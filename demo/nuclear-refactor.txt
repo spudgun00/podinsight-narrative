@@ -1,0 +1,151 @@
+claude-code "CRITICAL: You are an expert code refactoring specialist performing a complete structural analysis and automated refactoring of a large HTML file.
+
+TASK: Analyze index.html and create a COMPLETE refactoring solution without missing a single element.
+
+PHASE 1 - DEEP ANALYSIS (DO NOT OUTPUT CODE):
+Scan ENTIRE file (confirm all 4000 lines processed) for:
+
+1. STRUCTURE MAPPING:
+   □ Every section boundary (comments, divs, semantic tags)
+   □ Component patterns (repeated structures)
+   □ Nesting depth and hierarchy
+   □ Total line count per section
+
+2. RESOURCE INVENTORY:
+   □ ALL <script> blocks (inline + external) with line numbers
+   □ ALL <style> blocks with line numbers  
+   □ ALL inline style='' attributes (count them)
+   □ ALL event handlers (onclick, onload, etc)
+   □ ALL external resources (href, src)
+   □ ALL images/media (including base64)
+   □ ALL IDs and classes used
+
+3. DEPENDENCY MAPPING:
+   □ Which scripts need which DOM elements
+   □ Which styles apply to which sections
+   □ Event listener dependencies
+   □ Data attributes and their JS usage
+   □ Form dependencies and actions
+   □ API calls and endpoints
+
+PHASE 2 - REFACTORING PLAN:
+Create a COMPLETE extraction blueprint:
+
+1. FILE STRUCTURE:
+project/
+├── index.html (new, ~50 lines)
+├── components/
+│   └── [list every component to extract]
+├── js/
+│   └── [list every script to extract]
+├── css/
+│   └── [list every stylesheet to extract]
+├── assets/
+│   └── [list every asset found]
+└── config/
+    └── [any configuration needs]
+
+2. EXTRACTION MAP:
+For EACH section provide:
+- Name: [semantic name]
+- Lines: [start-end]
+- Output: [target file]
+- Dependencies: [what it needs]
+- Contains: [scripts/styles within]
+
+PHASE 3 - AUTOMATED SCRIPT GENERATION:
+Create extract.sh that:
+
+1. SAFETY FIRST:
+   - Backs up original file
+   - Creates all directories
+   - Validates line counts
+
+2. EXTRACTION LOGIC:
+   - Extract sections preserving all functionality
+   - Update all paths (relative → absolute → relative)
+   - Handle script dependencies correctly
+   - Preserve all event bindings
+   - Maintain CSS specificity
+
+3. SPECIAL HANDLERS for:
+   - Inline event handlers → event listeners
+   - Inline styles → external CSS
+   - Hardcoded values → config vars
+   - Base64 images → actual files
+   - Script initialization order
+
+4. VALIDATION STEPS:
+   - Line count verification
+   - Resource loading checks
+   - ID uniqueness validation
+   - Path resolution testing
+
+PHASE 4 - OUTPUT REQUIREMENTS:
+
+1. ANALYSIS REPORT:
+   ===== STRUCTURE ANALYSIS =====
+   Total lines: [count]
+   Sections found: [count]
+   Scripts found: [count]
+   Styles found: [count]
+   Assets found: [count]
+   
+   DETAILED BREAKDOWN:
+   [Complete inventory with line numbers]
+
+2. EXTRACTION SCRIPT:
+   Complete bash script with:
+   - Progress indicators
+   - Error handling
+   - Rollback capability
+   - Validation checks
+
+3. VERIFICATION CHECKLIST:
+   □ All 4000 lines accounted for
+   □ No functionality lost
+   □ All paths updated
+   □ All dependencies preserved
+   □ Can be reversed if needed
+
+CRITICAL VALIDATION REQUIREMENTS:
+- MUST scan ENTIRE file (not samples)
+- MUST preserve ALL functionality  
+- MUST handle ALL edge cases
+- MUST extract EVERY resource
+- MUST update ALL references
+- MUST create working site
+
+EDGE CASES TO HANDLE:
+- Mixed quote styles
+- Template literals
+- Conditional includes
+- AJAX content
+- Dynamic DOM creation
+- External dependencies
+- CDN resources
+- Minified code blocks
+- Nested components
+- Circular dependencies
+
+FORBIDDEN ACTIONS:
+- Do NOT output actual HTML content
+- Do NOT skip any sections
+- Do NOT assume standard structure
+- Do NOT break functionality
+- Do NOT lose any data
+
+ERROR HANDLING:
+If file too large: Create multi-stage approach
+If patterns unclear: List ambiguities for resolution
+If dependencies complex: Create dependency graph
+
+FINAL CONFIRMATION:
+Before outputting, verify:
+☑ Every line of original file analyzed
+☑ Complete extraction plan created
+☑ All resources accounted for
+☑ No functionality compromised
+☑ Script is production-ready
+
+BEGIN ANALYSIS NOW."

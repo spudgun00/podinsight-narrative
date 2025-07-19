@@ -1,0 +1,198 @@
+<!-- Intelligence Brief Sidebar -->
+<aside class="synthesis-sidebar">
+    <div class="synthesis-header">
+        <div>
+            <h3 class="synthesis-title">Weekly Intelligence Brief</h3>
+            <p class="synthesis-meta">1,498 hours analyzed • Updated 36 mins ago</p>
+        </div>
+        <div class="synthesis-header-actions">
+            <button class="brief-action-btn" title="Download PDF">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M7 1v8m0 0l-3-3m3 3l3-3"/>
+                    <path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+                </svg>
+            </button>
+            <button class="brief-action-btn" title="Email Brief">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="1" y="3" width="12" height="8" rx="1"/>
+                    <path d="M1 4l6 3 6-3"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Actual AI-Generated Synthesis -->
+    <div class="actual-synthesis">
+        <div class="brief-collapsed" id="briefCollapsed">
+            <p class="synthesis-text">
+                <strong>AI infrastructure dominates</strong> [12 sources agree, led by Gerstner/20VC, Gurley/Invest Like Best] with Series A at 20-30x ARR [Hoffman, Rabois confirm]. <strong>Contrarian signal:</strong> DePIN momentum without revenue [only Thiel dissenting]. <strong>Emerging blindspot:</strong> Developer tools consolidation [no top-tier coverage yet].
+            </p>
+        </div>
+        <div class="brief-expanded" id="briefExpanded" style="display: none;">
+            <div class="brief-section">
+                <h4 class="brief-section-title">Consensus Forming</h4>
+                <ul class="brief-list">
+                    <li><strong>AI infrastructure over applications</strong> [Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree] - Vertical AI seeing 2-3x better retention than horizontal plays</li>
+                    <li><strong>Series A valuations stabilizing</strong> [12 sources confirm: Gerstner, Hoffman, Rabois leading] - 20-30x ARR becomes new normal after 18-month correction</li>
+                    <li><strong>Capital efficiency replacing growth</strong> [mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned] - LPs driving this narrative shift hard</li>
+                </ul>
+            </div>
+            <div class="brief-section">
+                <h4 class="brief-section-title">Contrarian Signals</h4>
+                <ul class="brief-list">
+                    <li><strong>DePIN showing 190% momentum without revenue</strong> [Thiel only dissenter on Founders Fund pod, everyone else bullish] - Either massive opportunity or bubble forming</li>
+                    <li><strong>Consumer AI skepticism rising</strong> [Benchmark's Gurley, Lightspeed's Bogan pulling back] while Sequoia, a16z pile into enterprise</li>
+                </ul>
+            </div>
+            <div class="brief-section">
+                <h4 class="brief-section-title">Emerging Blindspots</h4>
+                <ul class="brief-list">
+                    <li><strong>Developer tools consolidation</strong> [3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage] - Market moving without public discourse</li>
+                    <li><strong>Climate tech sentiment inverting</strong> [Khosla quietly accumulating while Founders Fund exits] - Contrary indicator worth tracking</li>
+                </ul>
+            </div>
+        </div>
+        <button class="expand-brief-btn" id="expandBriefBtn" data-action="toggleBrief">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 5L6 8L9 5" id="expandArrow"/>
+            </svg>
+            <span id="expandText">Expand Brief</span>
+        </button>
+    </div>
+    
+    <div class="synthesis-divider"></div>
+    <h4 class="supporting-analytics-header">Supporting Analytics</h4>
+
+    <div class="synthesis-section">
+        <h4 class="synthesis-section-title">Velocity Tracking</h4>
+        <p class="section-description">Topic acceleration over past 7 days</p>
+        <div class="momentum-item">
+            <span class="momentum-theme">AI Agents</span>
+            <span class="momentum-change positive">+85% w/w</span>
+        </div>
+        <div class="momentum-item">
+            <span class="momentum-theme">Capital Efficiency</span>
+            <span class="momentum-change positive">+17% w/w</span>
+        </div>
+        <div class="momentum-item">
+            <span class="momentum-theme">DePIN</span>
+            <span class="momentum-change positive">+190% w/w</span>
+        </div>
+        <div class="momentum-item">
+            <span class="momentum-theme">B2B SaaS</span>
+            <span class="momentum-change negative">+3% w/w</span>
+        </div>
+        <div class="momentum-item">
+            <span class="momentum-theme">Crypto/Web3</span>
+            <span class="momentum-change positive">+53% w/w</span>
+        </div>
+    </div>
+
+    <div class="synthesis-section">
+        <h4 class="synthesis-section-title">Influence Metrics</h4>
+        <p class="section-description">Who's shaping the conversation</p>
+        <div class="influence-list">
+            <div class="influence-item">
+                <span class="influence-name">Brad Gerstner</span>
+                <div class="influence-bar-container">
+                    <div class="influence-bar" style="width: 94%;"></div>
+                </div>
+                <span class="influence-score">94%</span>
+            </div>
+            <div class="influence-item">
+                <span class="influence-name">All-In Hosts</span>
+                <div class="influence-bar-container">
+                    <div class="influence-bar" style="width: 87%;"></div>
+                </div>
+                <span class="influence-score">87%</span>
+            </div>
+            <div class="influence-item">
+                <span class="influence-name">Harry Stebbings</span>
+                <div class="influence-bar-container">
+                    <div class="influence-bar" style="width: 82%;"></div>
+                </div>
+                <span class="influence-score">82%</span>
+            </div>
+            <div class="influence-item">
+                <span class="influence-name">Josh Wolfe</span>
+                <div class="influence-bar-container">
+                    <div class="influence-bar" style="width: 76%;"></div>
+                </div>
+                <span class="influence-score">76%</span>
+            </div>
+            <div class="influence-item">
+                <span class="influence-name">Ben Thompson</span>
+                <div class="influence-bar-container">
+                    <div class="influence-bar" style="width: 68%;"></div>
+                </div>
+                <span class="influence-score">68%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="synthesis-section">
+        <h4 class="synthesis-section-title">Consensus Monitor</h4>
+        <p class="section-description">Market agreement levels by topic</p>
+        <div class="sentiment-summary">
+            <div class="sentiment-block">
+                <div class="sentiment-value">Strong</div>
+                <div class="sentiment-label">AI Agents</div>
+            </div>
+            <div class="sentiment-block">
+                <div class="sentiment-value">Building</div>
+                <div class="sentiment-label">Capital Eff.</div>
+            </div>
+            <div class="sentiment-block">
+                <div class="sentiment-value">Mixed</div>
+                <div class="sentiment-label">DePIN</div>
+            </div>
+            <div class="sentiment-block">
+                <div class="sentiment-value">Weak</div>
+                <div class="sentiment-label">Crypto/Web3</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="synthesis-section">
+        <h4 class="synthesis-section-title">Topic Correlations</h4>
+        <p class="section-description">How narratives cluster in conversation</p>
+        <div class="pie-charts-container">
+            <div class="mini-pie-chart">
+                <svg viewBox="0 0 100 100" style="width: 80px; height: 80px;">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#4a7c59" stroke-width="20"
+                            stroke-dasharray="85 125" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600">68%</text>
+                </svg>
+                <span class="pie-label">AI + Infrastructure</span>
+            </div>
+            <div class="mini-pie-chart">
+                <svg viewBox="0 0 100 100" style="width: 80px; height: 80px;">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#f4a261" stroke-width="20"
+                            stroke-dasharray="60 125" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600">48%</text>
+                </svg>
+                <span class="pie-label">SaaS + Efficiency</span>
+            </div>
+            <div class="mini-pie-chart">
+                <svg viewBox="0 0 100 100" style="width: 80px; height: 80px;">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#5a6c8c" stroke-width="20"
+                            stroke-dasharray="45 125" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600">36%</text>
+                </svg>
+                <span class="pie-label">Dev Tools + AI</span>
+            </div>
+            <div class="mini-pie-chart">
+                <svg viewBox="0 0 100 100" style="width: 80px; height: 80px;">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#c77d7d" stroke-width="20"
+                            stroke-dasharray="25 125" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600">20%</text>
+                </svg>
+                <span class="pie-label">Climate + Deep Tech</span>
+            </div>
+        </div>
+    </div>
+</aside>

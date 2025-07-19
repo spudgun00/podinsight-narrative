@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test - VCPulse</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Test styles to highlight layout boundaries */
+        .test-highlight {
+            background: rgba(74, 124, 89, 0.1);
+            border: 2px dashed var(--sage);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .width-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            background: var(--deep-ink);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            z-index: 1001;
+        }
+        .header-main {
+            position: relative;
+        }
+        .header-main::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1px;
+            background: red;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (copied from demo.html) -->
+    <header class="header">
+        <div class="header-main">
+            <div class="logo-container">
+                <div class="pulse-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="white"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <div class="logo">VC<span style="color: #4a7c59;">Pulse</span></div>
+                    <div class="tagline">Track the heartbeat of venture capital</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="portfolio-button" 
+                        aria-label="Portfolio tracking"
+                        data-portfolio-count="0"
+                        data-new-mentions="0"
+                        data-panel-state="closed">
+                    <span class="portfolio-text">Portfolio</span>
+                    <span class="notification-badge" aria-hidden="true" style="display: none;">0</span>
+                    <span class="pulse-indicator" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <div class="header-metrics">
+            <div class="header-metrics-inner">
+                <!-- Ticker content will be loaded here -->
+            </div>
+        </div>
+    </header>
+    
+    <!-- Test Container -->
+    <div class="container">
+        <main>
+            <div class="test-highlight">
+                <h1>Navigation Width Test</h1>
+                <p>This page tests the navigation width constraints and layout.</p>
+                <h2>Changes Made:</h2>
+                <ul>
+                    <li>✓ Removed Live/Demo toggle</li>
+                    <li>✓ Removed Request Access button</li>
+                    <li>✓ Added max-width constraint to header-main (1200px)</li>
+                    <li>✓ Added proper centering with margin: 0 auto</li>
+                    <li>✓ Updated header-metrics to use inner wrapper</li>
+                    <li>✓ Cleaned up unused CSS</li>
+                    <li>✓ Added demo mode indicator (bottom-left)</li>
+                </ul>
+                <h2>Expected Behavior:</h2>
+                <ul>
+                    <li>Navigation should not overflow page width</li>
+                    <li>Portfolio button is the only action in nav</li>
+                    <li>Logo on left, Portfolio on right</li>
+                    <li>Demo mode indicator in bottom-left corner</li>
+                    <li>Clean spacing throughout</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Demo Mode Indicator -->
+    <div class="demo-mode-indicator">Demo Mode</div>
+    
+    <!-- Width Indicator -->
+    <div class="width-indicator">
+        <div>Window: <span id="window-width">0</span>px</div>
+        <div>Body: <span id="body-width">0</span>px</div>
+        <div>Scroll: <span id="has-scroll">No</span></div>
+    </div>
+    
+    <!-- Test Scripts -->
+    <script src="data/demo-data.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Update width indicators
+        function updateWidthInfo() {
+            document.getElementById('window-width').textContent = window.innerWidth;
+            document.getElementById('body-width').textContent = document.body.scrollWidth;
+            document.getElementById('has-scroll').textContent = 
+                document.body.scrollWidth > window.innerWidth ? 'Yes ⚠️' : 'No ✓';
+        }
+        
+        updateWidthInfo();
+        window.addEventListener('resize', updateWidthInfo);
+        
+        // Test portfolio button functionality
+        setTimeout(() => {
+            if (window.portfolioManager) {
+                window.portfolioManager.state.portfolioCount = 12;
+                window.portfolioManager.state.newMentions = 7;
+                window.portfolioManager.updateUI();
+                console.log('✓ Portfolio button initialized with test data');
+            }
+        }, 500);
+    </script>
+</body>
+</html>

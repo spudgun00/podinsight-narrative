@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Button Test - VCPulse</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            padding: 2rem;
+            background: var(--warm-paper);
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .test-button {
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        .test-button:hover {
+            background: #3d6348;
+        }
+        .event-log {
+            background: var(--warm-paper);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        .state-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .state-item {
+            padding: 1rem;
+            background: var(--light-sage);
+            border-radius: 6px;
+        }
+        .state-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .state-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Test Header -->
+    <header class="header">
+        <div class="header-main">
+            <div class="logo-container">
+                <div class="pulse-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="white"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <div class="logo">VC<span style="color: #4a7c59;">Pulse</span></div>
+                    <div class="tagline">Portfolio Button Test</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="portfolio-button" 
+                        aria-label="Portfolio tracking"
+                        data-portfolio-count="0"
+                        data-new-mentions="0"
+                        data-panel-state="closed">
+                    <span class="portfolio-text">Portfolio</span>
+                    <span class="notification-badge" aria-hidden="true" style="display: none;">0</span>
+                    <span class="pulse-indicator" aria-hidden="true"></span>
+                </button>
+                <a href="#" class="book-demo">Request Access</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Test Container -->
+    <div class="test-container">
+        <div class="test-section">
+            <h2>Portfolio Button Test Controls</h2>
+            <p>Use these controls to test different states and behaviors of the Portfolio button.</p>
+            
+            <div class="test-controls">
+                <button class="test-button" onclick="addMentions()">Add Random Mentions</button>
+                <button class="test-button" onclick="clearMentions()">Clear Mentions</button>
+                <button class="test-button" onclick="togglePanel()">Toggle Panel</button>
+                <button class="test-button" onclick="setLargeCount()">Set 100+ Mentions</button>
+                <button class="test-button" onclick="resetState()">Reset State</button>
+            </div>
+            
+            <div class="state-display">
+                <div class="state-item">
+                    <div class="state-label">Portfolio Companies</div>
+                    <div class="state-value" id="portfolio-count">0</div>
+                </div>
+                <div class="state-item">
+                    <div class="state-label">New Mentions</div>
+                    <div class="state-value" id="new-mentions">0</div>
+                </div>
+                <div class="state-item">
+                    <div class="state-label">Panel State</div>
+                    <div class="state-value" id="panel-state">closed</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Event Log</h2>
+            <div class="event-log" id="event-log">
+                <div>Waiting for events...</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Mobile View Test</h2>
+            <p>Resize your browser window to below 768px width to see the mobile responsive behavior.</p>
+        </div>
+    </div>
+
+    <!-- Include main.js which has PortfolioManager -->
+    <script src="data/demo-data.js"></script>
+    <script src="main.js"></script>
+    
+    <!-- Test Scripts -->
+    <script>
+        const eventLog = document.getElementById('event-log');
+        const portfolioCountDisplay = document.getElementById('portfolio-count');
+        const newMentionsDisplay = document.getElementById('new-mentions');
+        const panelStateDisplay = document.getElementById('panel-state');
+        
+        // Listen for portfolio events
+        window.addEventListener('portfolio-panel-toggle', (e) => {
+            logEvent('Portfolio panel toggled', e.detail);
+            updateStateDisplay();
+        });
+        
+        function logEvent(message, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.textContent = `[${timestamp}] ${message}`;
+            if (data) {
+                entry.textContent += ` - ${JSON.stringify(data)}`;
+            }
+            eventLog.insertBefore(entry, eventLog.firstChild);
+            
+            // Keep only last 10 entries
+            while (eventLog.children.length > 10) {
+                eventLog.removeChild(eventLog.lastChild);
+            }
+        }
+        
+        function updateStateDisplay() {
+            if (window.portfolioManager) {
+                portfolioCountDisplay.textContent = window.portfolioManager.state.portfolioCount;
+                newMentionsDisplay.textContent = window.portfolioManager.state.newMentions;
+                panelStateDisplay.textContent = window.portfolioManager.state.panelState;
+            }
+        }
+        
+        function addMentions() {
+            if (window.portfolioManager) {
+                const count = Math.floor(Math.random() * 5) + 1;
+                window.portfolioManager.state.newMentions += count;
+                window.portfolioManager.updateUI();
+                window.portfolioManager.saveState();
+                logEvent(`Added ${count} new mentions`);
+                updateStateDisplay();
+            }
+        }
+        
+        function clearMentions() {
+            if (window.portfolioManager) {
+                window.portfolioManager.state.newMentions = 0;
+                window.portfolioManager.updateUI();
+                window.portfolioManager.saveState();
+                logEvent('Cleared all mentions');
+                updateStateDisplay();
+            }
+        }
+        
+        function togglePanel() {
+            if (window.portfolioManager) {
+                window.portfolioManager.handleClick(new Event('click'));
+                logEvent('Toggled panel programmatically');
+            }
+        }
+        
+        function setLargeCount() {
+            if (window.portfolioManager) {
+                window.portfolioManager.state.newMentions = 123;
+                window.portfolioManager.updateUI();
+                window.portfolioManager.saveState();
+                logEvent('Set mentions to 123 (should show 99+)');
+                updateStateDisplay();
+            }
+        }
+        
+        function resetState() {
+            if (window.portfolioManager) {
+                localStorage.removeItem('vcpulse_portfolio_state');
+                window.portfolioManager.state = window.portfolioManager.loadState();
+                window.portfolioManager.state.portfolioCount = 12;
+                window.portfolioManager.state.newMentions = 7;
+                window.portfolioManager.updateUI();
+                window.portfolioManager.saveState();
+                logEvent('Reset to default state');
+                updateStateDisplay();
+            }
+        }
+        
+        // Initial state update
+        setTimeout(() => {
+            updateStateDisplay();
+            logEvent('Test page loaded');
+        }, 500);
+    </script>
+</body>
+</html>

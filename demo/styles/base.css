@@ -1,0 +1,17 @@
+/* 
+ * base.css
+ * Reset Styles and Typography Basics
+ * This file contains CSS reset rules, base typography settings,
+ * and default styles for HTML elements.
+ */
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--warm-paper);
+            color: var(--deep-ink);
+            line-height: 1.6;
+        }

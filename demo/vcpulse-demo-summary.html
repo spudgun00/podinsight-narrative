@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse Demo Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #fafaf9;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 24px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #16a34a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .accent {
+            color: #16a34a;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav a {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav a:hover {
+            color: #16a34a;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a1a2e;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .metrics-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 40px;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #16a34a;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Features Grid */
+        .features-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #1a1a2e;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: #e8f0ea;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: #16a34a;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1a1a2e;
+        }
+        
+        .feature-description {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Screenshot Gallery */
+        .screenshots-section {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 60px;
+        }
+        
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 40px;
+        }
+        
+        .screenshot {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .screenshot-placeholder {
+            background: #f3f4f6;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 18px;
+        }
+        
+        .screenshot-caption {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* Demo Access Section */
+        .demo-access {
+            background: #1a1a2e;
+            color: white;
+            padding: 60px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .demo-access h3 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .demo-access p {
+            font-size: 18px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        /* Tech Stack */
+        .tech-stack {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+        
+        .tech-badge {
+            background: #f3f4f6;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 14px;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .footer-text {
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="white"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>VC<span class="accent">Pulse</span></h1>
+                    <p class="tagline">Track the heartbeat of venture capital</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#tech">Technology</a>
+                <a href="#access">Access Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>Intelligence Briefings for Venture Capital</h2>
+            <p>Transform podcast conversations into actionable market intelligence with AI-powered narrative analysis</p>
+            
+            <div class="metrics-row">
+                <div class="metric">
+                    <div class="metric-value">1,498</div>
+                    <div class="metric-label">Episodes Analyzed</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">1,498</div>
+                    <div class="metric-label">Hours Processed</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">47</div>
+                    <div class="metric-label">VC Podcasts</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h18m-9-9v18"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Narrative Pulse</h3>
+                    <p class="feature-description">Track topic momentum and narrative acceleration across the venture ecosystem with interactive visualizations showing momentum, volume, and consensus views.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Notable Signals</h3>
+                    <p class="feature-description">Curated intelligence across five key categories: Market Narratives, Thesis Validation, Notable Deals, Portfolio Mentions, and LP Sentiment tracking.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"/>
+                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Priority Briefings</h3>
+                    <p class="feature-description">Episode summaries with intelligent prioritization - Critical (red), Opportunity (green), and Elevated (amber) classifications for rapid decision-making.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Weekly Intelligence Brief</h3>
+                    <p class="feature-description">Comprehensive PDF reports with executive summaries, key metrics, consensus analysis, and actionable recommendations delivered weekly.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">AI Intelligence Search</h3>
+                    <p class="feature-description">Natural language queries across 1,498 episodes to instantly surface specific insights, patterns, and connections in the venture ecosystem.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-time Analytics</h3>
+                    <p class="feature-description">Live tracking of topic velocity, influence metrics, and consensus monitoring with customizable time ranges (7d, 30d, 90d views).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section id="screenshots" class="screenshots-section">
+            <h2 class="section-title">Platform Screenshots</h2>
+            <div class="screenshot-grid">
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        Dashboard Overview
+                    </div>
+                    <div class="screenshot-caption">
+                        Main dashboard showing Narrative Pulse chart, Notable Signals grid, and Intelligence Brief sidebar
+                    </div>
+                </div>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        Weekly Intelligence Brief
+                    </div>
+                    <div class="screenshot-caption">
+                        PDF-ready weekly brief with executive summary, metrics, and action items
+                    </div>
+                </div>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        Narrative Pulse Visualization
+                    </div>
+                    <div class="screenshot-caption">
+                        Interactive chart with momentum, volume, and consensus views
+                    </div>
+                </div>
+                
+                <div class="screenshot">
+                    <div class="screenshot-placeholder">
+                        Priority Briefings Feed
+                    </div>
+                    <div class="screenshot-caption">
+                        Filtered episode intelligence with priority classifications
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section id="tech" class="tech-stack">
+            <h2 class="section-title">Technology Stack</h2>
+            <div class="tech-grid">
+                <span class="tech-badge">Next.js 14.2.5</span>
+                <span class="tech-badge">React 18.3.1</span>
+                <span class="tech-badge">TypeScript 5.5.4</span>
+                <span class="tech-badge">Tailwind CSS 3.4.7</span>
+                <span class="tech-badge">Framer Motion</span>
+                <span class="tech-badge">AI-Powered Analysis</span>
+                <span class="tech-badge">Real-time Data Processing</span>
+                <span class="tech-badge">SVG Visualizations</span>
+            </div>
+        </section>
+
+        <!-- Demo Access Section -->
+        <section id="access" class="demo-access">
+            <h3>Experience VCPulse Today</h3>
+            <p>See how leading venture capital firms are using AI-powered intelligence to stay ahead of market narratives</p>
+            <div class="cta-buttons">
+                <a href="/demo/demo.html" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Launch Demo
+                </a>
+                <a href="/demo/pdf/1.html" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    View Sample Brief
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon" style="width: 32px; height: 32px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="white"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </div>
+                <span style="font-size: 20px; font-weight: 600;">VC<span class="accent">Pulse</span></span>
+            </div>
+            <p class="footer-text">Track the heartbeat of venture capital</p>
+            <p style="opacity: 0.5; font-size: 14px;">© 2024 VCPulse. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

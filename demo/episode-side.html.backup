@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse - Episode Intelligence Panel (Version B)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --deep-ink: #1a1a2e;
+            --warm-paper: #fafaf9;
+            --sage: #4a7c59;
+            --dusty-rose: #c77d7d;
+            --amber-glow: #f4a261;
+            --slate-blue: #5a6c8c;
+            --light-sage: #e8f0ea;
+            --light-rose: #f5e6e6;
+            --gray-600: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-200: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--warm-paper);
+            color: var(--deep-ink);
+            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Backdrop */
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+
+        /* Panel Container */
+        .panel-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 1000px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Panel Header */
+        .panel-header {
+            padding: 2rem 3rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .podcast-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .podcast-logo {
+            width: 48px;
+            height: 48px;
+            background: var(--light-sage);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .podcast-logo svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--sage);
+        }
+
+        .podcast-details h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .podcast-meta {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .influence-score {
+            color: var(--sage);
+            font-weight: 600;
+        }
+
+        .close-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-200);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: var(--warm-paper);
+            border-color: var(--gray-400);
+        }
+
+        .episode-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--deep-ink);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .episode-guest {
+            font-size: 1rem;
+            color: var(--gray-600);
+        }
+
+        /* Panel Content */
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 3rem;
+        }
+
+        /* Intelligence Sections */
+        .intelligence-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--light-sage);
+        }
+
+        /* Key Points */
+        .key-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            color: var(--deep-ink);
+        }
+
+        .key-points li:before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+            font-weight: bold;
+        }
+
+        /* Strategic Implications */
+        .implication-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .implication-card {
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            border-left: 3px solid transparent;
+        }
+
+        .implication-card.investment {
+            background: var(--light-sage);
+            border-left-color: var(--sage);
+        }
+
+        .implication-card.competitive {
+            background: #fef3e2;
+            border-left-color: var(--amber-glow);
+        }
+
+        .implication-card.benchmark {
+            background: #f5f3f0;
+            border-left-color: var(--slate-blue);
+        }
+
+        /* Pattern Recognition */
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .pattern-card {
+            padding: 1rem;
+            background: var(--warm-paper);
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .pattern-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sage);
+            margin-bottom: 0.25rem;
+        }
+
+        .pattern-label {
+            font-size: 0.8125rem;
+            color: var(--gray-600);
+        }
+
+        /* Portfolio Mentions */
+        .mentions-empty {
+            padding: 2rem;
+            background: var(--warm-paper);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px dashed var(--gray-200);
+        }
+
+        .mentions-empty p {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .add-portfolio-hint {
+            color: var(--sage);
+            font-size: 0.8125rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .add-portfolio-hint:hover {
+            text-decoration: underline;
+        }
+
+        .mentions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .mention-item {
+            padding: 1rem;
+            background: var(--warm-paper);
+            border-radius: 8px;
+            border-left: 3px solid var(--amber-glow);
+        }
+
+        .mention-company {
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .mention-context {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Key Takeaways */
+        .takeaway-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .takeaway-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9375rem;
+            color: var(--deep-ink);
+        }
+
+        .takeaway-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+            font-weight: bold;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            background: var(--warm-paper);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--sage);
+        }
+
+        .quote-text {
+            font-size: 1.0625rem;
+            font-style: italic;
+            color: var(--deep-ink);
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .quote-attribution {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quote-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .quote-action {
+            padding: 0.25rem 0.75rem;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .quote-action:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+
+        /* Audio Progress Bar */
+        .audio-progress-bar {
+            width: 100%;
+            height: 2px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .audio-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--sage);
+            transition: width 0.1s linear;
+        }
+
+        /* Audio button specific styles */
+        .audio-button.playing .play-icon {
+            display: none;
+        }
+
+        .audio-button.playing .pause-icon {
+            display: block !important;
+        }
+
+        .audio-button.playing {
+            color: var(--sage);
+            border-color: var(--sage);
+        }
+
+        /* Related Episodes */
+        .related-episodes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .related-episode {
+            padding: 0.875rem;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .related-episode:hover {
+            border-color: var(--sage);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .related-title {
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-note {
+            color: var(--gray-600);
+            font-size: 0.8125rem;
+        }
+
+        /* Action Bar */
+        .action-bar {
+            padding: 1.5rem 3rem;
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .action-button.primary {
+            background: var(--sage);
+            color: white;
+        }
+
+        .action-button.primary:hover {
+            background: #3d6348;
+        }
+
+        .action-button.secondary {
+            background: white;
+            color: var(--sage);
+            border: 1px solid var(--sage);
+        }
+
+        .action-button.secondary:hover {
+            background: var(--light-sage);
+        }
+
+        .action-button.tertiary {
+            background: white;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+        }
+
+        .action-button.tertiary:hover {
+            background: var(--warm-paper);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .panel-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .panel-header, .panel-content, .action-bar {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .pattern-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        let currentPlaybackTimer = null;
+        let progressInterval = null;
+
+        function toggleAudioPlayback(button) {
+            const isPlaying = button.classList.contains('playing');
+            const progressContainer = button.closest('.quote-section').querySelector('.audio-progress-container');
+            const progressBar = progressContainer.querySelector('.audio-progress-bar');
+            const progressFill = progressContainer.querySelector('.audio-progress-fill');
+            const audioText = button.querySelector('.audio-text');
+            
+            if (isPlaying) {
+                // Stop playback
+                stopPlayback(button, progressContainer, progressFill, audioText);
+            } else {
+                // Start playback
+                startPlayback(button, progressContainer, progressBar, progressFill, audioText);
+            }
+        }
+
+        function startPlayback(button, progressContainer, progressBar, progressFill, audioText) {
+            // Clear any existing timers
+            if (currentPlaybackTimer) clearTimeout(currentPlaybackTimer);
+            if (progressInterval) clearInterval(progressInterval);
+            
+            // Update UI
+            button.classList.add('playing');
+            progressContainer.style.display = 'block';
+            audioText.textContent = 'Pause';
+            
+            // Reset progress
+            progressFill.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', '0');
+            
+            // Animate progress over 18 seconds
+            const duration = 18000; // 18 seconds
+            const updateInterval = 100; // Update every 100ms
+            let elapsed = 0;
+            
+            progressInterval = setInterval(() => {
+                elapsed += updateInterval;
+                const progress = Math.min((elapsed / duration) * 100, 100);
+                const seconds = Math.min(elapsed / 1000, 18);
+                
+                progressFill.style.width = progress + '%';
+                progressBar.setAttribute('aria-valuenow', Math.round(seconds));
+                
+                if (elapsed >= duration) {
+                    stopPlayback(button, progressContainer, progressFill, audioText);
+                }
+            }, updateInterval);
+            
+            // Set timeout as backup to stop after 18 seconds
+            currentPlaybackTimer = setTimeout(() => {
+                stopPlayback(button, progressContainer, progressFill, audioText);
+            }, duration);
+        }
+
+        function stopPlayback(button, progressContainer, progressFill, audioText) {
+            // Clear timers
+            if (currentPlaybackTimer) {
+                clearTimeout(currentPlaybackTimer);
+                currentPlaybackTimer = null;
+            }
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            
+            // Update UI
+            button.classList.remove('playing');
+            audioText.textContent = 'Play clip (0:18)';
+            
+            // Reset progress after a small delay
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+                progressContainer.querySelector('.audio-progress-bar').setAttribute('aria-valuenow', '0');
+            }, 300);
+        }
+    </script>
+</head>
+<body>
+    <!-- Backdrop -->
+    <div class="backdrop"></div>
+
+    <!-- Slide-out Panel -->
+    <div class="panel-container">
+        <!-- Header -->
+        <div class="panel-header">
+            <div class="header-top">
+                <div class="podcast-info">
+                    <div class="podcast-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 12L12 8L16 12M8 16L12 12L16 16" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <h3>20VC with Harry Stebbings</h3>
+                        <div class="podcast-meta">
+                            2h ago • 72 min • <span class="influence-score">94% influence</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="close-button">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 1L13 13M13 1L1 13"/>
+                    </svg>
+                </button>
+            </div>
+            <h1 class="episode-title">Why We're Wrong About AI Valuations</h1>
+            <p class="episode-guest">Guest: Brad Gerstner, Founder & CEO at Altimeter Capital</p>
+        </div>
+
+        <!-- Content -->
+        <div class="panel-content">
+            <!-- Episode Intelligence -->
+            <div class="intelligence-section">
+                <h2 class="section-header">Episode Intelligence</h2>
+                
+                <!-- The Facts -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--deep-ink);">The Facts</h3>
+                    <ul class="key-points">
+                        <li>Series A valuations: 20-30x ARR (down from 100x peaks in 2021)</li>
+                        <li>Vertical AI companies trading at discount to horizontal AI platforms</li>
+                        <li>AI-enabled SaaS showing 2-3x better retention metrics than traditional SaaS</li>
+                        <li>Perplexity: $10B valuation with 3x liquidation preference for late-stage investors</li>
+                    </ul>
+                </div>
+
+                <!-- The Context -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--deep-ink);">The Context</h3>
+                    <ul class="key-points">
+                        <li>Valuation normalization represents 18-month market correction cycle</li>
+                        <li>Proprietary data becoming primary differentiator in AI investment thesis</li>
+                        <li>Liquidation preferences returning to term sheets across all stages</li>
+                        <li>AI integration shifting from competitive advantage to baseline requirement</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Market Signals -->
+            <div class="intelligence-section">
+                <h2 class="section-header">Market Signals</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <!-- Momentum -->
+                    <div style="padding: 1rem; background: var(--light-sage); border-left: 3px solid var(--sage); border-radius: 6px;">
+                        <h4 style="font-size: 0.875rem; font-weight: 600; color: var(--sage); margin-bottom: 0.5rem;">📈 MOMENTUM</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--deep-ink);">
+                            <li style="margin-bottom: 0.25rem;">• Vertical AI applications with domain expertise</li>
+                            <li style="margin-bottom: 0.25rem;">• Capital efficiency metrics over growth at all costs</li>
+                            <li>• Structured liquidation preferences in hot deals</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Emerging -->
+                    <div style="padding: 1rem; background: #fef3e2; border-left: 3px solid var(--amber-glow); border-radius: 6px;">
+                        <h4 style="font-size: 0.875rem; font-weight: 600; color: #d97706; margin-bottom: 0.5rem;">⚡ EMERGING</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--deep-ink);">
+                            <li style="margin-bottom: 0.25rem;">• AI infrastructure consolidation plays</li>
+                            <li style="margin-bottom: 0.25rem;">• Retention-based valuation models</li>
+                            <li>• Cross-border AI regulatory arbitrage</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Declining -->
+                    <div style="padding: 1rem; background: var(--light-rose); border-left: 3px solid var(--dusty-rose); border-radius: 6px;">
+                        <h4 style="font-size: 0.875rem; font-weight: 600; color: #b91c1c; margin-bottom: 0.5rem;">📉 DECLINING</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--deep-ink);">
+                            <li style="margin-bottom: 0.25rem;">• Horizontal AI platforms without differentiation</li>
+                            <li style="margin-bottom: 0.25rem;">• Growth-at-all-costs narratives</li>
+                            <li>• Clean term sheets at premium valuations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pattern Recognition -->
+            <div class="intelligence-section">
+                <h2 class="section-header">Pattern Recognition</h2>
+                <div class="pattern-grid">
+                    <div class="pattern-card">
+                        <div class="pattern-number">4th</div>
+                        <div class="pattern-label">Major investor this week discussing vertical AI opportunity</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-number">12+</div>
+                        <div class="pattern-label">Episodes mentioning 20-30x ARR as new normal</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-number">87%</div>
+                        <div class="pattern-label">Of AI discussions now include efficiency metrics</div>
+                    </div>
+                    <div class="pattern-card">
+                        <div class="pattern-number">3x</div>
+                        <div class="pattern-label">Increase in liquidation preference mentions (Q4 vs Q3)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notable Mentions -->
+            <div class="intelligence-section">
+                <h2 class="section-header">Notable Mentions</h2>
+                <!-- Empty state version -->
+                <div class="mentions-empty">
+                    <p>⚠️ No portfolio companies detected in this episode</p>
+                    <span class="add-portfolio-hint">[+ Add your portfolio companies to get alerts]</span>
+                </div>
+                
+                <!-- Populated version (commented out for demo)
+                <div class="mentions-list">
+                    <div class="mention-item">
+                        <div class="mention-company">⚠️ Perplexity (AI Infrastructure)</div>
+                        <div class="mention-context">Context: Valuation discussion at $10B with 3x liquidation preference</div>
+                    </div>
+                    <div class="mention-item">
+                        <div class="mention-company">📍 OpenAI (AI Platform)</div>
+                        <div class="mention-context">Context: Comparison point for vertical vs horizontal AI strategies</div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+
+            <!-- Essential Quote -->
+            <div class="quote-section">
+                <h2 class="section-header" style="margin-bottom: 1rem;">Essential Quote</h2>
+                <div class="quote-text">
+                    "Vertical AI with proprietary data is the biggest market that doesn't exist yet."
+                </div>
+                <div class="quote-attribution">
+                    <span>- Brad Gerstner @ 24:31</span>
+                    <div class="quote-actions">
+                        <button class="quote-action">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="6" height="6" rx="1"/>
+                                <path d="M5 1H9a1 1 0 011 1v4"/>
+                            </svg>
+                            Copy
+                        </button>
+                        <button class="quote-action audio-button" onclick="toggleAudioPlayback(this)">
+                            <svg class="play-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="6" cy="6" r="5"/>
+                                <path d="M5 4l3 2-3 2V4z" fill="currentColor" stroke="none"/>
+                            </svg>
+                            <svg class="pause-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="display: none;">
+                                <circle cx="6" cy="6" r="5"/>
+                                <rect x="4" y="4" width="1.5" height="4" fill="currentColor" stroke="none"/>
+                                <rect x="6.5" y="4" width="1.5" height="4" fill="currentColor" stroke="none"/>
+                            </svg>
+                            <span class="audio-text">Play clip (0:18)</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Audio Progress Bar -->
+                <div class="audio-progress-container" style="display: none; margin-top: 0.75rem;">
+                    <div class="audio-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="18">
+                        <div class="audio-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Episodes -->
+            <div class="intelligence-section">
+                <h2 class="section-header">Related Episodes</h2>
+                <div class="related-episodes">
+                    <div class="related-episode">
+                        <div class="related-title">Stratechery: The State of SaaS</div>
+                        <div class="related-note">Relevant: Confirms 2-3x retention metrics across 15 SaaS companies</div>
+                    </div>
+                    <div class="related-episode">
+                        <div class="related-title">All-In: Why Most VCs Are Wrong About AI</div>
+                        <div class="related-note">Relevant: Opposing thesis - Sacks sees horizontal AI winning</div>
+                    </div>
+                    <div class="related-episode">
+                        <div class="related-title">Acquired: The Perplexity Story</div>
+                        <div class="related-note">Relevant: Details on $10B valuation structure and LP concerns</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="action-button primary">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M7 1v8m0 0l-3-3m3 3l3-3"/>
+                    <path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+                </svg>
+                Download PDF
+            </button>
+            <button class="action-button secondary">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="1" y="3" width="12" height="8" rx="1"/>
+                    <path d="M1 4l6 3 6-3"/>
+                </svg>
+                Email Brief
+            </button>
+            <button class="action-button tertiary">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="7" cy="7" r="6"/>
+                    <path d="M5 9l2 2 4-4"/>
+                </svg>
+                Share to Slack
+            </button>
+            <button class="action-button tertiary">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="7" cy="7" r="6"/>
+                    <polygon points="6,4 9,7 6,10" fill="currentColor"/>
+                </svg>
+                Open in Spotify
+            </button>
+        </div>
+    </div>
+</body>
+</html>

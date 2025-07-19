@@ -1,0 +1,23 @@
+{
+  "name": "vcpulse-pdf-generator",
+  "version": "2.0.0",
+  "description": "Generate PDF from VCPulse Weekly Intelligence Brief HTML with perfect styling",
+  "main": "convert-to-pdf.js",
+  "scripts": {
+    "pdf": "node convert-to-pdf.js",
+    "generate": "node generate-pdf.js",
+    "convert": "node convert-to-pdf.js",
+    "install-deps": "npm install",
+    "clean": "rm -f *.pdf"
+  },
+  "dependencies": {
+    "puppeteer": "^22.8.2"
+  },
+  "devDependencies": {},
+  "keywords": ["pdf", "vcpulse", "report", "weekly-brief"],
+  "author": "VCPulse",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

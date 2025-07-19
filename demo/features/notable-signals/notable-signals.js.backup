@@ -1,0 +1,202 @@
+const NotableSignals = {
+    init: function(container) {
+        this.container = container;
+        this.bindEvents();
+        this.setupPanelData();
+    },
+    
+    bindEvents: function() {
+        // Card clicks
+        this.container.addEventListener('click', (e) => {
+            const card = e.target.closest('.signal-card');
+            if (card) {
+                const type = card.dataset.signalType;
+                const strength = card.dataset.strength;
+                const insight = card.querySelector('.signal-insight').textContent;
+                this.openSignalPanel(type, insight, strength);
+            }
+            
+            // Close buttons
+            if (e.target.closest('.panel-close') || 
+                e.target.classList.contains('panel-backdrop')) {
+                this.closeSignalPanel();
+            }
+        });
+        
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeSignalPanel();
+            }
+        });
+    },
+    
+    openSignalPanel: function(signalType, insight, strength) {
+        const panel = document.getElementById('signalDetailPanel');
+        const backdrop = document.querySelector('.panel-backdrop');
+        const titleEl = document.getElementById('panelTitle');
+        const subtitleEl = document.getElementById('panelSubtitle');
+        const contentEl = document.getElementById('panelContent');
+        
+        // Check if elements exist
+        if (!panel || !backdrop || !titleEl || !subtitleEl || !contentEl) {
+            console.error('Panel elements not found:', {
+                panel: !!panel,
+                backdrop: !!backdrop,
+                titleEl: !!titleEl,
+                subtitleEl: !!subtitleEl,
+                contentEl: !!contentEl
+            });
+            return;
+        }
+        
+        // Set title based on signal type
+        const titles = {
+            'market-narratives': 'Market Narratives',
+            'thesis-validation': 'Thesis Validation',
+            'notable-deals': 'Notable Deals',
+            'portfolio-mentions': 'Portfolio Mentions',
+            'lp-sentiment': 'LP Sentiment'
+        };
+        
+        const subtitles = {
+            'market-narratives': 'Dominant themes and narrative shifts',
+            'thesis-validation': 'Investment theses gaining consensus',
+            'notable-deals': 'Key funding rounds with notable structures',
+            'portfolio-mentions': 'Portfolio company intelligence and threats',
+            'lp-sentiment': 'Limited partner mood and requirements'
+        };
+        
+        titleEl.textContent = titles[signalType];
+        subtitleEl.textContent = subtitles[signalType];
+        
+        // Generate content based on signal type
+        let content = '<div class="signal-items-list">';
+        
+        if (signalType === 'market-narratives') {
+            const narratives = [
+                { trend: '"Growth at all costs" → "Efficient growth"', count: 23, source: 'Multiple podcasts', insight: 'LPs are driving this narrative hard. Every major fund is adjusting their pitch.' },
+                { trend: 'AI applications → AI infrastructure', count: 17, source: '20VC, All-In, Invest Like Best', insight: 'The picks-and-shovels thesis is winning. Application layer seeing valuation compression.' },
+                { trend: 'Remote-first → Hybrid mandatory', count: 12, source: 'Various founder interviews', insight: 'Even YC companies are requiring 3 days in office. Culture concerns driving reversal.' },
+                { trend: 'B2C skepticism rising', count: 8, source: 'Benchmark, Lightspeed pods', insight: 'Consumer acquisition costs making B2C uninvestable unless viral growth proven.' },
+                { trend: 'DevTools consolidation predicted', count: 6, source: 'Developer tea, TWIG', insight: 'Too many point solutions. Platformization wave coming in next 18 months.' },
+                { trend: 'Climate tech quietly resurging', count: 5, source: 'Khosla, Breakthrough pods', insight: 'New narrative around adaptation tech, not just mitigation. Defense angle emerging.' }
+            ];
+            
+            narratives.forEach(item => {
+                content += `
+                    <div class="signal-item">
+                        <div class="signal-item-header">
+                            <div class="signal-item-title">${item.trend}</div>
+                            <div class="signal-item-meta">
+                                <span class="signal-item-count">${item.count} mentions</span>
+                            </div>
+                        </div>
+                        <div class="signal-item-source">${item.source}</div>
+                        <div class="signal-item-insight">${item.insight}</div>
+                    </div>
+                `;
+            });
+        } else if (signalType === 'thesis-validation') {
+            const validations = [
+                { thesis: 'Vertical AI > Horizontal AI', status: 'VALIDATED', sources: 'Gerstner, Wolfe, Stebbings all agree', insight: 'Every horizontal play struggling with differentiation. Vertical expertise is the moat.' },
+                { thesis: 'Series A at 20-30x ARR is new normal', status: 'VALIDATED', sources: '12 sources confirm', insight: 'Market has found equilibrium after 18-month correction. Higher only for AI infra.' },
+                { thesis: 'Developer experience as primary differentiator', status: 'EMERGING', sources: 'a16z, Redpoint discussions', insight: 'DX is the new UX. Poor developer experience kills B2B adoption instantly.' },
+                { thesis: 'PLG dead for enterprise', status: 'VALIDATED', sources: 'Multiple enterprise founders', insight: 'Sales-led making comeback. PLG only works for developer tools now.' }
+            ];
+            
+            validations.forEach(item => {
+                content += `
+                    <div class="signal-item">
+                        <div class="signal-item-header">
+                            <div class="signal-item-title">${item.thesis}</div>
+                            <div class="signal-item-meta">
+                                <span class="signal-item-count" style="color: ${item.status === 'VALIDATED' ? 'var(--sage)' : 'var(--amber-glow)'};">${item.status}</span>
+                            </div>
+                        </div>
+                        <div class="signal-item-source">${item.sources}</div>
+                        <div class="signal-item-insight">${item.insight}</div>
+                    </div>
+                `;
+            });
+        } else if (signalType === 'notable-deals') {
+            const deals = [
+                { company: 'Perplexity', details: 'Series B at $10B valuation', insight: 'Sequoia got 3x liquidation preference. New structure becoming standard for hot deals.' },
+                { company: 'Anthropic (rumored)', details: 'Series D at $40B', insight: 'Google deepening partnership. Strategic investors winning over pure financial.' },
+                { company: 'Cursor', details: 'Series A at $400M', insight: 'Developer tools with AI seeing 10x valuation premiums. Metrics don\'t matter yet.' }
+            ];
+            
+            deals.forEach(item => {
+                content += `
+                    <div class="signal-item">
+                        <div class="signal-item-header">
+                            <div class="signal-item-title">${item.company}</div>
+                        </div>
+                        <div class="signal-item-source">${item.details}</div>
+                        <div class="signal-item-insight">${item.insight}</div>
+                    </div>
+                `;
+            });
+        } else if (signalType === 'portfolio-mentions') {
+            const mentions = [
+                { company: 'Your Portfolio Co (unnamed)', context: 'Mentioned by Gerstner as example of efficient growth', sentiment: 'POSITIVE', action: 'Leverage for fundraising' },
+                { company: 'Competitor analysis', context: 'Three funds discussing your space', sentiment: 'NEUTRAL', action: 'Watch for new entrants' },
+                { company: 'Market positioning', context: 'Your vertical getting increased attention', sentiment: 'POSITIVE', action: 'Accelerate hiring' }
+            ];
+            
+            mentions.forEach(item => {
+                content += `
+                    <div class="signal-item">
+                        <div class="signal-item-header">
+                            <div class="signal-item-title">${item.company}</div>
+                            <div class="signal-item-meta">
+                                <span class="signal-item-count" style="color: ${item.sentiment === 'POSITIVE' ? 'var(--sage)' : 'var(--gray-600)'};">${item.sentiment}</span>
+                            </div>
+                        </div>
+                        <div class="signal-item-source">${item.context}</div>
+                        <div class="signal-item-insight">Action: ${item.action}</div>
+                    </div>
+                `;
+            });
+        } else if (signalType === 'lp-sentiment') {
+            const shifts = [
+                { trend: 'DPI focus intensifying', source: 'CalPERS on Institutional Investor pod', impact: 'First-time funds facing 18+ month raises' },
+                { trend: 'Vintage year concerns', source: 'Multiple endowment discussions', impact: '2021-2022 vintages being written down aggressively' },
+                { trend: 'Co-invest appetite growing', source: 'Sovereign wealth discussions', impact: 'LPs want more direct exposure, less blind pool risk' }
+            ];
+            
+            shifts.forEach(item => {
+                content += `
+                    <div class="signal-item">
+                        <div class="signal-item-header">
+                            <div class="signal-item-title">${item.trend}</div>
+                        </div>
+                        <div class="signal-item-source">${item.source}</div>
+                        <div class="signal-item-insight">${item.impact}</div>
+                    </div>
+                `;
+            });
+        }
+        
+        content += '</div>';
+        contentEl.innerHTML = content;
+        
+        // Show panel and backdrop
+        panel.classList.add('open');
+        backdrop.classList.add('visible');
+    },
+    
+    closeSignalPanel: function() {
+        const panel = document.getElementById('signalDetailPanel');
+        const backdrop = document.querySelector('.panel-backdrop');
+        
+        panel.classList.remove('open');
+        backdrop.classList.remove('visible');
+    },
+    
+    setupPanelData: function() {
+        // Future: Could move all panel data here for easier management
+    }
+};
+
+window.NotableSignals = NotableSignals;

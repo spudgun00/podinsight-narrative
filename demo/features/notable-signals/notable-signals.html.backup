@@ -1,0 +1,136 @@
+<!-- Notable Signals Section -->
+<section class="signals-section">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Notable Signals</h2>
+            <p class="section-subtitle">Key patterns from this week's episodes</p>
+        </div>
+    </div>
+
+    <div class="signals-grid">
+        <div class="signal-card" data-signal-type="market-narratives" data-strength="high">
+            <div class="signal-content">
+                <div class="signal-type">Market Narratives</div>
+                <div class="signal-icon">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="14" height="14" rx="2"/>
+                        <path d="M7 10L10 7L13 10"/>
+                    </svg>
+                </div>
+                <div class="signal-insight">Efficiency > Growth</div>
+                <div class="signal-label">New dominant narrative</div>
+            </div>
+            <div class="signal-strength">
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot"></span>
+            </div>
+        </div>
+        <div class="signal-card" data-signal-type="thesis-validation" data-strength="high">
+            <div class="signal-content">
+                <div class="signal-type">Thesis Validation</div>
+                <div class="signal-icon">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10" cy="10" r="8"/>
+                        <path d="M6 10L9 13L14 7"/>
+                    </svg>
+                </div>
+                <div class="signal-insight">Vertical AI Consensus</div>
+                <div class="signal-label">4 tier-1 VCs aligned</div>
+            </div>
+            <div class="signal-strength">
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+            </div>
+        </div>
+        <div class="signal-card" data-signal-type="notable-deals" data-strength="medium">
+            <div class="signal-content">
+                <div class="signal-type">Notable Deals</div>
+                <div class="signal-icon">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10" cy="10" r="7"/>
+                        <path d="M10 5V10L13 13"/>
+                    </svg>
+                </div>
+                <div class="signal-insight">Perplexity @ $10B</div>
+                <div class="signal-label">Unusual terms emerging</div>
+            </div>
+            <div class="signal-strength">
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot"></span>
+            </div>
+        </div>
+        <div class="signal-card" data-signal-type="portfolio-mentions" data-strength="high">
+            <div class="signal-content">
+                <div class="signal-type">Portfolio Mentions</div>
+                <div class="signal-icon">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="8" width="12" height="8" rx="1"/>
+                        <path d="M8 8V6C8 4 9 3 10 3C11 3 12 4 12 6V8"/>
+                    </svg>
+                </div>
+                <div class="signal-insight">2 Competitive Threats</div>
+                <div class="signal-label">High exposure risk</div>
+            </div>
+            <div class="signal-strength">
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+            </div>
+        </div>
+        <div class="signal-card" data-signal-type="lp-sentiment" data-strength="medium">
+            <div class="signal-content">
+                <div class="signal-type">LP Sentiment</div>
+                <div class="signal-icon">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 17L7 13L11 15L17 9"/>
+                        <path d="M13 9H17V13"/>
+                    </svg>
+                </div>
+                <div class="signal-insight">DPI Focus Rising</div>
+                <div class="signal-label">Risk appetite declining</div>
+            </div>
+            <div class="signal-strength">
+                <span class="strength-dot active"></span>
+                <span class="strength-dot active"></span>
+                <span class="strength-dot"></span>
+                <span class="strength-dot"></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Search Prompt -->
+    <div class="ai-search-callout">
+        <span>Have a specific question about these insights?</span>
+        <span class="ai-search-pointer">Ask our AI →</span>
+    </div>
+</section>
+
+<!-- Panel Backdrop -->
+<div class="panel-backdrop"></div>
+
+<!-- Signal Detail Panel -->
+<div class="signal-detail-panel" id="signalDetailPanel">
+    <div class="panel-header">
+        <div>
+            <h3 class="panel-title" id="panelTitle">Market Narratives</h3>
+            <p class="panel-subtitle" id="panelSubtitle">Key intelligence from this week's episodes</p>
+        </div>
+        <button class="panel-close">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6L14 14M6 14L14 6"/>
+            </svg>
+        </button>
+    </div>
+    <div class="panel-content" id="panelContent">
+        <div class="signal-items-list">
+            <!-- Content will be dynamically generated -->
+        </div>
+    </div>
+</div>

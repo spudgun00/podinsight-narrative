@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse Portfolio Panel</title>
+    <style>
+        :root {
+            --deep-ink: #1a1a2e;
+            --warm-paper: #fafaf9;
+            --sage: #4a7c59;
+            --sage-light: #4a7c5920;
+            --dusty-rose: #c77d7d;
+            --amber-glow: #f4a261;
+            --border-subtle: #e5e5e4;
+            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-panel: -4px 0 24px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: var(--warm-paper);
+            color: var(--deep-ink);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Main Dashboard Background (for context) */
+        .dashboard-bg {
+            position: absolute;
+            inset: 0;
+            padding: 24px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .dashboard-bg h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--deep-ink);
+        }
+
+        /* Semi-transparent Backdrop */
+        .backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 26, 46, 0.1);
+            backdrop-filter: blur(2px);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Portfolio Button in Nav */
+        .nav-portfolio-button {
+            position: fixed;
+            top: 20px;
+            right: 140px;
+            background: white;
+            border: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-portfolio-button:hover {
+            border-color: var(--sage);
+            transform: translateY(-1px);
+        }
+
+        .nav-portfolio-button .indicator {
+            width: 6px;
+            height: 6px;
+            background: var(--sage);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Panel Container */
+        .portfolio-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 420px;
+            background: white;
+            box-shadow: var(--shadow-panel);
+            transform: translateX(0);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Panel Header */
+        .panel-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+
+        .close-button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--warm-paper);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: var(--sage-light);
+        }
+
+        /* Panel Content */
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        /* Quick Add Section */
+        .quick-add {
+            margin-bottom: 32px;
+        }
+
+        .quick-add h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .add-company-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .company-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .company-input:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px var(--sage-light);
+        }
+
+        .add-button {
+            padding: 10px 16px;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-button:hover {
+            background: #3d6548;
+            transform: translateY(-1px);
+        }
+
+        /* Import Section */
+        .import-section {
+            margin-bottom: 32px;
+            padding: 20px;
+            background: var(--warm-paper);
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .import-section p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .import-button {
+            flex: 1;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .import-button:hover {
+            border-color: var(--sage);
+            background: var(--sage-light);
+        }
+
+        /* Portfolio List */
+        .portfolio-list {
+            margin-top: 24px;
+        }
+
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .portfolio-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+
+        .company-count {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Company Cards */
+        .company-card {
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .company-card:hover {
+            border-color: var(--sage);
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .company-card.threat {
+            border-left: 3px solid var(--dusty-rose);
+        }
+
+        .company-card.validated {
+            border-left: 3px solid var(--sage);
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .company-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+
+        .mention-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .mention-badge.positive {
+            color: var(--sage);
+        }
+
+        .mention-badge.threat {
+            color: var(--dusty-rose);
+        }
+
+        .company-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .threat-label {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: rgba(199, 125, 125, 0.1);
+            color: var(--dusty-rose);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .validated-label {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: var(--sage-light);
+            color: var(--sage);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: #666;
+        }
+
+        .empty-state h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--deep-ink);
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .panel-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--warm-paper);
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--dusty-rose);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Background for Context -->
+    <div class="dashboard-bg">
+        <h3>Topic Momentum This Week</h3>
+        <p>AI infrastructure dominates with Series A at 20-30x ARR...</p>
+    </div>
+
+    <!-- Semi-transparent Backdrop -->
+    <div class="backdrop"></div>
+
+    <!-- Portfolio Button in Navigation -->
+    <button class="nav-portfolio-button">
+        <span class="indicator"></span>
+        Portfolio
+        <span class="notification-badge">5</span>
+    </button>
+
+    <!-- Portfolio Panel -->
+    <div class="portfolio-panel">
+        <!-- Header -->
+        <div class="panel-header">
+            <h2>Your Portfolio Intelligence</h2>
+            <button class="close-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="panel-content">
+            <!-- Quick Add -->
+            <div class="quick-add">
+                <h3>Quick Add</h3>
+                <form class="add-company-form">
+                    <input type="text" class="company-input" placeholder="Company name..." />
+                    <button type="submit" class="add-button">+ Add</button>
+                </form>
+            </div>
+
+            <!-- Import Section -->
+            <div class="import-section">
+                <p>Or import your portfolio:</p>
+                <div class="import-buttons">
+                    <button class="import-button">
+                        📎 Upload CSV
+                    </button>
+                    <button class="import-button">
+                        🔗 Connect CRM
+                    </button>
+                </div>
+            </div>
+
+            <!-- Portfolio List -->
+            <div class="portfolio-list">
+                <div class="portfolio-header">
+                    <h3>Your Companies</h3>
+                    <span class="company-count">(12)</span>
+                </div>
+
+                <!-- Company Cards -->
+                <div class="company-card validated">
+                    <div class="company-header">
+                        <span class="company-name">Acme AI</span>
+                        <span class="mention-badge positive">✓ 3 mentions</span>
+                    </div>
+                    <div class="company-details">
+                        2 positive, 1 neutral
+                        <span class="validated-label">Thesis validated</span>
+                    </div>
+                </div>
+
+                <div class="company-card threat">
+                    <div class="company-header">
+                        <span class="company-name">DataBricks</span>
+                        <span class="mention-badge threat">⚠ 5 mentions</span>
+                    </div>
+                    <div class="company-details">
+                        Competitive landscape heating up
+                        <span class="threat-label">Competitive threat</span>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-header">
+                        <span class="company-name">Vertical SaaS Co</span>
+                        <span class="mention-badge positive">✓ 1 mention</span>
+                    </div>
+                    <div class="company-details">
+                        Brad Gerstner validated vertical thesis
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-header">
+                        <span class="company-name">CloudInfra Inc</span>
+                        <span class="mention-badge">0 mentions</span>
+                    </div>
+                    <div class="company-details">
+                        No mentions this week
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="panel-footer">
+            Import formats: CSV, Affinity, Airtable, PitchBook
+        </div>
+    </div>
+</body>
+</html>

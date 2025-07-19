@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "graphiti-memory": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "podinsight-graphiti-mcp",
+        "python",
+        "-m",
+        "mcp",
+        "server"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+/* 
+ * utilities.css
+ * Helper Classes and Animations
+ * This file contains:
+ * - Animation keyframes
+ * - Utility classes for visibility, spacing, etc.
+ * - Media queries for responsive design
+ * - Helper classes and modifiers
+ */
+        .chart-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Draw animation for paths */
+        @keyframes drawPath {
+            from {
+                stroke-dashoffset: 1000;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        .animate-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 1s ease-out forwards;
+        }
+        .filter-active.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile responsive styles for chart labels */
+        @media (max-width: 640px) {
+            .hide-mobile {
+                display: none;
+            }
+        }
+        
+        /* Static dots - no animation */
+        .data-point-dot {
+            transform-origin: center;
+            transition: opacity 200ms ease;
+        }
+        }
+        .show-more-button:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .show-more-button svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+        .show-more-button:hover svg {
+            transform: translateY(2px);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        .panel-backdrop.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        /* Volume view animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        /* Media queries - ordered from largest to smallest */
+        @media (max-width: 1200px) {
+            .signal-detail-panel {
+                width: 400px;
+            }
+        }
+        @media (max-width: 768px) {
+            .signal-detail-panel {
+                width: 100%;
+            }
+        }

@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
+@layer base {
+  :root {
+    --background: theme('colors.warm-paper');
+    --foreground: theme('colors.deep-ink');
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-warm-paper text-deep-ink;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre {
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  ::selection {
+    @apply bg-sage/20 text-deep-ink;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: theme('colors.deep-ink');
+      --foreground: theme('colors.warm-paper');
+    }
+
+    body {
+      @apply bg-deep-ink text-warm-paper;
+    }
+
+    ::selection {
+      @apply bg-sage/30 text-warm-paper;
+    }
+  }
+}
+
+@layer components {
+  .prose {
+    @apply text-deep-ink leading-relaxed;
+  }
+
+  .prose h1 {
+    @apply text-3xl md:text-4xl font-bold mb-6;
+  }
+
+  .prose h2 {
+    @apply text-2xl md:text-3xl font-semibold mb-4 mt-8;
+  }
+
+  .prose h3 {
+    @apply text-xl md:text-2xl font-semibold mb-3 mt-6;
+  }
+
+  .prose p {
+    @apply mb-4 text-base md:text-lg;
+  }
+
+  .prose strong {
+    @apply font-semibold text-deep-ink;
+  }
+
+  .prose em {
+    @apply italic;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-sage pl-4 italic my-6;
+  }
+
+  .prose code {
+    @apply bg-slate-blue/10 px-1.5 py-0.5 rounded text-sm;
+  }
+
+  .prose pre {
+    @apply bg-deep-ink text-warm-paper p-4 rounded-lg overflow-x-auto my-6;
+  }
+
+  .prose a {
+    @apply text-sage underline underline-offset-2 hover:text-sage/80 transition-colors;
+  }
+
+  .prose ul {
+    @apply list-disc list-inside mb-4 space-y-2;
+  }
+
+  .prose ol {
+    @apply list-decimal list-inside mb-4 space-y-2;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .prose {
+      @apply text-warm-paper;
+    }
+
+    .prose strong {
+      @apply text-warm-paper;
+    }
+
+    .prose code {
+      @apply bg-slate-blue/20;
+    }
+
+    .prose pre {
+      @apply bg-slate-blue/20 text-warm-paper;
+    }
+
+    .prose a {
+      @apply text-amber-glow hover:text-amber-glow/80;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}

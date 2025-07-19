@@ -1,0 +1,328 @@
+// Narrative Pulse Component
+// Modular implementation of the Narrative Pulse feature
+
+const NarrativePulse = {
+    // Component state
+    activeFilter: null,
+    container: null,
+    
+    // Initialize the component
+    init: function(containerElement) {
+        this.container = containerElement;
+        this.bindEvents();
+        this.initMomentumView();
+        
+        // Expose global functions for backward compatibility
+        window.createConsensusView = this.createConsensusView.bind(this);
+        window.updateTooltipPosition = this.updateTooltipPosition.bind(this);
+        window.setTopicFilter = this.setTopicFilter.bind(this);
+        window.clearTopicFilter = this.clearTopicFilter.bind(this);
+    },
+    
+    // Bind event listeners
+    bindEvents: function() {
+        const container = this.container;
+        
+        // Time range toggle
+        const timeRangeBtn = container.querySelector('[data-action="toggleTimeRange"]');
+        if (timeRangeBtn) {
+            timeRangeBtn.addEventListener('click', this.toggleTimeRange.bind(this));
+        }
+        
+        // View toggle
+        const viewBtn = container.querySelector('[data-action="toggleView"]');
+        if (viewBtn) {
+            viewBtn.addEventListener('click', this.toggleView.bind(this));
+        }
+        
+        // Filter clear button
+        const filterClearBtn = container.querySelector('[data-action="clearTopicFilter"]');
+        if (filterClearBtn) {
+            filterClearBtn.addEventListener('click', this.clearTopicFilter.bind(this));
+        }
+    },
+    
+    // Toggle Time Range
+    toggleTimeRange: function() {
+        const timeText = this.container.querySelector('#timeRangeText');
+        const current = timeText.textContent;
+        if (current === '7 days') {
+            timeText.textContent = '30 days';
+        } else if (current === '30 days') {
+            timeText.textContent = '90 days';
+        } else {
+            timeText.textContent = '7 days';
+        }
+    },
+    
+    // Toggle View Mode
+    toggleView: function() {
+        const viewText = this.container.querySelector('#viewText');
+        const current = viewText.textContent;
+        
+        if (current === 'Momentum') {
+            viewText.textContent = 'Volume';
+            this.createVolumeView();
+        } else if (current === 'Volume') {
+            viewText.textContent = 'Consensus';
+            this.createConsensusView();
+        } else {
+            viewText.textContent = 'Momentum';
+            this.createMomentumView(); // Create momentum view dynamically
+        }
+    },
+    
+    // Create Volume View
+    createVolumeView: function() {
+        const chartContent = this.container.querySelector('#chartContent');
+        chartContent.innerHTML = `
+            <!-- Y-axis for volume -->
+            <text x="40" y="65" fill="#9ca3af" font-size="10" text-anchor="end">200</text>
+            <text x="40" y="105" fill="#9ca3af" font-size="10" text-anchor="end">150</text>
+            <text x="40" y="145" fill="#9ca3af" font-size="10" text-anchor="end">100</text>
+            <text x="40" y="185" fill="#9ca3af" font-size="10" text-anchor="end">50</text>
+            
+            <!-- Volume bars -->
+            <g class="volume-bar fade-in" data-topic="AI Agents">
+                <rect x="100" y="103" width="100" height="117" fill="#4a7c59" opacity="0.8" rx="4"/>
+                <text x="150" y="95" fill="#4a7c59" font-size="14" font-weight="600" text-anchor="middle">147</text>
+                <text x="150" y="245" fill="#6b7280" font-size="11" text-anchor="middle">AI Agents</text>
+            </g>
+            <g class="volume-bar fade-in" data-topic="Capital Efficiency">
+                <rect x="250" y="144" width="100" height="76" fill="#f4a261" opacity="0.8" rx="4"/>
+                <text x="300" y="136" fill="#f4a261" font-size="14" font-weight="600" text-anchor="middle">89</text>
+                <text x="300" y="245" fill="#6b7280" font-size="11" text-anchor="middle">Capital Eff.</text>
+            </g>
+            <g class="volume-bar fade-in" data-topic="DePIN">
+                <rect x="400" y="60" width="100" height="160" fill="#5a6c8c" opacity="0.8" rx="4"/>
+                <text x="450" y="52" fill="#5a6c8c" font-size="14" font-weight="600" text-anchor="middle">201</text>
+                <text x="450" y="245" fill="#6b7280" font-size="11" text-anchor="middle">DePIN</text>
+            </g>
+            <g class="volume-bar fade-in" data-topic="B2B SaaS">
+                <rect x="550" y="185" width="100" height="35" fill="#c77d7d" opacity="0.8" rx="4"/>
+                <text x="600" y="177" fill="#c77d7d" font-size="14" font-weight="600" text-anchor="middle">43</text>
+                <text x="600" y="245" fill="#6b7280" font-size="11" text-anchor="middle">B2B SaaS</text>
+            </g>
+            
+            <!-- Y-axis label -->
+            <text x="20" y="140" fill="#6b7280" font-size="10" text-anchor="middle" transform="rotate(-90 20 140)">Mentions</text>
+        `;
+        
+        // Initialize volume interactions
+        this.initVolumeInteractions();
+    },
+    
+    // Initialize volume interactions
+    initVolumeInteractions: function() {
+        const bars = this.container.querySelectorAll('.volume-bar');
+        const tooltip = this.container.querySelector('#chartTooltip');
+        
+        bars.forEach(bar => {
+            bar.addEventListener('mouseenter', (e) => {
+                const topic = bar.dataset.topic;
+                const data = window.topics[topic];
+                
+                tooltip.innerHTML = `${topic}: ${data.mentions} mentions across ${data.episodes} episodes`;
+                tooltip.classList.add('visible');
+                this.updateTooltipPosition(e);
+            });
+
+            bar.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('visible');
+            });
+
+            bar.addEventListener('mousemove', (e) => {
+                if (tooltip.classList.contains('visible')) {
+                    this.updateTooltipPosition(e);
+                }
+            });
+        });
+    },
+    
+    // Create Consensus View  
+    createConsensusView: function() {
+        const chartContent = this.container.querySelector('#chartContent');
+        const topicNames = ['AI Agents', 'Capital Efficiency', 'DePIN', 'B2B SaaS'];
+        const consensusLevels = [
+            [0.8, 0.6, 0.9, 0.7],
+            [0.5, 0.6, 0.7, 0.8],
+            [0.3, 0.5, 0.8, 0.9],
+            [0.4, 0.4, 0.3, 0.3]
+        ];
+        const labels = [
+            ['Building', 'Moderate', 'Strong', 'Strong'],
+            ['Moderate', 'Moderate', 'Strong', 'Strong'],
+            ['Weak', 'Moderate', 'Strong', 'Peak'],
+            ['Weak', 'Weak', 'Weak', 'Weak']
+        ];
+        const colors = ['#4a7c59', '#f4a261', '#5a6c8c', '#c77d7d'];
+
+        let html = '';
+        topicNames.forEach((topic, i) => {
+            html += `<g class="consensus-row fade-in-slow" data-topic="${topic}">`;
+            consensusLevels[i].forEach((level, j) => {
+                const x = 50 + j * 175;
+                const y = 50 + i * 50;
+                const color = colors[i];
+                html += `
+                    <rect class="consensus-cell" x="${x}" y="${y}" width="175" height="40" 
+                          fill="${color}" opacity="${level}" rx="4" 
+                          data-week="${j + 1}" data-level="${labels[i][j]}" data-percent="${Math.round(level * 100)}"/>
+                `;
+                if (labels[i][j] !== 'Weak') {
+                    html += `<text x="${x + 87.5}" y="${y + 25}" fill="white" font-size="11" text-anchor="middle">${labels[i][j]}</text>`;
+                }
+            });
+            html += '</g>';
+        });
+        
+        chartContent.innerHTML = html + `
+            <!-- Time labels for consensus view -->
+            <text x="137.5" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 1</text>
+            <text x="312.5" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 2</text>
+            <text x="487.5" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 3</text>
+            <text x="662.5" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 4</text>
+        `;
+    },
+    
+    // Update tooltip position
+    updateTooltipPosition: function(e) {
+        const chartContainer = this.container.querySelector('.chart-container');
+        const tooltip = this.container.querySelector('#chartTooltip');
+        const rect = chartContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        let tooltipX = x + 10;
+        let tooltipY = y - 30;
+
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const tooltipWidth = tooltipRect.width;
+        const tooltipHeight = tooltipRect.height;
+
+        if (tooltipX + tooltipWidth > rect.width - 20) {
+            tooltipX = x - tooltipWidth - 10;
+        }
+
+        if (tooltipY < 10) {
+            tooltipY = y + 20;
+        }
+
+        tooltip.style.left = tooltipX + 'px';
+        tooltip.style.top = tooltipY + 'px';
+    },
+    
+    // Set topic filter
+    setTopicFilter: function(topic) {
+        const filterIndicator = this.container.querySelector('#filterActive');
+        const filterTopicSpan = this.container.querySelector('#filterTopic');
+        
+        this.activeFilter = topic;
+        window.activeFilter = topic; // Maintain global compatibility
+        filterTopicSpan.textContent = topic;
+        filterIndicator.classList.add('show');
+        
+        this.container.querySelectorAll('.topic-line').forEach(line => {
+            if (line.dataset.topic === topic) {
+                line.classList.add('active');
+            } else {
+                line.classList.add('dimmed');
+            }
+        });
+        
+        this.container.querySelector('#chartTooltip').classList.remove('visible');
+    },
+    
+    // Clear topic filter
+    clearTopicFilter: function() {
+        const filterIndicator = this.container.querySelector('#filterActive');
+        
+        this.activeFilter = null;
+        window.activeFilter = null; // Maintain global compatibility
+        filterIndicator.classList.remove('show');
+        
+        this.container.querySelectorAll('.topic-line, .volume-bar, .consensus-row').forEach(el => {
+            el.classList.remove('active', 'dimmed');
+        });
+    },
+    
+    // Create Momentum View (to avoid page reload)
+    createMomentumView: function() {
+        const chartContent = this.container.querySelector('#chartContent');
+        chartContent.innerHTML = `
+            <!-- Momentum view (default) -->
+            <g class="topic-line" data-topic="AI Agents" data-momentum="+85%" data-color="#4a7c59">
+                <path d="M 50,180 Q 150,165 250,130 T 450,110 T 650,75 T 750,40" 
+                      fill="none" stroke="#4a7c59" stroke-width="3" class="topic-path animate-path"/>
+            </g>
+            <g class="topic-line" data-topic="Capital Efficiency" data-momentum="+17%" data-color="#f4a261">
+                <path d="M 50,195 Q 150,188 250,170 T 450,165 T 650,155 T 750,145" 
+                      fill="none" stroke="#f4a261" stroke-width="3" class="topic-path animate-path"/>
+            </g>
+            <g class="topic-line" data-topic="DePIN" data-momentum="+190%" data-color="#5a6c8c">
+                <path d="M 50,210 Q 150,200 250,165 T 450,145 T 650,105 T 750,65" 
+                      fill="none" stroke="#5a6c8c" stroke-width="3" class="topic-path animate-path"/>
+            </g>
+            <g class="topic-line" data-topic="B2B SaaS" data-momentum="+3%" data-color="#c77d7d">
+                <path d="M 50,150 Q 150,155 250,158 T 450,160 T 650,163 T 750,165" 
+                      fill="none" stroke="#c77d7d" stroke-width="3" class="topic-path animate-path"/>
+            </g>
+            
+            <!-- Time labels -->
+            <text x="150" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 1</text>
+            <text x="350" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 2</text>
+            <text x="550" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 3</text>
+            <text x="750" y="260" fill="#6b7280" font-size="11" text-anchor="middle">Week 4</text>
+        `;
+        
+        // Re-initialize momentum view interactions
+        this.initMomentumView();
+    },
+    
+    // Initialize momentum view interactions
+    initMomentumView: function() {
+        const topicLines = this.container.querySelectorAll('.topic-line');
+        const tooltip = this.container.querySelector('#chartTooltip');
+        
+        topicLines.forEach(line => {
+            line.addEventListener('mouseenter', (e) => {
+                if (!this.activeFilter && !window.activeFilter) {
+                    topicLines.forEach(other => {
+                        if (other !== line) other.classList.add('dimmed');
+                    });
+                    
+                    const topic = line.dataset.topic;
+                    const momentum = line.dataset.momentum;
+                    tooltip.innerHTML = `${topic} ${momentum}`;
+                    tooltip.classList.add('visible');
+                    this.updateTooltipPosition(e);
+                }
+            });
+
+            line.addEventListener('mouseleave', () => {
+                if (!this.activeFilter && !window.activeFilter) {
+                    topicLines.forEach(other => other.classList.remove('dimmed'));
+                    tooltip.classList.remove('visible');
+                }
+            });
+
+            line.addEventListener('mousemove', (e) => {
+                if (tooltip.classList.contains('visible')) {
+                    this.updateTooltipPosition(e);
+                }
+            });
+
+            line.addEventListener('click', () => {
+                const topic = line.dataset.topic;
+                if (this.activeFilter === topic || window.activeFilter === topic) {
+                    this.clearTopicFilter();
+                } else {
+                    this.setTopicFilter(topic);
+                }
+            });
+        });
+    }
+};
+
+// Export for use
+window.NarrativePulse = NarrativePulse;

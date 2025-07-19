@@ -1,0 +1,6 @@
+graphiti-core[google-genai,anthropic,groq]>=0.17.0
+mcp>=1.0.0
+neo4j>=5.0.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-dotenv>=1.0.0

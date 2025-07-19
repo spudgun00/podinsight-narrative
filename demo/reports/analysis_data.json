@@ -1,0 +1,771 @@
+{
+  "backup": {
+    "file": "backups/demo_20250717_210749.html"
+  },
+  "line_count": {
+    "status": "\u2717",
+    "expected": 3149,
+    "actual": 3150,
+    "match": false
+  },
+  "sections": [
+    {
+      "line": 1845,
+      "type": "comment",
+      "name": "Header",
+      "content": "<!-- Header -->"
+    },
+    {
+      "line": 1847,
+      "type": "div",
+      "name": "header-main",
+      "content": "<div class=\"header-main\">"
+    },
+    {
+      "line": 1849,
+      "type": "div",
+      "name": "header-actions",
+      "content": "<div class=\"header-actions\">"
+    },
+    {
+      "line": 1857,
+      "type": "div",
+      "name": "header-metrics",
+      "content": "<div class=\"header-metrics\">"
+    },
+    {
+      "line": 1866,
+      "type": "comment",
+      "name": "Main Container",
+      "content": "<!-- Main Container -->"
+    },
+    {
+      "line": 1867,
+      "type": "div",
+      "name": "container",
+      "content": "<div class=\"container\">"
+    },
+    {
+      "line": 1868,
+      "type": "comment",
+      "name": "Main Content",
+      "content": "<!-- Main Content -->"
+    },
+    {
+      "line": 1870,
+      "type": "comment",
+      "name": "Narrative Pulse (Topic Velocity Tracker)",
+      "content": "<!-- Narrative Pulse (Topic Velocity Tracker) -->"
+    },
+    {
+      "line": 1872,
+      "type": "div",
+      "name": "pulse-header",
+      "content": "<div class=\"pulse-header\">"
+    },
+    {
+      "line": 1896,
+      "type": "comment",
+      "name": "Legend moved outside chart area",
+      "content": "<!-- Legend moved outside chart area -->"
+    },
+    {
+      "line": 1920,
+      "type": "div",
+      "name": "chart-wrapper",
+      "content": "<div class=\"chart-wrapper\">"
+    },
+    {
+      "line": 1921,
+      "type": "comment",
+      "name": "Filter indicator (hidden by default)",
+      "content": "<!-- Filter indicator (hidden by default) -->"
+    },
+    {
+      "line": 1927,
+      "type": "div",
+      "name": "chart-container",
+      "content": "<div class=\"chart-container\">"
+    },
+    {
+      "line": 1928,
+      "type": "comment",
+      "name": "Tooltip (hidden by default)",
+      "content": "<!-- Tooltip (hidden by default) -->"
+    },
+    {
+      "line": 1931,
+      "type": "comment",
+      "name": "Topic Velocity Chart with Dynamic Views",
+      "content": "<!-- Topic Velocity Chart with Dynamic Views -->"
+    },
+    {
+      "line": 1933,
+      "type": "comment",
+      "name": "Grid lines",
+      "content": "<!-- Grid lines -->"
+    },
+    {
+      "line": 1940,
+      "type": "comment",
+      "name": "Y-axis labels",
+      "content": "<!-- Y-axis labels -->"
+    },
+    {
+      "line": 1947,
+      "type": "comment",
+      "name": "Chart content will be inserted by JavaScript",
+      "content": "<!-- Chart content will be inserted by JavaScript -->"
+    },
+    {
+      "line": 1949,
+      "type": "comment",
+      "name": "Momentum view (default)",
+      "content": "<!-- Momentum view (default) -->"
+    },
+    {
+      "line": 1968,
+      "type": "comment",
+      "name": "Time labels",
+      "content": "<!-- Time labels -->"
+    },
+    {
+      "line": 2015,
+      "type": "comment",
+      "name": "Narrative Feed",
+      "content": "<!-- Narrative Feed -->"
+    },
+    {
+      "line": 2017,
+      "type": "div",
+      "name": "section-header",
+      "content": "<div class=\"section-header\">"
+    },
+    {
+      "line": 2024,
+      "type": "div",
+      "name": "feed-container",
+      "content": "<div class=\"feed-container\">"
+    },
+    {
+      "line": 2025,
+      "type": "comment",
+      "name": "Feed Entry 1: AI Infrastructure Consensus",
+      "content": "<!-- Feed Entry 1: AI Infrastructure Consensus -->"
+    },
+    {
+      "line": 2027,
+      "type": "div",
+      "name": "feed-entry-header",
+      "content": "<div class=\"feed-entry-header\">"
+    },
+    {
+      "line": 2034,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2035,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Sources Reaching Consensus</div>"
+    },
+    {
+      "line": 2037,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2044,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2051,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2058,
+      "type": "div",
+      "name": "expansion-section expansion-dissent",
+      "content": "<div class=\"expansion-section expansion-dissent\">"
+    },
+    {
+      "line": 2059,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Dissenting Voice</div>"
+    },
+    {
+      "line": 2061,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2073,
+      "type": "comment",
+      "name": "Feed Entry 2: Peter Thiel Divergence",
+      "content": "<!-- Feed Entry 2: Peter Thiel Divergence -->"
+    },
+    {
+      "line": 2075,
+      "type": "div",
+      "name": "feed-entry-header",
+      "content": "<div class=\"feed-entry-header\">"
+    },
+    {
+      "line": 2082,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2083,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Contrarian Position</div>"
+    },
+    {
+      "line": 2085,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2092,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2093,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Mainstream Consensus He's Challenging</div>"
+    },
+    {
+      "line": 2095,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2102,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2114,
+      "type": "comment",
+      "name": "Feed Entry 3: Developer Experience Trend",
+      "content": "<!-- Feed Entry 3: Developer Experience Trend -->"
+    },
+    {
+      "line": 2116,
+      "type": "div",
+      "name": "feed-entry-header",
+      "content": "<div class=\"feed-entry-header\">"
+    },
+    {
+      "line": 2123,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2124,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Pattern Emerging Across Shows</div>"
+    },
+    {
+      "line": 2126,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2133,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2140,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2147,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2148,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Momentum Indicator</div>"
+    },
+    {
+      "line": 2156,
+      "type": "comment",
+      "name": "Feed Entry 4: LP Sentiment",
+      "content": "<!-- Feed Entry 4: LP Sentiment -->"
+    },
+    {
+      "line": 2158,
+      "type": "div",
+      "name": "feed-entry-header",
+      "content": "<div class=\"feed-entry-header\">"
+    },
+    {
+      "line": 2165,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2166,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">LP Sentiment Indicators</div>"
+    },
+    {
+      "line": 2168,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2175,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2182,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2183,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Impact on Fundraising</div>"
+    },
+    {
+      "line": 2191,
+      "type": "comment",
+      "name": "Feed Entry 5: Vertical AI Pattern",
+      "content": "<!-- Feed Entry 5: Vertical AI Pattern -->"
+    },
+    {
+      "line": 2193,
+      "type": "div",
+      "name": "feed-entry-header",
+      "content": "<div class=\"feed-entry-header\">"
+    },
+    {
+      "line": 2200,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2201,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Converging Thesis Validation</div>"
+    },
+    {
+      "line": 2203,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2207,
+      "type": "div",
+      "name": "expansion-quote",
+      "content": "<div class=\"expansion-quote\">\"Horizontal AI is a race to zero. Vertical AI with domain expertise is ..."
+    },
+    {
+      "line": 2210,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2217,
+      "type": "div",
+      "name": "expansion-source-header",
+      "content": "<div class=\"expansion-source-header\">"
+    },
+    {
+      "line": 2224,
+      "type": "div",
+      "name": "expansion-section",
+      "content": "<div class=\"expansion-section\">"
+    },
+    {
+      "line": 2225,
+      "type": "div",
+      "name": "expansion-section-title",
+      "content": "<div class=\"expansion-section-title\">Investment Implications</div>"
+    },
+    {
+      "line": 2235,
+      "type": "comment",
+      "name": "Notable Signals",
+      "content": "<!-- Notable Signals -->"
+    },
+    {
+      "line": 2237,
+      "type": "div",
+      "name": "section-header",
+      "content": "<div class=\"section-header\">"
+    },
+    {
+      "line": 2307,
+      "type": "comment",
+      "name": "AI Search Prompt",
+      "content": "<!-- AI Search Prompt -->"
+    },
+    {
+      "line": 2314,
+      "type": "comment",
+      "name": "Priority Briefings",
+      "content": "<!-- Priority Briefings -->"
+    },
+    {
+      "line": 2316,
+      "type": "div",
+      "name": "section-header",
+      "content": "<div class=\"section-header\">"
+    },
+    {
+      "line": 2325,
+      "type": "comment",
+      "name": "Priority Briefing 1 - Portfolio Alert (Critical)",
+      "content": "<!-- Priority Briefing 1 - Portfolio Alert (Critical) -->"
+    },
+    {
+      "line": 2327,
+      "type": "div",
+      "name": "episode-header",
+      "content": "<div class=\"episode-header\">"
+    },
+    {
+      "line": 2366,
+      "type": "comment",
+      "name": "Priority Briefing 2 - Thesis Match (Opportunity)",
+      "content": "<!-- Priority Briefing 2 - Thesis Match (Opportunity) -->"
+    },
+    {
+      "line": 2368,
+      "type": "div",
+      "name": "episode-header",
+      "content": "<div class=\"episode-header\">"
+    },
+    {
+      "line": 2406,
+      "type": "comment",
+      "name": "Priority Briefing 3 - Market Signal (Notable)",
+      "content": "<!-- Priority Briefing 3 - Market Signal (Notable) -->"
+    },
+    {
+      "line": 2408,
+      "type": "div",
+      "name": "episode-header",
+      "content": "<div class=\"episode-header\">"
+    },
+    {
+      "line": 2447,
+      "type": "comment",
+      "name": "Show More Button",
+      "content": "<!-- Show More Button -->"
+    },
+    {
+      "line": 2448,
+      "type": "div",
+      "name": "show-more-container",
+      "content": "<div class=\"show-more-container\">"
+    },
+    {
+      "line": 2459,
+      "type": "comment",
+      "name": "Intelligence Brief Sidebar",
+      "content": "<!-- Intelligence Brief Sidebar -->"
+    },
+    {
+      "line": 2461,
+      "type": "div",
+      "name": "synthesis-header",
+      "content": "<div class=\"synthesis-header\">"
+    },
+    {
+      "line": 2466,
+      "type": "div",
+      "name": "synthesis-header-actions",
+      "content": "<div class=\"synthesis-header-actions\">"
+    },
+    {
+      "line": 2482,
+      "type": "comment",
+      "name": "Actual AI-Generated Synthesis",
+      "content": "<!-- Actual AI-Generated Synthesis -->"
+    },
+    {
+      "line": 2490,
+      "type": "div",
+      "name": "brief-section",
+      "content": "<div class=\"brief-section\">"
+    },
+    {
+      "line": 2498,
+      "type": "div",
+      "name": "brief-section",
+      "content": "<div class=\"brief-section\">"
+    },
+    {
+      "line": 2505,
+      "type": "div",
+      "name": "brief-section",
+      "content": "<div class=\"brief-section\">"
+    },
+    {
+      "line": 2524,
+      "type": "div",
+      "name": "synthesis-section",
+      "content": "<div class=\"synthesis-section\">"
+    },
+    {
+      "line": 2549,
+      "type": "div",
+      "name": "synthesis-section",
+      "content": "<div class=\"synthesis-section\">"
+    },
+    {
+      "line": 2555,
+      "type": "div",
+      "name": "influence-bar-container",
+      "content": "<div class=\"influence-bar-container\">"
+    },
+    {
+      "line": 2562,
+      "type": "div",
+      "name": "influence-bar-container",
+      "content": "<div class=\"influence-bar-container\">"
+    },
+    {
+      "line": 2569,
+      "type": "div",
+      "name": "influence-bar-container",
+      "content": "<div class=\"influence-bar-container\">"
+    },
+    {
+      "line": 2576,
+      "type": "div",
+      "name": "influence-bar-container",
+      "content": "<div class=\"influence-bar-container\">"
+    },
+    {
+      "line": 2583,
+      "type": "div",
+      "name": "influence-bar-container",
+      "content": "<div class=\"influence-bar-container\">"
+    },
+    {
+      "line": 2591,
+      "type": "div",
+      "name": "synthesis-section",
+      "content": "<div class=\"synthesis-section\">"
+    },
+    {
+      "line": 2614,
+      "type": "div",
+      "name": "synthesis-section",
+      "content": "<div class=\"synthesis-section\">"
+    },
+    {
+      "line": 2617,
+      "type": "div",
+      "name": "pie-charts-container",
+      "content": "<div class=\"pie-charts-container\">"
+    },
+    {
+      "line": 2659,
+      "type": "comment",
+      "name": "Panel Backdrop",
+      "content": "<!-- Panel Backdrop -->"
+    },
+    {
+      "line": 2662,
+      "type": "comment",
+      "name": "Signal Detail Panel",
+      "content": "<!-- Signal Detail Panel -->"
+    },
+    {
+      "line": 2664,
+      "type": "div",
+      "name": "panel-header",
+      "content": "<div class=\"panel-header\">"
+    },
+    {
+      "line": 2677,
+      "type": "comment",
+      "name": "Content will be dynamically generated",
+      "content": "<!-- Content will be dynamically generated -->"
+    },
+    {
+      "line": 2682,
+      "type": "comment",
+      "name": "AI Search Interface",
+      "content": "<!-- AI Search Interface -->"
+    },
+    {
+      "line": 2686,
+      "type": "comment",
+      "name": "Faceted Crystal/Prism",
+      "content": "<!-- Faceted Crystal/Prism -->"
+    },
+    {
+      "line": 2768,
+      "type": "comment",
+      "name": "Y-axis for volume",
+      "content": "<!-- Y-axis for volume -->"
+    },
+    {
+      "line": 2774,
+      "type": "comment",
+      "name": "Volume bars",
+      "content": "<!-- Volume bars -->"
+    },
+    {
+      "line": 2796,
+      "type": "comment",
+      "name": "Y-axis label",
+      "content": "<!-- Y-axis label -->"
+    },
+    {
+      "line": 2981,
+      "type": "div",
+      "name": "signal-item-header",
+      "content": "<div class=\"signal-item-header\">"
+    },
+    {
+      "line": 3003,
+      "type": "div",
+      "name": "signal-item-header",
+      "content": "<div class=\"signal-item-header\">"
+    },
+    {
+      "line": 3024,
+      "type": "div",
+      "name": "signal-item-header",
+      "content": "<div class=\"signal-item-header\">"
+    },
+    {
+      "line": 3042,
+      "type": "div",
+      "name": "signal-item-header",
+      "content": "<div class=\"signal-item-header\">"
+    },
+    {
+      "line": 3063,
+      "type": "div",
+      "name": "signal-item-header",
+      "content": "<div class=\"signal-item-header\">"
+    }
+  ],
+  "functions": [
+    {
+      "name": "toggleFeedEntry",
+      "line": 2702,
+      "type": "function"
+    },
+    {
+      "name": "toggleBrief",
+      "line": 2715,
+      "type": "function"
+    },
+    {
+      "name": "toggleTimeRange",
+      "line": 2735,
+      "type": "function"
+    },
+    {
+      "name": "toggleView",
+      "line": 2748,
+      "type": "function"
+    },
+    {
+      "name": "createVolumeView",
+      "line": 2765,
+      "type": "function"
+    },
+    {
+      "name": "initVolumeInteractions",
+      "line": 2805,
+      "type": "function"
+    },
+    {
+      "name": "openSignalPanel",
+      "line": 2938,
+      "type": "function"
+    },
+    {
+      "name": "closeSignalPanel",
+      "line": 3081,
+      "type": "function"
+    },
+    {
+      "name": "initMomentumView",
+      "line": 3103,
+      "type": "function"
+    }
+  ],
+  "event_handlers": {
+    "total": 37,
+    "by_type": {
+      "mouseenter": 2,
+      "mouseleave": 2,
+      "mousemove": 2,
+      "keydown": 1,
+      "domcontentloaded": 1,
+      "click": 17,
+      "tent": 1,
+      "hover": 8,
+      "last": 2,
+      "nth": 1
+    },
+    "unique_types": 10
+  },
+  "folders": {
+    "total_folders": 10,
+    "created": [
+      "components",
+      "components/dashboard",
+      "components/ui",
+      "components/layout",
+      "styles",
+      "utils",
+      "data",
+      "public",
+      "reports"
+    ],
+    "already_existed": [
+      "backups"
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse - Generate PDF</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .accent { color: #16a34a; }
+        .steps {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .steps li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+        }
+        .preview-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .note {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VC<span class="accent">Pulse</span> - Generate PDF</h1>
+        <p>Generate a PDF version of the Weekly Intelligence Brief</p>
+        
+        <div class="steps">
+            <h3>Quick Steps to Generate PDF:</h3>
+            <ol>
+                <li>Click the button below to open the Weekly Brief</li>
+                <li>Press <code>Cmd+P</code> (Mac) or <code>Ctrl+P</code> (Windows/Linux)</li>
+                <li>In the print dialog:
+                    <ul>
+                        <li>Destination: <strong>Save as PDF</strong></li>
+                        <li>Layout: <strong>Portrait</strong></li>
+                        <li>Paper size: <strong>A4</strong> or <strong>Letter</strong></li>
+                        <li>Margins: <strong>None</strong></li>
+                        <li>Options: ✓ <strong>Background graphics</strong> (Important!)</li>
+                    </ul>
+                </li>
+                <li>Click "Save" and name it <code>vcpulse-weekly-brief.pdf</code></li>
+            </ol>
+        </div>
+        
+        <div class="note">
+            <strong>⚠️ Important:</strong> Make sure "Background graphics" is enabled in the print dialog to preserve all colors and styling.
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="1.html" target="_blank" class="btn">Open Weekly Brief for PDF Generation</a>
+        </div>
+        
+        <h3>Preview:</h3>
+        <iframe src="1.html" class="preview-frame"></iframe>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <h3>Alternative Methods:</h3>
+            <p>For automated PDF generation, you can use:</p>
+            <ul>
+                <li><strong>Python:</strong> <code>pip install weasyprint && python generate-pdf.py</code></li>
+                <li><strong>Node.js:</strong> <code>npm install && node generate-pdf.js</code></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-open print dialog when the main document loads
+        window.addEventListener('message', function(e) {
+            if (e.data === 'ready-to-print') {
+                setTimeout(() => {
+                    window.print();
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

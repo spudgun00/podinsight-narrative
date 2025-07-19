@@ -1,0 +1,385 @@
+<!-- Priority Briefings Section -->
+<section class="episode-section">
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Priority Briefings</h2>
+            <p class="section-subtitle">What requires your attention today</p>
+        </div>
+        <a href="#" class="all-episodes-link">All Briefings →</a>
+    </div>
+
+    <div class="episode-grid">
+        <!-- Priority Briefing 1 - Portfolio Alert (Critical) -->
+        <div class="episode-card priority-critical">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 12L12 8L16 12M8 16L12 12L16 16" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">20VC with Harry Stebbings</div>
+                        <div class="episode-time">2h ago • 72 min • <span style="color: var(--sage); font-weight: 600;">94% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-red">Portfolio Alert</div>
+            </div>
+            <h3 class="episode-title">Why We're Wrong About AI Valuations</h3>
+            <p class="episode-guest">Guest: Brad Gerstner, Founder & CEO at Altimeter Capital</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Series A valuations settling at 20-30x ARR, sustainable after 18 months of chaos</li>
+                    <li>AI adoption driving 2-3x better retention in SaaS</li>
+                    <li>Perplexity at $10B but Sequoia got 3x liquidation preference</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag thesis">✓ Thesis Match: Vertical AI thesis validated</span>
+                <span class="signal-tag portfolio">⚠ Portfolio Alert: Your company mentioned by name</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>2h ago</span>
+                    <span>•</span>
+                    <span>72 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 2 - Thesis Match (Opportunity) -->
+        <div class="episode-card priority-opportunity">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9H21M9 3V21"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">Stratechery</div>
+                        <div class="episode-time">1d ago • 44 min • <span style="color: var(--sage); font-weight: 600;">68% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-green">Thesis Match</div>
+            </div>
+            <h3 class="episode-title">The State of SaaS</h3>
+            <p class="episode-guest">Host: Ben Thompson</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Vertical SaaS companies achieving 150%+ net revenue retention</li>
+                    <li>Infrastructure costs dropping 80% YoY enabling new business models</li>
+                    <li>Developer tools consolidation wave beginning - 3 major acquisitions coming</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag market">◆ Market Signal: Aligns with your developer tools thesis</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>1d ago</span>
+                    <span>•</span>
+                    <span>44 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 3 - Market Signal (Notable) -->
+        <div class="episode-card priority-elevated">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1V9M12 15V23M4.22 4.22L9.88 9.88M14.12 14.12L19.78 19.78M1 12H9M15 12H23M4.22 19.78L9.88 14.12M14.12 9.88L19.78 4.22"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">Invest Like the Best</div>
+                        <div class="episode-time">3h ago • 68 min • <span style="color: var(--sage); font-weight: 600;">82% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal">Market Signal</div>
+            </div>
+            <h3 class="episode-title">Why Developer Tools Are Harder Than We Thought</h3>
+            <p class="episode-guest">Guest: Dylan Field, CEO at Figma</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Developer tool reality: need 1000+ free users before first paid conversion</li>
+                    <li>Market bifurcating - small startups stay free forever, enterprises spending 5x more</li>
+                    <li>Adobe's failed Figma acquisition creating M&A opportunity window</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag lp">◇ LP Intel: Multiple LPs questioning developer tool investments</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>3h ago</span>
+                    <span>•</span>
+                    <span>68 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 4 - Portfolio Alert -->
+        <div class="episode-card priority-critical">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M3 13h8l2-8 2 16 2-8h4" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">Acquired</div>
+                        <div class="episode-time">1d ago • 156 min • <span style="color: var(--sage); font-weight: 600;">82% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-red">Portfolio Alert</div>
+            </div>
+            <h3 class="episode-title">The Nvidia Company Story: Part II</h3>
+            <p class="episode-guest">Guest: Jensen Huang, CEO of Nvidia</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>GPU architecture evolution mirrors platform shifts in tech history</li>
+                    <li>Data center revenue now 80% of business, validating infrastructure thesis</li>
+                    <li>AI training costs following Moore's Law in reverse - doubling every 2 years</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag thesis">✓ Thesis Match: AI Infrastructure</span>
+                <span class="signal-tag portfolio">⚠ Competitive Intel: AMD positioning</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>1d ago</span>
+                    <span>•</span>
+                    <span>156 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 5 - Thesis Match -->
+        <div class="episode-card priority-opportunity">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor"/>
+                            <path d="M12 6v6l4 2" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">The Tim Ferriss Show</div>
+                        <div class="episode-time">1d ago • 112 min • <span style="color: var(--sage); font-weight: 600;">78% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-green">Thesis Match</div>
+            </div>
+            <h3 class="episode-title">Palmer Luckey on Defense Tech's Golden Age</h3>
+            <p class="episode-guest">Guest: Palmer Luckey, Founder of Anduril</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Defense tech hitting inflection point with $1.5B Series F at $8.5B valuation</li>
+                    <li>Bipartisan support creating unprecedented 10-year visibility for contracts</li>
+                    <li>Software eating defense: 70% of value now in autonomous systems</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag market">◆ Market Signal: Defense Tech</span>
+                <span class="signal-tag thesis">✓ Thesis Match: Dual-Use Technology</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>1d ago</span>
+                    <span>•</span>
+                    <span>112 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 6 - Market Signal -->
+        <div class="episode-card priority-elevated">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor"/>
+                            <path d="M9 9h6M9 15h6" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">Indie Hackers</div>
+                        <div class="episode-time">2d ago • 89 min • <span style="color: var(--sage); font-weight: 600;">71% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal">Market Signal</div>
+            </div>
+            <h3 class="episode-title">AI Coding Tools: The $10B Market Nobody Saw Coming</h3>
+            <p class="episode-guest">Guest: Amjad Masad, CEO of Replit</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>GitHub Copilot at $100M ARR in under 2 years, fastest B2B growth ever</li>
+                    <li>Developer productivity tools seeing 150% net revenue retention</li>
+                    <li>Next frontier: AI agents that ship production code autonomously</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag market">◆ Dev Tools Opportunity</span>
+                <span class="signal-tag market">◆ AI Applications</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>2d ago</span>
+                    <span>•</span>
+                    <span>89 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 7 - Market Signal -->
+        <div class="episode-card priority-elevated">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">This Week in Startups</div>
+                        <div class="episode-time">2d ago • 95 min • <span style="color: var(--sage); font-weight: 600;">74% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal">Market Signal</div>
+            </div>
+            <h3 class="episode-title">OpenAI's Path to $100B: Lessons for AI Startups</h3>
+            <p class="episode-guest">Guest: Sam Altman, CEO of OpenAI</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Revenue run rate hit $3.4B, up from $1.6B six months ago</li>
+                    <li>Enterprise adoption accelerating: 92% of Fortune 500 now customers</li>
+                    <li>Margin profile improving as inference costs drop 90% year-over-year</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag market">◆ AI Leaders</span>
+                <span class="signal-tag market">◆ Market Expansion</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>2d ago</span>
+                    <span>•</span>
+                    <span>95 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 8 - Thesis Match -->
+        <div class="episode-card priority-opportunity">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">The Knowledge Project</div>
+                        <div class="episode-time">3d ago • 102 min • <span style="color: var(--sage); font-weight: 600;">68% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-green">Thesis Match</div>
+            </div>
+            <h3 class="episode-title">Climate Tech's Profitability Turn</h3>
+            <p class="episode-guest">Guest: Ryan Orbuch, Partner at Lowercarbon Capital</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>First wave of climate unicorns reaching profitability without subsidies</li>
+                    <li>Industrial heat and carbon capture seeing 70% gross margins</li>
+                    <li>LP interest surging: $45B allocated to climate funds in 2024</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag thesis">✓ Climate Tech</span>
+                <span class="signal-tag market">◆ Sustainability</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>3d ago</span>
+                    <span>•</span>
+                    <span>102 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+
+        <!-- Priority Briefing 9 - Thesis Match -->
+        <div class="episode-card priority-opportunity">
+            <div class="episode-header">
+                <div class="podcast-info">
+                    <div class="podcast-avatar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M3 3h18v18H3zM12 8v8M8 12h8" stroke="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">BG2</div>
+                        <div class="episode-time">3d ago • 118 min • <span style="color: var(--sage); font-weight: 600;">65% influence</span></div>
+                    </div>
+                </div>
+                <div class="episode-signal priority-green">Thesis Match</div>
+            </div>
+            <h3 class="episode-title">The New Physics of Venture: Power Laws in the AI Era</h3>
+            <p class="episode-guest">Guest: Brad Gerstner & Bill Gurley</p>
+            <div class="key-insights">
+                <div class="key-insights-label">Key Insights</div>
+                <ul class="insight-list">
+                    <li>Traditional 10x fund returns becoming 100x in AI-native companies</li>
+                    <li>Capital efficiency paradox: AI companies need less but command more</li>
+                    <li>Warning signs: Late-stage valuations disconnecting from fundamentals</li>
+                </ul>
+            </div>
+            <div class="additional-signals">
+                <span class="signal-tag lp">◇ Fund Strategy</span>
+                <span class="signal-tag market">◆ Valuation Trends</span>
+            </div>
+            <div class="episode-footer">
+                <div class="episode-stats">
+                    <span>3d ago</span>
+                    <span>•</span>
+                    <span>118 min</span>
+                </div>
+                <a href="#" class="episode-action">View Full Brief →</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Show More Button -->
+    <div class="show-more-container">
+        <button class="show-more-button" aria-expanded="false">
+            <span class="show-more-text">Show more</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6L8 10L12 6"/>
+            </svg>
+        </button>
+    </div>
+</section>

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse Search Integration - With Ticker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background: #fafaf9;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e5e4;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-main {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4a7c59;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.95); }
+        }
+
+        /* Minimalist Ticker */
+        .ticker-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+            font-size: 13px;
+            color: #666;
+            margin-left: 40px;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .ticker-value {
+            color: #4a7c59;
+            font-weight: 500;
+        }
+
+        .ticker-divider {
+            color: #ddd;
+        }
+
+        /* Search Container - Now the hero */
+        .search-container {
+            flex-grow: 1;
+            max-width: 500px;
+            position: relative;
+            margin: 0 40px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 120px 10px 16px;
+            border: 1px solid #e5e5e4;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            background: #fafaf9;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4a7c59;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+        }
+
+        .shortcut-hint {
+            position: absolute;
+            right: 48px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #999;
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* Right section */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .portfolio-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .portfolio-btn:hover {
+            background: #3d6748;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Simplified ticker bar */
+        .ticker-bar {
+            background: #f8f8f7;
+            padding: 8px 24px;
+            border-bottom: 1px solid #e5e5e4;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-metric {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .metric-name {
+            color: #999;
+        }
+
+        .metric-value {
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+
+        .metric-change {
+            color: #4a7c59;
+            font-size: 12px;
+        }
+
+        /* Search Dropdown - Refined */
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 200;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .search-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-section {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .search-suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .suggestion-item:hover {
+            background: #f5f5f5;
+        }
+
+        .suggestion-meta {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .trending-badge {
+            font-size: 12px;
+            color: #4a7c59;
+            font-weight: 500;
+        }
+
+        .smart-questions {
+            display: grid;
+            gap: 10px;
+        }
+
+        .question-card {
+            padding: 14px 16px;
+            background: #fafaf9;
+            border: 1px solid #e5e5e4;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .question-card:hover {
+            border-color: #4a7c59;
+            background: white;
+            transform: translateX(4px);
+        }
+
+        .dynamic-topic {
+            color: #4a7c59;
+            font-weight: 500;
+        }
+
+        /* Quick filters */
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-chip:hover {
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+
+        /* Results Section - Refined */
+        .search-results {
+            position: fixed;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 300;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .search-results.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .results-header {
+            padding: 24px 24px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .results-title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .query-display {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        /* Backdrop for focus */
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 250;
+        }
+
+        .backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main content adjustment */
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .dashboard-section {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 24px;
+        }
+
+        /* Close button */
+        .close-results {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #e5e5e4;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .close-results:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* Synthesis content */
+        .synthesis-content {
+            padding: 24px;
+        }
+
+        .confidence-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .confidence-badge {
+            background: #e8f5e9;
+            color: #4a7c59;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .source-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .key-insight {
+            background: #f8faf9;
+            border-left: 4px solid #4a7c59;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+        }
+
+        .insight-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .highlight {
+            background: rgba(74, 124, 89, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Source previews */
+        .source-previews {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .source-card {
+            padding: 16px;
+            background: #fafaf9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .source-card:hover {
+            background: #f0f0f0;
+        }
+
+        .source-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .source-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .play-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #4a7c59;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .play-btn:hover {
+            background: #3d6748;
+            transform: scale(1.05);
+        }
+
+        .quote-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            font-style: italic;
+        }
+
+        /* Action row */
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding: 20px;
+            background: #fafaf9;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e5e5e4;
+            background: white;
+            color: #666;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #fafaf9;
+            color: #1a1a2e;
+        }
+
+        .btn-primary {
+            background: #4a7c59;
+            color: white;
+            border-color: #4a7c59;
+        }
+
+        .btn-primary:hover {
+            background: #3d6748;
+            border-color: #3d6748;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .ticker-section {
+                display: none;
+            }
+            
+            .search-container {
+                margin: 0 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-main {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .search-container {
+                order: 3;
+                flex-basis: 100%;
+                max-width: none;
+                margin: 0;
+            }
+
+            .ticker-bar {
+                display: none;
+            }
+
+            .search-results {
+                width: 95%;
+                top: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Backdrop -->
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- Header with integrated search and minimal ticker -->
+    <header class="header">
+        <div class="header-main">
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="status-dot"></span>
+                    <span>VCPulse</span>
+                </div>
+            </div>
+
+            <!-- Minimal inline ticker -->
+            <div class="ticker-section">
+                <div class="ticker-item">
+                    <span>AI Agents</span>
+                    <span class="ticker-value">↑85%</span>
+                </div>
+                <span class="ticker-divider">•</span>
+                <div class="ticker-item">
+                    <span>Capital Efficiency</span>
+                    <span class="ticker-value">↑17%</span>
+                </div>
+            </div>
+            
+            <!-- Search is now the hero feature -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="Ask anything about VC conversations..."
+                        id="searchInput"
+                    >
+                    <span class="shortcut-hint">⌘K</span>
+                    <span class="search-icon">🔍</span>
+                    
+                    <!-- Enhanced Search Dropdown -->
+                    <div class="search-dropdown" id="searchDropdown">
+                        <div class="dropdown-section">
+                            <div class="section-title">Jump to Insights</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="fillSearch('What\'s the consensus on vertical AI?')">
+                                    <span>What's the consensus on vertical AI?</span>
+                                    <span class="suggestion-meta">14 sources</span>
+                                </div>
+                                <div class="suggestion-item" onclick="fillSearch('Series A valuations this month')">
+                                    <span>Series A valuations this month</span>
+                                    <span class="suggestion-meta">8 sources</span>
+                                </div>
+                                <div class="suggestion-item" onclick="fillSearch('Brad Gerstner latest thesis')">
+                                    <span>Brad Gerstner latest thesis</span>
+                                    <span class="suggestion-meta">3 episodes</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Trending Topics This Week</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="fillSearch('AI Agents')">
+                                    <span>AI Agents</span>
+                                    <span class="trending-badge">↑85% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="fillSearch('Capital efficiency')">
+                                    <span>Capital efficiency metrics</span>
+                                    <span class="trending-badge">↑17% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="fillSearch('DePIN')">
+                                    <span>DePIN infrastructure</span>
+                                    <span class="trending-badge">↑190% w/w</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Quick Filters</div>
+                            <div class="quick-filters">
+                                <span class="filter-chip" onclick="filterBy('consensus')">Consensus views</span>
+                                <span class="filter-chip" onclick="filterBy('contrarian')">Contrarian takes</span>
+                                <span class="filter-chip" onclick="filterBy('emerging')">Emerging themes</span>
+                                <span class="filter-chip" onclick="filterBy('deals')">Deal mentions</span>
+                                <span class="filter-chip" onclick="filterBy('people')">Key people</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <a href="#" class="portfolio-btn">
+                    Portfolio
+                    <span class="badge">99</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Optional scrolling ticker bar (can be hidden) -->
+        <div class="ticker-bar" id="tickerBar">
+            <div class="ticker-content">
+                <div class="ticker-metric">
+                    <span class="metric-name">47 Patterns Detected</span>
+                </div>
+                <div class="ticker-metric">
+                    <span class="metric-name">B2B SaaS</span>
+                    <span class="metric-change">↑3%</span>
+                </div>
+                <div class="ticker-metric">
+                    <span class="metric-name">Crypto/Web3</span>
+                    <span class="metric-change">↓53%</span>
+                </div>
+                <div class="ticker-metric">
+                    <span class="metric-name">Climate Tech</span>
+                    <span class="metric-change">↑48%</span>
+                </div>
+                <div class="ticker-metric">
+                    <span class="metric-name">Healthcare AI</span>
+                    <span class="metric-change">↑12%</span>
+                </div>
+                <!-- Duplicate for seamless scroll -->
+                <div class="ticker-metric">
+                    <span class="metric-name">47 Patterns Detected</span>
+                </div>
+                <div class="ticker-metric">
+                    <span class="metric-name">B2B SaaS</span>
+                    <span class="metric-change">↑3%</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Results (Floating card style) -->
+    <div class="search-results" id="searchResults">
+        <button class="close-results" onclick="closeResults()">×</button>
+        
+        <div class="results-header">
+            <div class="results-title">Intelligence synthesis for:</div>
+            <div class="query-display" id="queryDisplay">What's the consensus on vertical AI?</div>
+        </div>
+        
+        <div class="synthesis-content">
+            <div class="confidence-row">
+                <span class="confidence-badge">89% confidence</span>
+                <span class="source-count">Based on 14 podcast discussions</span>
+            </div>
+            
+            <div class="key-insight">
+                <div class="insight-text">
+                    <strong>Strong consensus forming:</strong> Vertical AI applications with <span class="highlight">proprietary data moats</span> are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to <span class="highlight">"AI for specific workflows"</span> with deep domain expertise.
+                </div>
+            </div>
+            
+            <div class="source-previews">
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-info">
+                            <span>🎙️</span>
+                            <span>Brad Gerstner on 20VC</span>
+                            <span>• 2 days ago</span>
+                        </div>
+                        <span class="play-btn">▶</span>
+                    </div>
+                    <div class="quote-text">
+                        "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow..."
+                    </div>
+                </div>
+                
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-info">
+                            <span>🎙️</span>
+                            <span>Elad Gil on Invest Like Best</span>
+                            <span>• 4 days ago</span>
+                        </div>
+                        <span class="play-btn">▶</span>
+                    </div>
+                    <div class="quote-text">
+                        "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance..."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-row">
+            <button class="btn btn-primary" onclick="viewDeepAnalysis()">View Deep Analysis</button>
+            <button class="btn" onclick="shareInsight()">Share Insight</button>
+            <button class="btn" onclick="saveToNotebook()">Save to Notebook</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <main class="main-content" id="mainContent">
+        <div class="dashboard-section">
+            <h2 class="section-header">Narrative Pulse</h2>
+            <p style="color: #999;">Your topic momentum visualization and dashboard content continues here...</p>
+        </div>
+        
+        <div class="dashboard-section">
+            <h2 class="section-header">Weekly Intelligence Brief</h2>
+            <p style="color: #999;">Latest synthesis and insights...</p>
+        </div>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        const searchResults = document.getElementById('searchResults');
+        const backdrop = document.getElementById('backdrop');
+        const queryDisplay = document.getElementById('queryDisplay');
+
+        // Focus states
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.classList.add('active');
+            updatePlaceholder();
+        });
+
+        searchInput.addEventListener('blur', (e) => {
+            // Delay to allow click events on dropdown items
+            setTimeout(() => {
+                if (!searchInput.value) {
+                    searchDropdown.classList.remove('active');
+                }
+            }, 200);
+        });
+
+        // Dynamic placeholder rotation
+        function updatePlaceholder() {
+            const placeholders = [
+                "What's the consensus on...",
+                "Which VCs are talking about...",
+                "Show me contrarian views on...",
+                "What's gaining momentum in..."
+            ];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (document.activeElement !== searchInput) {
+                    clearInterval(interval);
+                    return;
+                }
+                if (!searchInput.value) {
+                    searchInput.placeholder = placeholders[index % placeholders.length];
+                    index++;
+                }
+            }, 3000);
+        }
+
+        // Fill search from suggestions
+        function fillSearch(query) {
+            searchInput.value = query;
+            searchDropdown.classList.remove('active');
+            performSearch();
+        }
+
+        // Filter by type
+        function filterBy(type) {
+            const filterQueries = {
+                'consensus': "What's the consensus on ",
+                'contrarian': "Contrarian views on ",
+                'emerging': "Emerging themes in ",
+                'deals': "Recent deals in ",
+                'people': "What is [person] saying about "
+            };
+            searchInput.value = filterQueries[type] || "";
+            searchInput.focus();
+        }
+
+        // Perform search
+        function performSearch() {
+            if (searchInput.value.trim()) {
+                searchDropdown.classList.remove('active');
+                backdrop.classList.add('active');
+                searchResults.classList.add('active');
+                queryDisplay.textContent = searchInput.value;
+                
+                // Simulate different result types
+                updateResultsForQuery(searchInput.value);
+            }
+        }
+
+        // Enter key handler
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Close results
+        function closeResults() {
+            searchResults.classList.remove('active');
+            backdrop.classList.remove('active');
+            searchInput.value = '';
+        }
+
+        // Close on backdrop click
+        backdrop.addEventListener('click', closeResults);
+
+        // Keyboard shortcut (Cmd+K or Ctrl+K)
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    searchInput.focus();
+                    searchInput.select();
+                }, 300);
+            }
+            
+            // ESC to close
+            if (e.key === 'Escape') {
+                closeResults();
+            }
+        });
+
+        // Update results based on query type
+        function updateResultsForQuery(query) {
+            const confidenceBadge = document.querySelector('.confidence-badge');
+            const sourceCount = document.querySelector('.source-count');
+            const insightText = document.querySelector('.insight-text');
+            
+            if (query.toLowerCase().includes('contrarian')) {
+                confidenceBadge.textContent = '76% confidence';
+                sourceCount.textContent = 'Based on 3 dissenting voices';
+                insightText.innerHTML = '<strong>Limited contrarian views:</strong> While the majority is bullish on AI, Peter Thiel and others question <span class="highlight">timeline to profitability</span>. "We\'re building infrastructure for use cases that don\'t exist yet."';
+            } else if (query.toLowerCase().includes('series a')) {
+                confidenceBadge.textContent = '91% confidence';
+                sourceCount.textContent = 'Based on 8 recent discussions';
+                insightText.innerHTML = '<strong>Valuation normalization:</strong> Series A rounds settling at <span class="highlight">20-30x ARR</span> for AI companies, down from 50-100x in 2023. "Reality is setting in," per Benchmark\'s latest.';
+            }
+        }
+
+        // Action handlers
+        function viewDeepAnalysis() {
+            alert('In production: Opens comprehensive analysis with all sources, timeline, and dissenting views');
+        }
+
+        function shareInsight() {
+            alert('In production: Share to Slack, Email, or copy formatted insight');
+        }
+
+        function saveToNotebook() {
+            alert('In production: Save to your intelligence notebook for future reference');
+        }
+    </script>
+</body>
+</html>

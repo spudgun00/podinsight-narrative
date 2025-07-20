@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCPulse Search States - Intelligence Interface Demonstration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background: #fafaf9;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        /* Documentation styles */
+        .doc-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .doc-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e5e5e4;
+        }
+
+        .doc-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        .doc-subtitle {
+            font-size: 20px;
+            color: #666;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .value-prop {
+            background: #e8f0ea;
+            color: #4a7c59;
+            padding: 12px 24px;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 24px;
+            font-size: 16px;
+        }
+
+        /* Live Demo Section */
+        .live-demo-section {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .demo-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .tour-btn {
+            background: #4a7c59;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .tour-btn:hover {
+            background: #3d6748;
+            transform: translateY(-1px);
+        }
+
+        /* Search Components (copied from search-place.html) */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 120px 12px 20px;
+            border: 1px solid #e5e5e4;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: #fafaf9;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4a7c59;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 20px;
+        }
+
+        .shortcut-hint {
+            position: absolute;
+            right: 56px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            color: #999;
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* State Grid */
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .state-card {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .state-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .state-number {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .state-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .state-trigger {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .state-visual {
+            background: #fafaf9;
+            border: 1px solid #e5e5e4;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .state-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Specific state visuals */
+        .search-bar-demo {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid #e5e5e4;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fafaf9;
+            position: relative;
+        }
+
+        .search-bar-demo.focused {
+            border-color: #4a7c59;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        .dropdown-demo {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .results-demo {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            padding: 20px;
+        }
+
+        .loading-demo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #4a7c59;
+            border-radius: 50%;
+            animation: pulse-dot 1.4s ease-in-out infinite;
+        }
+
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse-dot {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Result Types Section */
+        .result-types-section {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .result-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .result-type-card {
+            border: 1px solid #e5e5e4;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .result-type-card:hover {
+            border-color: #4a7c59;
+            background: #fafaf9;
+        }
+
+        .result-type-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .result-type-example {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Edge Cases Section */
+        .edge-cases-section {
+            background: #f8f8f7;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .edge-case-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .edge-case-item {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .edge-case-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f0ea;
+            color: #4a7c59;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .edge-case-content {
+            flex: 1;
+        }
+
+        .edge-case-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1a1a2e;
+        }
+
+        .edge-case-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Keyboard Shortcuts */
+        .shortcuts-section {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .shortcut-key {
+            background: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'SF Mono', monospace;
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .shortcut-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Responsive Preview */
+        .responsive-section {
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .device-previews {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .device-frame {
+            text-align: center;
+        }
+
+        .device-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .device-screen {
+            background: white;
+            border: 2px solid #e5e5e4;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .mobile-frame {
+            width: 320px;
+        }
+
+        .tablet-frame {
+            width: 480px;
+        }
+
+        /* Tour Overlay */
+        .tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tour-overlay.active {
+            display: flex;
+        }
+
+        .tour-tooltip {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .tour-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #e5e5e4;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .tour-close:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* Dropdown content */
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 200;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .search-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-section {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .suggestion-item:hover {
+            background: #f5f5f5;
+        }
+
+        .suggestion-meta {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Results overlay */
+        .search-results {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(-20px);
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 300;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .search-results.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) translateY(0);
+        }
+
+        .results-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .results-title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .query-display {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .confidence-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .confidence-badge {
+            background: #e8f5e9;
+            color: #4a7c59;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .source-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Backdrop */
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 250;
+        }
+
+        .backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Quick filters */
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-chip:hover {
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+
+        /* Tour steps */
+        .tour-step {
+            margin-bottom: 20px;
+        }
+
+        .tour-step-number {
+            background: #4a7c59;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .tour-step-title {
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .tour-step-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Intelligence types */
+        .intelligence-icon {
+            width: 48px;
+            height: 48px;
+            background: #e8f0ea;
+            color: #4a7c59;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Backdrop -->
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay">
+        <div class="tour-tooltip">
+            <button class="tour-close" onclick="closeTour()">×</button>
+            <h3 style="margin-bottom: 20px; color: #1a1a2e;">Automated Intelligence Tour</h3>
+            
+            <div class="tour-step">
+                <div>
+                    <span class="tour-step-number">1</span>
+                    <span class="tour-step-title">Entity Recognition</span>
+                </div>
+                <p class="tour-step-desc">Watch as I type "NVIDIA" - the system recognizes entities and provides rich context immediately.</p>
+            </div>
+            
+            <div class="tour-step">
+                <div>
+                    <span class="tour-step-number">2</span>
+                    <span class="tour-step-title">Complex Analysis</span>
+                </div>
+                <p class="tour-step-desc">Next, I'll search for "contrarian views on Fed policy" to demonstrate our unique insight synthesis.</p>
+            </div>
+            
+            <div class="tour-step">
+                <div>
+                    <span class="tour-step-number">3</span>
+                    <span class="tour-step-title">Intelligence Results</span>
+                </div>
+                <p class="tour-step-desc">Notice the confidence scores, source attribution, and actionable insights - not just search results.</p>
+            </div>
+            
+            <button class="tour-btn" onclick="startTour()" style="width: 100%; margin-top: 24px;">
+                Start Demo Tour
+            </button>
+        </div>
+    </div>
+
+    <div class="doc-container">
+        <!-- Header -->
+        <div class="doc-header">
+            <h1 class="doc-title">VCPulse Search Intelligence Interface</h1>
+            <p class="doc-subtitle">A sophisticated search experience that transforms queries into actionable venture intelligence. Not just search results - synthesized insights from 1,500+ podcast episodes.</p>
+            <span class="value-prop">💎 Premium Intelligence Tool - $349/month</span>
+        </div>
+
+        <!-- Live Interactive Demo -->
+        <section class="live-demo-section">
+            <div class="section-label">LIVE INTERACTIVE DEMO</div>
+            <div class="demo-header">
+                <h2 class="demo-title">Try the Intelligence Search</h2>
+                <button class="tour-btn" onclick="showTourOverlay()">
+                    <span>▶</span>
+                    <span>Take Automated Tour</span>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="What are VCs discussing?"
+                        id="liveSearchInput"
+                    >
+                    <span class="shortcut-hint">⌘K</span>
+                    <span class="search-icon">🔍</span>
+                    
+                    <!-- Dropdown -->
+                    <div class="search-dropdown" id="searchDropdown">
+                        <div class="dropdown-section">
+                            <div class="section-title">Jump to Insights</div>
+                            <div class="suggestion-item" onclick="fillSearch('What\'s the consensus on vertical AI?')">
+                                <span>What's the consensus on vertical AI?</span>
+                                <span class="suggestion-meta">14 sources</span>
+                            </div>
+                            <div class="suggestion-item" onclick="fillSearch('Series A valuations this month')">
+                                <span>Series A valuations this month</span>
+                                <span class="suggestion-meta">8 sources</span>
+                            </div>
+                            <div class="suggestion-item" onclick="fillSearch('Brad Gerstner latest thesis')">
+                                <span>Brad Gerstner latest thesis</span>
+                                <span class="suggestion-meta">3 episodes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Trending Topics This Week</div>
+                            <div class="suggestion-item" onclick="fillSearch('AI Agents')">
+                                <span>AI Agents</span>
+                                <span class="suggestion-meta">↑85% w/w</span>
+                            </div>
+                            <div class="suggestion-item" onclick="fillSearch('Capital efficiency')">
+                                <span>Capital efficiency metrics</span>
+                                <span class="suggestion-meta">↑17% w/w</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Quick Filters</div>
+                            <div class="quick-filters">
+                                <span class="filter-chip" onclick="filterBy('consensus')">Consensus views</span>
+                                <span class="filter-chip" onclick="filterBy('contrarian')">Contrarian takes</span>
+                                <span class="filter-chip" onclick="filterBy('emerging')">Emerging themes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results Overlay -->
+        <div class="search-results" id="searchResults">
+            <button class="tour-close" onclick="closeResults()" style="position: absolute; top: 24px; right: 24px;">×</button>
+            
+            <div class="results-header">
+                <div class="results-title">Intelligence synthesis for:</div>
+                <div class="query-display" id="queryDisplay">What's the consensus on vertical AI?</div>
+                <div class="confidence-row">
+                    <span class="confidence-badge">89% confidence</span>
+                    <span class="source-count">Based on 14 podcast discussions</span>
+                </div>
+            </div>
+            
+            <div style="padding: 24px;">
+                <div style="background: #f8faf9; border-left: 4px solid #4a7c59; padding: 20px; border-radius: 4px;">
+                    <p style="font-size: 16px; line-height: 1.7; color: #333;">
+                        <strong>Strong consensus forming:</strong> Vertical AI applications with <span style="background: rgba(74, 124, 89, 0.1); padding: 2px 4px; border-radius: 3px;">proprietary data moats</span> are seeing 2-3x better retention than horizontal plays.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Demonstrations -->
+        <section class="state-grid">
+            <!-- State 1: Pristine/Resting -->
+            <div class="state-card">
+                <div class="state-number">1</div>
+                <h3 class="state-name">Pristine (Resting)</h3>
+                <p class="state-trigger">Trigger: Page load, no interaction</p>
+                <div class="state-visual">
+                    <div style="width: 100%;">
+                        <div class="search-bar-demo">
+                            <span style="color: #999;">What are VCs discussing?</span>
+                            <span style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 12px; background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-family: monospace;">⌘K</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="state-description">Default state with professional placeholder text that hints at capabilities. Subtle gray background (#fafaf9) with visible keyboard shortcut.</p>
+            </div>
+
+            <!-- State 2: Focused -->
+            <div class="state-card">
+                <div class="state-number">2</div>
+                <h3 class="state-name">Focused</h3>
+                <p class="state-trigger">Trigger: Click or ⌘K</p>
+                <div class="state-visual">
+                    <div style="width: 100%;">
+                        <div class="search-bar-demo focused">
+                            <span style="color: #999;">What's the consensus on...</span>
+                        </div>
+                        <div class="dropdown-demo">
+                            <div style="font-weight: 600; margin-bottom: 8px;">Jump to Insights</div>
+                            <div style="color: #666;">• Vertical AI consensus</div>
+                            <div style="color: #666;">• Series A valuations</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="state-description">Green border appears with subtle shadow. Background turns white. Dropdown slides in smoothly with curated suggestions.</p>
+            </div>
+
+            <!-- State 3: Active Query -->
+            <div class="state-card">
+                <div class="state-number">3</div>
+                <h3 class="state-name">Active Query (Typing)</h3>
+                <p class="state-trigger">Trigger: User types</p>
+                <div class="state-visual">
+                    <div style="width: 100%;">
+                        <div class="search-bar-demo focused">
+                            <span style="color: #1a1a2e;">Brad Gers</span><span style="color: #999;">tner</span>
+                        </div>
+                        <div class="dropdown-demo">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: #e8f0ea; color: #4a7c59; padding: 4px 8px; border-radius: 4px; font-size: 11px;">PERSON</span>
+                                <span style="font-weight: 600;">Brad Gerstner</span>
+                            </div>
+                            <div style="font-size: 12px; color: #666;">Altimeter Capital, All-In Podcast</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="state-description">Entity recognition shows intelligence. Autocomplete with context (company, podcast appearances). System understands intent.</p>
+            </div>
+
+            <!-- State 4: Loading -->
+            <div class="state-card">
+                <div class="state-number">4</div>
+                <h3 class="state-name">Loading/Executing</h3>
+                <p class="state-trigger">Trigger: Enter key or suggestion click</p>
+                <div class="state-visual">
+                    <div class="loading-demo">
+                        <span style="color: #666;">Synthesizing intelligence from 14 sources</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="state-description">Elegant loading state with contextual message. Shows it's analyzing, not just searching. Premium feel with smooth animation.</p>
+            </div>
+
+            <!-- State 5: Results -->
+            <div class="state-card">
+                <div class="state-number">5</div>
+                <h3 class="state-name">Results Displayed</h3>
+                <p class="state-trigger">Trigger: Search completion</p>
+                <div class="state-visual">
+                    <div class="results-demo">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <span style="background: #e8f5e9; color: #4a7c59; padding: 4px 12px; border-radius: 16px; font-size: 12px;">91% confidence</span>
+                            <span style="font-size: 12px; color: #666;">8 sources</span>
+                        </div>
+                        <div style="background: #f8faf9; border-left: 3px solid #4a7c59; padding: 12px; font-size: 13px; line-height: 1.5;">
+                            Strong consensus: Vertical AI with proprietary data...
+                        </div>
+                    </div>
+                </div>
+                <p class="state-description">Floating card with backdrop. Shows confidence score, source count, and synthesized insight. Action buttons for deeper analysis.</p>
+            </div>
+
+            <!-- State 6: No Results -->
+            <div class="state-card">
+                <div class="state-number">6</div>
+                <h3 class="state-name">No Results</h3>
+                <p class="state-trigger">Trigger: Query with no matches</p>
+                <div class="state-visual">
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 40px; margin-bottom: 12px;">🔍</div>
+                        <p style="color: #333; font-weight: 500; margin-bottom: 8px;">No direct results for your query</p>
+                        <p style="color: #666; font-size: 14px;">Try searching for <span style="color: #4a7c59; text-decoration: underline; cursor: pointer;">AI infrastructure</span> or <span style="color: #4a7c59; text-decoration: underline; cursor: pointer;">vertical SaaS</span></p>
+                    </div>
+                </div>
+                <p class="state-description">Helpful, not dead-end. Suggests alternatives and related topics. Maintains professional tone and guides user to value.</p>
+            </div>
+
+            <!-- State 7: Error -->
+            <div class="state-card">
+                <div class="state-number">7</div>
+                <h3 class="state-name">Error State</h3>
+                <p class="state-trigger">Trigger: Backend failure</p>
+                <div class="state-visual">
+                    <div style="background: #fef5f5; border: 1px solid #fdd; padding: 16px; border-radius: 8px; text-align: center;">
+                        <p style="color: #d00; font-weight: 500; margin-bottom: 8px;">Intelligence synthesis temporarily unavailable</p>
+                        <p style="color: #666; font-size: 14px;">Please try again in a moment</p>
+                    </div>
+                </div>
+                <p class="state-description">Graceful error handling. Professional language maintains trust. Clear but not alarming, with subtle red tones.</p>
+            </div>
+        </section>
+
+        <!-- Result Types -->
+        <section class="result-types-section">
+            <div class="section-label">INTELLIGENCE RESULT TYPES</div>
+            <h2 class="demo-title">Four Types of Synthesized Intelligence</h2>
+            
+            <div class="result-type-grid">
+                <div class="result-type-card">
+                    <div class="intelligence-icon">📊</div>
+                    <h4 class="result-type-name">Consensus View</h4>
+                    <p class="result-type-example">
+                        "87% of discussions agree that vertical AI is outperforming horizontal platforms. Key drivers: domain expertise, data moats, and workflow ownership."
+                    </p>
+                </div>
+                
+                <div class="result-type-card">
+                    <div class="intelligence-icon">⚡</div>
+                    <h4 class="result-type-name">Contrarian Take</h4>
+                    <p class="result-type-example">
+                        "Peter Thiel challenges the AI infrastructure thesis: 'We're building for use cases that don't exist yet.' Only 3 VCs share this view."
+                    </p>
+                </div>
+                
+                <div class="result-type-card">
+                    <div class="intelligence-icon">📈</div>
+                    <h4 class="result-type-name">Key Data Point</h4>
+                    <p class="result-type-example">
+                        "Series A valuations: 20-30x ARR (down from 50-100x in 2023). Source: 8 recent funding discussions across 20VC, All-In."
+                    </p>
+                </div>
+                
+                <div class="result-type-card">
+                    <div class="intelligence-icon">👤</div>
+                    <h4 class="result-type-name">Influential Voice</h4>
+                    <p class="result-type-example">
+                        "Bill Gurley: 'The best vertical AI companies aren't AI companies - they're vertical SaaS with AI as an implementation detail.'"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edge Cases -->
+        <section class="edge-cases-section">
+            <div class="section-label">EDGE CASES & SPECIAL HANDLING</div>
+            <h2 class="demo-title">Intelligent Edge Case Management</h2>
+            
+            <div class="edge-case-list">
+                <div class="edge-case-item">
+                    <div class="edge-case-icon">📝</div>
+                    <div class="edge-case-content">
+                        <div class="edge-case-title">Long, Complex Queries</div>
+                        <div class="edge-case-desc">Multi-line queries wrap elegantly. Example: "Show me all discussions about B2B SaaS companies raising Series A in the last 30 days with a focus on AI-enabled vertical solutions"</div>
+                    </div>
+                </div>
+                
+                <div class="edge-case-item">
+                    <div class="edge-case-icon">🔄</div>
+                    <div class="edge-case-content">
+                        <div class="edge-case-title">Query Refinement</div>
+                        <div class="edge-case-desc">Previous queries accessible via up arrow. Modify and refine searches without starting over.</div>
+                    </div>
+                </div>
+                
+                <div class="edge-case-item">
+                    <div class="edge-case-icon">📱</div>
+                    <div class="edge-case-content">
+                        <div class="edge-case-title">Mobile Optimization</div>
+                        <div class="edge-case-desc">Full-width search on mobile. Results adapt to viewport. Touch-optimized interactions.</div>
+                    </div>
+                </div>
+                
+                <div class="edge-case-item">
+                    <div class="edge-case-icon">⌨️</div>
+                    <div class="edge-case-content">
+                        <div class="edge-case-title">Keyboard Navigation</div>
+                        <div class="edge-case-desc">Full keyboard support. Tab through suggestions, arrow keys for history, ESC to close.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts -->
+        <section class="shortcuts-section">
+            <div class="section-label">KEYBOARD SHORTCUTS</div>
+            <h2 class="demo-title">Power User Commands</h2>
+            
+            <div class="shortcut-grid">
+                <div class="shortcut-item">
+                    <span class="shortcut-key">⌘ K</span>
+                    <span class="shortcut-desc">Focus search from anywhere</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">ESC</span>
+                    <span class="shortcut-desc">Close results/dropdown</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">↵ Enter</span>
+                    <span class="shortcut-desc">Submit search query</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">↑ ↓</span>
+                    <span class="shortcut-desc">Navigate suggestions</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">⌘ ↵</span>
+                    <span class="shortcut-desc">Open in new tab</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-key">Tab</span>
+                    <span class="shortcut-desc">Cycle through filters</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Responsive Preview -->
+        <section class="responsive-section">
+            <div class="section-label">RESPONSIVE BEHAVIOR</div>
+            <h2 class="demo-title">Adaptive Intelligence Interface</h2>
+            
+            <div class="device-previews">
+                <div class="device-frame">
+                    <div class="device-label">Mobile (320px)</div>
+                    <div class="device-screen mobile-frame">
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-weight: 600; font-size: 16px;">VCPulse</div>
+                        </div>
+                        <div style="position: relative;">
+                            <input type="text" placeholder="What are VCs discussing?" style="width: 100%; padding: 12px 16px; border: 1px solid #e5e5e4; border-radius: 8px; font-size: 16px;">
+                        </div>
+                        <div style="margin-top: 16px; font-size: 12px; color: #666;">
+                            Full-width search below logo. Touch-optimized tap targets.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-frame">
+                    <div class="device-label">Tablet (768px)</div>
+                    <div class="device-screen tablet-frame">
+                        <div style="display: flex; align-items: center; gap: 24px;">
+                            <div style="font-weight: 600;">VCPulse</div>
+                            <div style="flex: 1; position: relative;">
+                                <input type="text" placeholder="What are VCs discussing?" style="width: 100%; padding: 10px 16px; border: 1px solid #e5e5e4; border-radius: 8px;">
+                            </div>
+                            <button style="padding: 8px 16px; background: #4a7c59; color: white; border: none; border-radius: 8px;">Portfolio</button>
+                        </div>
+                        <div style="margin-top: 16px; font-size: 12px; color: #666;">
+                            Inline metrics hidden. Search remains prominent.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Live demo functionality
+        const liveSearchInput = document.getElementById('liveSearchInput');
+        const searchDropdown = document.getElementById('searchDropdown');
+        const searchResults = document.getElementById('searchResults');
+        const backdrop = document.getElementById('backdrop');
+        const queryDisplay = document.getElementById('queryDisplay');
+        const tourOverlay = document.getElementById('tourOverlay');
+
+        // Focus/blur handlers
+        liveSearchInput.addEventListener('focus', () => {
+            searchDropdown.classList.add('active');
+            updatePlaceholder();
+        });
+
+        liveSearchInput.addEventListener('blur', (e) => {
+            setTimeout(() => {
+                if (!liveSearchInput.value) {
+                    searchDropdown.classList.remove('active');
+                }
+            }, 200);
+        });
+
+        // Dynamic placeholder
+        function updatePlaceholder() {
+            const placeholders = [
+                "What's the consensus on...",
+                "Which VCs are talking about...",
+                "Show me contrarian views on...",
+                "What's gaining momentum in..."
+            ];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (document.activeElement !== liveSearchInput) {
+                    clearInterval(interval);
+                    return;
+                }
+                if (!liveSearchInput.value) {
+                    liveSearchInput.placeholder = placeholders[index % placeholders.length];
+                    index++;
+                }
+            }, 3000);
+        }
+
+        // Fill search
+        function fillSearch(query) {
+            liveSearchInput.value = query;
+            searchDropdown.classList.remove('active');
+            performSearch();
+        }
+
+        // Filter
+        function filterBy(type) {
+            const filterQueries = {
+                'consensus': "What's the consensus on ",
+                'contrarian': "Contrarian views on ",
+                'emerging': "Emerging themes in "
+            };
+            liveSearchInput.value = filterQueries[type] || "";
+            liveSearchInput.focus();
+        }
+
+        // Perform search
+        function performSearch() {
+            if (liveSearchInput.value.trim()) {
+                searchDropdown.classList.remove('active');
+                backdrop.classList.add('active');
+                searchResults.classList.add('active');
+                queryDisplay.textContent = liveSearchInput.value;
+                
+                // Update results based on query
+                updateResultsForQuery(liveSearchInput.value);
+            }
+        }
+
+        // Enter key
+        liveSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Close results
+        function closeResults() {
+            searchResults.classList.remove('active');
+            backdrop.classList.remove('active');
+            liveSearchInput.value = '';
+        }
+
+        // Backdrop click
+        backdrop.addEventListener('click', closeResults);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                // Scroll to the live demo section
+                const demoSection = document.querySelector('.live-demo-section');
+                if (demoSection) {
+                    demoSection.scrollIntoView({ behavior: 'smooth' });
+                }
+                setTimeout(() => {
+                    liveSearchInput.focus();
+                    liveSearchInput.select();
+                }, 300);
+            }
+            
+            if (e.key === 'Escape') {
+                closeResults();
+                closeTour();
+            }
+        });
+
+        // Update results based on query
+        function updateResultsForQuery(query) {
+            const confidenceBadge = document.querySelector('.confidence-badge');
+            const sourceCount = document.querySelector('.source-count');
+            
+            if (query.toLowerCase().includes('contrarian')) {
+                confidenceBadge.textContent = '76% confidence';
+                sourceCount.textContent = 'Based on 3 dissenting voices';
+            } else if (query.toLowerCase().includes('series a')) {
+                confidenceBadge.textContent = '91% confidence';
+                sourceCount.textContent = 'Based on 8 recent discussions';
+            } else if (query.toLowerCase().includes('nvidia')) {
+                confidenceBadge.textContent = '94% confidence';
+                sourceCount.textContent = 'Based on 22 mentions this week';
+            }
+        }
+
+        // Tour functionality
+        function showTourOverlay() {
+            tourOverlay.classList.add('active');
+        }
+
+        function closeTour() {
+            tourOverlay.classList.remove('active');
+        }
+
+        function startTour() {
+            closeTour();
+            
+            // Step 1: Focus and type
+            setTimeout(() => {
+                liveSearchInput.focus();
+                typeQuery('NVIDIA', 100);
+            }, 500);
+            
+            // Step 2: Show results
+            setTimeout(() => {
+                performSearch();
+            }, 2000);
+            
+            // Step 3: Close and search again
+            setTimeout(() => {
+                closeResults();
+                liveSearchInput.value = '';
+                typeQuery('contrarian views on Fed policy', 80);
+            }, 5000);
+            
+            // Step 4: Show contrarian results
+            setTimeout(() => {
+                performSearch();
+            }, 7500);
+        }
+
+        // Type animation
+        function typeQuery(text, speed) {
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    liveSearchInput.value += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, speed);
+        }
+    </script>
+</body>
+</html>

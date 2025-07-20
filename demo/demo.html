@@ -45,6 +45,9 @@
     
     <!-- Portfolio Panel Styles -->
     <link rel="stylesheet" href="styles/portfolio.css">
+    
+    <!-- Search Styles -->
+    <link rel="stylesheet" href="styles/search.css">
 </head>
 <body>
     <!-- Header -->
@@ -64,7 +67,71 @@
                     <div class="tagline">Track the heartbeat of venture capital</div>
                 </div>
             </div>
+            
             <div class="header-actions">
+                <!-- Search Container -->
+                <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="What are VCs discussing?"
+                        id="searchInput"
+                    >
+                    <span class="shortcut-hint">⌘K</span>
+                    <span class="search-icon">🔍</span>
+                    
+                    <!-- Search Dropdown -->
+                    <div class="search-dropdown" id="searchDropdown">
+                        <div class="dropdown-section">
+                            <div class="section-title">Jump to Insights</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('What\'s the consensus on vertical AI?')">
+                                    <span>What's the consensus on vertical AI?</span>
+                                    <span class="suggestion-meta">14 sources</span>
+                                </div>
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Series A valuations this month')">
+                                    <span>Series A valuations this month</span>
+                                    <span class="suggestion-meta">8 sources</span>
+                                </div>
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Brad Gerstner latest thesis')">
+                                    <span>Brad Gerstner latest thesis</span>
+                                    <span class="suggestion-meta">3 episodes</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Trending Topics This Week</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('AI Agents')">
+                                    <span>AI Agents</span>
+                                    <span class="trending-badge">↑85% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Capital efficiency')">
+                                    <span>Capital efficiency metrics</span>
+                                    <span class="trending-badge">↑17% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('DePIN')">
+                                    <span>DePIN infrastructure</span>
+                                    <span class="trending-badge">↑190% w/w</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Quick Filters</div>
+                            <div class="quick-filters">
+                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('consensus')">Consensus views</span>
+                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('contrarian')">Contrarian takes</span>
+                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('emerging')">Emerging themes</span>
+                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('deals')">Deal mentions</span>
+                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('people')">Key people</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <button class="portfolio-button" 
                         aria-label="Portfolio tracking"
                         data-portfolio-count="0"
@@ -100,15 +167,20 @@
             <div id="priority-briefings-container"></div>
         </main>
 
-        <!-- Intelligence Brief Component Container -->
-        <div id="intelligence-brief-container"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Weekly Intelligence Brief (Top of Sidebar) -->
+            <div id="intelligence-brief-container"></div>
+            
+            <!-- Supporting Analytics (Below Brief) -->
+            <div id="supporting-analytics-container"></div>
+        </aside>
     </div>
 
-    <!-- AI Search Interface -->
-    <div class="ai-search-interface">
+    <!-- AI Search Interface (Replaced by header search) -->
+    <!-- <div class="ai-search-interface">
         <button class="ai-search-button" title="AI Intelligence Search">
             <svg width="44" height="44" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2">
-                <!-- Faceted Crystal/Prism -->
                 <path d="M18 4 L8 14 L18 32 L28 14 Z" fill="none"/>
                 <line x1="18" y1="4" x2="18" y2="32"/>
                 <line x1="8" y1="14" x2="28" y2="14"/>
@@ -120,7 +192,7 @@
         <div class="ai-search-prompt">
             Ask anything about 1,498 episodes
         </div>
-    </div>
+    </div> -->
     
     <!-- Scripts -->
     <!-- Data -->
@@ -144,6 +216,9 @@
     
     <!-- Episode Panel -->
     <script src="features/episode-panel/episode-panel.js" defer></script>
+    
+    <!-- Search -->
+    <script src="demo/search.js" defer></script>
     
     <!-- Main Application Orchestrator -->
     <script src="main.js" defer></script>

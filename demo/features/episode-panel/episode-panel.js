@@ -162,21 +162,30 @@ const EpisodePanel = {
                         <rect x="1" y="3" width="12" height="8" rx="1"/>
                         <path d="M1 4l6 3 6-3"/>
                     </svg>
-                    Email Brief
+                    Email
+                </button>
+                <button class="action-button tertiary">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="2" cy="10" r="1.5"/>
+                        <circle cx="12" cy="10" r="1.5"/>
+                        <circle cx="7" cy="3" r="1.5"/>
+                        <path d="M7 4.5v3M7 7.5l-5 2.5M7 7.5l5 2.5"/>
+                    </svg>
+                    Share
                 </button>
                 <button class="action-button tertiary">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
                         <circle cx="7" cy="7" r="6"/>
-                        <path d="M5 9l2 2 4-4"/>
+                        <path d="M5.5 4.5v5l4-2.5z" fill="currentColor" stroke="none"/>
                     </svg>
-                    Share to Slack
+                    Play
                 </button>
                 <button class="action-button tertiary">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="7" cy="7" r="6"/>
-                        <polygon points="6,4 9,7 6,10" fill="currentColor"/>
+                        <rect x="2" y="2" width="10" height="10" rx="1"/>
+                        <path d="M4 5h6M4 7h6M4 9h4"/>
                     </svg>
-                    Open in Spotify
+                    Read
                 </button>
             </div>
         `;
@@ -244,7 +253,7 @@ const EpisodePanel = {
         // Show and animate panel
         this.container.classList.add('active');
         
-        // Add class to body for content push effect
+        // Add class to body for any necessary styling
         document.body.classList.add('panel-open');
         
         // Prevent body scroll

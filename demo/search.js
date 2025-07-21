@@ -21,6 +21,9 @@ class VCPulseSearch {
         ];
         this.placeholderIndex = 0;
         this.placeholderInterval = null;
+        
+        // Bind event handlers to preserve context
+        this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
     }
     
     init() {
@@ -132,8 +135,10 @@ class VCPulseSearch {
         // Input events
         this.searchInput.addEventListener('keypress', (e) => this.handleKeyPress(e));
         
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => this.handleGlobalKeydown(e));
+        // Keyboard shortcuts - use the pre-bound handler from constructor
+        // Add to both document and window with capture phase to intercept browser defaults
+        document.addEventListener('keydown', this.boundHandleGlobalKeydown, true);
+        window.addEventListener('keydown', this.boundHandleGlobalKeydown, true);
         
         // Backdrop click
         if (this.backdrop) {
@@ -173,22 +178,94 @@ class VCPulseSearch {
     }
     
     handleGlobalKeydown(e) {
-        // Cmd/Ctrl + K to focus search
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        console.log('Keydown event:', e.key, 'Ctrl:', e.ctrlKey, 'Meta:', e.metaKey);
+        
+        // Cmd/Ctrl + K to focus search (handle both lowercase and uppercase)
+        // Also support Cmd/Ctrl + / as fallback
+        if (((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) ||
+            ((e.metaKey || e.ctrlKey) && e.key === '/')) {
+            console.log('Cmd/Ctrl+K detected!');
+            
+            // Prevent ALL default behaviors
             e.preventDefault();
-            // Scroll to top of page where search bar is located
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            // Small delay to ensure scroll completes before focusing
-            setTimeout(() => {
-                this.searchInput.focus();
-                this.searchInput.select(); // Select any existing text
-            }, 300);
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            // Return false for legacy browser support
+            if (e.returnValue !== undefined) {
+                e.returnValue = false;
+            }
+            
+            console.log('Search input element:', this.searchInput);
+            
+            // Check if search input is visible
+            if (this.searchInput) {
+                const rect = this.searchInput.getBoundingClientRect();
+                const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+                
+                if (!isInViewport) {
+                    // Scroll to top if not visible
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Delay focus until scroll completes
+                    setTimeout(() => {
+                        this.focusSearchInput();
+                    }, 300);
+                } else {
+                    // Focus immediately if visible
+                    this.focusSearchInput();
+                }
+            } else {
+                console.error('Search input not found! Attempting to find it...');
+                // Try to find the input again
+                this.searchInput = document.getElementById('searchInput');
+                if (this.searchInput) {
+                    this.focusSearchInput();
+                }
+            }
+            
+            return false; // Extra prevention for older browsers
         }
         
         // ESC to close results
-        if (e.key === 'Escape') {
+        if (e.key === 'Escape' && this.searchResults?.classList.contains('active')) {
             this.closeResults();
         }
+    }
+    
+    focusSearchInput() {
+        if (!this.searchInput) {
+            console.error('Cannot focus: search input is null');
+            return;
+        }
+        
+        console.log('Focusing search input...');
+        
+        // Clear any existing focus
+        if (document.activeElement && document.activeElement !== this.searchInput) {
+            document.activeElement.blur();
+        }
+        
+        // Use requestAnimationFrame for better timing
+        requestAnimationFrame(() => {
+            this.searchInput.focus();
+            this.searchInput.select();
+            
+            // Verify focus was successful
+            setTimeout(() => {
+                if (document.activeElement === this.searchInput) {
+                    console.log('Search input focused successfully');
+                    // Send message to parent if in iframe
+                    if (window.parent !== window) {
+                        window.parent.postMessage({ type: 'search-focused' }, '*');
+                    }
+                } else {
+                    console.log('Focus failed, current active element:', document.activeElement);
+                    // Try one more time
+                    this.searchInput.focus();
+                }
+            }, 10);
+        });
     }
     
     startPlaceholderRotation() {
@@ -300,6 +377,22 @@ class VCPulseSearch {
     
     saveToNotebook() {
         alert('In production: Save to your intelligence notebook for future reference');
+    }
+    
+    // Clean up method
+    destroy() {
+        // Remove event listeners
+        if (this.boundHandleGlobalKeydown) {
+            document.removeEventListener('keydown', this.boundHandleGlobalKeydown, true);
+            window.removeEventListener('keydown', this.boundHandleGlobalKeydown, true);
+        }
+        
+        // Clear intervals
+        if (this.placeholderInterval) {
+            clearInterval(this.placeholderInterval);
+        }
+        
+        console.log('VCPulseSearch destroyed');
     }
 }
 

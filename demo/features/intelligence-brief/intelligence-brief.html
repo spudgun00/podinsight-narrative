@@ -1,71 +1,112 @@
-<!-- Intelligence Brief Sidebar -->
-<aside class="synthesis-sidebar">
-    <div class="synthesis-header">
-        <div>
-            <h3 class="synthesis-title">Weekly Intelligence Brief</h3>
-            <p class="synthesis-meta">1,498 hours analyzed • Updated 36 mins ago</p>
+<!-- Weekly Intelligence Brief Container -->
+<div class="intelligence-brief-sidebar">
+    <div class="brief-content">
+        <div class="brief-header">
+            <h3 class="section-title">WEEKLY INTELLIGENCE BRIEF</h3>
+            <p class="section-subtitle">1,498 hours analyzed • Updated 36 mins ago</p>
+            <div class="brief-sharing-links">
+                <a href="#" class="brief-share-link" title="Share">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zM18 22a3 3 0 100-6 3 3 0 000 6z" stroke-width="2"/>
+                        <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke-width="2"/>
+                    </svg>
+                    <span>Share</span>
+                </a>
+                <span class="brief-share-divider">|</span>
+                <a href="#" class="brief-share-link" title="Email Brief">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="2" y="4" width="20" height="16" rx="2" stroke-width="2"/>
+                        <path d="M22 7l-10 5L2 7" stroke-width="2"/>
+                    </svg>
+                    <span>Email</span>
+                </a>
+            </div>
         </div>
-        <div class="synthesis-header-actions">
-            <button class="brief-action-btn" title="Download PDF">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M7 1v8m0 0l-3-3m3 3l3-3"/>
-                    <path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+        
+        <!-- Actual AI-Generated Synthesis -->
+        <div class="actual-synthesis">
+            <div class="brief-collapsed" id="briefCollapsed">
+                <!-- Preview Sections -->
+                <div class="brief-preview-sections">
+                    <div class="brief-preview-section consensus">
+                        <div class="brief-preview-label">CONSENSUS FORMING</div>
+                        <div class="brief-preview-content">
+                            AI infrastructure over applications • Series A at 20-30x ARR • Capital efficiency replacing growth...
+                        </div>
+                    </div>
+                    
+                    <div class="brief-preview-section contrarian">
+                        <div class="brief-preview-label">CONTRARIAN SIGNALS</div>
+                        <div class="brief-preview-content">
+                            DePIN showing 190% momentum without revenue • Consumer AI skepticism rising...
+                        </div>
+                    </div>
+                    
+                    <div class="brief-preview-section blindspot">
+                        <div class="brief-preview-label">EMERGING BLINDSPOTS</div>
+                        <div class="brief-preview-content">
+                            Developer tools consolidation • Climate tech sentiment inverting...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Value Indicators -->
+                <div class="brief-value-indicators">
+                    <span class="brief-value-badge">📊 4 Key Trends</span>
+                    <span class="brief-value-badge">🎯 3 Action Items</span>
+                    <span class="brief-value-badge">📈 Visual Analysis</span>
+                </div>
+            </div>
+            <div class="brief-expanded" id="briefExpanded" style="display: none;">
+                <div class="brief-section">
+                    <h4 class="brief-section-title">Consensus Forming</h4>
+                    <ul class="brief-list">
+                        <li><strong>AI infrastructure over applications</strong> [Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree] - Vertical AI seeing 2-3x better retention than horizontal plays</li>
+                        <li><strong>Series A valuations stabilizing</strong> [12 sources confirm: Gerstner, Hoffman, Rabois leading] - 20-30x ARR becomes new normal after 18-month correction</li>
+                        <li><strong>Capital efficiency replacing growth</strong> [mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned] - LPs driving this narrative shift hard</li>
+                    </ul>
+                </div>
+                <div class="brief-section">
+                    <h4 class="brief-section-title">Contrarian Signals</h4>
+                    <ul class="brief-list">
+                        <li><strong>DePIN showing 190% momentum without revenue</strong> [Thiel only dissenter on Founders Fund pod, everyone else bullish] - Either massive opportunity or bubble forming</li>
+                        <li><strong>Consumer AI skepticism rising</strong> [Benchmark's Gurley, Lightspeed's Bogan pulling back] while Sequoia, a16z pile into enterprise</li>
+                    </ul>
+                </div>
+                <div class="brief-section">
+                    <h4 class="brief-section-title">Emerging Blindspots</h4>
+                    <ul class="brief-list">
+                        <li><strong>Developer tools consolidation</strong> [3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage] - Market moving without public discourse</li>
+                        <li><strong>Climate tech sentiment inverting</strong> [Khosla quietly accumulating while Founders Fund exits] - Contrary indicator worth tracking</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Prominent Download Button -->
+            <button class="brief-download-btn" id="downloadBriefBtn" data-action="downloadBrief">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 2v9m0 0l-3.5-3.5m3.5 3.5l3.5-3.5"/>
+                    <path d="M2 12v1.5a1 1 0 001 1h10a1 1 0 001-1V12"/>
                 </svg>
+                <span>Download Brief (PDF)</span>
             </button>
-            <button class="brief-action-btn" title="Email Brief">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="1" y="3" width="12" height="8" rx="1"/>
-                    <path d="M1 4l6 3 6-3"/>
+            
+            <!-- Secondary Expand Button -->
+            <button class="brief-expand-btn" id="expandBriefBtn" data-action="toggleBrief">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
+                <span id="expandText">Expand Brief</span>
             </button>
         </div>
     </div>
-    
-    <!-- Actual AI-Generated Synthesis -->
-    <div class="actual-synthesis">
-        <div class="brief-collapsed" id="briefCollapsed">
-            <p class="synthesis-text">
-                <strong>AI infrastructure dominates</strong> [12 sources agree, led by Gerstner/20VC, Gurley/Invest Like Best] with Series A at 20-30x ARR [Hoffman, Rabois confirm]. <strong>Contrarian view:</strong> DePIN momentum questions from select voices <strong>Potential blindspot:</strong> Developer tools consolidation discussions minimal.
-            </p>
-        </div>
-        <div class="brief-expanded" id="briefExpanded" style="display: none;">
-            <div class="brief-section">
-                <h4 class="brief-section-title">Consensus Forming</h4>
-                <ul class="brief-list">
-                    <li><strong>AI infrastructure over applications</strong> [Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree] - Vertical AI seeing 2-3x better retention than horizontal plays</li>
-                    <li><strong>Series A valuations stabilizing</strong> [12 sources confirm: Gerstner, Hoffman, Rabois leading] - 20-30x ARR becomes new normal after 18-month correction</li>
-                    <li><strong>Capital efficiency replacing growth</strong> [mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned] - LPs driving this narrative shift hard</li>
-                </ul>
-            </div>
-            <div class="brief-section">
-                <h4 class="brief-section-title">Contrarian Signals</h4>
-                <ul class="brief-list">
-                    <li><strong>DePIN showing 190% momentum without revenue</strong> [Thiel only dissenter on Founders Fund pod, everyone else bullish] - Either massive opportunity or bubble forming</li>
-                    <li><strong>Consumer AI skepticism rising</strong> [Benchmark's Gurley, Lightspeed's Bogan pulling back] while Sequoia, a16z pile into enterprise</li>
-                </ul>
-            </div>
-            <div class="brief-section">
-                <h4 class="brief-section-title">Emerging Blindspots</h4>
-                <ul class="brief-list">
-                    <li><strong>Developer tools consolidation</strong> [3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage] - Market moving without public discourse</li>
-                    <li><strong>Climate tech sentiment inverting</strong> [Khosla quietly accumulating while Founders Fund exits] - Contrary indicator worth tracking</li>
-                </ul>
-            </div>
-        </div>
-        <button class="expand-brief-btn" id="expandBriefBtn" data-action="toggleBrief">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 5L6 8L9 5" id="expandArrow"/>
-            </svg>
-            <span id="expandText">Expand Brief</span>
-        </button>
-    </div>
-    
-    <div class="synthesis-divider"></div>
-    <h4 class="supporting-analytics-header">Supporting Analytics</h4>
+</div>
 
+<!-- Supporting Analytics Sidebar (Separate Container) -->
+<aside class="synthesis-sidebar">
     <div class="synthesis-section">
-        <h4 class="synthesis-section-title">Velocity Tracking</h4>
-        <p class="section-description">Topic acceleration over past 7 days</p>
+        <h4 class="section-title">VELOCITY TRACKING</h4>
+        <p class="section-subtitle">Topic momentum over past 7 days</p>
         <div class="momentum-item">
             <span class="momentum-theme">AI Agents</span>
             <span class="momentum-change positive">+85% w/w</span>

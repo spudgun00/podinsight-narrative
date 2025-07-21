@@ -67,6 +67,12 @@ class PortfolioManager {
     
     saveState() {
         localStorage.setItem('vcpulse_portfolio_state', JSON.stringify(this.state));
+        
+        // Persist newMentions and nextUpdateTime separately for the 5-minute cycle
+        localStorage.setItem('vcpulse_newMentionsValue', this.state.newMentions.toString());
+        if (this.state.nextUpdateTime) {
+            localStorage.setItem('vcpulse_nextMentionsUpdateTime', this.state.nextUpdateTime.toString());
+        }
     }
     
     updateUI() {
@@ -210,19 +216,76 @@ class PortfolioManager {
     }
     
     simulateNewMentions() {
-        // For demo purposes, simulate new mentions every 30 seconds
-        setInterval(() => {
-            if (this.state.panelState === 'closed' && Math.random() > 0.7) {
-                this.state.newMentions = Math.min(this.state.newMentions + Math.floor(Math.random() * 3) + 1, 99);
+        // Define constants for the portfolio button cycle
+        const UPDATE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes in milliseconds
+        const MENTION_VALUES = [1, 2, 3]; // The sequence of numbers to cycle through
+        
+        // Load the initial state for newMentions from localStorage
+        this.loadMentionsState();
+        
+        // Determine the initial delay before the first update
+        let initialDelay = 0;
+        const now = Date.now();
+        if (this.state.nextUpdateTime && this.state.nextUpdateTime > now) {
+            initialDelay = this.state.nextUpdateTime - now;
+        }
+        
+        // Define the core update logic for newMentions
+        const updateMentionsCycle = () => {
+            // Calculate the next mention value in the cycle (1 -> 2 -> 3 -> 1...)
+            const currentIndex = MENTION_VALUES.indexOf(this.state.newMentions);
+            const nextIndex = (currentIndex + 1) % MENTION_VALUES.length;
+            this.state.newMentions = MENTION_VALUES[nextIndex];
+            
+            // Set the timestamp for the next update
+            this.state.nextUpdateTime = Date.now() + UPDATE_INTERVAL_MS;
+            
+            // Update the UI and persist the state
+            this.updateUI();
+            this.saveState();
+        };
+        
+        // Schedule the first update, then set up the recurring interval
+        setTimeout(() => {
+            updateMentionsCycle(); // Perform the first update
+            setInterval(updateMentionsCycle, UPDATE_INTERVAL_MS); // Then set up recurring updates
+        }, initialDelay);
+    }
+    
+    loadMentionsState() {
+        const storedMentions = localStorage.getItem('vcpulse_newMentionsValue');
+        const storedNextUpdate = localStorage.getItem('vcpulse_nextMentionsUpdateTime');
+        const now = Date.now();
+        const MENTION_VALUES = [1, 2, 3];
+        const UPDATE_INTERVAL_MS = 5 * 60 * 1000;
+        
+        if (storedMentions && storedNextUpdate) {
+            // Parse stored values
+            this.state.newMentions = parseInt(storedMentions, 10);
+            this.state.nextUpdateTime = parseInt(storedNextUpdate, 10);
+            
+            // If the stored next update time is in the past, calculate the correct current value
+            if (this.state.nextUpdateTime <= now) {
+                // Calculate how many 5-minute intervals have passed
+                const elapsedSinceLastUpdate = now - this.state.nextUpdateTime;
+                const intervalsPassed = Math.floor(elapsedSinceLastUpdate / UPDATE_INTERVAL_MS) + 1;
+                
+                // Advance newMentions by the number of intervals passed
+                const currentMentionsIndex = MENTION_VALUES.indexOf(this.state.newMentions);
+                const newIndex = (currentMentionsIndex + intervalsPassed) % MENTION_VALUES.length;
+                this.state.newMentions = MENTION_VALUES[newIndex];
+                
+                // Set the next update time from the current moment
+                this.state.nextUpdateTime = now + UPDATE_INTERVAL_MS;
+                
+                // Update UI and save state immediately after catching up
                 this.updateUI();
                 this.saveState();
             }
-        }, 30000);
-        
-        // Initial demo data
-        if (this.state.portfolioCount === 0) {
-            this.state.portfolioCount = 2;
-            this.state.newMentions = 2;
+        } else {
+            // No stored state found, initialize with default values
+            this.state.newMentions = MENTION_VALUES[0]; // Start with 1
+            this.state.nextUpdateTime = now + UPDATE_INTERVAL_MS; // Schedule first update 5 minutes from now
             this.updateUI();
             this.saveState();
         }

@@ -1,20 +1,22 @@
-<!-- Notable Signals Section -->
-<section class="signals-section">
-    <div class="section-header">
-        <div>
-            <h2 class="section-title">Notable Signals</h2>
-            <p class="section-subtitle">Key patterns from this week's episodes</p>
-        </div>
+<!-- Notable Signals: Using professional SVG icons with sage green theme -->
+<div class="notable-signals-container">
+    <!-- Header INSIDE container -->
+    <div class="section-header-wrapper">
+        <h2 class="section-title">NOTABLE SIGNALS</h2>
+        <p class="section-subtitle">Key patterns from this week's episodes</p>
     </div>
-
-    <div class="signals-grid">
+    
+    <!-- Cards grid also INSIDE container -->
+    <div class="signals-content">
+        <div class="signals-grid">
         <div class="signal-card" data-signal-type="market-narratives" data-strength="high">
             <div class="signal-content">
                 <div class="signal-type">Market Narratives</div>
                 <div class="signal-icon">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="14" height="14" rx="2"/>
-                        <path d="M7 10L10 7L13 10"/>
+                    <!-- Trending Up Icon for Market Narratives -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
                     </svg>
                 </div>
                 <div class="signal-insight">Efficiency narrative gaining momentum</div>
@@ -31,9 +33,10 @@
             <div class="signal-content">
                 <div class="signal-type">Thesis Validation</div>
                 <div class="signal-icon">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="10" cy="10" r="8"/>
-                        <path d="M6 10L9 13L14 7"/>
+                    <!-- Check Circle Icon for Thesis Validation -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
                     </svg>
                 </div>
                 <div class="signal-insight">Vertical AI thesis gaining support</div>
@@ -50,9 +53,10 @@
             <div class="signal-content">
                 <div class="signal-type">Notable Deals</div>
                 <div class="signal-icon">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="10" cy="10" r="7"/>
-                        <path d="M10 5V10L13 13"/>
+                    <!-- Briefcase Icon for Notable Deals -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                     </svg>
                 </div>
                 <div class="signal-insight">Perplexity funding activity</div>
@@ -69,9 +73,9 @@
             <div class="signal-content">
                 <div class="signal-type">Portfolio Mentions</div>
                 <div class="signal-icon">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="4" y="8" width="12" height="8" rx="1"/>
-                        <path d="M8 8V6C8 4 9 3 10 3C11 3 12 4 12 6V8"/>
+                    <!-- Folder Icon for Portfolio Mentions -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </div>
                 <div class="signal-insight">Portfolio activity detected</div>
@@ -88,9 +92,12 @@
             <div class="signal-content">
                 <div class="signal-type">LP Sentiment</div>
                 <div class="signal-icon">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 17L7 13L11 15L17 9"/>
-                        <path d="M13 9H17V13"/>
+                    <!-- Users Icon for LP Sentiment -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                 </div>
                 <div class="signal-insight">LP sentiment shifting</div>
@@ -103,6 +110,7 @@
                 <span class="strength-dot"></span>
             </div>
         </div>
+        </div>
     </div>
     
     <!-- AI Search Prompt -->
@@ -110,7 +118,7 @@
         <span>Have a specific question about these insights?</span>
         <span class="ai-search-pointer">Ask our AI →</span>
     </div>
-</section>
+</div>
 
 <!-- Panel Backdrop -->
 <div class="panel-backdrop"></div>

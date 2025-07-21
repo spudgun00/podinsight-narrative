@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             container.innerHTML = html;
             
             // Initialize the component
-            const sidebar = container.querySelector('.synthesis-sidebar');
-            if (sidebar && window.IntelligenceBrief) {
-                window.IntelligenceBrief.init(sidebar);
+            const briefContent = container.querySelector('.brief-content');
+            if (briefContent && window.IntelligenceBrief) {
+                window.IntelligenceBrief.init(briefContent);
             }
         } catch (error) {
             console.error('Failed to load Intelligence Brief component:', error);

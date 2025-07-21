@@ -58,6 +58,13 @@
     padding: 2px 6px;
     border-radius: 4px;
     font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.shortcut-hint:hover {
+    background: #ebebeb;
+    color: #666;
 }
 
 /* Search Dropdown */
@@ -93,7 +100,7 @@
     border-bottom: none;
 }
 
-.section-title {
+.dropdown-section .section-title {
     font-size: 11px;
     text-transform: uppercase;
     color: #999;

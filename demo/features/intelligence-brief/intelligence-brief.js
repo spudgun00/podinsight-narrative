@@ -10,10 +10,16 @@ const IntelligenceBrief = {
             toggleBtn.addEventListener('click', () => this.toggleBrief());
         }
         
-        // PDF Download button
-        const pdfBtn = this.container.querySelector('.brief-action-btn[title="Download PDF"]');
-        if (pdfBtn) {
-            pdfBtn.addEventListener('click', () => this.downloadPDF());
+        // Main Download button
+        const downloadBtn = this.container.querySelector('[data-action="downloadBrief"]');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => this.downloadPDF());
+        }
+        
+        // Slack button
+        const slackBtn = this.container.querySelector('.brief-action-btn[title="Share via Slack"]');
+        if (slackBtn) {
+            slackBtn.addEventListener('click', () => this.shareViaSlack());
         }
         
         // Email Brief button
@@ -33,12 +39,12 @@ const IntelligenceBrief = {
             collapsed.style.display = 'none';
             expanded.style.display = 'block';
             btn.classList.add('expanded');
-            btnText.textContent = 'Collapse Brief';
+            btnText.textContent = 'Collapse Analysis';
         } else {
             collapsed.style.display = 'block';
             expanded.style.display = 'none';
             btn.classList.remove('expanded');
-            btnText.textContent = 'Expand Brief';
+            btnText.textContent = 'View Full Analysis';
         }
     },
     
@@ -82,6 +88,41 @@ Synthesized from 1,498 hours across 47 VC podcasts
         
         // Open email client
         window.location.href = mailtoLink;
+    },
+    
+    shareViaSlack: function() {
+        // Get current date for the message
+        const today = new Date();
+        const weekNum = Math.ceil(((today - new Date(today.getFullYear(), 0, 1)) / 86400000 + 1) / 7);
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                          "July", "August", "September", "October", "November", "December"];
+        const month = monthNames[today.getMonth()];
+        
+        // Create Slack message
+        const message = `📊 *VCPulse Weekly Intelligence Brief - Week ${weekNum}, ${month}*\n\n` +
+                       `Key highlights:\n` +
+                       `• AI infrastructure dominates with Series A at 20-30x ARR\n` +
+                       `• DePIN showing 190% momentum (contrarian signal)\n` +
+                       `• Developer tools consolidation emerging as blindspot\n\n` +
+                       `View full brief: ${window.location.origin}/demo/pdf/weekly-brief.html`;
+        
+        // Copy to clipboard and show notification
+        navigator.clipboard.writeText(message).then(() => {
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = 'slack-notification';
+            notification.textContent = 'Brief copied to clipboard - paste in Slack!';
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            // Hide and remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        });
     }
 };
 

@@ -170,6 +170,7 @@
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
         .pulse-title {
             font-size: 0.875rem;
@@ -181,6 +182,49 @@
         .pulse-subtitle {
             font-size: 0.75rem;
             color: var(--gray-600);
+        }
+        
+        /* Standardized Section Headers */
+        /* Apply these classes to existing header elements for consistent styling */
+        .section-title {
+            font-size: 0.875rem !important;  /* 14px - matches pulse-title */
+            font-weight: 700 !important;
+            color: var(--deep-ink) !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            margin: 0;
+        }
+        
+        /* Direct child section-title in sidebars gets consistent bottom margin */
+        .synthesis-sidebar > .section-title {
+            margin-bottom: 16px !important;
+        }
+        
+        /* Brief header title should have minimal spacing like other sections */
+        .brief-header .section-title {
+            margin-bottom: 4px !important;
+        }
+        
+        /* First synthesis-section should align to top like intelligence brief */
+        .synthesis-sidebar > .synthesis-section:first-child {
+            margin-top: 0;
+            padding-top: 0;
+        }
+        
+        /* Ensure consistent spacing between title, subtitle, and content */
+        .synthesis-section .section-title {
+            margin-bottom: 4px !important;
+        }
+        
+        .synthesis-section .section-subtitle {
+            margin-bottom: 16px !important;
+        }
+        
+        .section-subtitle {
+            font-size: 0.75rem !important;   /* 12px - matches pulse-subtitle */
+            color: var(--gray-600) !important;
+            font-weight: 400 !important;      /* Normal weight, not bold */
+            margin: 0;
         }
         .control-button:hover {
             border-color: var(--sage);
@@ -206,16 +250,17 @@
             height: 280px;
             position: relative;
             overflow: visible;
+            pointer-events: auto;
         }
         /* Chart Tooltip */
         .chart-tooltip {
             position: absolute;
-            background: rgba(26, 26, 46, 0.95);
-            color: white;
-            padding: 14px;
+            background: rgba(255, 255, 255, 0.98);
+            color: var(--deep-ink);
+            padding: 16px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
             pointer-events: none;
             z-index: 10;
             font-size: 11px;
@@ -224,25 +269,50 @@
             transition: opacity 200ms ease;
         }
         
+        .chart-tooltip.visible {
+            opacity: 1;
+        }
+        
+        /* View-specific tooltip styles */
+        .chart-tooltip-momentum {
+            /* Momentum view uses rich content */
+        }
+        
+        .chart-tooltip-volume {
+            /* Volume view has specific styling */
+            max-width: 320px;
+        }
+        
+        .chart-tooltip-consensus {
+            /* Consensus view has simpler content */
+            max-width: 240px;
+        }
+        
         /* Rich Tooltip Content */
         .rich-tooltip-content {
             white-space: normal;
+            min-width: 200px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: -4px; /* Compensate for tooltip padding */
         }
         
         .tooltip-date {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            color: var(--deep-ink);
         }
         
         .tooltip-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
-            margin: 6px 0 10px;
+            background: var(--gray-200);
+            margin: 8px 0;
         }
         
         .topic-section {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            padding: 4px 0;
         }
         
         .topic-section:last-child {
@@ -261,20 +331,20 @@
         }
         
         .topic-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
         }
         
         .topic-name {
             font-weight: 500;
-            color: white;
-            font-size: 11px;
+            color: var(--deep-ink);
+            font-size: 12px;
         }
         
         .topic-stats {
-            color: #e5e7eb;
+            color: var(--gray-600);
             margin-left: 12px;
             font-size: 11px;
         }
@@ -288,6 +358,7 @@
         .topic-line {
             cursor: pointer;
             transition: opacity 0.2s ease;
+            pointer-events: bounding-box;
         }
         .topic-line.dimmed {
             opacity: 0.3;
@@ -345,17 +416,6 @@
             font-weight: 600;
             color: var(--sage);
         }
-        .section-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--deep-ink);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .section-subtitle {
-            font-size: 0.75rem;
-            color: var(--gray-600);
-            margin-top: 0.125rem;
         }
         .all-episodes-link {
             font-size: 0.875rem;
@@ -374,6 +434,7 @@
             padding: 2rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             margin-top: 2rem;
+            transition: all 0.3s ease;
         }
         .feed-container {
             margin-top: 1.5rem;
@@ -525,18 +586,80 @@
             background: #f5f3f0;
             color: var(--gray-600);
         }
-        /* Notable Signals Section */
-        .signals-section {
+        /* Notable Signals Section - Professional Container Structure */
+        .notable-signals-container {
+            background: #ffffff;
+            border: 1px solid #e5e5e4;
+            border-radius: 12px;
+            overflow: hidden;
             margin-top: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
-        .signal-card:hover {
+        
+        .notable-signals-container:hover {
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
         }
+        
+        .section-header-wrapper {
+            padding: 24px 24px 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .section-header-wrapper .section-title {
+            font-size: 0.875rem;  /* 14px - matching our pattern */
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .section-header-wrapper .section-subtitle {
+            font-size: 0.75rem;   /* 12px - matching our pattern */
+            color: #666;
+            font-weight: 400;
+            margin: 0;
+        }
+        
+        .signals-content {
+            padding: 24px;
+        }
+        
+        /* Signal Cards */
+        .signal-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .signal-card:hover {
+            border-color: #4a7c59;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Professional Icon Styling */
+        .signal-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(74, 124, 89, 0.1);  /* 10% sage green */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a7c59;  /* Sage green */
+            margin: 0 auto 0.75rem;
+            transition: background 0.2s ease;
+        }
+        
+        .signal-card:hover .signal-icon {
+            background: rgba(74, 124, 89, 0.15);  /* Slightly darker on hover */
+        }
+        
         .signal-icon svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--sage);
+            width: 24px;
+            height: 24px;
+            stroke: #4a7c59;  /* Sage green */
         }
         .signal-count {
             font-size: 2rem;
@@ -571,25 +694,27 @@
             line-height: 1.3;
         }
         
-        /* Visual strength indicators */
+        /* Visual strength indicators - Subtle and Professional */
         .signal-strength {
             display: flex;
-            gap: 0.25rem;
-            margin-top: auto;
-            padding-top: 0.75rem;
+            gap: 4px;
             justify-content: center;
+            margin-top: auto;  /* Push to bottom of card */
+            padding-top: 0.75rem;
         }
         
         .strength-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--gray-200);
-            transition: background-color 0.2s ease;
+            background: #e5e5e4;  /* Inactive dots - light gray */
+            opacity: 0.5;
+            transition: all 0.2s ease;
         }
         
         .strength-dot.active {
-            background: var(--sage);
+            background: #4a7c59;  /* Active dots - sage green */
+            opacity: 0.8;
         }
         /* Priority Briefings Section (formerly Episode Intelligence) */
         .episode-section {
@@ -731,11 +856,12 @@
             color: white;
         }
         .synthesis-title {
-            font-size: 0.875rem;
+            font-size: 0.813rem;
             font-weight: 700;
             color: var(--deep-ink);
             margin-bottom: 0.5rem;
             text-transform: uppercase;
+            white-space: nowrap;
             letter-spacing: 1px;
         }
         .synthesis-meta {
@@ -754,11 +880,9 @@
         }
         /* Actual AI Synthesis */
         .actual-synthesis {
-            background: var(--warm-paper);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 3px solid var(--sage);
+            background: transparent;
+            padding: 0;
+            margin-bottom: 0;
         }
         .synthesis-text {
             font-size: 0.813rem;
@@ -768,6 +892,68 @@
         .synthesis-text strong {
             color: var(--sage);
             font-weight: 600;
+        }
+        
+        /* Brief Preview Sections */
+        .brief-preview-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .brief-preview-section {
+            padding: 12px;
+            background: #f8f8f7;
+            border-radius: 6px;
+            border-left: 3px solid;
+        }
+        
+        .brief-preview-section.consensus {
+            border-left-color: #4a7c59;
+        }
+        
+        .brief-preview-section.contrarian {
+            border-left-color: #c77d7d;
+        }
+        
+        .brief-preview-section.blindspot {
+            border-left-color: #f4a261;
+        }
+        
+        .brief-preview-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+        
+        .brief-preview-content {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #1a1a2e;
+        }
+        
+        /* Value Indicators */
+        .brief-value-indicators {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .brief-value-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #666;
         }
         /* Expandable Brief Styles */
         .brief-collapsed {
@@ -808,6 +994,68 @@
             color: var(--sage);
             font-weight: bold;
         }
+        /* Prominent Download Button */
+        .brief-download-btn {
+            width: 100%;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+        
+        .brief-download-btn:hover {
+            background: #3d6548;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(74, 124, 89, 0.3);
+        }
+        
+        .brief-download-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+        
+        /* Secondary Expand Button */
+        .brief-expand-btn {
+            width: 100%;
+            background: #f8f8f7;
+            border: 1px solid #e5e5e4;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .brief-expand-btn:hover {
+            border-color: #4a7c59;
+            background: white;
+        }
+        
+        .brief-expand-btn svg {
+            width: 12px;
+            height: 12px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Keep old expand-brief-btn styles for compatibility */
         .expand-brief-btn:hover {
             border-color: var(--sage);
             color: var(--sage);
@@ -844,9 +1092,9 @@
             padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--gray-200);
         }
-        .synthesis-section:nth-last-child(2) {
+        .synthesis-section:last-child {
             border-bottom: none;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
             padding-bottom: 0;
         }
         .synthesis-section-title {
@@ -1138,6 +1386,401 @@
         .volume-bar:hover {
             transform: translateY(-2px);
         }
+        
+        /* Volume Chart Hover Effects */
+        .volume-bar-segment {
+            cursor: pointer;
+        }
+        
+        .volume-bar-rect {
+            transition: filter 300ms ease-out, opacity 300ms ease-out, transform 300ms ease-out;
+        }
+        
+        .volume-bar-segment:hover .volume-bar-rect {
+            filter: brightness(0.9) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+            transform: translateY(-2px);
+        }
+        
+        .volume-hover-dot {
+            transition: opacity 0.2s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        /* Volume Tooltip Styles */
+        .volume-tooltip-content {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--deep-ink);
+            margin-top: -4px; /* Consistent top spacing */
+        }
+        
+        .volume-tooltip-content .tooltip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .volume-tooltip-content .tooltip-date {
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+        
+        .volume-tooltip-content .tooltip-total {
+            font-weight: 500;
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+        
+        .volume-tooltip-content .tooltip-breakdown {
+            margin: 8px 0;
+        }
+        
+        .volume-tooltip-content .breakdown-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .volume-tooltip-content .topic-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+        }
+        
+        .volume-tooltip-content .topic-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .volume-tooltip-content .topic-name {
+            flex: 1;
+            color: var(--deep-ink);
+        }
+        
+        .volume-tooltip-content .topic-stats {
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        
+        .volume-tooltip-content .tooltip-episodes {
+            margin-top: 8px;
+        }
+        
+        .volume-tooltip-content .episodes-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .volume-tooltip-content .episode-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            padding: 2px 0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .volume-tooltip-content .episode-number {
+            color: var(--gray-500);
+            width: 16px;
+            flex-shrink: 0;
+            font-size: 11px;
+        }
+        
+        .volume-tooltip-content .episode-content {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            font-size: 12px;
+        }
+        
+        .volume-tooltip-content .episode-title {
+            color: var(--deep-ink);
+            font-weight: normal !important;
+            font-size: 12px !important;
+            font-family: inherit !important;
+            font-style: normal !important;
+        }
+        
+        .volume-tooltip-content .episode-podcast {
+            color: var(--gray-500);
+            font-size: 11px;
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+        
+        /* Performance Optimizations & Animations */
+        .chart-transition {
+            transition: all 300ms ease-out;
+            will-change: transform, opacity;
+        }
+        
+        .chart-fade-enter {
+            opacity: 0;
+            transform: scale(0.98);
+        }
+        
+        .chart-fade-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 300ms ease-out;
+        }
+        
+        /* Loading Skeleton */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.7; }
+        }
+        
+        .skeleton-loading {
+            background: var(--gray-200);
+            animation: pulse 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+        
+        .skeleton-bar {
+            height: 100%;
+            background: var(--gray-300);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        /* Enhanced Hover States */
+        .hover-glow {
+            filter: drop-shadow(0 0 8px rgba(74, 124, 89, 0.3));
+            transition: filter 300ms ease-out;
+        }
+        
+        .topic-line {
+            transition: opacity 300ms ease-out, filter 300ms ease-out;
+            cursor: pointer;
+        }
+        
+        .topic-line:hover {
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+        }
+        
+        .topic-line.active {
+            filter: drop-shadow(0 4px 12px rgba(74, 124, 89, 0.4));
+        }
+        
+        .topic-line.dimmed {
+            opacity: 0.3;
+        }
+        
+        /* Consensus Heatmap Styles */
+        .consensus-cell {
+            cursor: pointer;
+            transition: filter 300ms ease-out, transform 300ms ease-out;
+        }
+        
+        .consensus-cell-group:hover .consensus-cell {
+            filter: brightness(0.9) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            transform: translateY(-1px);
+        }
+        
+        /* Consensus Heatmap Tooltip */
+        .consensus-heatmap-tooltip {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--deep-ink);
+            margin-top: -4px; /* Consistent top spacing */
+        }
+        
+        .consensus-heatmap-tooltip .tooltip-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .consensus-heatmap-tooltip .tooltip-consensus {
+            color: var(--gray-700);
+            margin-bottom: 2px;
+        }
+        
+        .consensus-heatmap-tooltip .tooltip-mentions {
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+        
+        .consensus-heatmap-tooltip .tooltip-sources {
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+        
+        /* Data Point Animations */
+        .data-point-dot {
+            transition: all 300ms ease-out;
+            pointer-events: none;
+        }
+        
+        .data-point-dot.active {
+            transform: scale(1.67);
+        }
+        
+        /* Touch Support */
+        @media (hover: none) and (pointer: coarse) {
+            .topic-line,
+            .volume-bar-segment,
+            .consensus-cell {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            #chartTooltip {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+        }
+        
+        /* Chart Container Optimizations */
+        .chart-container {
+            /* Removed contain property to allow tooltips to overflow */
+            /* contain: layout style paint; */
+            transform: translateZ(0); /* Force GPU acceleration */
+        }
+        
+        /* Smooth View Transitions */
+        #chartContent {
+            transition: opacity 150ms ease-out;
+        }
+        
+        #chartContent.fade-out {
+            opacity: 0;
+        }
+        
+        #chartContent.fade-in {
+            animation: fadeIn 150ms ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .consensus-tooltip-content {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--deep-ink);
+        }
+        
+        .consensus-tooltip-content .tooltip-header {
+            margin-bottom: 8px;
+        }
+        
+        .consensus-tooltip-content .topic-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--deep-ink);
+            margin-bottom: 4px;
+        }
+        
+        .consensus-tooltip-content .consensus-label {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+        
+        .consensus-tooltip-content .sentiment-section {
+            margin: 8px 0;
+        }
+        
+        .consensus-tooltip-content .sentiment-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .consensus-tooltip-content .sentiment-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            font-size: 12px;
+        }
+        
+        .consensus-tooltip-content .sentiment-type {
+            color: var(--gray-600);
+        }
+        
+        .consensus-tooltip-content .sentiment-count {
+            color: var(--deep-ink);
+            font-weight: 500;
+        }
+        
+        .consensus-tooltip-content .advocates-section {
+            margin: 8px 0;
+        }
+        
+        .consensus-tooltip-content .advocates-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .consensus-tooltip-content .advocate-row {
+            display: flex;
+            gap: 4px;
+            padding: 2px 0;
+            font-size: 12px;
+        }
+        
+        .consensus-tooltip-content .advocate-name {
+            color: var(--deep-ink);
+        }
+        
+        .consensus-tooltip-content .advocate-firm {
+            color: var(--gray-500);
+        }
+        
+        .consensus-tooltip-content .dissent-section {
+            margin-top: 8px;
+        }
+        
+        .consensus-tooltip-content .dissent-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .consensus-tooltip-content .dissent-quote {
+            font-style: italic;
+            color: var(--deep-ink);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .consensus-tooltip-content .dissent-author {
+            color: var(--gray-600);
+            font-size: 11px;
+            text-align: right;
+        }
         .ai-search-pointer {
             color: var(--sage);
             font-weight: 600;
@@ -1357,4 +2000,363 @@ html {
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Slack Notification */
+.slack-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--sage);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.slack-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Weekly Intelligence Brief Sidebar Container */
+.intelligence-brief-sidebar {
+    margin-bottom: 20px;
+}
+
+.brief-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+/* Brief Header Styles */
+.brief-header {
+    margin-bottom: 16px;
+}
+
+.brief-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--deep-ink);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.brief-meta {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    margin: 0.125rem 0 0.5rem 0;
+}
+
+/* Removed brief-meta-row - no longer needed */
+
+.brief-sharing-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.brief-share-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--gray-600);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.brief-share-link:hover {
+    color: var(--sage);
+}
+
+.brief-share-link svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+}
+
+.brief-share-divider {
+    color: var(--gray-400);
+    font-size: 0.75rem;
+}
+
+/* Supporting Analytics Section */
+.supporting-analytics-header {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    padding: 0 1.5rem;
+}
+
+/* Topic Customization Panel Styles */
+.topic-customization-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 26, 46, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.topic-customization-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.topic-customization-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 480px;
+    background: white;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.topic-customization-panel[data-state="open"] {
+    transform: translateX(0);
+}
+
+.topic-customization-panel .panel-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: white;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.topic-customization-panel .panel-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--deep-ink);
+    margin: 0;
+}
+
+.topic-customization-panel .panel-subtitle {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin: 4px 0 0 0;
+}
+
+.topic-customization-panel .close-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--warm-paper);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.topic-customization-panel .close-button:hover {
+    background: rgba(74, 124, 89, 0.1);
+}
+
+.topic-customization-panel .panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.topic-customization-panel .topic-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.topic-customization-panel .topic-item {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topic-customization-panel .topic-item:hover {
+    background: rgba(74, 124, 89, 0.04);
+    border-color: rgba(74, 124, 89, 0.4);
+}
+
+.topic-customization-panel .topic-item.selected {
+    border-color: var(--sage);
+    background: rgba(74, 124, 89, 0.08);
+}
+
+.topic-customization-panel .topic-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.topic-customization-panel .topic-item.disabled:hover {
+    background: white;
+    border-color: var(--gray-200);
+}
+
+.topic-customization-panel .topic-checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--gray-400);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.topic-customization-panel .topic-item.selected .topic-checkbox {
+    background: var(--sage);
+    border-color: var(--sage);
+}
+
+.topic-customization-panel .topic-checkbox svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.topic-customization-panel .topic-checkbox svg path {
+    stroke: white;
+    stroke-width: 2;
+}
+
+.topic-customization-panel .topic-item.selected .topic-checkbox svg {
+    opacity: 1;
+}
+
+.topic-customization-panel .topic-info {
+    flex: 1;
+}
+
+.topic-customization-panel .topic-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--deep-ink);
+    margin-bottom: 4px;
+}
+
+.topic-customization-panel .topic-stats {
+    font-size: 12px;
+    color: var(--gray-600);
+}
+
+.topic-customization-panel .topic-momentum {
+    color: var(--sage);
+    font-weight: 500;
+}
+
+.topic-customization-panel .selection-counter {
+    padding: 16px 0;
+    font-size: 13px;
+    color: var(--gray-600);
+    text-align: center;
+    border-top: 1px solid var(--gray-200);
+}
+
+.topic-customization-panel .panel-buttons {
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+}
+
+.topic-customization-panel .button-secondary,
+.topic-customization-panel .button-primary {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.topic-customization-panel .button-secondary {
+    background: white;
+    border: 1px solid var(--gray-300);
+    color: var(--deep-ink);
+}
+
+.topic-customization-panel .button-secondary:hover {
+    background: var(--gray-100);
+}
+
+.topic-customization-panel .button-primary {
+    background: var(--sage);
+    color: white;
+}
+
+.topic-customization-panel .button-primary:hover:not(:disabled) {
+    background: #3d6a4a;
+}
+
+.topic-customization-panel .button-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Unified Dashboard Container Hover Effects */
+/* Ensures all main dashboard containers have consistent hover behavior */
+.dashboard-container,
+.narrative-pulse,
+.narrative-feed,
+.brief-content,
+.synthesis-sidebar,
+.signal-card,
+.episode-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dashboard-container:hover,
+.narrative-pulse:hover,
+.narrative-feed:hover,
+.brief-content:hover,
+.synthesis-sidebar:hover,
+.signal-card:hover,
+.episode-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    transform: translateY(-2px);
 }

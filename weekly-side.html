@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Intelligence Brief - Final Design</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+            background: #fafaf9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        /* Collapsed State */
+        .brief-collapsed {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .brief-header {
+            margin-bottom: 16px;
+        }
+
+        .brief-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 0;
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .icon-button {
+            background: white;
+            border: 1px solid #e5e5e4;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-button:hover {
+            border-color: #4a7c59;
+            transform: translateY(-1px);
+        }
+
+        .icon-button svg {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .brief-meta {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Preview Sections */
+        .preview-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .preview-section {
+            padding: 12px;
+            background: #f8f8f7;
+            border-radius: 6px;
+            border-left: 3px solid;
+        }
+
+        .preview-section.consensus {
+            border-left-color: #4a7c59;
+        }
+
+        .preview-section.contrarian {
+            border-left-color: #c77d7d;
+        }
+
+        .preview-section.blindspot {
+            border-left-color: #f4a261;
+        }
+
+        .preview-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+
+        .preview-content {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #1a1a2e;
+        }
+
+        .preview-content.truncated::after {
+            content: "...";
+        }
+
+        /* Value Indicators */
+        .value-indicators {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .value-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: white;
+            border: 1px solid #e5e5e4;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Action Buttons */
+        .download-button {
+            width: 100%;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .download-button:hover {
+            background: #3d6548;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(74, 124, 89, 0.3);
+        }
+
+        .expand-button {
+            width: 100%;
+            background: #f8f8f7;
+            border: 1px solid #e5e5e4;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .expand-button:hover {
+            border-color: #4a7c59;
+            background: white;
+        }
+
+        /* Expanded State */
+        .brief-expanded {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .full-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .section-content ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        .section-content li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .section-content li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .consensus-item::before {
+            color: #4a7c59;
+        }
+
+        .contrarian-item::before {
+            color: #c77d7d;
+        }
+
+        .blindspot-item::before {
+            color: #f4a261;
+        }
+
+        .highlight {
+            font-weight: 600;
+        }
+
+        .source-ref {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .collapse-button {
+            width: 100%;
+            background: white;
+            border: 1px solid #e5e5e4;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .collapse-button:hover {
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+
+        .demo-label {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- COLLAPSED STATE -->
+        <div class="brief-collapsed">
+            <div class="brief-header">
+                <h2 class="brief-title">WEEKLY INTELLIGENCE BRIEF</h2>
+            </div>
+
+            <div class="brief-meta">
+                1,498 hours analyzed • Updated 36 mins ago
+            </div>
+
+            <div class="share-actions">
+                <button class="icon-button" title="Share">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zM18 22a3 3 0 100-6 3 3 0 000 6z" stroke-width="2"/>
+                        <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke-width="2"/>
+                    </svg>
+                </button>
+                <button class="icon-button" title="Email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke-width="2"/>
+                        <path d="M22 6l-10 7L2 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Preview Sections showing structure -->
+            <div class="preview-sections">
+                <div class="preview-section consensus">
+                    <div class="preview-label">CONSENSUS FORMING</div>
+                    <div class="preview-content truncated">
+                        AI infrastructure over applications • Series A at 20-30x ARR • Capital efficiency replacing growth
+                    </div>
+                </div>
+                
+                <div class="preview-section contrarian">
+                    <div class="preview-label">CONTRARIAN SIGNALS</div>
+                    <div class="preview-content truncated">
+                        DePIN showing 190% momentum without revenue • Consumer AI skepticism rising
+                    </div>
+                </div>
+                
+                <div class="preview-section blindspot">
+                    <div class="preview-label">EMERGING BLINDSPOTS</div>
+                    <div class="preview-content truncated">
+                        Developer tools consolidation • Climate tech sentiment inverting
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Indicators -->
+            <div class="value-indicators">
+                <span class="value-badge">📊 4 Key Trends</span>
+                <span class="value-badge">🎯 3 Action Items</span>
+                <span class="value-badge">📈 Visual Analysis</span>
+                <span class="value-badge">📄 7 Pages</span>
+            </div>
+
+            <button class="download-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 11L4 7M8 11L12 7M8 11V2M2 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Download Intelligence Brief (PDF)
+            </button>
+
+            <button class="expand-button">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                View Full Analysis
+            </button>
+        </div>
+
+        <div class="demo-label">↓ EXPANDED STATE ↓</div>
+
+        <!-- EXPANDED STATE -->
+        <div class="brief-expanded">
+            <div class="brief-header">
+                <h2 class="brief-title">WEEKLY INTELLIGENCE BRIEF</h2>
+            </div>
+
+            <div class="brief-meta">
+                1,498 hours analyzed • Updated 36 mins ago
+            </div>
+
+            <div class="share-actions">
+                <button class="icon-button" title="Share">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zM18 22a3 3 0 100-6 3 3 0 000 6z" stroke-width="2"/>
+                        <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" stroke-width="2"/>
+                    </svg>
+                </button>
+                <button class="icon-button" title="Email">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke-width="2"/>
+                        <path d="M22 6l-10 7L2 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="full-section">
+                <h3 class="section-title">CONSENSUS FORMING</h3>
+                <div class="section-content">
+                    <ul>
+                        <li class="consensus-item">
+                            <span class="highlight">AI infrastructure over applications</span>
+                            <span class="source-ref">[Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree]</span> - Vertical AI seeing 2-3x better retention than horizontal plays
+                        </li>
+                        <li class="consensus-item">
+                            <span class="highlight">Series A valuations stabilizing</span>
+                            <span class="source-ref">[12 sources confirm: Gerstner, Hoffman, Rabois leading]</span> - 20-30x ARR becomes new normal after 18-month correction
+                        </li>
+                        <li class="consensus-item">
+                            <span class="highlight">Capital efficiency replacing growth</span>
+                            <span class="source-ref">[mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned]</span> - LPs driving this narrative shift hard
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="full-section">
+                <h3 class="section-title">CONTRARIAN SIGNALS</h3>
+                <div class="section-content">
+                    <ul>
+                        <li class="contrarian-item">
+                            <span class="highlight">DePIN showing 190% momentum without revenue</span>
+                            <span class="source-ref">[Thiel only dissenter on Founders Fund pod, everyone else bullish]</span> - Either massive opportunity or bubble forming
+                        </li>
+                        <li class="contrarian-item">
+                            <span class="highlight">Consumer AI skepticism rising</span>
+                            <span class="source-ref">[Benchmark's Gurley, Lightspeed's Bogan pulling back]</span> while Sequoia, a16z pile into enterprise
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="full-section">
+                <h3 class="section-title">EMERGING BLINDSPOTS</h3>
+                <div class="section-content">
+                    <ul>
+                        <li class="blindspot-item">
+                            <span class="highlight">Developer tools consolidation</span>
+                            <span class="source-ref">[3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage]</span> - Market moving without public discourse
+                        </li>
+                        <li class="blindspot-item">
+                            <span class="highlight">Climate tech sentiment inverting</span>
+                            <span class="source-ref">[Khosla quietly accumulating while Founders Fund exits]</span> - Contrary indicator worth tracking
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="download-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 11L4 7M8 11L12 7M8 11V2M2 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Download Intelligence Brief (PDF)
+            </button>
+
+            <button class="collapse-button">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M9 7.5L6 4.5L3 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Collapse Brief
+            </button>
+        </div>
+    </div>
+</body>
+</html>

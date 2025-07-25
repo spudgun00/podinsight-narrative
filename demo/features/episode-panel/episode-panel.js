@@ -16,8 +16,6 @@ const EpisodePanel = {
     },
     
     createPanelStructure: function() {
-        console.log('[EpisodePanel] Creating panel structure...');
-        
         // Create backdrop
         this.backdrop = document.createElement('div');
         this.backdrop.className = 'episode-panel-backdrop';
@@ -26,7 +24,6 @@ const EpisodePanel = {
         // Create panel container
         this.container = document.createElement('div');
         this.container.className = 'episode-panel-container';
-        console.log('[EpisodePanel] Setting innerHTML...');
         this.container.innerHTML = `
             <!-- Panel Header -->
             <div class="panel-header">
@@ -193,23 +190,28 @@ const EpisodePanel = {
         // Append to body
         document.body.appendChild(this.backdrop);
         document.body.appendChild(this.container);
-        
-        console.log('[EpisodePanel] Panel structure created');
-        console.log('[EpisodePanel] Checking header-top:', this.container.querySelector('.header-top'));
-        console.log('[EpisodePanel] Checking close-button:', this.container.querySelector('.close-button'));
     },
     
     attachEventListeners: function() {
-        // Listen for clicks on all "View Full Brief" buttons
+        // Listen for clicks on entire episode cards or "View Full Brief" buttons
         document.addEventListener('click', (e) => {
-            const button = e.target.closest('.episode-action');
-            if (button && button.textContent.includes('View Full Brief')) {
-                e.preventDefault();
-                const episodeCard = button.closest('.episode-card');
-                if (episodeCard) {
-                    this.openPanel(episodeCard);
-                }
+            // Check if click is on episode card or any of its children
+            const episodeCard = e.target.closest('.episode-card');
+            if (!episodeCard) return;
+            
+            // Check if this card is in Priority Briefings section
+            const priorityBriefings = episodeCard.closest('.priority-briefings-container');
+            if (!priorityBriefings) return;
+            
+            // Prevent opening panel twice if clicking on links within the card
+            const clickedLink = e.target.closest('a');
+            if (clickedLink && !clickedLink.classList.contains('episode-action')) {
+                // Allow other links to work normally
+                return;
             }
+            
+            e.preventDefault();
+            this.openPanel(episodeCard);
         });
     },
     
@@ -232,17 +234,11 @@ const EpisodePanel = {
     },
     
     openPanel: function(episodeCard) {
-        console.log('[EpisodePanel] Opening panel...');
-        
         // Extract data from episode card
         const data = this.extractEpisodeData(episodeCard);
         
         // Populate panel content
         this.populatePanel(data);
-        
-        // Debug: Check what's in the header
-        const header = this.container.querySelector('.panel-header');
-        console.log('[EpisodePanel] Header innerHTML:', header ? header.innerHTML : 'Header not found');
         
         // Show backdrop
         this.backdrop.style.display = 'block';
@@ -264,7 +260,6 @@ const EpisodePanel = {
         if (closeBtn) closeBtn.focus();
         
         this.isOpen = true;
-        console.log('[EpisodePanel] Panel opened');
     },
     
     closePanel: function() {

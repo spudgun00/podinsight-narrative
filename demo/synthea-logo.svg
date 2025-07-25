@@ -1,0 +1,18 @@
+<svg width="360" height="50" viewBox="0 0 360 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Mark - Three overlapping circles centered vertically -->
+  <g transform="translate(6, 3) scale(1.1)">
+    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3">
+      <circle r="13" cx="14" cy="14" />
+      <circle r="13" cx="30" cy="14" />
+      <circle r="13" cx="22" cy="28" />
+    </g>
+  </g>
+  
+  <!-- Logo Text - Properly aligned with logo mark -->
+  <g>
+    <!-- synthea.ai -->
+    <text x="65" y="26" font-family="Inter, sans-serif" font-size="26" font-weight="700" fill="#2C2C2C" letter-spacing="-0.01em">synthea.ai</text>
+    <!-- Tagline -->
+    <text x="65" y="42" font-family="Inter, sans-serif" font-size="14" font-weight="400" fill="#5A5A5A" letter-spacing="0.02em">synthesized intelligence for venture capital</text>
+  </g>
+</svg>

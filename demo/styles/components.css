@@ -9,48 +9,185 @@
  * - AI search interface
  * - All other UI components
  */
+
+/* Filtered out episodes - used by Priority Briefings filter */
+.episode-card.filtered-out {
+    display: none !important;
+    visibility: hidden !important;
+    max-height: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Fix for Priority Briefings filter - DOM reordering approach */
+/* When filtering is active, ensure all visible cards display properly */
+/* Handle both .episode-grid and .briefings-list.episode-grid selectors */
+.episode-grid.filter-active .episode-card:not(.filtered-out),
+.briefings-list.episode-grid.filter-active .episode-card:not(.filtered-out) {
+    /* Force visibility for non-filtered cards */
+    max-height: 600px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    border: 1px solid var(--gray-200) !important;
+    border-left: 3px solid transparent !important;
+    overflow: visible !important;
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: auto !important;
+    width: auto !important;
+    transition: none !important;
+}
+
+/* Override ALL nth-child rules when filter is active */
+.episode-grid.filter-active .episode-card:nth-child(n+1),
+.briefings-list.episode-grid.filter-active .episode-card:nth-child(n+1) {
+    max-height: 600px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    overflow: visible !important;
+    border-top: 1px solid var(--gray-200) !important;
+    border-right: 1px solid var(--gray-200) !important;
+    border-bottom: 1px solid var(--gray-200) !important;
+}
+
+/* Preserve priority colors for filtered cards */
+.episode-grid.filter-active .episode-card.priority-critical {
+    border-left-color: var(--priority-red) !important;
+}
+.episode-grid.filter-active .episode-card.priority-opportunity {
+    border-left-color: var(--priority-green) !important;
+}
+.episode-grid.filter-active .episode-card.priority-elevated {
+    border-left-color: var(--priority-amber) !important;
+}
+
+/* Ensure filtered-out cards stay hidden with highest priority */
+.episode-grid.filter-active .episode-card.filtered-out,
+.briefings-list.episode-grid.filter-active .episode-card.filtered-out {
+    display: none !important;
+    visibility: hidden !important;
+    max-height: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* Remove margin from last visible card when filtering */
+.episode-grid.filter-active .episode-card:not(.filtered-out):last-of-type,
+.briefings-list.episode-grid.filter-active .episode-card:not(.filtered-out):last-of-type {
+    margin-bottom: 0 !important;
+}
+
+/* Ensure the grid container itself is properly displayed when filtering */
+.episode-grid.filter-active,
+.briefings-list.episode-grid.filter-active {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 200px !important;
+    overflow: visible !important;
+}
+
+/* NUCLEAR SOLUTION: Completely new grid class with NO nth-child rules */
+.episode-grid-filtered {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Cards in the filtered grid - simple and direct */
+.episode-grid-filtered .episode-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: none !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 1.5rem !important;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+    border: 1px solid var(--gray-200) !important;
+    border-left: 3px solid transparent !important;
+    transform: none !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    overflow: visible !important;
+    transition: none !important;
+}
+
+/* Priority colors in filtered grid */
+.episode-grid-filtered .episode-card.priority-critical {
+    border-left-color: var(--priority-red) !important;
+}
+.episode-grid-filtered .episode-card.priority-opportunity {
+    border-left-color: var(--priority-green) !important;
+}
+.episode-grid-filtered .episode-card.priority-elevated {
+    border-left-color: var(--priority-amber) !important;
+}
         /* Logo Container */
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 8px;
         }
         
-        /* Pulse Logo */
-        .pulse-logo {
-            width: 32px;
-            height: 32px;
-            background-color: var(--sage);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Logo Mark - SVG */
+        .logo-mark {
+            width: 35px;
+            height: 35px;
+            transition: opacity 0.2s ease;
+            cursor: pointer;
         }
         
-        .pulse-logo svg {
-            width: 20px;
-            height: 20px;
+        /* Hover state for logo mark */
+        .logo-mark:hover {
+            opacity: 0.85;
         }
         
         /* Logo Text */
         .logo-text {
             display: flex;
             flex-direction: column;
-            gap: 0.125rem;
+            gap: 2px;
+            padding-top: 2px; /* Fine-tune baseline alignment */
         }
         
         .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--deep-ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 600; /* Semi-Bold */
+            color: #2C2C2C;
             line-height: 1;
+            letter-spacing: -0.01em;
         }
         
         .tagline {
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: var(--gray-600);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 400; /* Regular */
+            color: #6B6B6B;
             line-height: 1;
+            letter-spacing: 0.01em;
         }
         .ticker-value {
             color: var(--sage);
@@ -65,12 +202,12 @@
             align-items: center;
             gap: 0.5rem;
             padding: 8px 16px;
-            background: white;
-            border: 1px solid var(--gray-200);
+            background: var(--sage);
+            border: 1px solid var(--sage);
             border-radius: 6px;
             font-size: 13px;
             font-weight: 500;
-            color: var(--deep-ink);
+            color: white;
             cursor: pointer;
             transition: all 0.2s ease;
             transform: translateY(0);
@@ -79,14 +216,17 @@
         }
 
         .portfolio-button:hover {
-            border-color: var(--sage);
+            background: #3a6c49; /* Darker sage on hover */
+            border-color: #3a6c49;
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(74, 124, 89, 0.2);
         }
 
         .portfolio-button:active {
+            background: #356040; /* Even darker on click */
+            border-color: #356040;
             transform: translateY(0);
-            box-shadow: none;
+            box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
         }
 
         /* Notification Badge */
@@ -143,9 +283,10 @@
 
         /* Panel Open State */
         .portfolio-button[data-panel-state="open"] {
-            background: var(--light-sage);
-            border-color: var(--sage);
-            color: var(--sage);
+            background: #2a5037; /* Darkest sage for open state */
+            border-color: #2a5037;
+            color: white;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         /* Mobile Responsive */
@@ -225,6 +366,16 @@
             color: var(--gray-600) !important;
             font-weight: 400 !important;      /* Normal weight, not bold */
             margin: 0;
+        }
+        
+        /* Uppercase subtitle variant for inline headers like "PATTERN EMERGENCE • LAST 48 HOURS" */
+        .section-subtitle-uppercase {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            font-weight: 400;              /* Same weight as regular subtitle */
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 0.05em;        /* Improves readability for all-caps */
         }
         .control-button:hover {
             border-color: var(--sage);
@@ -593,6 +744,7 @@
             border-radius: 12px;
             overflow: hidden;
             margin-top: 2rem;
+            margin-bottom: 2rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
@@ -687,8 +839,8 @@
         
         /* New insight-based styles */
         .signal-insight {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 500;
             color: var(--deep-ink);
             margin: 0.5rem 0;
             line-height: 1.3;
@@ -720,6 +872,172 @@
         .episode-section {
             margin-top: 2rem;
         }
+        
+        /* Priority Briefings Container Styling */
+        .priority-briefings-container {
+            background: #ffffff;
+            border: 1px solid #e5e5e4;
+            border-radius: 12px;
+            overflow: visible;  /* Changed from hidden to visible */
+            /* NO fixed height - container expands naturally */
+            min-height: 300px; /* Ensure minimum height for filtered content */
+        }
+        
+        /* Fix the border radius clipping without hiding overflow */
+        .priority-briefings-container > * {
+            border-radius: inherit;
+        }
+        
+        .section-header-wrapper {
+            padding: 24px 24px 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .section-header-content h2 {
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: var(--deep-ink);
+        }
+        
+        .section-header-content p {
+            margin: 0.25rem 0 0 0;
+            font-size: 0.8125rem;
+            color: var(--gray-600);
+        }
+        
+        .header-action {
+            font-size: 0.75rem;
+            color: var(--sage);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .header-action:hover {
+            color: var(--deep-ink);
+        }
+        
+        .briefings-content {
+            padding: 24px;
+            padding-bottom: 0;  /* Button container provides bottom spacing */
+        }
+        
+        .briefings-list {
+            /* Uses existing episode-grid styles */
+        }
+        
+        /* Override the default grid gap for priority briefings */
+        .priority-briefings-container .episode-grid {
+            gap: 0 !important; /* Remove grid gap - we'll use margins on cards instead */
+        }
+        
+        /* Add controlled spacing between cards - override ALL default margins */
+        .priority-briefings-container .episode-card {
+            margin-bottom: 6px !important; /* Even tighter 6px spacing between cards */
+        }
+        
+        /* Override the expanded/partial state margins too */
+        .priority-briefings-container .episode-grid.show-partial .episode-card,
+        .priority-briefings-container .episode-grid.show-expanded .episode-card {
+            margin-bottom: 6px !important;
+        }
+        
+        /* Remove margin from the last visible card in each state */
+        .priority-briefings-container .episode-grid:not(.show-partial):not(.show-expanded) .episode-card:nth-child(3),
+        .priority-briefings-container .episode-grid.show-partial .episode-card:nth-child(6),
+        .priority-briefings-container .episode-grid.show-expanded .episode-card:last-child,
+        .priority-briefings-container .episode-grid.show-expanded .episode-card:nth-child(9) {
+            margin-bottom: 0 !important;
+        }
+
+        /* Filter dropdown styling */
+        .filter-dropdown-container {
+            position: relative;
+        }
+
+        .podcast-filter-select {
+            appearance: none;
+            background: white;
+            border: 1px solid var(--gray-200, #e5e7eb);
+            border-radius: 6px;
+            padding: 6px 32px 6px 12px;
+            font-size: 14px;
+            color: var(--gray-700, #374151);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            
+            /* Custom dropdown arrow */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 8px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+        }
+
+        .podcast-filter-select:hover {
+            background-color: var(--gray-50, #f9fafb);
+            border-color: var(--gray-300, #d1d5db);
+        }
+
+        .podcast-filter-select:focus {
+            outline: none;
+            border-color: var(--sage, #4a7c59);
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+        }
+
+        /* Sage green halo for "Curated for You" */
+        .podcast-filter-select[data-active="curated"] {
+            box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.15), 
+                        0 0 8px rgba(74, 124, 89, 0.2),
+                        0 0 12px rgba(74, 124, 89, 0.1);
+            border-color: var(--sage, #4a7c59);
+            background-color: rgba(74, 124, 89, 0.02);
+        }
+
+        /* Active filter indication for other selections */
+        .podcast-filter-select:not([data-active="curated"]) {
+            border-color: var(--sage, #4a7c59);
+            background-color: rgba(74, 124, 89, 0.04);
+        }
+
+        /* Filtering transition */
+        .episode-card.filtering {
+            opacity: 0.6;
+            transition: opacity 0.2s ease-out;
+        }
+
+        /* No results message */
+        .no-results-message {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--gray-600, #4b5563);
+            font-size: 16px;
+            grid-column: 1 / -1;
+        }
+
+        .no-results-message .filter-name {
+            font-weight: 600;
+            color: var(--gray-900, #111827);
+        }
+
+        /* Ensure proper header spacing */
+        .priority-briefings-container .section-header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .priority-briefings-container .section-header-wrapper .filter-dropdown-container {
+            flex: 0 0 auto;
+        }
+
         .episode-card {
             background: white;
             border: 1px solid var(--gray-200);
@@ -747,6 +1065,17 @@
             width: 24px;
             height: 24px;
             stroke: var(--sage);
+        }
+        .podcast-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         .podcast-name {
             font-size: 0.875rem;
@@ -1085,7 +1414,6 @@
             color: var(--gray-600);
             margin-top: -0.5rem;
             margin-bottom: 1rem;
-            font-style: italic;
         }
         .synthesis-section {
             margin-bottom: 2rem;
@@ -1796,7 +2124,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 2rem;
+            margin-top: 1rem;
             padding: 1rem;
             background: var(--light-sage);
             border-radius: 8px;
@@ -1807,10 +2135,18 @@
 
 /* Priority Briefings Progressive Reveal */
 .show-more-container {
+    padding: 20px 24px 24px;  /* Increased top padding to 20px for consistent spacing */
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 0;
 }
+
+/* Ensure consistent spacing for all states */
+.priority-briefings-container .show-more-container {
+    padding-top: 20px !important;  /* Always 20px from last card */
+}
+
+/* No need for state-specific adjustments - spacing is now consistent */
 
 /* Hide the checkbox - no longer needed */
 .show-more-checkbox {
@@ -1847,6 +2183,46 @@
     outline-offset: 2px;
 }
 
+/* Show more button inherits brief-expand-btn styles */
+.show-more-container .brief-expand-btn {
+    width: auto; /* Override full width for this context */
+    display: inline-flex;
+}
+
+/* Last visible card has no bottom margin */
+.briefings-content .episode-card.last-visible,
+.episode-grid .episode-card.last-visible {
+    margin-bottom: 0 !important;
+}
+
+/* Ensure proper spacing for Priority Briefings */
+.priority-briefings-container .episode-card:last-child {
+    margin-bottom: 0 !important;
+}
+
+.btn-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    line-height: 1;
+}
+
+.show-more-btn svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Mobile optimization for show more button */
+@media (max-width: 640px) {
+    .show-more-btn {
+        padding: 0.625rem 1.25rem; /* Keep same padding as desktop */
+    }
+    
+    .show-more-container {
+        padding: 16px 16px 20px; /* Consistent 16px top spacing on mobile */
+    }
+}
+
 /* Override grid gap from layout.css for better control */
 .episode-section .episode-grid {
     gap: 0; /* We'll use margin-bottom on cards instead */
@@ -1868,20 +2244,20 @@
 
 /* Last visible card should have no margin - but restore margin when more cards are shown */
 .episode-grid:not(.show-partial):not(.show-expanded) .episode-card:nth-child(3) {
-    margin-bottom: 0;
+    margin-bottom: 0 !important; /* Force no margin on 3rd card when only 3 showing */
 }
 .episode-grid.show-partial .episode-card:nth-child(3) {
     margin-bottom: 1.5rem; /* Restore margin when showing more cards */
 }
 .episode-grid.show-partial .episode-card:nth-child(6) {
-    margin-bottom: 0;
+    margin-bottom: 0 !important; /* No margin on 6th card when 6 showing */
 }
 .episode-grid.show-expanded .episode-card:nth-child(3),
 .episode-grid.show-expanded .episode-card:nth-child(6) {
-    margin-bottom: 1.5rem; /* Restore margin for cards 3 and 6 */
+    margin-bottom: 6px !important; /* Keep consistent 6px margin */
 }
 .episode-grid.show-expanded .episode-card:nth-child(9) {
-    margin-bottom: 0;
+    margin-bottom: 0 !important; /* No margin on 9th card when all showing */
 }
 
 /* Hide cards 4-9 by default */
@@ -1925,6 +2301,8 @@
 }
 
 /* Staggered transition delays for cascade effect */
+/* COMMENTED OUT - Handled by JavaScript now */
+/*
 .episode-grid .episode-card:nth-child(4) { 
     transition-delay: 0s; 
 }
@@ -1948,6 +2326,7 @@
 .episode-grid .episode-card:nth-child(9) { 
     transition-delay: 0.5s; 
 }
+*/
 
 /* Arrow rotation based on state */
 .show-more-button svg {
@@ -1956,6 +2335,54 @@
 
 .episode-grid.show-expanded ~ .show-more-container .show-more-button svg {
     transform: rotate(180deg);
+}
+
+/* Card visibility animations */
+
+.episode-card {
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.episode-card.hidden {
+    display: none;
+}
+
+.episode-card.visible {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+/* Screen reader only text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
 /* Smooth scroll behavior for the page */
@@ -1967,6 +2394,12 @@ html {
 .episode-card {
     transform-origin: top center;
     will-change: transform, opacity;
+}
+
+/* Body state when portfolio panel is open */
+body.portfolio-open {
+    overflow: hidden !important;
+    position: relative;
 }
 
 /* Accessibility helpers */

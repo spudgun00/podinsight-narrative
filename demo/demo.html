@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VCPulse - Track the heartbeat of venture capital through AI-powered podcast intelligence">
+    <meta name="description" content="synthea.ai - Synthesized intelligence for venture capital">
     <meta name="theme-color" content="#4a7c59">
-    <meta property="og:title" content="VCPulse - Venture Capital Intelligence Platform">
+    <meta property="og:title" content="synthea.ai - Venture Capital Intelligence Platform">
     <meta property="og:description" content="Track narratives, signals, and insights from 1,498+ venture capital podcasts">
     <meta property="og:type" content="website">
-    <title>VCPulse - Track the heartbeat of venture capital</title>
+    <title>synthea.ai - Synthesized intelligence for venture capital</title>
     
     <!-- Performance -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234a7c59'/%3E%3Cpath d='M16 4a4 4 0 0 0-4 4v8a4 4 0 0 0 8 0V8a4 4 0 0 0-4-4z' fill='white'/%3E%3Cpath d='M24 14v2a8 8 0 0 1-16 0v-2' fill='none' stroke='white' stroke-width='2'/%3E%3Cline x1='16' y1='24' x2='16' y2='28' stroke='white' stroke-width='2'/%3E%3Cline x1='11' y1='28' x2='21' y2='28' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='3'%3E%3Ccircle r='9' cx='9.7' cy='10.2' /%3E%3Ccircle r='9' cx='22.3' cy='10.2' /%3E%3Ccircle r='9' cx='16' cy='21.2' /%3E%3C/g%3E%3C/svg%3E">
     
     <!-- Critical CSS -->
     <style>
@@ -55,17 +55,16 @@
     <header class="header">
         <div class="header-main">
             <div class="logo-container">
-                <div class="pulse-logo">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" fill="white"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                        <line x1="12" y1="19" x2="12" y2="23"/>
-                        <line x1="8" y1="23" x2="16" y2="23"/>
-                    </svg>
-                </div>
+                <svg class="logo-mark" width="35" height="35" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
+                    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
+                        <circle r="13" cx="14" cy="14" />
+                        <circle r="13" cx="30" cy="14" />
+                        <circle r="13" cx="22" cy="28" />
+                    </g>
+                </svg>
                 <div class="logo-text">
-                    <div class="logo">VC<span style="color: #4a7c59;">Pulse</span></div>
-                    <div class="tagline">Track the heartbeat of venture capital</div>
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
                 </div>
             </div>
             
@@ -87,15 +86,15 @@
                         <div class="dropdown-section">
                             <div class="section-title">Jump to Insights</div>
                             <div class="search-suggestions">
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('What\'s the consensus on vertical AI?')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('What\'s the consensus on vertical AI?')">
                                     <span>What's the consensus on vertical AI?</span>
                                     <span class="suggestion-meta">14 sources</span>
                                 </div>
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Series A valuations this month')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('Series A valuations this month')">
                                     <span>Series A valuations this month</span>
                                     <span class="suggestion-meta">8 sources</span>
                                 </div>
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Brad Gerstner latest thesis')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('Brad Gerstner latest thesis')">
                                     <span>Brad Gerstner latest thesis</span>
                                     <span class="suggestion-meta">3 episodes</span>
                                 </div>
@@ -105,15 +104,15 @@
                         <div class="dropdown-section">
                             <div class="section-title">Trending Topics This Week</div>
                             <div class="search-suggestions">
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('AI Agents')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('AI Agents')">
                                     <span>AI Agents</span>
                                     <span class="trending-badge">↑85% w/w</span>
                                 </div>
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('Capital efficiency')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('Capital efficiency')">
                                     <span>Capital efficiency metrics</span>
                                     <span class="trending-badge">↑17% w/w</span>
                                 </div>
-                                <div class="suggestion-item" onclick="vcPulseSearch.fillSearch('DePIN')">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('DePIN')">
                                     <span>DePIN infrastructure</span>
                                     <span class="trending-badge">↑190% w/w</span>
                                 </div>
@@ -123,22 +122,22 @@
                         <div class="dropdown-section">
                             <div class="section-title">Quick Filters</div>
                             <div class="quick-filters">
-                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('consensus')">Consensus views</span>
-                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('contrarian')">Contrarian takes</span>
-                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('emerging')">Emerging themes</span>
-                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('deals')">Deal mentions</span>
-                                <span class="filter-chip" onclick="vcPulseSearch.filterBy('people')">Key people</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('consensus')">Consensus views</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('contrarian')">Contrarian takes</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('emerging')">Emerging themes</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('deals')">Deal mentions</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('people')">Key people</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
                 <button class="portfolio-button" 
-                        aria-label="Portfolio tracking"
+                        aria-label="Company tracking"
                         data-portfolio-count="0"
                         data-new-mentions="0"
                         data-panel-state="closed">
-                    <span class="portfolio-text">Portfolio</span>
+                    <span class="portfolio-text">Company Tracking</span>
                     <span class="notification-badge" aria-hidden="true" style="display: none;">0</span>
                     <span class="pulse-indicator" aria-hidden="true"></span>
                 </button>
@@ -198,9 +197,12 @@
     <!-- Scripts -->
     <!-- Data -->
     <script src="data/demo-data.js" defer></script>
+    <script src="data/narrative-pulse-data.js" defer></script>
     
     <!-- Component Scripts -->
     <script src="features/narrative-pulse/narrative-pulse.js" defer></script>
+    <script src="features/narrative-pulse/apply-data-updates.js" defer></script>
+    <script src="features/narrative-pulse/final-fixes.js" defer></script>
     <script src="features/narrative-pulse/init.js" defer></script>
     
     <script src="features/narrative-feed/narrative-feed.js" defer></script>
@@ -214,6 +216,7 @@
     
     <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
     <script src="features/intelligence-brief/init.js" defer></script>
+    <script src="features/intelligence-brief/velocity-tracking.js" defer></script>
     
     <!-- Episode Panel -->
     <script src="features/episode-panel/episode-panel.js" defer></script>
@@ -228,15 +231,15 @@
     <noscript>
         <div style="padding: 2rem; text-align: center; background: #fafaf9;">
             <h2>JavaScript Required</h2>
-            <p>VCPulse requires JavaScript to display venture capital insights.</p>
+            <p>synthea.ai requires JavaScript to display venture capital insights.</p>
         </div>
     </noscript>
     
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p class="footer-tagline">Track the heartbeat of venture capital</p>
-            <p class="footer-copyright">© 2024 VCPulse. All rights reserved.</p>
+            <p class="footer-tagline">Synthesized intelligence for venture capital</p>
+            <p class="footer-copyright">© 2024 synthea.ai. All rights reserved.</p>
         </div>
     </footer>
     
@@ -248,7 +251,7 @@
     <div class="portfolio-panel" data-state="closed">
         <!-- Header -->
         <div class="panel-header">
-            <h2>Your Portfolio Intelligence</h2>
+            <h2>Company Tracking</h2>
             <button class="close-button">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -258,37 +261,75 @@
 
         <!-- Content -->
         <div class="panel-content">
-            <!-- Quick Add -->
-            <div class="quick-add">
-                <h3>Quick Add</h3>
-                <form class="add-company-form">
-                    <input type="text" class="company-input" placeholder="Company name..." />
+            <!-- Stats Summary -->
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Total Companies</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">19</span>
+                    <span class="stat-label">Mentions This Week</span>
+                </div>
+                <div class="stat-item trending-positive">
+                    <span class="stat-value">+73%</span>
+                    <span class="stat-label">Positive Sentiment</span>
+                </div>
+            </div>
+
+            <!-- Portfolio Section -->
+            <div class="quick-add-section">
+                <h3 class="section-label">PORTFOLIO COMPANIES</h3>
+                <form class="add-company-form" data-list="portfolio">
+                    <input type="text" class="company-input" placeholder="Enter company name" />
+                    <button type="submit" class="add-button">+ Add</button>
+                </form>
+                
+                <!-- Import Section (only for portfolio) -->
+                <div class="import-section">
+                    <p>Or import your portfolio:</p>
+                    <div class="import-buttons">
+                        <button class="import-button">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 1V7H15M9 1L15 7M11 9V13H5V3H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Upload CSV
+                        </button>
+                        <button class="import-button">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9C6 9 6 11 3 11C0 11 0 9 0 9C0 9 0 7 3 7C4.5 7 5.5 7.5 6 8.5L10 6.5C10 6.5 10 4.5 13 4.5C16 4.5 16 6.5 16 6.5C16 6.5 16 8.5 13 8.5C11.5 8.5 10.5 8 10 7L6 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Connect CRM
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watchlist Section -->
+            <div class="quick-add-section watchlist-section">
+                <h3 class="section-label">WATCHLIST COMPANIES</h3>
+                <form class="add-company-form" data-list="watchlist">
+                    <input type="text" class="company-input" placeholder="Enter company name" />
                     <button type="submit" class="add-button">+ Add</button>
                 </form>
             </div>
 
-            <!-- Import Section -->
-            <div class="import-section">
-                <p>Or import your portfolio:</p>
-                <div class="import-buttons">
-                    <button class="import-button">
-                        📎 Upload CSV
-                    </button>
-                    <button class="import-button">
-                        🔗 Connect CRM
-                    </button>
-                </div>
-            </div>
-
             <!-- Portfolio List -->
-            <div class="portfolio-list">
-                <div class="portfolio-header">
-                    <h3>Your Companies</h3>
-                    <span class="company-count">(2)</span>
+            <div class="company-list-section">
+                <div class="list-header">
+                    <h3>
+                        <span class="section-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 13V7M6 13V3M10 13V9M14 13V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        YOUR PORTFOLIO
+                    </h3>
+                    <span class="company-count portfolio-count">(2)</span>
                 </div>
-                <div class="portfolio-companies">
-                    <!-- Companies will be added here dynamically -->
-                    <div class="company-card validated" data-company="anthropic">
+                <div class="portfolio-companies" data-list="portfolio">
+                    <!-- Existing portfolio cards stay here -->
+                    <div class="company-card validated" data-company="anthropic" data-list="portfolio">
                         <button class="delete-button" aria-label="Remove Anthropic">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                                 <path d="M4 3.5L10 10.5M10 3.5L4 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -296,7 +337,14 @@
                         </button>
                         <div class="company-header">
                             <span class="company-name">Anthropic</span>
-                            <span class="mention-badge positive">✓ 7 mentions</span>
+                        </div>
+                        <div class="company-mention">
+                            <span class="mention-badge positive">
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                7 mentions
+                            </span>
                         </div>
                         <div class="company-details">
                             5 positive, 2 neutral
@@ -304,7 +352,7 @@
                         </div>
                     </div>
                     
-                    <div class="company-card threat" data-company="openai">
+                    <div class="company-card threat" data-company="openai" data-list="portfolio">
                         <button class="delete-button" aria-label="Remove OpenAI">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                                 <path d="M4 3.5L10 10.5M10 3.5L4 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -312,12 +360,47 @@
                         </button>
                         <div class="company-header">
                             <span class="company-name">OpenAI</span>
-                            <span class="mention-badge threat">⚠ 12 mentions</span>
+                        </div>
+                        <div class="company-mention">
+                            <span class="mention-badge threat">
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 2L11 10H1L6 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                    <path d="M6 4.5V7.5M6 8.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                                12 mentions
+                            </span>
                         </div>
                         <div class="company-details">
                             Competitive landscape intensifying
                             <span class="threat-label">Competitive threat</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watchlist List -->
+            <div class="company-list-section" style="margin-top: 32px;">
+                <div class="list-header">
+                    <h3>
+                        <span class="section-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        YOUR WATCHLIST
+                    </h3>
+                    <span class="company-count watchlist-count">(0)</span>
+                </div>
+                <div class="watchlist-companies" data-list="watchlist">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M26 26L34 34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <p>Add companies to monitor for investment opportunities</p>
                     </div>
                 </div>
             </div>

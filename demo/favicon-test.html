@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthea.ai Favicon Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .favicon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .favicon-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .size-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .favicon-preview {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-box {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .light-bg {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+        }
+
+        .dark-bg {
+            background: #1a1a1a;
+            border: 1px solid #333;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .dark-bg .preview-label {
+            color: #999;
+        }
+
+        .svg-container {
+            display: inline-block;
+            border: 1px dashed #ddd;
+            padding: 4px;
+        }
+
+        .specs {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+            margin-top: 16px;
+        }
+
+        .export-section {
+            margin-top: 40px;
+            padding: 24px;
+            background: #e8f0ea;
+            border-radius: 12px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Synthea.ai Favicon Variations</h1>
+    <p>Three-circle outline design optimized for different sizes</p>
+
+    <div class="favicon-grid">
+        <!-- 16x16 Favicon -->
+        <div class="favicon-card">
+            <h3>16×16px Favicon</h3>
+            <div class="size-info">1px stroke • 20% overlap • 2px padding</div>
+            
+            <div class="favicon-preview">
+                <div class="preview-box light-bg">
+                    <div class="svg-container">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 16px version: 2px padding, circles are 4px radius, 20% overlap -->
+                            <g fill="none" stroke="#4a7c59" stroke-width="1">
+                                <circle r="4" cx="5.5" cy="5.5" />
+                                <circle r="4" cx="10.5" cy="5.5" />
+                                <circle r="4" cx="8" cy="9.5" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Light Background</div>
+                </div>
+                
+                <div class="preview-box dark-bg">
+                    <div class="svg-container">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="#4a7c59" stroke-width="1">
+                                <circle r="4" cx="5.5" cy="5.5" />
+                                <circle r="4" cx="10.5" cy="5.5" />
+                                <circle r="4" cx="8" cy="9.5" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Dark Background</div>
+                </div>
+            </div>
+            
+            <div class="specs">
+                <strong>Calculations:</strong><br>
+                Canvas: 16×16px<br>
+                Padding: 2px<br>
+                Available space: 12×12px<br>
+                Circle diameter: 8px (radius: 4px)<br>
+                20% overlap = 1.6px overlap<br>
+                Distance between centers: 6.4px → ~5px for clarity
+            </div>
+        </div>
+
+        <!-- 32x32 Favicon -->
+        <div class="favicon-card">
+            <h3>32×32px Favicon</h3>
+            <div class="size-info">3px stroke • 15% overlap • 2px padding</div>
+            
+            <div class="favicon-preview">
+                <div class="preview-box light-bg">
+                    <div class="svg-container">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 32px version: 2px padding, circles are 9px radius, 15% overlap -->
+                            <g fill="none" stroke="#4a7c59" stroke-width="3">
+                                <circle r="9" cx="11" cy="11" />
+                                <circle r="9" cx="21" cy="11" />
+                                <circle r="9" cx="16" cy="19.8" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Light Background</div>
+                </div>
+                
+                <div class="preview-box dark-bg">
+                    <div class="svg-container">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="#4a7c59" stroke-width="3">
+                                <circle r="9" cx="11" cy="11" />
+                                <circle r="9" cx="21" cy="11" />
+                                <circle r="9" cx="16" cy="19.8" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Dark Background</div>
+                </div>
+            </div>
+            
+            <div class="specs">
+                <strong>Calculations:</strong><br>
+                Canvas: 32×32px<br>
+                Padding: 2px<br>
+                Available space: 28×28px<br>
+                Circle diameter: 18px (radius: 9px)<br>
+                15% overlap = 2.7px overlap<br>
+                Distance between centers: 15.3px → ~10px horizontal
+            </div>
+        </div>
+
+        <!-- 64x64 Favicon -->
+        <div class="favicon-card">
+            <h3>64×64px Favicon</h3>
+            <div class="size-info">4px stroke • 15% overlap • 2px padding</div>
+            
+            <div class="favicon-preview">
+                <div class="preview-box light-bg">
+                    <div class="svg-container">
+                        <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 64px version: 2px padding, circles are 18px radius, 15% overlap -->
+                            <g fill="none" stroke="#4a7c59" stroke-width="4">
+                                <circle r="18" cx="22" cy="22" />
+                                <circle r="18" cx="42" cy="22" />
+                                <circle r="18" cx="32" cy="39.5" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Light Background</div>
+                </div>
+                
+                <div class="preview-box dark-bg">
+                    <div class="svg-container">
+                        <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="#4a7c59" stroke-width="4">
+                                <circle r="18" cx="22" cy="22" />
+                                <circle r="18" cx="42" cy="22" />
+                                <circle r="18" cx="32" cy="39.5" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Dark Background</div>
+                </div>
+            </div>
+            
+            <div class="specs">
+                <strong>Calculations:</strong><br>
+                Canvas: 64×64px<br>
+                Padding: 2px<br>
+                Available space: 60×60px<br>
+                Circle diameter: 36px (radius: 18px)<br>
+                15% overlap = 5.4px overlap<br>
+                Distance between centers: 30.6px → ~20px horizontal
+            </div>
+        </div>
+
+        <!-- 180x180 Apple Touch Icon -->
+        <div class="favicon-card">
+            <h3>180×180px Apple Touch Icon</h3>
+            <div class="size-info">6px stroke • 15% overlap • 2px padding</div>
+            
+            <div class="favicon-preview">
+                <div class="preview-box light-bg">
+                    <div class="svg-container" style="width: 90px; height: 90px;">
+                        <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                            <!-- 180px version: 2px padding, circles are 51px radius, 15% overlap -->
+                            <g fill="none" stroke="#4a7c59" stroke-width="6">
+                                <circle r="51" cx="62" cy="62" />
+                                <circle r="51" cx="118" cy="62" />
+                                <circle r="51" cx="90" cy="111" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Light Background</div>
+                </div>
+                
+                <div class="preview-box dark-bg">
+                    <div class="svg-container" style="width: 90px; height: 90px;">
+                        <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" style="width: 90px; height: 90px;">
+                            <g fill="none" stroke="#4a7c59" stroke-width="6">
+                                <circle r="51" cx="62" cy="62" />
+                                <circle r="51" cx="118" cy="62" />
+                                <circle r="51" cx="90" cy="111" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="preview-label">Dark Background</div>
+                </div>
+            </div>
+            
+            <div class="specs">
+                <strong>Calculations:</strong><br>
+                Canvas: 180×180px<br>
+                Padding: 2px<br>
+                Available space: 176×176px<br>
+                Circle diameter: 102px (radius: 51px)<br>
+                15% overlap = 15.3px overlap<br>
+                Distance between centers: 86.7px → ~56px horizontal
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Instructions -->
+    <div class="export-section">
+        <h2>Export Instructions</h2>
+        
+        <h3>Individual PNG Files</h3>
+        <p>Save each SVG as PNG with transparent background:</p>
+        <ul>
+            <li><code>favicon-16.png</code> - 16×16px</li>
+            <li><code>favicon-32.png</code> - 32×32px</li>
+            <li><code>favicon-64.png</code> - 64×64px</li>
+            <li><code>apple-touch-icon.png</code> - 180×180px</li>
+        </ul>
+
+        <h3>ICO File Creation</h3>
+        <p>Combine all sizes into a single <code>favicon.ico</code> file containing:</p>
+        <ul>
+            <li>16×16px (1px stroke)</li>
+            <li>32×32px (3px stroke)</li>
+            <li>64×64px (4px stroke)</li>
+        </ul>
+
+        <h3>HTML Implementation</h3>
+        <pre><code>&lt;!-- Favicon --&gt;
+&lt;link rel="icon" type="image/x-icon" href="/favicon.ico"&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png"&gt;
+
+&lt;!-- Apple Touch Icon --&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"&gt;</code></pre>
+
+        <h3>Testing Notes</h3>
+        <p>✓ All sizes maintain distinct circles<br>
+        ✓ Stroke weights optimized for each size<br>
+        ✓ Visible on both light and dark backgrounds<br>
+        ✓ 16×16 version uses 20% overlap for better separation at small size<br>
+        ✓ Larger sizes use 15% overlap for cleaner appearance</p>
+    </div>
+
+    <!-- Actual size preview -->
+    <div style="margin-top: 40px; padding: 24px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Actual Size Preview</h3>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <div>
+                <img src="data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='1'%3E%3Ccircle r='4' cx='5.5' cy='5.5' /%3E%3Ccircle r='4' cx='10.5' cy='5.5' /%3E%3Ccircle r='4' cx='8' cy='9.5' /%3E%3C/g%3E%3C/svg%3E" width="16" height="16" style="border: 1px solid #eee;">
+                <div style="font-size: 11px; color: #666; margin-top: 4px;">16×16</div>
+            </div>
+            <div>
+                <img src="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='3'%3E%3Ccircle r='9' cx='11' cy='11' /%3E%3Ccircle r='9' cx='21' cy='11' /%3E%3Ccircle r='9' cx='16' cy='19.8' /%3E%3C/g%3E%3C/svg%3E" width="32" height="32" style="border: 1px solid #eee;">
+                <div style="font-size: 11px; color: #666; margin-top: 4px;">32×32</div>
+            </div>
+            <div>
+                <img src="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='4'%3E%3Ccircle r='18' cx='22' cy='22' /%3E%3Ccircle r='18' cx='42' cy='22' /%3E%3Ccircle r='18' cx='32' cy='39.5' /%3E%3C/g%3E%3C/svg%3E" width="64" height="64" style="border: 1px solid #eee;">
+                <div style="font-size: 11px; color: #666; margin-top: 4px;">64×64</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

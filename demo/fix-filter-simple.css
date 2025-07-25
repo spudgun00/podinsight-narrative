@@ -1,0 +1,47 @@
+/* Simple fix for Priority Briefings filter issue */
+
+/* When filter is active, show ALL cards regardless of position */
+/* This needs to come AFTER the nth-child hiding rules in components.css */
+
+/* First, reset ALL cards to visible when filter is active */
+.briefings-list.episode-grid.filter-active .episode-card {
+    /* Reset all the properties that hide cards 4-9 */
+    max-height: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    overflow: visible !important;
+    border: 1px solid var(--gray-200) !important;
+    border-left: 3px solid transparent !important;
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* Then hide the filtered-out ones */
+.briefings-list.episode-grid.filter-active .episode-card.filtered-out {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* Maintain priority borders */
+.briefings-list.episode-grid.filter-active .episode-card.priority-critical {
+    border-left-color: var(--dusty-rose) !important;
+}
+
+.briefings-list.episode-grid.filter-active .episode-card.priority-opportunity {
+    border-left-color: var(--sage) !important;
+}
+
+.briefings-list.episode-grid.filter-active .episode-card.priority-elevated {
+    border-left-color: var(--amber-glow) !important;
+}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthea.ai Logo Variations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            background: #fafaf9;
+            color: #1a1a2e;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            color: #1a1a2e;
+        }
+
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .variation-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        .variation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2C2C2C;
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .tagline {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6B6B6B;
+            line-height: 1;
+        }
+
+        .pros-cons {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .pros {
+            color: #4a7c59;
+            margin-bottom: 8px;
+        }
+
+        .cons {
+            color: #c77d7d;
+        }
+
+        /* Logo marks */
+        .logo-mark {
+            width: 44px;
+            height: 44px;
+            transition: opacity 0.2s ease;
+        }
+
+        .logo-mark:hover {
+            opacity: 0.85;
+        }
+
+        /* Current design for comparison */
+        .current-design {
+            grid-column: 1 / -1;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+        }
+
+        .synthesis-mark {
+            width: 44px;
+            height: 44px;
+            position: relative;
+        }
+
+        .synthesis-circle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .synthesis-circle:nth-child(1) {
+            background: #4a7c59;
+            top: 0;
+            left: 0;
+        }
+
+        .synthesis-circle:nth-child(2) {
+            background: #5a8c69;
+            top: 0;
+            right: 0;
+        }
+
+        .synthesis-circle:nth-child(3) {
+            background: #6a9c79;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <h1>Synthea.ai Logo Design Variations</h1>
+
+    <!-- Current Design -->
+    <div class="variations-grid">
+        <div class="variation-card current-design">
+            <div class="variation-title">Current Design (CSS circles with opacity)</div>
+            <div class="logo-container">
+                <div class="synthesis-mark">
+                    <div class="synthesis-circle"></div>
+                    <div class="synthesis-circle"></div>
+                    <div class="synthesis-circle"></div>
+                </div>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="cons">✗ Messy color mixing with opacity<br>✗ Visual confusion at overlap points<br>✗ Different colors create inconsistency</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Variations -->
+    <div class="variations-grid">
+        <!-- Variation 1: Outlined Circles -->
+        <div class="variation-card">
+            <div class="variation-title">1. Outlined Circles (2px stroke)</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" stroke="#4a7c59" stroke-width="2">
+                        <circle r="13" cx="14" cy="14" />
+                        <circle r="13" cx="30" cy="14" />
+                        <circle r="13" cx="22" cy="28" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Clean, no color mixing<br>✓ Elegant overlapping effect<br>✓ Scalable and crisp</div>
+                <div class="cons">✗ May feel too light/minimal</div>
+            </div>
+        </div>
+
+        <!-- Variation 2: Minimal Overlap (15%) -->
+        <div class="variation-card">
+            <div class="variation-title">2. Solid Circles - 15% Overlap</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#4a7c59">
+                        <circle r="14" cx="14" cy="14" />
+                        <circle r="14" cx="32.2" cy="14" />
+                        <circle r="14" cx="23.1" cy="29.8" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Subtle overlap<br>✓ Maintains synthesis concept<br>✓ No transparency issues</div>
+                <div class="cons">✗ Less distinctive than separated</div>
+            </div>
+        </div>
+
+        <!-- Variation 3: Separate with Lines -->
+        <div class="variation-card">
+            <div class="variation-title">3. Connected Circles</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Connecting lines -->
+                    <g stroke="#4a7c59" stroke-width="2" fill="none">
+                        <line x1="14" y1="14" x2="30" y2="14" />
+                        <line x1="14" y1="14" x2="22" y2="28" />
+                        <line x1="30" y1="14" x2="22" y2="28" />
+                    </g>
+                    <!-- Circles -->
+                    <g fill="#4a7c59">
+                        <circle r="8" cx="14" cy="14" />
+                        <circle r="8" cx="30" cy="14" />
+                        <circle r="8" cx="22" cy="28" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Clear network concept<br>✓ No overlap confusion<br>✓ Modern, tech feel</div>
+                <div class="cons">✗ More complex visually</div>
+            </div>
+        </div>
+
+        <!-- Variation 4: Outlined with Fill -->
+        <div class="variation-card">
+            <div class="variation-title">4. Outlined + Light Fill</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
+                        <circle r="13" cx="14" cy="14" />
+                        <circle r="13" cx="30" cy="14" />
+                        <circle r="13" cx="22" cy="28" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Best of both worlds<br>✓ Subtle depth<br>✓ Clean overlaps</div>
+                <div class="cons">✗ Slight color mixing</div>
+            </div>
+        </div>
+
+        <!-- Variation 5: Dots Pattern -->
+        <div class="variation-card">
+            <div class="variation-title">5. Dot Matrix</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#4a7c59">
+                        <!-- Top row -->
+                        <circle r="4" cx="14" cy="10" />
+                        <circle r="4" cx="22" cy="10" />
+                        <circle r="4" cx="30" cy="10" />
+                        <!-- Middle row -->
+                        <circle r="4" cx="10" cy="18" />
+                        <circle r="4" cx="18" cy="18" />
+                        <circle r="4" cx="26" cy="18" />
+                        <circle r="4" cx="34" cy="18" />
+                        <!-- Bottom row -->
+                        <circle r="4" cx="14" cy="26" />
+                        <circle r="4" cx="22" cy="26" />
+                        <circle r="4" cx="30" cy="26" />
+                        <!-- Extra bottom -->
+                        <circle r="4" cx="22" cy="34" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Unique AI/data feel<br>✓ No overlap issues<br>✓ Distinctive</div>
+                <div class="cons">✗ Less synthesis concept</div>
+            </div>
+        </div>
+
+        <!-- Variation 6: Three Rings -->
+        <div class="variation-card">
+            <div class="variation-title">6. Interlocking Rings</div>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" stroke="#4a7c59" stroke-width="2.5">
+                        <!-- First ring -->
+                        <circle r="10" cx="22" cy="14" />
+                        <!-- Second ring (interlocked) -->
+                        <path d="M 15,21 A 10,10 0 1,1 25,31" />
+                        <path d="M 25,31 A 10,10 0 0,1 15,21" stroke-dasharray="0 3.5 10 100" />
+                        <!-- Third ring (interlocked) -->
+                        <path d="M 29,21 A 10,10 0 1,0 19,31" />
+                        <path d="M 19,31 A 10,10 0 0,0 29,21" stroke-dasharray="0 3.5 10 100" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <div class="pros-cons">
+                <div class="pros">✓ Strong synthesis metaphor<br>✓ Unique and memorable<br>✓ Clean design</div>
+                <div class="cons">✗ More complex to execute</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended -->
+    <div style="margin-top: 60px; padding: 30px; background: #e8f0ea; border-radius: 8px;">
+        <h2 style="color: #4a7c59; margin-bottom: 16px;">Recommendation</h2>
+        <p style="color: #1a1a2e; line-height: 1.6;">
+            <strong>Option 1 (Outlined Circles)</strong> offers the cleanest solution - it maintains the synthesis concept through elegant overlaps without any color mixing issues. The 2px stroke weight provides good visibility at all sizes while keeping the design sophisticated and modern.
+        </p>
+        <p style="color: #1a1a2e; line-height: 1.6; margin-top: 12px;">
+            <strong>Option 4 (Outlined + Light Fill)</strong> is a close second if you want slightly more visual weight while still avoiding the opacity issues.
+        </p>
+    </div>
+</body>
+</html>

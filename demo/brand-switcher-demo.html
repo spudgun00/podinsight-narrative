@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Brand Switcher Demo - Synthea.ai vs Trove.ai">
+    <title>Brand Switcher Demo - Synthea.ai vs Trove.ai</title>
+    
+    <!-- Include all the existing stylesheets -->
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/typography.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/utilities.css">
+    <link rel="stylesheet" href="styles/search.css">
+    <link rel="stylesheet" href="styles/portfolio.css">
+    
+    <!-- Component-specific styles -->
+    <link rel="stylesheet" href="features/search/search.css">
+    <link rel="stylesheet" href="features/portfolio-panel/portfolio-panel.css">
+    <link rel="stylesheet" href="features/narrative-pulse/narrative-pulse.css">
+    <link rel="stylesheet" href="features/narrative-feed/narrative-feed.css">
+    <link rel="stylesheet" href="features/notable-signals/notable-signals.css">
+    <link rel="stylesheet" href="features/priority-briefings/priority-briefings.css">
+    <link rel="stylesheet" href="features/intelligence-brief/intelligence-brief.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel.css">
+    <link rel="stylesheet" href="episode-panel-clean-fix.css">
+    <link rel="stylesheet" href="debug-spacing-fix.css">
+    
+    <style>
+        /* Brand Switcher Styles */
+        .brand-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: 2px solid var(--sage);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .brand-switcher h3 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+        
+        .brand-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .brand-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .brand-option:hover {
+            background: var(--light-sage);
+        }
+        
+        .brand-option input[type="radio"] {
+            cursor: pointer;
+        }
+        
+        .brand-option label {
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--deep-ink);
+        }
+        
+        .brand-note {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-200);
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+        
+        /* Dynamic branding classes */
+        body[data-brand="synthea"] .brand-name {
+            /* Default synthea.ai styling */
+        }
+        
+        body[data-brand="trove"] .brand-name {
+            /* Trove.ai specific styling if needed */
+        }
+    </style>
+</head>
+<body data-brand="synthea">
+    <!-- Brand Switcher -->
+    <div class="brand-switcher">
+        <h3>Select Brand</h3>
+        <div class="brand-options">
+            <div class="brand-option">
+                <input type="radio" id="synthea-brand" name="brand" value="synthea" checked>
+                <label for="synthea-brand">synthea.ai</label>
+            </div>
+            <div class="brand-option">
+                <input type="radio" id="trove-brand" name="brand" value="trove">
+                <label for="trove-brand">trove.ai</label>
+            </div>
+        </div>
+        <div class="brand-note">
+            Switch between brands to see how the platform looks with different branding. Logo and tagline remain the same.
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Site Header -->
+        <header class="site-header">
+            <div class="header-content">
+                <a href="/" class="header-logo-link">
+                    <svg class="logo-mark" width="35" height="35" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
+                        <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
+                            <circle r="13" cx="14" cy="14" />
+                            <circle r="13" cx="30" cy="14" />
+                            <circle r="13" cx="22" cy="28" />
+                        </g>
+                    </svg>
+                    <div class="logo brand-name">synthea.ai</div>
+                </a>
+                
+                <!-- Rest of header content remains the same -->
+                <div class="header-metrics">
+                    <div class="header-metrics-wrapper">
+                        <div class="header-metrics-inner">
+                            <!-- Dynamic ticker content -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="portfolio-button" data-portfolio-count="2" data-new-mentions="2" data-panel-state="closed" aria-label="Portfolio tracking, 2 new mentions">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="4" width="14" height="12" rx="2"/>
+                            <path d="M7 4V2a1 1 0 011-1h4a1 1 0 011 1v2M10 9v4"/>
+                        </svg>
+                        <span class="notification-badge">2</span>
+                        <span class="pulse-indicator"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Container -->
+        <main class="dashboard-container">
+            <!-- Left Column -->
+            <div class="dashboard-left">
+                <div id="narrative-pulse-container"></div>
+                <div id="narrative-feed-container"></div>
+            </div>
+            
+            <!-- Middle Column -->
+            <div class="dashboard-middle">
+                <div id="notable-signals-container"></div>
+                <div id="priority-briefings-container"></div>
+            </div>
+            
+            <!-- Right Column (Sidebar) -->
+            <div class="dashboard-right">
+                <div id="intelligence-brief-container"></div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p class="footer-copyright">© 2024 <span class="brand-name">synthea.ai</span>. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Portfolio Panel -->
+    <div class="portfolio-backdrop"></div>
+    <div class="portfolio-panel" data-state="closed"></div>
+
+    <!-- Floating AI Search -->
+    <div class="floating-ai-search">
+        <span class="search-label">Search Intelligence</span>
+        <div class="search-shortcut">
+            <span class="key">⌘</span>
+            <span class="key">K</span>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="search-modal-backdrop"></div>
+    <div class="search-modal"></div>
+
+    <noscript>
+        <div class="noscript-message">
+            <p><span class="brand-name">synthea.ai</span> requires JavaScript to display venture capital insights.</p>
+        </div>
+    </noscript>
+
+    <!-- Brand Switcher Script -->
+    <script>
+        // Brand switcher functionality
+        const brandRadios = document.querySelectorAll('input[name="brand"]');
+        const brandElements = document.querySelectorAll('.brand-name');
+        const logoAriaLabel = document.querySelector('.logo-mark');
+        
+        function updateBrand(brand) {
+            // Update body data attribute
+            document.body.setAttribute('data-brand', brand);
+            
+            // Update all brand name instances
+            const brandName = brand === 'synthea' ? 'synthea.ai' : 'trove.ai';
+            brandElements.forEach(el => {
+                el.textContent = brandName;
+            });
+            
+            // Update logo aria-label
+            if (logoAriaLabel) {
+                logoAriaLabel.setAttribute('aria-label', `${brandName} Logo`);
+            }
+            
+            // Update page title
+            document.title = document.title.replace(/synthea\.ai|trove\.ai/gi, brandName);
+            
+            // Store preference
+            localStorage.setItem('selectedBrand', brand);
+        }
+        
+        // Add event listeners to radio buttons
+        brandRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                updateBrand(e.target.value);
+            });
+        });
+        
+        // Load saved preference
+        const savedBrand = localStorage.getItem('selectedBrand');
+        if (savedBrand) {
+            const savedRadio = document.querySelector(`input[name="brand"][value="${savedBrand}"]`);
+            if (savedRadio) {
+                savedRadio.checked = true;
+                updateBrand(savedBrand);
+            }
+        }
+    </script>
+
+    <!-- Include all the necessary scripts -->
+    <script src="data/demo-data.js" defer></script>
+    <script src="data/ticker-data.js" defer></script>
+    <script src="data/velocity-data.js" defer></script>
+    <script src="features/narrative-pulse/init.js" defer></script>
+    <script src="features/narrative-feed/init.js" defer></script>
+    <script src="features/notable-signals/init.js" defer></script>
+    <script src="features/priority-briefings/init.js" defer></script>
+    <script src="features/intelligence-brief/init.js" defer></script>
+    <script src="features/narrative-pulse/narrative-pulse.js" defer></script>
+    <script src="features/narrative-feed/narrative-feed.js" defer></script>
+    <script src="features/notable-signals/notable-signals.js" defer></script>
+    <script src="features/priority-briefings/priority-briefings.js" defer></script>
+    <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
+    <script src="features/intelligence-brief/velocity-tracking.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="features/portfolio-panel/portfolio-panel.js" defer></script>
+    <script src="features/episode-panel/episode-panel.js" defer></script>
+    <script src="main.js" defer></script>
+</body>
+</html>

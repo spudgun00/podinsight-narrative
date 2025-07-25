@@ -1,9 +1,9 @@
 /**
- * VCPulse Intelligence Search
+ * PatternFlow Intelligence Search
  * Premium search interface for venture capital intelligence
  */
 
-class VCPulseSearch {
+class PatternFlowSearch {
     constructor() {
         this.searchInput = null;
         this.searchDropdown = null;
@@ -63,7 +63,7 @@ class VCPulseSearch {
         if (!document.getElementById('searchResults')) {
             const resultsHtml = `
                 <div class="search-results" id="searchResults">
-                    <button class="close-results" onclick="vcPulseSearch.closeResults()">×</button>
+                    <button class="close-results" onclick="patternFlowSearch.closeResults()">×</button>
                     
                     <div class="results-header">
                         <div class="results-title">Intelligence synthesis for:</div>
@@ -114,9 +114,9 @@ class VCPulseSearch {
                     </div>
                     
                     <div class="action-row">
-                        <button class="btn btn-primary" onclick="vcPulseSearch.viewDeepAnalysis()">View Deep Analysis</button>
-                        <button class="btn" onclick="vcPulseSearch.shareInsight()">Share Insight</button>
-                        <button class="btn" onclick="vcPulseSearch.saveToNotebook()">Save to Notebook</button>
+                        <button class="btn btn-primary" onclick="patternFlowSearch.viewDeepAnalysis()">View Deep Analysis</button>
+                        <button class="btn" onclick="patternFlowSearch.shareInsight()">Share Insight</button>
+                        <button class="btn" onclick="patternFlowSearch.saveToNotebook()">Save to Notebook</button>
                     </div>
                 </div>
             `;
@@ -392,19 +392,19 @@ class VCPulseSearch {
             clearInterval(this.placeholderInterval);
         }
         
-        console.log('VCPulseSearch destroyed');
+        console.log('PatternFlowSearch destroyed');
     }
 }
 
 // Create global instance
-const vcPulseSearch = new VCPulseSearch();
+const patternFlowSearch = new PatternFlowSearch();
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => vcPulseSearch.init());
+    document.addEventListener('DOMContentLoaded', () => patternFlowSearch.init());
 } else {
-    vcPulseSearch.init();
+    patternFlowSearch.init();
 }
 
 // Export for use in other modules
-window.vcPulseSearch = vcPulseSearch;
+window.patternFlowSearch = patternFlowSearch;

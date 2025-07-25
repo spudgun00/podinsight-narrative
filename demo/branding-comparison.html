@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branding Comparison: Synthea.ai vs Trove.ai</title>
+    <style>
+        :root {
+            --deep-ink: #1a1a2e;
+            --warm-paper: #fafaf9;
+            --sage: #4a7c59;
+            --dusty-rose: #c77d7d;
+            --amber-glow: #f4a261;
+            --slate-blue: #5a6c8c;
+            --gray-200: #e5e7eb;
+            --gray-600: #6b7280;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--warm-paper);
+            color: var(--deep-ink);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .brand-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo-display {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-mark {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--deep-ink);
+        }
+
+        .brand-details h3 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--deep-ink);
+        }
+
+        .detail-value {
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .meta-tags {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .color-swatch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .implementation-section {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .implementation-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--deep-ink);
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: var(--amber-glow);
+            padding: 0.125rem 0.25rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-container">
+        <h1>Branding Comparison: Synthea.ai → Trove.ai</h1>
+        
+        <div class="comparison-grid">
+            <!-- Synthea.ai Card -->
+            <div class="brand-card">
+                <div class="brand-header">
+                    <div class="logo-display">
+                        <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 6 L35.5 13.5 L35.5 28.5 L22 36 L8.5 28.5 L8.5 13.5 Z" fill="#4a7c59" stroke="none"/>
+                            <path d="M8.5 13.5 L22 21 M22 21 L35.5 13.5 M22 21 L22 36" stroke="white" stroke-width="1.5"/>
+                        </svg>
+                        <div class="logo-text">synthea.ai</div>
+                    </div>
+                </div>
+                
+                <div class="brand-details">
+                    <h3>Current Branding</h3>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Brand Name</div>
+                        <div class="detail-value">synthea.ai</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Tagline</div>
+                        <div class="detail-value">Synthesized intelligence for venture capital</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Logo Concept</div>
+                        <div class="detail-value">Hexagonal shape representing synthesis and connection of insights</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Meta Tags</div>
+                        <div class="meta-tags">
+&lt;meta name="description" content="synthea.ai - Synthesized intelligence for venture capital"&gt;
+&lt;title&gt;synthea.ai - Synthesized intelligence for venture capital&lt;/title&gt;
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trove.ai Card -->
+            <div class="brand-card">
+                <div class="brand-header">
+                    <div class="logo-display">
+                        <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 4 L38 16 L22 40 L6 16 Z" fill="#4a7c59" stroke="none"/>
+                            <path d="M22 4 L38 16 M38 16 L22 40 M22 40 L6 16 M6 16 L22 4" stroke="white" stroke-width="1" fill="none" opacity="0.3"/>
+                            <path d="M6 16 L38 16" stroke="white" stroke-width="0.5" fill="none" opacity="0.2"/>
+                        </svg>
+                        <div class="logo-text">trove.ai</div>
+                    </div>
+                </div>
+                
+                <div class="brand-details">
+                    <h3>New Branding</h3>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Brand Name</div>
+                        <div class="detail-value">trove.ai</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Tagline</div>
+                        <div class="detail-value">Synthesized intelligence for venture capital</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Logo Concept</div>
+                        <div class="detail-value">Diamond/gem shape representing a treasure trove of valuable insights</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">Meta Tags</div>
+                        <div class="meta-tags">
+&lt;meta name="description" content="trove.ai - Synthesized intelligence for venture capital"&gt;
+&lt;title&gt;trove.ai - Synthesized intelligence for venture capital&lt;/title&gt;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="implementation-section">
+            <h2>Implementation Steps</h2>
+            
+            <h3>1. Text Replacements</h3>
+            <p>Replace all instances of <span class="highlight">synthea.ai</span> with <span class="highlight">trove.ai</span> in:</p>
+            <ul>
+                <li>demo.html</li>
+                <li>pdf/weekly-brief.html</li>
+                <li>All meta tags and titles</li>
+                <li>Footer copyright text</li>
+            </ul>
+            
+            <h3>2. Logo Update</h3>
+            <p>Replace the hexagonal Synthea logo with the diamond-shaped Trove logo:</p>
+            <div class="code-block">
+&lt;!-- Old Synthea Logo --&gt;
+&lt;svg class="logo-mark" viewBox="0 0 44 44"&gt;
+    &lt;path d="M22 6 L35.5 13.5 L35.5 28.5 L22 36 L8.5 28.5 L8.5 13.5 Z" fill="#4a7c59"/&gt;
+    &lt;path d="M8.5 13.5 L22 21 M22 21 L35.5 13.5 M22 21 L22 36" stroke="white"/&gt;
+&lt;/svg&gt;
+
+&lt;!-- New Trove Logo --&gt;
+&lt;svg class="logo-mark" viewBox="0 0 44 44"&gt;
+    &lt;path d="M22 4 L38 16 L22 40 L6 16 Z" fill="#4a7c59"/&gt;
+    &lt;path d="M22 4 L38 16 M38 16 L22 40 M22 40 L6 16 M6 16 L22 4" stroke="white" opacity="0.3"/&gt;
+    &lt;path d="M6 16 L38 16" stroke="white" opacity="0.2"/&gt;
+&lt;/svg&gt;
+            </div>
+            
+            <h3>3. Files to Update</h3>
+            <ul>
+                <li>✓ demo.html - Main dashboard</li>
+                <li>✓ pdf/weekly-brief.html - PDF export template</li>
+                <li>✓ All component files referencing the brand</li>
+                <li>✓ Meta tags and SEO content</li>
+            </ul>
+            
+            <h3>4. Testing</h3>
+            <p>Open <strong>test-trove-branding.html</strong> to see the new branding in action.</p>
+        </div>
+        
+        <div class="implementation-section">
+            <h2>Quick Swap Script</h2>
+            <p>Run the following command to automatically swap all branding:</p>
+            <div class="code-block">
+./swap-to-trove.sh
+            </div>
+            <p>This script will:</p>
+            <ul>
+                <li>Create backups of original files</li>
+                <li>Replace all text instances of synthea.ai with trove.ai</li>
+                <li>Provide instructions for manual logo updates</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

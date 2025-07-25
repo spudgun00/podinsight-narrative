@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrative Pulse Hover State Test</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Test-specific styles to isolate the component */
+        body {
+            padding: 2rem;
+            background: var(--warm-paper);
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .test-info {
+            background: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .test-info h2 {
+            color: #0284c7;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+        }
+        
+        .test-info ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .test-info li {
+            margin: 0.25rem 0;
+        }
+        
+        .test-info code {
+            background: #e0f2fe;
+            padding: 0.125rem 0.25rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-info">
+            <h2>Hover State Test</h2>
+            <p>This page tests the fixed hover interactions for the Narrative Pulse component.</p>
+            
+            <h3>What was fixed:</h3>
+            <ul>
+                <li>✅ Event handler memory leak - proper cleanup on view switch</li>
+                <li>✅ Tooltip state persistence - complete reset between views</li>
+                <li>✅ SVG coordinate mapping - accurate mouse position calculations</li>
+                <li>✅ View-specific state management - proper state clearing</li>
+                <li>✅ CSS class conflicts - view-specific tooltip classes</li>
+            </ul>
+            
+            <h3>How to test:</h3>
+            <ul>
+                <li>1. Hover over the <strong>Momentum</strong> view lines - tooltip should show all topics</li>
+                <li>2. Switch to <strong>Volume</strong> view - hover over bars to see breakdown</li>
+                <li>3. Switch to <strong>Consensus</strong> view - hover over cells for simplified tooltip</li>
+                <li>4. Switch between views rapidly - tooltips should not persist or glitch</li>
+                <li>5. Check browser console - no errors should appear</li>
+            </ul>
+        </div>
+        
+        <!-- Include the Narrative Pulse component -->
+        <div id="narrativePulse"></div>
+    </div>
+    
+    <!-- Include the component script -->
+    <script src="features/narrative-pulse/narrative-pulse.js"></script>
+    <script>
+        // Initialize the component
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load the component HTML
+            fetch('features/narrative-pulse/narrative-pulse.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('narrativePulse').innerHTML = html;
+                    
+                    // Initialize the JavaScript component
+                    const container = document.querySelector('.narrative-pulse');
+                    if (container && window.NarrativePulse) {
+                        window.NarrativePulse.init(container);
+                        console.log('✅ Narrative Pulse initialized successfully');
+                    } else {
+                        console.error('❌ Failed to initialize Narrative Pulse');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error loading component:', error);
+                });
+        });
+        
+        // Add debugging for hover events
+        let eventCount = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log when tooltips are shown/hidden
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.target.id === 'chartTooltip') {
+                        const tooltip = mutation.target;
+                        const isVisible = tooltip.classList.contains('visible');
+                        const viewClass = Array.from(tooltip.classList).find(c => c.startsWith('chart-tooltip-'));
+                        if (viewClass) {
+                            console.log(`📍 Tooltip ${isVisible ? 'shown' : 'hidden'} - ${viewClass} (Event #${++eventCount})`);
+                        }
+                    }
+                });
+            });
+            
+            // Start observing after a delay to ensure component is loaded
+            setTimeout(() => {
+                const tooltip = document.querySelector('#chartTooltip');
+                if (tooltip) {
+                    observer.observe(tooltip, {
+                        attributes: true,
+                        attributeFilter: ['class', 'style']
+                    });
+                    console.log('🔍 Tooltip observer activated');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

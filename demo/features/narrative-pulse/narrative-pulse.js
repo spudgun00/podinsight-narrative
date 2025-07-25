@@ -5,15 +5,35 @@ const NarrativePulse = {
     // Component state
     activeFilter: null,
     container: null,
+    currentTimeRange: '7 days', // Track current time range
     
     // Chart configuration
     chartWidth: 800,
     chartHeight: 300,
     padding: 50,
-    dateLabels: ['Aug 1', 'Aug 8', 'Aug 15', 'Aug 22', 'Aug 29'],
+    dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
     xPositions: [], // Will be calculated in init
     hideTooltipTimer: null,
     mouseMoveFrame: null, // For requestAnimationFrame debouncing
+    
+    // Time range data configurations
+    timeRangeConfigs: {
+        '7 days': {
+            dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
+            dataPoints: 7,
+            interval: 'daily'
+        },
+        '30 days': {
+            dateLabels: ['Aug 1-7', 'Aug 8-14', 'Aug 15-21', 'Aug 22-28'],
+            dataPoints: 4,
+            interval: 'weekly'
+        },
+        '90 days': {
+            dateLabels: ['Jun 5', 'Jun 12', 'Jun 19', 'Jun 26', 'Jul 3', 'Jul 10', 'Jul 17', 'Jul 24', 'Jul 31', 'Aug 7', 'Aug 14', 'Aug 21', 'Aug 28'],
+            dataPoints: 13,
+            interval: 'weekly'
+        }
+    },
     
     // Event listener management
     eventListeners: {
@@ -25,10 +45,10 @@ const NarrativePulse = {
     currentView: 'momentum',
     
     // Topic customization state
-    availableTopics: ['AI Agents', 'Capital Efficiency', 'DePIN', 'B2B SaaS', 'Developer Tools', 'Vertical SaaS', 'AI Infrastructure'],
-    selectedTopics: ['AI Agents', 'Capital Efficiency', 'DePIN', 'B2B SaaS'],
+    availableTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
+    selectedTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
     tempSelectedTopics: [],
-    maxTopics: 4,
+    maxTopics: 7,
     panel: null,
     backdrop: null,
     hasChanges: false,
@@ -36,7 +56,7 @@ const NarrativePulse = {
     // Consensus sentiment data
     consensusData: {
         'AI Agents': {
-            'Aug 1': { positive: 70, neutral: 7, negative: 2, total: 79, percent: 88.6, level: 'Strong',
+            'Aug 7': { positive: 70, neutral: 7, negative: 2, total: 79, percent: 88.6, level: 'Strong',
                 advocates: [
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
                     { name: 'Reid Hoffman', firm: 'Greylock' },
@@ -44,7 +64,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 8': { positive: 93, neutral: 10, negative: 2, total: 105, percent: 88.6, level: 'Strong',
+            'Aug 14': { positive: 93, neutral: 10, negative: 2, total: 105, percent: 88.6, level: 'Strong',
                 advocates: [
                     { name: 'Sarah Guo', firm: 'Conviction' },
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
@@ -52,7 +72,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 115, neutral: 11, negative: 2, total: 128, percent: 89.8, level: 'Strong',
+            'Aug 21': { positive: 115, neutral: 11, negative: 2, total: 128, percent: 89.8, level: 'Strong',
                 advocates: [
                     { name: 'Reid Hoffman', firm: 'Greylock' },
                     { name: 'Sarah Guo', firm: 'Conviction' },
@@ -60,32 +80,24 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 22': { positive: 127, neutral: 13, negative: 2, total: 142, percent: 89.4, level: 'Strong',
+            'Aug 28': { positive: 127, neutral: 13, negative: 2, total: 142, percent: 89.4, level: 'Strong',
                 advocates: [
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
                     { name: 'Reid Hoffman', firm: 'Greylock' },
                     { name: 'Sarah Guo', firm: 'Conviction' }
                 ],
                 dissent: null
-            },
-            'Aug 29': { positive: 132, neutral: 12, negative: 3, total: 147, percent: 89.8, level: 'Strong',
-                advocates: [
-                    { name: 'Marc Andreessen', firm: 'a16z' },
-                    { name: 'Sarah Guo', firm: 'Conviction' },
-                    { name: 'Reid Hoffman', firm: 'Greylock' }
-                ],
-                dissent: { quote: 'Overhyped in near term', author: 'Peter Thiel' }
             }
         },
         'Capital Efficiency': {
-            'Aug 1': { positive: 38, neutral: 30, negative: 8, total: 76, percent: 50.0, level: 'Moderate',
+            'Aug 7': { positive: 38, neutral: 30, negative: 8, total: 76, percent: 50.0, level: 'Moderate',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'David Sacks', firm: 'Craft Ventures' }
                 ],
                 dissent: null
             },
-            'Aug 8': { positive: 49, neutral: 28, negative: 5, total: 82, percent: 59.8, level: 'Moderate',
+            'Aug 14': { positive: 49, neutral: 28, negative: 5, total: 82, percent: 59.8, level: 'Moderate',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
@@ -93,7 +105,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 61, neutral: 22, negative: 4, total: 87, percent: 70.1, level: 'Strong',
+            'Aug 21': { positive: 61, neutral: 22, negative: 4, total: 87, percent: 70.1, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Keith Rabois', firm: 'Founders Fund' },
@@ -101,7 +113,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 22': { positive: 71, neutral: 14, negative: 3, total: 88, percent: 80.7, level: 'Strong',
+            'Aug 28': { positive: 71, neutral: 14, negative: 3, total: 88, percent: 80.7, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
@@ -109,7 +121,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 29': { positive: 76, neutral: 11, negative: 2, total: 89, percent: 85.4, level: 'Strong',
+            'Aug 28': { positive: 76, neutral: 11, negative: 2, total: 89, percent: 85.4, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'David Sacks', firm: 'Craft Ventures' },
@@ -119,20 +131,20 @@ const NarrativePulse = {
             }
         },
         'DePIN': {
-            'Aug 1': { positive: 3, neutral: 5, negative: 3, total: 11, percent: 27.3, level: 'Weak',
+            'Aug 7': { positive: 3, neutral: 5, negative: 3, total: 11, percent: 27.3, level: 'Weak',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' }
                 ],
                 dissent: { quote: 'Still too early for institutional', author: 'Bill Gurley' }
             },
-            'Aug 8': { positive: 17, neutral: 12, negative: 5, total: 34, percent: 50.0, level: 'Moderate',
+            'Aug 14': { positive: 17, neutral: 12, negative: 5, total: 34, percent: 50.0, level: 'Moderate',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' }
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 62, neutral: 22, negative: 5, total: 89, percent: 69.7, level: 'Strong',
+            'Aug 21': { positive: 62, neutral: 22, negative: 5, total: 89, percent: 69.7, level: 'Strong',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' },
@@ -140,7 +152,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 22': { positive: 117, neutral: 35, negative: 4, total: 156, percent: 75.0, level: 'Strong',
+            'Aug 28': { positive: 117, neutral: 35, negative: 4, total: 156, percent: 75.0, level: 'Strong',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' },
@@ -148,7 +160,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 29': { positive: 181, neutral: 18, negative: 2, total: 201, percent: 90.0, level: 'Peak',
+            'Aug 28': { positive: 181, neutral: 18, negative: 2, total: 201, percent: 90.0, level: 'Peak',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Marc Andreessen', firm: 'a16z' },
@@ -158,49 +170,42 @@ const NarrativePulse = {
             }
         },
         'B2B SaaS': {
-            'Aug 1': { positive: 16, neutral: 20, negative: 4, total: 40, percent: 40.0, level: 'Weak',
+            'Aug 7': { positive: 16, neutral: 20, negative: 4, total: 40, percent: 40.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
                     { name: 'Byron Deeter', firm: 'Bessemer' }
                 ],
                 dissent: { quote: 'Growth multiples unsustainable', author: 'Bill Gurley' }
             },
-            'Aug 8': { positive: 16, neutral: 21, negative: 4, total: 41, percent: 39.0, level: 'Weak',
+            'Aug 14': { positive: 16, neutral: 21, negative: 4, total: 41, percent: 39.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
                     { name: 'Byron Deeter', firm: 'Bessemer' }
                 ],
                 dissent: { quote: 'Consolidation inevitable', author: 'David Sacks' }
             },
-            'Aug 15': { positive: 13, neutral: 25, negative: 4, total: 42, percent: 31.0, level: 'Weak',
+            'Aug 21': { positive: 13, neutral: 25, negative: 4, total: 42, percent: 31.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' }
                 ],
                 dissent: { quote: 'AI will eat most SaaS', author: 'Marc Andreessen' }
             },
-            'Aug 22': { positive: 13, neutral: 26, negative: 4, total: 43, percent: 30.2, level: 'Weak',
+            'Aug 28': { positive: 13, neutral: 26, negative: 4, total: 43, percent: 30.2, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' }
                 ],
                 dissent: { quote: 'Vertical AI replacing horizontal SaaS', author: 'Sarah Guo' }
-            },
-            'Aug 29': { positive: 13, neutral: 26, negative: 4, total: 43, percent: 30.2, level: 'Weak',
-                advocates: [
-                    { name: 'Jason Lemkin', firm: 'SaaStr' },
-                    { name: 'Byron Deeter', firm: 'Bessemer' }
-                ],
-                dissent: { quote: 'SaaS winter is here', author: 'Bill Gurley' }
             }
         },
         'Developer Tools': {
-            'Aug 1': { positive: 28, neutral: 12, negative: 2, total: 42, percent: 66.7, level: 'Moderate',
+            'Aug 7': { positive: 28, neutral: 12, negative: 2, total: 42, percent: 66.7, level: 'Moderate',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dylan Field', firm: 'Figma' }
                 ],
                 dissent: null
             },
-            'Aug 8': { positive: 32, neutral: 10, negative: 2, total: 44, percent: 72.7, level: 'Strong',
+            'Aug 14': { positive: 32, neutral: 10, negative: 2, total: 44, percent: 72.7, level: 'Strong',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dylan Field', firm: 'Figma' },
@@ -208,7 +213,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 38, neutral: 8, negative: 2, total: 48, percent: 79.2, level: 'Strong',
+            'Aug 21': { positive: 38, neutral: 8, negative: 2, total: 48, percent: 79.2, level: 'Strong',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dev Ittycheria', firm: 'MongoDB' },
@@ -216,73 +221,55 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 22': { positive: 52, neutral: 10, negative: 2, total: 64, percent: 81.3, level: 'Strong',
+            'Aug 28': { positive: 52, neutral: 10, negative: 2, total: 64, percent: 81.3, level: 'Strong',
                 advocates: [
                     { name: 'Nat Friedman', firm: 'Former GitHub' },
                     { name: 'Dev Ittycheria', firm: 'MongoDB' },
                     { name: 'Peter Levine', firm: 'a16z' }
                 ],
                 dissent: null
-            },
-            'Aug 29': { positive: 82, neutral: 10, negative: 2, total: 94, percent: 87.2, level: 'Strong',
-                advocates: [
-                    { name: 'Peter Levine', firm: 'a16z' },
-                    { name: 'Nat Friedman', firm: 'Former GitHub' },
-                    { name: 'Guillermo Rauch', firm: 'Vercel' }
-                ],
-                dissent: null
             }
         },
-        'Vertical SaaS': {
-            'Aug 1': { positive: 22, neutral: 14, negative: 4, total: 40, percent: 55.0, level: 'Moderate',
+        'Crypto/Web3': {
+            'Aug 7': { positive: 16, neutral: 10, negative: 2, total: 28, percent: 57.1, level: 'Building',
                 advocates: [
-                    { name: 'Jason Lemkin', firm: 'SaaStr' },
-                    { name: 'Byron Deeter', firm: 'Bessemer' }
+                    { name: 'Chris Dixon', firm: 'a16z' },
+                    { name: 'David Roebuck', firm: 'Electric Capital' }
                 ],
                 dissent: null
             },
-            'Aug 8': { positive: 28, neutral: 12, negative: 4, total: 44, percent: 63.6, level: 'Moderate',
+            'Aug 14': { positive: 14, neutral: 9, negative: 2, total: 25, percent: 56.0, level: 'Building',
                 advocates: [
-                    { name: 'Jason Lemkin', firm: 'SaaStr' },
-                    { name: 'Byron Deeter', firm: 'Bessemer' },
-                    { name: 'David Ulevitch', firm: 'a16z' }
+                    { name: 'Chris Dixon', firm: 'a16z' },
+                    { name: 'Jesse Walden', firm: 'Variant' }
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 40, neutral: 10, negative: 2, total: 52, percent: 76.9, level: 'Strong',
+            'Aug 21': { positive: 12, neutral: 8, negative: 2, total: 22, percent: 54.5, level: 'Weak',
                 advocates: [
-                    { name: 'Byron Deeter', firm: 'Bessemer' },
-                    { name: 'David Ulevitch', firm: 'a16z' },
-                    { name: 'Jason Lemkin', firm: 'SaaStr' }
+                    { name: 'Linda Xie', firm: 'Scalar Capital' },
+                    { name: 'Chris Dixon', firm: 'a16z' }
                 ],
-                dissent: null
+                dissent: { name: 'Howard Marks', firm: 'Oaktree', quote: 'Still seeking killer use cases' }
             },
-            'Aug 22': { positive: 60, neutral: 10, negative: 2, total: 72, percent: 83.3, level: 'Strong',
+            'Aug 28': { positive: 15, neutral: 9, negative: 2, total: 26, percent: 57.7, level: 'Building',
                 advocates: [
-                    { name: 'David Ulevitch', firm: 'a16z' },
-                    { name: 'Byron Deeter', firm: 'Bessemer' },
-                    { name: 'Sarah Guo', firm: 'Conviction' }
-                ],
-                dissent: null
-            },
-            'Aug 29': { positive: 98, neutral: 12, negative: 2, total: 112, percent: 87.5, level: 'Strong',
-                advocates: [
-                    { name: 'Sarah Guo', firm: 'Conviction' },
-                    { name: 'Byron Deeter', firm: 'Bessemer' },
-                    { name: 'David Ulevitch', firm: 'a16z' }
+                    { name: 'Jesse Walden', firm: 'Variant' },
+                    { name: 'Chris Dixon', firm: 'a16z' },
+                    { name: 'Ryan Selkis', firm: 'Messari' }
                 ],
                 dissent: null
             }
         },
         'AI Infrastructure': {
-            'Aug 1': { positive: 38, neutral: 16, negative: 4, total: 58, percent: 65.5, level: 'Moderate',
+            'Aug 7': { positive: 38, neutral: 16, negative: 4, total: 58, percent: 65.5, level: 'Moderate',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' }
                 ],
                 dissent: null
             },
-            'Aug 8': { positive: 56, neutral: 16, negative: 4, total: 76, percent: 73.7, level: 'Strong',
+            'Aug 14': { positive: 56, neutral: 16, negative: 4, total: 76, percent: 73.7, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' },
@@ -290,7 +277,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 15': { positive: 82, neutral: 14, negative: 4, total: 100, percent: 82.0, level: 'Strong',
+            'Aug 21': { positive: 82, neutral: 14, negative: 4, total: 100, percent: 82.0, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Soumith Chintala', firm: 'Meta' },
@@ -298,19 +285,11 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 22': { positive: 114, neutral: 20, negative: 4, total: 138, percent: 82.6, level: 'Strong',
+            'Aug 28': { positive: 114, neutral: 20, negative: 4, total: 138, percent: 82.6, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' },
                     { name: 'Jensen Huang', firm: 'NVIDIA' }
-                ],
-                dissent: null
-            },
-            'Aug 29': { positive: 142, neutral: 12, negative: 2, total: 156, percent: 91.0, level: 'Peak',
-                advocates: [
-                    { name: 'Jensen Huang', firm: 'NVIDIA' },
-                    { name: 'Martin Casado', firm: 'a16z' },
-                    { name: 'Ali Ghodsi', firm: 'Databricks' }
                 ],
                 dissent: null
             }
@@ -319,7 +298,7 @@ const NarrativePulse = {
     
     // Rich data for tooltips
     topicDataByDate: {
-        'Aug 1': {
+        'Aug 7': {
             'AI Agents': { mentions: 79, weekOverWeek: 0, change: 0, podcasts: ['20VC', 'All-In'], quote: 'AI will eat software' },
             'Capital Efficiency': { mentions: 76, weekOverWeek: 0, change: 0, podcasts: ['Acquired'], quote: 'Do more with less' },
             'DePIN': { mentions: 11, weekOverWeek: 0, change: 0, podcasts: ['Bankless'], quote: 'Infrastructure revolution' },
@@ -333,7 +312,7 @@ const NarrativePulse = {
                 { title: 'Why DePIN Matters Now', podcast: 'Bankless' }
             ]
         },
-        'Aug 8': {
+        'Aug 14': {
             'AI Agents': { mentions: 105, weekOverWeek: 33, change: 26, podcasts: ['20VC', 'Invest Like Best'], quote: 'Agents are the new apps' },
             'Capital Efficiency': { mentions: 82, weekOverWeek: 8, change: 6, podcasts: ['This Week in Startups'], quote: 'Efficiency is the new growth' },
             'DePIN': { mentions: 34, weekOverWeek: 209, change: 23, podcasts: ['Bankless', 'All-In'], quote: 'DePIN summer is here' },
@@ -347,7 +326,7 @@ const NarrativePulse = {
                 { title: 'Capital Efficiency Playbook', podcast: 'This Week in Startups' }
             ]
         },
-        'Aug 15': {
+        'Aug 21': {
             'AI Agents': { mentions: 128, weekOverWeek: 22, change: 23, podcasts: ['All-In', 'a16z Podcast'], quote: 'Vertical AI dominance inevitable' },
             'Capital Efficiency': { mentions: 87, weekOverWeek: 6, change: 5, podcasts: ['20VC'], quote: 'Capital discipline wins' },
             'DePIN': { mentions: 89, weekOverWeek: 162, change: 55, podcasts: ['Bankless', 'Unchained'], quote: 'Physical meets digital' },
@@ -361,7 +340,7 @@ const NarrativePulse = {
                 { title: 'Capital Allocation Strategy', podcast: '20VC' }
             ]
         },
-        'Aug 22': {
+        'Aug 28': {
             'AI Agents': { mentions: 142, weekOverWeek: 11, change: 14, podcasts: ['20VC', 'All-In', 'Invest Like Best'], quote: 'Every company needs agents' },
             'Capital Efficiency': { mentions: 88, weekOverWeek: 1, change: 1, podcasts: ['Acquired', 'a16z Podcast'], quote: 'New reality for 2025 fundraising' },
             'DePIN': { mentions: 156, weekOverWeek: 75, change: 67, podcasts: ['Bankless', 'All-In'], quote: 'Infrastructure gold rush' },
@@ -374,20 +353,211 @@ const NarrativePulse = {
                 { title: 'The State of SaaS', podcast: 'SaaStr' },
                 { title: 'DePIN Infrastructure Rush', podcast: 'Bankless' }
             ]
+        }
+    },
+    
+    // Complete time range data from narrative-pulse-complete-data.md
+    timeRangeData: {
+        '7 days': {
+            topics: {
+                'AI Agents': {
+                    color: '#4a7c59',
+                    displayMomentum: '+59%',
+                    dataPoints: [3, 1, 2, 6, 8, 9, 6],
+                    consensus: [89, 88, 89, 90, 89, 88, 89],
+                    startValue: 22,
+                    endValue: 35,
+                    consensusLevel: 'Strong'
+                },
+                'AI Infrastructure': {
+                    color: '#a87c68',
+                    displayMomentum: '+37%',
+                    dataPoints: [5, 2, 3, 8, 10, 12, 12],
+                    consensus: [91, 91, 92, 92, 93, 93, 94],
+                    startValue: 38,
+                    endValue: 52,
+                    consensusLevel: 'Peak'
+                },
+                'Capital Efficiency': {
+                    color: '#f4a261',
+                    displayMomentum: '+15%',
+                    dataPoints: [2, 0, 1, 3, 4, 3, 2],
+                    consensus: [81, 82, 83, 84, 85, 85, 85],
+                    startValue: 13,
+                    endValue: 15,
+                    consensusLevel: 'Strong'
+                },
+                'DePIN': {
+                    color: '#5a6c8c',
+                    displayMomentum: '+78%',
+                    dataPoints: [2, 1, 1, 5, 7, 8, 8],
+                    consensus: [75, 78, 82, 85, 88, 90, 90],
+                    startValue: 18,
+                    endValue: 32,
+                    consensusLevel: 'Building'
+                },
+                'Crypto/Web3': {
+                    color: '#5c7cfa',
+                    displayMomentum: '+18%',
+                    dataPoints: [3, 2, 2, 4, 5, 5, 5],
+                    consensus: [60, 62, 64, 66, 68, 70, 72],
+                    startValue: 22,
+                    endValue: 26,
+                    consensusLevel: 'Moderate'
+                },
+                'B2B SaaS': {
+                    color: '#c77d7d',
+                    displayMomentum: '-20%',
+                    dataPoints: [1, 0, 1, 2, 2, 1, 1],
+                    consensus: [30, 30, 30, 30, 30, 30, 30],
+                    startValue: 10,
+                    endValue: 8,
+                    consensusLevel: 'Weak'
+                },
+                'Developer Tools': {
+                    color: '#8a68a8',
+                    displayMomentum: '+29%',
+                    dataPoints: [2, 1, 1, 3, 4, 4, 3],
+                    consensus: [81, 83, 85, 86, 87, 87, 87],
+                    startValue: 14,
+                    endValue: 18,
+                    consensusLevel: 'Strong'
+                }
+            }
         },
-        'Aug 29': {
-            'AI Agents': { mentions: 147, weekOverWeek: 4, change: 5, podcasts: ['20VC', 'All-In', 'Invest Like Best'], quote: 'Agents everywhere' },
-            'Capital Efficiency': { mentions: 89, weekOverWeek: 1, change: 1, podcasts: ['Acquired', 'Bankless', 'a16z Podcast'], quote: 'Sustainable growth matters' },
-            'DePIN': { mentions: 201, weekOverWeek: 29, change: 45, podcasts: ['Bankless', 'Unchained'], quote: 'DePIN eating the world' },
-            'B2B SaaS': { mentions: 43, weekOverWeek: 0, change: 0, podcasts: ['SaaStr', 'Invest Like Best'], quote: 'Consolidation phase' },
-            'Developer Tools': { mentions: 94, weekOverWeek: 47, change: 47, podcasts: ['20VC', 'a16z Podcast'], quote: 'DevEx renaissance' },
-            'Vertical SaaS': { mentions: 112, weekOverWeek: 65, change: 65, podcasts: ['SaaStr', 'Acquired'], quote: 'Niche domination' },
-            'AI Infrastructure': { mentions: 156, weekOverWeek: 92, change: 92, podcasts: ['All-In', 'a16z Podcast'], quote: 'Picks and shovels' },
-            'topEpisodes': [
-                { title: 'Agent-First Companies', podcast: '20VC' },
-                { title: 'DePIN Domination', podcast: 'Bankless' },
-                { title: 'SaaS Consolidation Wave', podcast: 'SaaStr' }
-            ]
+        '30 days': {
+            topics: {
+                'AI Agents': {
+                    color: '#4a7c59',
+                    displayMomentum: '+337%',
+                    dataPoints: [8, 15, 22, 35, 35],  // Aug 7, 14, 21, 28
+                    consensus: [60, 70, 80, 90, 90],
+                    startValue: 8,
+                    endValue: 35,
+                    consensusLevel: 'Strong'
+                },
+                'AI Infrastructure': {
+                    color: '#a87c68',
+                    displayMomentum: '+333%',
+                    dataPoints: [12, 25, 38, 52, 52],  // Aug 7, 14, 21, 28
+                    consensus: [85, 88, 90, 94, 94],
+                    startValue: 12,
+                    endValue: 52,
+                    consensusLevel: 'Peak'
+                },
+                'Capital Efficiency': {
+                    color: '#f4a261',
+                    displayMomentum: '+25%',
+                    dataPoints: [12, 14, 13, 15, 15],  // Aug 7, 14, 21, 28
+                    consensus: [70, 75, 73, 85, 85],
+                    startValue: 12,
+                    endValue: 15,
+                    consensusLevel: 'Strong'
+                },
+                'DePIN': {
+                    color: '#5a6c8c',
+                    displayMomentum: '+1500%',
+                    dataPoints: [2, 8, 18, 32, 32],  // Aug 7, 14, 21, 28
+                    consensus: [30, 50, 70, 90, 90],
+                    startValue: 2,
+                    endValue: 32,
+                    consensusLevel: 'Peak'
+                },
+                'Crypto/Web3': {
+                    color: '#5c7cfa',
+                    displayMomentum: '-7%',
+                    dataPoints: [28, 25, 22, 26, 26],  // Aug 7, 14, 21, 28
+                    consensus: [57, 52, 50, 58, 58],
+                    startValue: 28,
+                    endValue: 26,
+                    consensusLevel: 'Moderate'
+                },
+                'B2B SaaS': {
+                    color: '#c77d7d',
+                    displayMomentum: '-47%',
+                    dataPoints: [15, 12, 10, 8, 8],  // Aug 7, 14, 21, 28
+                    consensus: [33, 25, 20, 20, 20],
+                    startValue: 15,
+                    endValue: 8,
+                    consensusLevel: 'Weak'
+                },
+                'Developer Tools': {
+                    color: '#8a68a8',
+                    displayMomentum: '+200%',
+                    dataPoints: [6, 10, 14, 18, 18],  // Aug 7, 14, 21, 28
+                    consensus: [83, 80, 86, 89, 89],
+                    startValue: 6,
+                    endValue: 18,
+                    consensusLevel: 'Strong'
+                }
+            }
+        },
+        '90 days': {
+            topics: {
+                'AI Agents': {
+                    color: '#4a7c59',
+                    displayMomentum: '+775%',
+                    dataPoints: [4, 5, 6, 7, 8, 9, 10, 11, 12, 8, 15, 22, 35, 35],  // Last 5 match 30-day
+                    consensus: [30, 35, 40, 45, 50, 55, 60, 65, 70, 60, 70, 80, 90, 90],
+                    startValue: 4,
+                    endValue: 35,
+                    consensusLevel: 'Strong'
+                },
+                'AI Infrastructure': {
+                    color: '#a87c68',
+                    displayMomentum: '+867%',
+                    dataPoints: [6, 8, 10, 12, 15, 18, 22, 26, 30, 12, 25, 38, 52, 52],  // Last 5 match 30-day
+                    consensus: [40, 45, 50, 55, 65, 70, 75, 80, 85, 85, 88, 90, 94, 94],
+                    startValue: 6,
+                    endValue: 52,
+                    consensusLevel: 'Peak'
+                },
+                'Capital Efficiency': {
+                    color: '#f4a261',
+                    displayMomentum: '+36%',
+                    dataPoints: [11, 10, 9, 8, 8, 9, 10, 11, 12, 12, 14, 13, 15, 15],  // Last 5 match 30-day
+                    consensus: [75, 73, 65, 60, 58, 60, 65, 70, 73, 70, 75, 73, 85, 85],
+                    startValue: 11,
+                    endValue: 15,
+                    consensusLevel: 'Strong'
+                },
+                'DePIN': {
+                    color: '#5a6c8c',
+                    displayMomentum: '+3100%',
+                    dataPoints: [1, 1, 1, 2, 2, 3, 4, 5, 6, 2, 8, 18, 32, 32],  // Last 5 match 30-day
+                    consensus: [10, 10, 10, 15, 20, 25, 30, 35, 40, 30, 50, 70, 90, 90],
+                    startValue: 1,
+                    endValue: 32,
+                    consensusLevel: 'Peak'
+                },
+                'Crypto/Web3': {
+                    color: '#5c7cfa',
+                    displayMomentum: '-28%',
+                    dataPoints: [36, 34, 32, 30, 28, 26, 24, 23, 22, 28, 25, 22, 26, 26],  // Last 5 match 30-day
+                    consensus: [65, 63, 60, 58, 55, 50, 48, 45, 43, 57, 52, 50, 58, 58],
+                    startValue: 36,
+                    endValue: 26,
+                    consensusLevel: 'Moderate'
+                },
+                'B2B SaaS': {
+                    color: '#c77d7d',
+                    displayMomentum: '-60%',
+                    dataPoints: [20, 19, 18, 17, 16, 15, 14, 13, 12, 15, 12, 10, 8, 8],  // Last 5 match 30-day
+                    consensus: [35, 33, 32, 30, 28, 27, 26, 25, 24, 33, 25, 20, 20, 20],
+                    startValue: 20,
+                    endValue: 8,
+                    consensusLevel: 'Weak'
+                },
+                'Developer Tools': {
+                    color: '#8a68a8',
+                    displayMomentum: '+260%',
+                    dataPoints: [5, 5, 6, 6, 7, 8, 9, 10, 11, 6, 10, 14, 18, 18],  // Last 5 match 30-day
+                    consensus: [65, 65, 68, 70, 73, 75, 78, 80, 82, 83, 80, 86, 89, 89],
+                    startValue: 5,
+                    endValue: 18,
+                    consensusLevel: 'Strong'
+                }
+            }
         }
     },
     
@@ -413,11 +583,13 @@ const NarrativePulse = {
         }
         
         // Calculate consistent x-positions for 5 data points
-        const drawableWidth = this.chartWidth - (2 * this.padding);
-        const sectionWidth = drawableWidth / 4; // 4 sections between 5 points
-        this.xPositions = this.dateLabels.map((_, i) => {
-            return this.padding + (sectionWidth * i);
-        });
+        // Set initial time range
+        this.currentTimeRange = '7 days';
+        const config = this.timeRangeConfigs[this.currentTimeRange];
+        this.dateLabels = config.dateLabels;
+        
+        // Calculate X positions
+        this.calculateXPositions();
         
         // Get panel elements (now at document level for proper viewport positioning)
         this.panel = document.querySelector('.topic-customization-panel');
@@ -429,6 +601,7 @@ const NarrativePulse = {
         this.bindEvents();
         this.currentView = 'momentum'; // Set initial view
         this.createMomentumView(); // Create the momentum view with all elements
+        this.updateInsightCards(); // Initialize insight cards
         
         // Initialize interactions after a small delay to ensure DOM is ready
         setTimeout(() => {
@@ -496,7 +669,68 @@ const NarrativePulse = {
         }
     },
     
+    // Create Catmull-Rom spline path
+    createCatmullRomPath: function(xPoints, yPoints) {
+        if (xPoints.length < 2) return '';
+        
+        let path = `M ${xPoints[0]},${yPoints[0]}`;
+        
+        for (let i = 0; i < xPoints.length - 1; i++) {
+            const p0x = i > 0 ? xPoints[i - 1] : xPoints[0];
+            const p0y = i > 0 ? yPoints[i - 1] : yPoints[0];
+            const p1x = xPoints[i];
+            const p1y = yPoints[i];
+            const p2x = xPoints[i + 1];
+            const p2y = yPoints[i + 1];
+            const p3x = i < xPoints.length - 2 ? xPoints[i + 2] : xPoints[xPoints.length - 1];
+            const p3y = i < yPoints.length - 2 ? yPoints[i + 2] : yPoints[yPoints.length - 1];
+            
+            // Calculate control points
+            const cp1x = p1x + (p2x - p0x) / 6;
+            const cp1y = p1y + (p2y - p0y) / 6;
+            const cp2x = p2x - (p3x - p1x) / 6;
+            const cp2y = p2y - (p3y - p1y) / 6;
+            
+            path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2x},${p2y}`;
+        }
+        
+        return path;
+    },
+    
     // Create grid lines for charts
+    // Calculate X positions based on date labels
+    calculateXPositions: function() {
+        this.xPositions = this.dateLabels.map((_, i) => 
+            this.padding + (i * ((this.chartWidth - 2 * this.padding) / (this.dateLabels.length - 1)))
+        );
+    },
+    
+    // Get current time range data
+    getCurrentData: function() {
+        return this.timeRangeData[this.currentTimeRange];
+    },
+    
+    // Get topic data for current time range
+    getTopicData: function(topic) {
+        const data = this.getCurrentData();
+        return data.topics[topic] || null;
+    },
+    
+    // Calculate Y scale for topic data points
+    calculateYScale: function(dataPoints) {
+        const maxValue = Math.max(...dataPoints);
+        const minValue = Math.min(...dataPoints);
+        const chartBottom = 220;
+        const chartTop = 40;
+        const range = chartBottom - chartTop;
+        
+        // Map min value to bottom and max value to top
+        const yStart = chartBottom - ((dataPoints[0] - minValue) / (maxValue - minValue)) * range;
+        const yEnd = chartBottom - ((dataPoints[dataPoints.length - 1] - minValue) / (maxValue - minValue)) * range;
+        
+        return { start: yStart, end: yEnd };
+    },
+    
     createGridLines: function() {
         return this.xPositions.map(x => 
             `<line x1="${x}" y1="40" x2="${x}" y2="240" stroke="#e5e7eb" stroke-width="1" opacity="0.5"/>`
@@ -516,13 +750,110 @@ const NarrativePulse = {
     toggleTimeRange: function() {
         const timeText = this.container.querySelector('#timeRangeText');
         const current = timeText.textContent;
+        
+        // Update time range
         if (current === '7 days') {
-            timeText.textContent = '30 days';
+            this.currentTimeRange = '30 days';
         } else if (current === '30 days') {
-            timeText.textContent = '90 days';
+            this.currentTimeRange = '90 days';
         } else {
-            timeText.textContent = '7 days';
+            this.currentTimeRange = '7 days';
         }
+        
+        // Update UI text
+        timeText.textContent = this.currentTimeRange;
+        
+        // Update date labels and recalculate x positions
+        const config = this.timeRangeConfigs[this.currentTimeRange];
+        this.dateLabels = config.dateLabels;
+        this.calculateXPositions();
+        
+        // Refresh current view with new data
+        const chartContent = this.container.querySelector('#chartContent');
+        chartContent.classList.add('fade-out');
+        
+        setTimeout(() => {
+            if (this.currentView === 'momentum') {
+                this.createMomentumView();
+            } else if (this.currentView === 'volume') {
+                this.createVolumeView();
+            } else {
+                this.createConsensusView();
+            }
+            
+            chartContent.classList.remove('fade-out');
+            chartContent.classList.add('fade-in');
+            
+            setTimeout(() => {
+                chartContent.classList.remove('fade-in');
+            }, 150);
+        }, 150);
+        
+        // Update insight cards for the new time range
+        this.updateInsightCards();
+    },
+    
+    // Update insight cards based on current time range
+    updateInsightCards: function() {
+        const insights = this.container.querySelectorAll('.insight-text');
+        if (insights.length < 3) return;
+        
+        const currentData = this.getCurrentData();
+        const timeRangeText = this.currentTimeRange;
+        
+        // Define insights for each time range
+        const insightData = {
+            '7 days': [
+                {
+                    highlight: 'Weekly Momentum:',
+                    text: 'DePIN accelerating +28.8% this week, leading narrative shift'
+                },
+                {
+                    highlight: 'Velocity Spike:',
+                    text: 'Vertical SaaS mentions up 55.6% as specialization gains traction'
+                },
+                {
+                    highlight: 'Daily Pattern:',
+                    text: 'Developer tools discussion peaks mid-week, 46.9% weekly growth'
+                }
+            ],
+            '30 days': [
+                {
+                    highlight: 'Strong Consensus:',
+                    text: 'AI infrastructure investment thesis validated across 12 sources'
+                },
+                {
+                    highlight: 'Narrative Shift:',
+                    text: 'From "growth at all costs" to "efficient growth" - mentioned 47 times'
+                },
+                {
+                    highlight: 'Emerging Theme:',
+                    text: 'Developer tools seeing renewed interest after 2-year lull'
+                }
+            ],
+            '90 days': [
+                {
+                    highlight: 'Quarterly Trend:',
+                    text: 'DePIN exploded from 2 to 201 mentions, defining new infrastructure era'
+                },
+                {
+                    highlight: 'Recovery Story:',
+                    text: 'Capital efficiency sentiment recovered from July lows, now strong consensus'
+                },
+                {
+                    highlight: 'Sustained Growth:',
+                    text: 'AI Agents maintained 268% growth over quarter, mainstream adoption clear'
+                }
+            ]
+        };
+        
+        const currentInsights = insightData[timeRangeText] || insightData['30 days'];
+        
+        insights.forEach((insightEl, index) => {
+            if (currentInsights[index]) {
+                insightEl.innerHTML = `<span class="insight-highlight">${currentInsights[index].highlight}</span> ${currentInsights[index].text}`;
+            }
+        });
     },
     
     // Toggle View Mode with smooth transitions
@@ -562,38 +893,105 @@ const NarrativePulse = {
                 chartContent.classList.remove('fade-in');
             }, 150);
         }, 150);
+        
+        // Update insight cards for the new time range
+        this.updateInsightCards();
+    },
+    
+    // Update insight cards based on current time range
+    updateInsightCards: function() {
+        const insights = this.container.querySelectorAll('.insight-text');
+        if (insights.length < 3) return;
+        
+        const currentData = this.getCurrentData();
+        const timeRangeText = this.currentTimeRange;
+        
+        // Define insights for each time range
+        const insightData = {
+            '7 days': [
+                {
+                    highlight: 'Weekly Momentum:',
+                    text: 'DePIN accelerating +28.8% this week, leading narrative shift'
+                },
+                {
+                    highlight: 'Velocity Spike:',
+                    text: 'Vertical SaaS mentions up 55.6% as specialization gains traction'
+                },
+                {
+                    highlight: 'Daily Pattern:',
+                    text: 'Developer tools discussion peaks mid-week, 46.9% weekly growth'
+                }
+            ],
+            '30 days': [
+                {
+                    highlight: 'Strong Consensus:',
+                    text: 'AI infrastructure investment thesis validated across 12 sources'
+                },
+                {
+                    highlight: 'Narrative Shift:',
+                    text: 'From "growth at all costs" to "efficient growth" - mentioned 47 times'
+                },
+                {
+                    highlight: 'Emerging Theme:',
+                    text: 'Developer tools seeing renewed interest after 2-year lull'
+                }
+            ],
+            '90 days': [
+                {
+                    highlight: 'Quarterly Trend:',
+                    text: 'DePIN exploded from 2 to 201 mentions, defining new infrastructure era'
+                },
+                {
+                    highlight: 'Recovery Story:',
+                    text: 'Capital efficiency sentiment recovered from July lows, now strong consensus'
+                },
+                {
+                    highlight: 'Sustained Growth:',
+                    text: 'AI Agents maintained 268% growth over quarter, mainstream adoption clear'
+                }
+            ]
+        };
+        
+        const currentInsights = insightData[timeRangeText] || insightData['30 days'];
+        
+        insights.forEach((insightEl, index) => {
+            if (currentInsights[index]) {
+                insightEl.innerHTML = `<span class="insight-highlight">${currentInsights[index].highlight}</span> ${currentInsights[index].text}`;
+            }
+        });
     },
     
     // Create Volume View
     createVolumeView: function() {
         const chartContent = this.container.querySelector('#chartContent');
+        const currentData = this.getCurrentData();
+        
+        // Update legend first
+        this.updateLegend();
         
         // Calculate max total mentions for scaling
         let maxTotal = 0;
-        this.dateLabels.forEach(date => {
-            const dateData = this.topicDataByDate[date];
-            const total = Object.keys(dateData)
-                .filter(key => key !== 'topEpisodes')
-                .reduce((sum, topic) => sum + dateData[topic].mentions, 0);
-            maxTotal = Math.max(maxTotal, total);
-        });
+        const totalsPerDate = [];
         
-        const barWidth = 60;
-        const chartPaddingLeft = 20; // Add padding to prevent first bar from overlapping Y-axis
+        // Calculate totals for each data point
+        for (let i = 0; i < this.dateLabels.length; i++) {
+            let total = 0;
+            this.selectedTopics.forEach(topic => {
+                const topicData = currentData.topics[topic];
+                if (topicData && topicData.dataPoints[i]) {
+                    total += topicData.dataPoints[i];
+                }
+            });
+            totalsPerDate.push(total);
+            maxTotal = Math.max(maxTotal, total);
+        }
+        
+        // Adjust bar width based on number of data points
+        const barWidth = this.dateLabels.length > 7 ? 40 : 60;
+        const chartPaddingLeft = this.dateLabels.length > 7 ? 10 : 20;
         const maxHeight = 160;
         const baseY = 220;
         const yAxisX = 35;
-        
-        // Topic colors - use the same colors as in getTopicColor
-        const topicColors = {
-            'AI Agents': '#4a7c59',
-            'Capital Efficiency': '#f4a261',
-            'DePIN': '#5a6c8c',
-            'B2B SaaS': '#c77d7d',
-            'Developer Tools': '#8a68a8',
-            'Vertical SaaS': '#7d9c8d',
-            'AI Infrastructure': '#a87c68'
-        };
         
         // Calculate Y-axis scale
         const yScale = Math.ceil(maxTotal / 50) * 50; // Round up to nearest 50
@@ -617,33 +1015,36 @@ const NarrativePulse = {
             <text x="${yAxisX}" y="224" fill="#9ca3af" font-size="10" text-anchor="end">0</text>
             
             <!-- Y-axis label -->
-            <text x="15" y="140" fill="#6b7280" font-size="10" text-anchor="middle" transform="rotate(-90 15 140)">Mentions</text>
+            <text x="15" y="140" fill="#6b7280" font-size="11" text-anchor="middle" transform="rotate(-90 15 140)">Mentions</text>
         `;
         
         // Create stacked bars for each date
         this.dateLabels.forEach((date, dateIndex) => {
-            const dateData = this.topicDataByDate[date];
-            const x = this.xPositions[dateIndex] - barWidth / 2 + chartPaddingLeft;
+            const x = this.xPositions[dateIndex];
             let currentY = baseY;
             
             // Create bars for each selected topic (reverse order for stacking)
             [...this.selectedTopics].reverse().forEach(topic => {
-                if (dateData[topic]) {
-                    const mentions = dateData[topic].mentions;
+                const topicData = currentData.topics[topic];
+                if (topicData && topicData.dataPoints[dateIndex] !== undefined) {
+                    const mentions = topicData.dataPoints[dateIndex];
                     const barHeight = (mentions / yScale) * maxHeight;
-                    currentY -= barHeight;
                     
-                    html += `
-                        <g class="volume-bar-segment" data-date="${date}" data-topic="${topic}">
-                            <rect x="${x}" y="${currentY}" width="${barWidth}" height="${barHeight}"
-                                  fill="${topicColors[topic]}" opacity="0.8" rx="2"
-                                  class="volume-bar-rect"/>
-                            <!-- Hover dot (initially hidden) - positioned at top of this segment -->
-                            <circle cx="${x + barWidth/2}" cy="${currentY - 5}" r="4" 
-                                    fill="${topicColors[topic]}" opacity="0" 
-                                    class="volume-hover-dot"/>
-                        </g>
-                    `;
+                    if (barHeight > 0) {
+                        currentY -= barHeight;
+                        
+                        html += `
+                            <g class="volume-bar-segment" data-date="${date}" data-topic="${topic}" data-mentions="${mentions}">
+                                <rect x="${x}" y="${currentY}" width="${barWidth}" height="${barHeight}"
+                                      fill="${topicData.color}" opacity="0.8" rx="2"
+                                      class="volume-bar-rect"/>
+                                <!-- Hover dot (initially hidden) - positioned at top of this segment -->
+                                <circle cx="${x + barWidth/2}" cy="${currentY - 5}" r="4" 
+                                        fill="${topicData.color}" opacity="0" 
+                                        class="volume-hover-dot"/>
+                            </g>
+                        `;
+                    }
                 }
             });
         });
@@ -672,7 +1073,8 @@ const NarrativePulse = {
         segments.forEach(segment => {
             const handleSegmentMouseEnter = (e) => {
                 const date = segment.dataset.date;
-                const dateData = this.topicDataByDate[date];
+                const dateIndex = this.dateLabels.indexOf(date);
+                const currentData = this.getCurrentData();
                 
                 // Show dots for all segments of this date
                 if (this.currentHoveredDate !== date) {
@@ -689,10 +1091,22 @@ const NarrativePulse = {
                     this.currentHoveredDate = date;
                 }
                 
-                // Calculate total mentions and percentages
-                const total = Object.keys(dateData)
-                    .filter(key => key !== 'topEpisodes')
-                    .reduce((sum, topic) => sum + dateData[topic].mentions, 0);
+                // Calculate total mentions for this date
+                let total = 0;
+                const topicBreakdown = [];
+                
+                this.selectedTopics.forEach(topic => {
+                    const topicData = currentData.topics[topic];
+                    if (topicData && topicData.dataPoints[dateIndex] !== undefined) {
+                        const mentions = topicData.dataPoints[dateIndex];
+                        total += mentions;
+                        topicBreakdown.push({
+                            topic: topic,
+                            mentions: mentions,
+                            color: topicData.color
+                        });
+                    }
+                });
                 
                 // Format date
                 const [month, day] = date.split(' ');
@@ -710,25 +1124,22 @@ const NarrativePulse = {
                             <div class="breakdown-label">Breakdown by topic:</div>
                 `;
                 
-                // Add topic breakdown for selected topics
-                this.selectedTopics.forEach(topic => {
-                    if (dateData[topic]) {
-                        const mentions = dateData[topic].mentions;
-                        const percentage = ((mentions / total) * 100).toFixed(1);
-                        const color = this.getTopicColor(topic);
-                        
-                        html += `
-                            <div class="topic-row">
-                                <span class="topic-dot" style="background-color: ${color}"></span>
-                                <span class="topic-name">${topic}:</span>
-                                <span class="topic-stats">${mentions} (${percentage}%)</span>
-                            </div>
-                        `;
-                    }
+                // Add topic breakdown
+                topicBreakdown.forEach(item => {
+                    const percentage = total > 0 ? ((item.mentions / total) * 100).toFixed(1) : '0';
+                    
+                    html += `
+                        <div class="topic-row">
+                            <span class="topic-dot" style="background-color: ${item.color}"></span>
+                            <span class="topic-name">${item.topic}:</span>
+                            <span class="topic-stats">${item.mentions} (${percentage}%)</span>
+                        </div>
+                    `;
                 });
                 
-                // Add top episodes
-                if (dateData.topEpisodes && dateData.topEpisodes.length > 0) {
+                // Add top episodes if available in current data
+                if (currentData.topEpisodes && currentData.topEpisodes[date]) {
+                    const episodes = currentData.topEpisodes[date];
                     html += `
                         </div>
                         <div class="tooltip-divider"></div>
@@ -736,7 +1147,7 @@ const NarrativePulse = {
                             <div class="episodes-label">Top episodes this day:</div>
                     `;
                     
-                    dateData.topEpisodes.forEach((episode, index) => {
+                    episodes.forEach((episode, index) => {
                         html += `
                             <div class="episode-row">
                                 <span class="episode-number">${index + 1}.</span>
@@ -801,22 +1212,18 @@ const NarrativePulse = {
     createConsensusView: function() {
         const chartContent = this.container.querySelector('#chartContent');
         const topicNames = this.selectedTopics;
-        const topicColors = {
-            'AI Agents': '#4a7c59',
-            'Capital Efficiency': '#f4a261',
-            'DePIN': '#5a6c8c',
-            'B2B SaaS': '#c77d7d',
-            'Developer Tools': '#8a68a8',
-            'Vertical SaaS': '#7d9c8d',
-            'AI Infrastructure': '#a87c68'
-        };
+        const currentData = this.getCurrentData();
+        
+        // Update legend first
+        this.updateLegend();
         
         // Grid layout configuration - align with chart axes
         const gridStartX = this.padding; // Start at y-axis (50px)
         const gridStartY = 50;  // Moved up another 10px (was 60)
         const availableWidth = this.chartWidth - (2 * this.padding); // 700px
-        const cellWidth = (availableWidth - (4 * 1)) / 5; // ~139px per cell
-        const cellHeight = (220 - gridStartY) / 4 - 1; // Maximum vertical space
+        const numCells = this.dateLabels.length;
+        const cellWidth = (availableWidth - ((numCells - 1) * 1)) / numCells;
+        const cellHeight = (220 - gridStartY) / topicNames.length - 1; // Maximum vertical space
         const cellGap = 1;      // 1px gap between cells
         
         // Color gradient based on consensus percentage
@@ -834,16 +1241,18 @@ const NarrativePulse = {
             
             <!-- Grid cells -->
             ${topicNames.map((topic, rowIndex) => {
+                const topicData = currentData.topics[topic];
+                if (!topicData || !topicData.consensus) return '';
+                
                 return this.dateLabels.map((date, colIndex) => {
-                    const consensusData = this.consensusData[topic][date];
-                    const percent = consensusData.percent;
+                    const percent = topicData.consensus[colIndex] || 0;
                     const x = gridStartX + colIndex * (cellWidth + cellGap);
                     const y = gridStartY + rowIndex * (cellHeight + cellGap);
                     const fillColor = getConsensusColor(percent);
                     const textColor = percent >= 60 ? 'white' : '#374151';
                     
                     return `
-                        <g class="consensus-cell-group" data-topic="${topic}" data-date="${date}" data-percent="${percent}">
+                        <g class="consensus-cell-group" data-topic="${topic}" data-date="${date}" data-percent="${percent}" data-index="${colIndex}">
                             <rect class="consensus-cell"
                                   x="${x}" y="${y}"
                                   width="${cellWidth}" height="${cellHeight}"
@@ -862,7 +1271,8 @@ const NarrativePulse = {
             <!-- Topic labels (left side) -->
             ${topicNames.map((topic, i) => {
                 const y = gridStartY + i * (cellHeight + cellGap) + cellHeight/2;
-                const color = topicColors[topic];
+                const topicData = currentData.topics[topic];
+                const color = topicData ? topicData.color : '#666666';
                 
                 // Handle multi-line text for longer topic names
                 if (topic === 'Capital Efficiency') {
@@ -994,20 +1404,26 @@ const NarrativePulse = {
             const handleCellMouseEnter = (e) => {
                 const topic = cellGroup.dataset.topic;
                 const date = cellGroup.dataset.date;
-                const percent = cellGroup.dataset.percent;
-                const consensusData = this.consensusData[topic][date];
+                const percent = parseFloat(cellGroup.dataset.percent);
+                const dateIndex = parseInt(cellGroup.dataset.index);
+                const currentData = this.getCurrentData();
+                const topicData = currentData.topics[topic];
                 
                 // Format date nicely
                 const [month, day] = date.split(' ');
                 const formattedDate = `${month} ${day}`;
+                
+                // Calculate mentions for this date
+                const mentions = topicData && topicData.dataPoints ? topicData.dataPoints[dateIndex] : 0;
+                const sources = Math.round(mentions * (percent / 100)); // Estimate positive sources
                 
                 // Build simplified tooltip
                 let html = `
                     <div class="consensus-heatmap-tooltip">
                         <div class="tooltip-title">${topic} - ${formattedDate}</div>
                         <div class="tooltip-consensus">Consensus: ${percent}% positive</div>
-                        <div class="tooltip-mentions">Based on ${consensusData.total} mentions</div>
-                        <div class="tooltip-sources">${consensusData.advocates.length} sources agree</div>
+                        <div class="tooltip-mentions">Based on ${mentions} mentions</div>
+                        <div class="tooltip-sources">${sources} sources agree</div>
                     </div>
                 `;
                 
@@ -1113,21 +1529,46 @@ const NarrativePulse = {
         // Update legend first
         this.updateLegend();
         
-        // Create paths for selected topics only
-        const pathConfigs = {
-            'AI Agents': { momentum: "+85%", color: "#4a7c59", yStart: 180, yEnd: 40 },
-            'Capital Efficiency': { momentum: "+17%", color: "#f4a261", yStart: 195, yEnd: 145 },
-            'DePIN': { momentum: "+190%", color: "#5a6c8c", yStart: 210, yEnd: 65 },
-            'B2B SaaS': { momentum: "+3%", color: "#c77d7d", yStart: 150, yEnd: 165 },
-            'Developer Tools': { momentum: "+47%", color: "#8a68a8", yStart: 170, yEnd: 90 },
-            'Vertical SaaS': { momentum: "+65%", color: "#7d9c8d", yStart: 185, yEnd: 110 },
-            'AI Infrastructure': { momentum: "+92%", color: "#a87c68", yStart: 200, yEnd: 70 }
-        };
+        // Create paths for selected topics using dynamic data
+        const currentData = this.getCurrentData();
+        const pathConfigs = {};
+        
+        // Build path configs from current time range data
+        Object.keys(currentData.topics).forEach(topic => {
+            const topicData = currentData.topics[topic];
+            const yScale = this.calculateYScale(topicData.dataPoints);
+            pathConfigs[topic] = {
+                momentum: topicData.displayMomentum,
+                color: topicData.color,
+                yStart: yScale.start,
+                yEnd: yScale.end,
+                dataPoints: topicData.dataPoints
+            };
+        });
         
         const paths = this.selectedTopics.map(topic => ({
             topic: topic,
             ...pathConfigs[topic]
         }));
+        
+        // Calculate Y-axis scale based on actual data
+        const allDataPoints = Object.values(currentData.topics).flatMap(t => t.dataPoints);
+        const maxDataValue = Math.max(...allDataPoints);
+        const minDataValue = Math.min(...allDataPoints);
+        
+        // Add some padding to the scale
+        const range = maxDataValue - minDataValue;
+        const padding = range * 0.1;
+        const scaleMax = Math.ceil((maxDataValue + padding) / 10) * 10;
+        const scaleMin = Math.floor((minDataValue - padding) / 10) * 10;
+        
+        // Calculate Y-axis labels
+        const yAxisSteps = 5;
+        const stepSize = (scaleMax - scaleMin) / (yAxisSteps - 1);
+        const yAxisLabels = [];
+        for (let i = 0; i < yAxisSteps; i++) {
+            yAxisLabels.push(Math.round(scaleMax - (i * stepSize)));
+        }
         
         chartContent.innerHTML = `
             <!-- Horizontal grid lines -->
@@ -1142,32 +1583,48 @@ const NarrativePulse = {
             ${this.createGridLines()}
             
             <!-- Y-axis labels for momentum -->
-            <text x="35" y="44" fill="#9ca3af" font-size="10" text-anchor="end">80</text>
-            <text x="35" y="84" fill="#9ca3af" font-size="10" text-anchor="end">60</text>
-            <text x="35" y="124" fill="#9ca3af" font-size="10" text-anchor="end">40</text>
-            <text x="35" y="164" fill="#9ca3af" font-size="10" text-anchor="end">20</text>
-            <text x="35" y="204" fill="#9ca3af" font-size="10" text-anchor="end">0</text>
+            <text x="35" y="44" fill="#9ca3af" font-size="10" text-anchor="end">${yAxisLabels[0]}</text>
+            <text x="35" y="84" fill="#9ca3af" font-size="10" text-anchor="end">${yAxisLabels[1]}</text>
+            <text x="35" y="124" fill="#9ca3af" font-size="10" text-anchor="end">${yAxisLabels[2]}</text>
+            <text x="35" y="164" fill="#9ca3af" font-size="10" text-anchor="end">${yAxisLabels[3]}</text>
+            <text x="35" y="204" fill="#9ca3af" font-size="10" text-anchor="end">${yAxisLabels[4]}</text>
             
             <!-- Y-axis label -->
-            <text x="15" y="130" fill="#6b7280" font-size="10" text-anchor="middle" transform="rotate(-90 15 130)">Mentions</text>
+            <text x="15" y="130" fill="#6b7280" font-size="11" text-anchor="middle" transform="rotate(-90 15 130)">Mentions</text>
             
             <!-- Momentum view paths -->
             ${paths.map(p => {
-                // Create smooth path using our consistent x-positions
-                const pathData = `M ${this.xPositions[0]},${p.yStart} ` +
-                    `Q ${this.xPositions[1]},${p.yStart - (p.yStart - p.yEnd) * 0.3} ` +
-                    `${this.xPositions[2]},${p.yStart - (p.yStart - p.yEnd) * 0.5} ` +
-                    `T ${this.xPositions[3]},${p.yStart - (p.yStart - p.yEnd) * 0.8} ` +
-                    `T ${this.xPositions[4]},${p.yEnd}`;
+                if (!p.dataPoints || p.dataPoints.length === 0) return '';
                 
-                // Calculate Y positions for dots at each data point
-                const yPositions = [
-                    p.yStart,
-                    p.yStart - (p.yStart - p.yEnd) * 0.3,
-                    p.yStart - (p.yStart - p.yEnd) * 0.5,
-                    p.yStart - (p.yStart - p.yEnd) * 0.8,
-                    p.yEnd
-                ];
+                // Use the same scale values as Y-axis labels
+                const chartBottom = 220;
+                const chartTop = 40;
+                const range = chartBottom - chartTop;
+                
+                const yPositions = p.dataPoints.map(value => 
+                    chartBottom - ((value - scaleMin) / (scaleMax - scaleMin)) * range
+                );
+                
+                // Create smooth path data
+                let pathData = '';
+                
+                if (yPositions.length > 1) {
+                    // Different approaches based on number of points
+                    if (yPositions.length <= 5) {
+                        // For 5 or fewer points (30-day view), use quadratic curves
+                        pathData = `M ${this.xPositions[0]},${yPositions[0]}`;
+                        pathData += ` Q ${this.xPositions[1]},${yPositions[1]} ${this.xPositions[2]},${yPositions[2]}`;
+                        if (yPositions.length > 3) {
+                            pathData += ` T ${this.xPositions[3]},${yPositions[3]}`;
+                        }
+                        if (yPositions.length > 4) {
+                            pathData += ` T ${this.xPositions[4]},${yPositions[4]}`;
+                        }
+                    } else {
+                        // For more points (7-day and 90-day), use Catmull-Rom spline
+                        pathData = this.createCatmullRomPath(this.xPositions, yPositions);
+                    }
+                }
                 
                 return `<g class="topic-line chart-transition" data-topic="${p.topic}" data-momentum="${p.momentum}" data-color="${p.color}">
                     <path d="${pathData}" 
@@ -1314,11 +1771,12 @@ const NarrativePulse = {
     showRichTooltip: function(dateIndex, mouseEvent) {
         const tooltip = this.container.querySelector('#chartTooltip');
         const date = this.dateLabels[dateIndex];
-        const dateData = this.topicDataByDate[date];
+        const currentData = this.getCurrentData();
         
-        if (!dateData) {
-            console.error(`No data found for date: ${date}`);
-            return;
+        // For 30-day view, try to use the old structure if available
+        let dateData = null;
+        if (this.currentTimeRange === '30 days' && this.topicDataByDate && this.topicDataByDate[date]) {
+            dateData = this.topicDataByDate[date];
         }
         
         // Clear hide timer
@@ -1336,10 +1794,40 @@ const NarrativePulse = {
         const [month, day] = date.split(' ');
         const formattedDate = `${month} ${day}, 2025`;
         
-        // Get all topics sorted by mentions (excluding metadata)
-        const topics = Object.entries(dateData)
-            .filter(([key]) => key !== 'topEpisodes' && this.selectedTopics.includes(key))
-            .sort((a, b) => b[1].mentions - a[1].mentions);
+        // Build topic data from the new structure
+        const topicStats = [];
+        
+        if (dateData) {
+            // Use old structure for 30-day view
+            const topics = Object.entries(dateData)
+                .filter(([key]) => key !== 'topEpisodes' && this.selectedTopics.includes(key))
+                .sort((a, b) => b[1].mentions - a[1].mentions);
+            
+            topics.forEach(([topic, data]) => {
+                topicStats.push({
+                    topic: topic,
+                    mentions: data.mentions,
+                    color: this.getTopicColor(topic),
+                    weekOverWeek: data.weekOverWeek || 0
+                });
+            });
+        } else {
+            // Use new structure for 7-day and 90-day views
+            this.selectedTopics.forEach(topic => {
+                const topicData = currentData.topics[topic];
+                if (topicData && topicData.dataPoints[dateIndex] !== undefined) {
+                    topicStats.push({
+                        topic: topic,
+                        mentions: topicData.dataPoints[dateIndex],
+                        color: topicData.color,
+                        weekOverWeek: 0 // Not available in new structure
+                    });
+                }
+            });
+            
+            // Sort by mentions
+            topicStats.sort((a, b) => b.mentions - a.mentions);
+        }
         
         // Build tooltip HTML
         let html = `
@@ -1348,33 +1836,19 @@ const NarrativePulse = {
                 <div class="tooltip-divider"></div>
         `;
         
-        topics.forEach(([topic, data]) => {
-            const color = this.getTopicColor(topic);
-            const changeText = data.weekOverWeek > 0 ? 
-                `+${data.weekOverWeek}% w/w` : '';
-            
-            // Limit sources to 2
-            const sources = data.podcasts ? data.podcasts.slice(0, 2).join(', ') : '';
-            
-            // Truncate quote to 5 words
-            const truncateQuote = (quote) => {
-                if (!quote) return '';
-                const words = quote.split(' ');
-                return words.length > 5 ? 
-                    words.slice(0, 5).join(' ') + '...' : 
-                    quote;
-            };
-            
-            const isFaded = data.mentions < 10;
+        topicStats.forEach(stat => {
+            const changeText = stat.weekOverWeek > 0 ? 
+                `+${stat.weekOverWeek}% w/w` : '';
+            const isFaded = stat.mentions < 10;
             
             html += `
                 <div class="topic-section ${isFaded ? 'faded-topic' : ''}">
                     <div class="topic-header">
-                        <span class="topic-dot" style="background-color: ${color}"></span>
-                        <span class="topic-name">${topic}</span>
+                        <span class="topic-dot" style="background-color: ${stat.color}"></span>
+                        <span class="topic-name">${stat.topic}</span>
                     </div>
                     <div class="topic-stats">
-                        ${data.mentions} mentions${changeText ? ' • ' + changeText : ''}
+                        ${stat.mentions} mentions${changeText ? ' • ' + changeText : ''}
                     </div>
                 </div>
             `;
@@ -1388,11 +1862,21 @@ const NarrativePulse = {
     
     // Get topic color
     getTopicColor: function(topic) {
+        const currentData = this.getCurrentData();
+        const topicData = currentData.topics[topic];
+        if (topicData && topicData.color) {
+            return topicData.color;
+        }
+        
+        // Fallback colors
         const colors = {
             'AI Agents': '#4a7c59',
             'Capital Efficiency': '#f4a261',
             'DePIN': '#5a6c8c',
-            'B2B SaaS': '#c77d7d'
+            'B2B SaaS': '#c77d7d',
+            'Developer Tools': '#8a68a8',
+            'Vertical SaaS': '#7d9c8d',
+            'AI Infrastructure': '#a87c68'
         };
         return colors[topic] || '#6b7280';
     },
@@ -1544,7 +2028,7 @@ const NarrativePulse = {
                 );
                 // Ensure we have at least one topic
                 if (this.selectedTopics.length === 0) {
-                    this.selectedTopics = this.availableTopics.slice(0, 4);
+                    this.selectedTopics = [...this.availableTopics];
                 }
             } catch (e) {
                 console.error('Error loading saved topics:', e);
@@ -1590,12 +2074,13 @@ const NarrativePulse = {
         // Topic stats for the demo
         const topicStats = {
             'AI Agents': { momentum: '+85%', mentions: 147 },
+            'AI Infrastructure': { momentum: '+92%', mentions: 156 },
             'Capital Efficiency': { momentum: '+17%', mentions: 89 },
             'DePIN': { momentum: '+190%', mentions: 201 },
+            'Crypto/Web3': { momentum: '+45%', mentions: 78 },
             'B2B SaaS': { momentum: '+3%', mentions: 43 },
             'Developer Tools': { momentum: '+47%', mentions: 94 },
-            'Vertical SaaS': { momentum: '+65%', mentions: 112 },
-            'AI Infrastructure': { momentum: '+92%', mentions: 156 }
+            'Vertical SaaS': { momentum: '+65%', mentions: 112 }
         };
         
         this.availableTopics.forEach(topic => {
@@ -1756,25 +2241,17 @@ const NarrativePulse = {
     
     updateLegend: function() {
         const legend = this.container.querySelector('.pulse-legend');
-        const topicColors = {
-            'AI Agents': '#4a7c59',
-            'Capital Efficiency': '#f4a261',
-            'DePIN': '#5a6c8c',
-            'B2B SaaS': '#c77d7d',
-            'Developer Tools': '#8a68a8',
-            'Vertical SaaS': '#7d9c8d',
-            'AI Infrastructure': '#a87c68'
-        };
+        const currentData = this.getCurrentData();
         
-        const topicMomentum = {
-            'AI Agents': '+85%',
-            'Capital Efficiency': '+17%',
-            'DePIN': '+190%',
-            'B2B SaaS': '+3%',
-            'Developer Tools': '+47%',
-            'Vertical SaaS': '+65%',
-            'AI Infrastructure': '+92%'
-        };
+        // Get colors and momentum from current data
+        const topicColors = {};
+        const topicMomentum = {};
+        
+        Object.keys(currentData.topics).forEach(topic => {
+            const topicData = currentData.topics[topic];
+            topicColors[topic] = topicData.color;
+            topicMomentum[topic] = topicData.displayMomentum;
+        });
         
         legend.innerHTML = '';
         this.selectedTopics.forEach(topic => {

@@ -1,0 +1,46 @@
+/* Episode Panel Clean Fix - Override any conflicting styles */
+
+/* Ensure backdrop is truly above everything except the panel itself */
+.episode-panel-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(26, 26, 46, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    z-index: 99998 !important; /* Very high to cover everything */
+    pointer-events: auto !important;
+}
+
+/* Ensure panel is above backdrop */
+.episode-panel-container {
+    z-index: 99999 !important; /* Higher than backdrop */
+}
+
+/* Hide any elements that might be glitching through */
+body.panel-open .intelligence-brief,
+body.panel-open .pie-charts-container,
+body.panel-open .synthesis-sidebar {
+    /* Force these to stay behind the backdrop */
+    position: relative !important;
+    z-index: auto !important;
+}
+
+/* Ensure main content doesn't move or transform */
+body.panel-open main,
+body.panel-open .main-content,
+body.panel-open .dashboard-content {
+    transform: none !important;
+    margin-right: 0 !important;
+    transition: none !important;
+}
+
+/* Fix any potential overflow issues */
+body.panel-open {
+    overflow: hidden !important;
+    position: relative !important;
+}

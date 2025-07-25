@@ -1,4 +1,4 @@
-// VCPulse - Venture Capital Intelligence Demo Data
+// PatternFlow - Venture Capital Intelligence Demo Data
 // All demo data extracted from demo.html for maintainability
 
 // ============================================

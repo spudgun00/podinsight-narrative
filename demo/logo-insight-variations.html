@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthea.ai Logo Insight Variations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+        
+        h1 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        
+        .variation-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .variation-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        
+        .variation-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .size-item {
+            text-align: center;
+        }
+        
+        .size-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            min-height: 80px;
+        }
+        
+        .logo-container.dark {
+            background: #1a1a2e;
+            border-color: #2a2a3e;
+        }
+        
+        .background-test {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .test-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .sub-variations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .sub-variation {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .sub-variation-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .current-logo {
+            background: #e8f0ea;
+            border: 2px solid #4a7c59;
+        }
+        
+        /* Logo styles matching current implementation */
+        .logo-with-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-text-group {
+            text-align: left;
+        }
+        
+        .logo-name {
+            font-weight: 700;
+            color: #2C2C2C;
+            line-height: 1;
+            margin: 0;
+        }
+        
+        .logo-tagline {
+            color: #5A5A5A;
+            line-height: 1.2;
+            margin: 2px 0 0 0;
+        }
+        
+        /* Size-specific text styles */
+        .size-16 .logo-name { font-size: 10px; }
+        .size-16 .logo-tagline { font-size: 6px; }
+        
+        .size-48 .logo-name { font-size: 18px; }
+        .size-48 .logo-tagline { font-size: 10px; }
+        
+        .size-200 .logo-name { font-size: 48px; }
+        .size-200 .logo-tagline { font-size: 26px; }
+        
+        /* Dark mode text */
+        .dark .logo-name { color: white; }
+        .dark .logo-tagline { color: #B8B8B8; }
+    </style>
+</head>
+<body>
+    <h1>Synthea.ai Logo Insight Variations</h1>
+    <p class="subtitle">Testing different approaches to add a central "insight" element to the logo</p>
+    
+    <!-- Current Logo -->
+    <div class="variation-section current-logo">
+        <h2 class="variation-title">Current Logo (Reference)</h2>
+        <p class="variation-description">The existing logo for comparison</p>
+        
+        <div class="size-grid">
+            <div class="size-item">
+                <div class="size-label">16px (Favicon)</div>
+                <div class="logo-container">
+                    <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(3, 2)" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3">
+                            <circle r="14.3" cx="15.4" cy="15.4" />
+                            <circle r="14.3" cx="33" cy="15.4" />
+                            <circle r="14.3" cx="24.2" cy="30.8" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">48px (Standard)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-48">
+                        <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(3, 2)" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3">
+                                <circle r="14.3" cx="15.4" cy="15.4" />
+                                <circle r="14.3" cx="33" cy="15.4" />
+                                <circle r="14.3" cx="24.2" cy="30.8" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">200px (Large)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-200">
+                        <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(3, 2)" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3">
+                                <circle r="14.3" cx="15.4" cy="15.4" />
+                                <circle r="14.3" cx="33" cy="15.4" />
+                                <circle r="14.3" cx="24.2" cy="30.8" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Variation 1: Subtle Gradient -->
+    <div class="variation-section">
+        <h2 class="variation-title">Variation 1: Subtle Gradient Approach</h2>
+        <p class="variation-description">Radial gradient in the center overlap area creating a soft illumination effect</p>
+        
+        <div class="size-grid">
+            <div class="size-item">
+                <div class="size-label">16px (Favicon)</div>
+                <div class="logo-container">
+                    <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="centerGlow16">
+                                <stop offset="0%" style="stop-color:#5d8f6a;stop-opacity:0.4" />
+                                <stop offset="100%" style="stop-color:#4a7c59;stop-opacity:0.2" />
+                            </radialGradient>
+                            <filter id="blur16">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+                            </filter>
+                        </defs>
+                        <g transform="translate(3, 2)">
+                            <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <!-- Center glow -->
+                            <circle r="8" cx="24.2" cy="20.5" fill="url(#centerGlow16)" filter="url(#blur16)" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">48px (Standard)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-48">
+                        <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="centerGlow48">
+                                    <stop offset="0%" style="stop-color:#5d8f6a;stop-opacity:0.4" />
+                                    <stop offset="100%" style="stop-color:#4a7c59;stop-opacity:0.2" />
+                                </radialGradient>
+                                <filter id="blur48">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" />
+                                </filter>
+                            </defs>
+                            <g transform="translate(3, 2)">
+                                <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <!-- Center glow -->
+                                <circle r="8" cx="24.2" cy="20.5" fill="url(#centerGlow48)" filter="url(#blur48)" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">200px (Large)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-200">
+                        <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="centerGlow200">
+                                    <stop offset="0%" style="stop-color:#5d8f6a;stop-opacity:0.4" />
+                                    <stop offset="100%" style="stop-color:#4a7c59;stop-opacity:0.2" />
+                                </radialGradient>
+                                <filter id="blur200">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+                                </filter>
+                            </defs>
+                            <g transform="translate(3, 2)">
+                                <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <!-- Center glow -->
+                                <circle r="8" cx="24.2" cy="20.5" fill="url(#centerGlow200)" filter="url(#blur200)" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Variation 2: Bold Accent Color -->
+    <div class="variation-section">
+        <h2 class="variation-title">Variation 2: Bold Accent Color</h2>
+        <p class="variation-description">Small filled circle in the center overlap area - three color options</p>
+        
+        <div class="sub-variations">
+            <!-- Warm Gold -->
+            <div class="sub-variation">
+                <h3 class="sub-variation-title">2a: Warm Gold (#D4A574)</h3>
+                <div class="size-grid">
+                    <div class="size-item">
+                        <div class="size-label">16px</div>
+                        <div class="logo-container">
+                            <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2a">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#D4A574" filter="url(#dotShadow2a)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">48px</div>
+                        <div class="logo-container">
+                            <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2a48">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#D4A574" filter="url(#dotShadow2a48)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">200px</div>
+                        <div class="logo-container">
+                            <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2a200">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#D4A574" filter="url(#dotShadow2a200)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Deep Amber -->
+            <div class="sub-variation">
+                <h3 class="sub-variation-title">2b: Deep Amber (#F59E0B)</h3>
+                <div class="size-grid">
+                    <div class="size-item">
+                        <div class="size-label">16px</div>
+                        <div class="logo-container">
+                            <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2b">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#F59E0B" filter="url(#dotShadow2b)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">48px</div>
+                        <div class="logo-container">
+                            <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2b48">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#F59E0B" filter="url(#dotShadow2b48)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">200px</div>
+                        <div class="logo-container">
+                            <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2b200">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#F59E0B" filter="url(#dotShadow2b200)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Muted Teal -->
+            <div class="sub-variation">
+                <h3 class="sub-variation-title">2c: Muted Teal (#0891B2)</h3>
+                <div class="size-grid">
+                    <div class="size-item">
+                        <div class="size-label">16px</div>
+                        <div class="logo-container">
+                            <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2c">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#0891B2" filter="url(#dotShadow2c)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">48px</div>
+                        <div class="logo-container">
+                            <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2c48">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#0891B2" filter="url(#dotShadow2c48)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="size-item">
+                        <div class="size-label">200px</div>
+                        <div class="logo-container">
+                            <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <filter id="dotShadow2c200">
+                                        <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                    </filter>
+                                </defs>
+                                <g transform="translate(3, 2)">
+                                    <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                    <!-- Center dot -->
+                                    <circle r="4" cx="24.2" cy="20.5" fill="#0891B2" filter="url(#dotShadow2c200)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Variation 3: Geometric Star -->
+    <div class="variation-section">
+        <h2 class="variation-title">Variation 3: Geometric Star Approach</h2>
+        <p class="variation-description">4-pointed star in center overlap, rotated 45° for diamond orientation</p>
+        
+        <div class="size-grid">
+            <div class="size-item">
+                <div class="size-label">16px (Favicon)</div>
+                <div class="logo-container">
+                    <svg width="16" height="16" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="starGrad16" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:0.15" />
+                                <stop offset="100%" style="stop-color:#6aac7a;stop-opacity:0.15" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(3, 2)">
+                            <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                            <!-- Star -->
+                            <path d="M 24.2 15.5 L 27.2 20.5 L 24.2 25.5 L 21.2 20.5 Z" fill="url(#starGrad16)" transform="rotate(45, 24.2, 20.5)" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">48px (Standard)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-48">
+                        <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="starGrad48" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:0.15" />
+                                    <stop offset="100%" style="stop-color:#6aac7a;stop-opacity:0.15" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(3, 2)">
+                                <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <!-- Star -->
+                                <path d="M 24.2 15.5 L 27.2 20.5 L 24.2 25.5 L 21.2 20.5 Z" fill="url(#starGrad48)" transform="rotate(45, 24.2, 20.5)" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="size-item">
+                <div class="size-label">200px (Large)</div>
+                <div class="logo-container">
+                    <div class="logo-with-text size-200">
+                        <svg width="200" height="200" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="starGrad200" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:0.15" />
+                                    <stop offset="100%" style="stop-color:#6aac7a;stop-opacity:0.15" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(3, 2)">
+                                <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <!-- Star -->
+                                <path d="M 24.2 15.5 L 27.2 20.5 L 24.2 25.5 L 21.2 20.5 Z" fill="url(#starGrad200)" transform="rotate(45, 24.2, 20.5)" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dark Background Test -->
+    <div class="variation-section">
+        <h2 class="variation-title">Dark Background Test</h2>
+        <p class="variation-description">Testing visibility on dark backgrounds</p>
+        
+        <div class="background-test">
+            <div>
+                <div class="test-label">Current Logo</div>
+                <div class="logo-container dark">
+                    <div class="logo-with-text size-48">
+                        <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(3, 2)" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3">
+                                <circle r="14.3" cx="15.4" cy="15.4" />
+                                <circle r="14.3" cx="33" cy="15.4" />
+                                <circle r="14.3" cx="24.2" cy="30.8" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="test-label">Bold Accent (Warm Gold)</div>
+                <div class="logo-container dark">
+                    <div class="logo-with-text size-48">
+                        <svg width="48" height="48" viewBox="0 0 52 48" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <filter id="dotShadowDark">
+                                    <feDropShadow dx="0" dy="0" stdDeviation="1" flood-opacity="0.1"/>
+                                </filter>
+                            </defs>
+                            <g transform="translate(3, 2)">
+                                <circle r="14.3" cx="15.4" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="33" cy="15.4" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="14.3" cx="24.2" cy="30.8" fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="3" />
+                                <circle r="4" cx="24.2" cy="20.5" fill="#D4A574" filter="url(#dotShadowDark)" />
+                            </g>
+                        </svg>
+                        <div class="logo-text-group">
+                            <div class="logo-name">synthea.ai</div>
+                            <div class="logo-tagline">Synthesized intelligence for venture capital</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 60px; padding: 20px; background: #e8f0ea; border-radius: 8px;">
+        <h3 style="margin-top: 0;">Implementation Notes</h3>
+        <ul style="font-size: 14px; color: #666;">
+            <li>All variations maintain the original 3px stroke weight on circles</li>
+            <li>Center elements are positioned at the mathematical center of overlap</li>
+            <li>The bold accent dots are exactly 8px in diameter as requested</li>
+            <li>Star approach uses a 10px diameter with 45° rotation</li>
+            <li>All variations tested at 16px, 48px, and 200px sizes</li>
+            <li>Easy rollback: Simply remove the center element to return to current design</li>
+        </ul>
+    </div>
+</body>
+</html>

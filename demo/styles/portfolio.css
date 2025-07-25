@@ -21,7 +21,6 @@
 /* Panel Container */
 .portfolio-panel {
     position: fixed;
-    right: 0;
     top: 0;
     height: 100vh;
     width: 420px;
@@ -30,16 +29,32 @@
         -2px 0 12px rgba(0, 0, 0, 0.08),
         -8px 0 32px rgba(0, 0, 0, 0.12),
         -16px 0 48px rgba(0, 0, 0, 0.16);
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
     z-index: 1000;
     display: flex;
     flex-direction: column;
     max-width: 80vw;
+    overflow-y: auto;    /* Keep vertical scroll functionality */
+    
+    /* Position off-screen to the right */
+    right: -420px;
+    transition: right 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .portfolio-panel[data-state="open"] {
-    transform: translateX(0);
+    /* Slide in from right */
+    right: 0;
+    animation: slideIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes slideIn {
+    from {
+        right: -420px;
+        opacity: 0.8;
+    }
+    to {
+        right: 0;
+        opacity: 1;
+    }
 }
 
 /* Panel Header */
@@ -82,16 +97,64 @@
     padding: 24px;
 }
 
+/* Stats Summary */
+.portfolio-panel .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(74, 124, 89, 0.03) 0%, rgba(90, 108, 140, 0.03) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+}
+
+.portfolio-panel .stat-item {
+    text-align: center;
+}
+
+.portfolio-panel .stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--deep-ink);
+    margin-bottom: 4px;
+}
+
+.portfolio-panel .stat-label {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.portfolio-panel .stat-item.trending-positive .stat-value {
+    color: var(--sage);
+}
+
+.portfolio-panel .stat-item.trending-negative .stat-value {
+    color: var(--dusty-rose);
+}
+
 /* Quick Add Section */
 .portfolio-panel .quick-add {
     margin-bottom: 32px;
 }
 
-.portfolio-panel .quick-add h3 {
+.portfolio-panel .quick-add-section {
+    margin-bottom: 40px;
+}
+
+.portfolio-panel .quick-add-section:last-of-type {
+    margin-bottom: 32px;
+}
+
+.portfolio-panel .section-label {
     font-size: 13px;
-    font-weight: 600;
-    color: #666;
-    margin-bottom: 12px;
+    font-weight: 700;
+    color: var(--deep-ink);
+    margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -103,11 +166,17 @@
 
 .portfolio-panel .company-input {
     flex: 1;
-    padding: 10px 14px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 6px;
+    padding: 12px 16px;
+    border: 2px solid var(--gray-200);
+    border-radius: 8px;
     font-size: 14px;
+    background: white;
     transition: all 0.2s ease;
+}
+
+.portfolio-panel .company-input::placeholder {
+    color: var(--gray-400);
+    font-weight: 400;
 }
 
 .portfolio-panel .company-input:focus {
@@ -135,11 +204,31 @@
 
 /* Import Section */
 .portfolio-panel .import-section {
+    margin-top: 24px;
     margin-bottom: 32px;
     padding: 20px;
-    background: var(--warm-paper);
-    border-radius: 8px;
+    background: linear-gradient(135deg, var(--warm-paper) 0%, rgba(74, 124, 89, 0.02) 100%);
+    border-radius: 12px;
     border: 1px solid var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-panel .import-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(74, 124, 89, 0.02) 0%, transparent 70%);
+    animation: rotate 30s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .portfolio-panel .import-section p {
@@ -165,8 +254,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     transition: all 0.2s ease;
+}
+
+.portfolio-panel .import-button svg {
+    width: 16px;
+    height: 16px;
+    color: var(--sage);
 }
 
 .portfolio-panel .import-button:hover {
@@ -194,7 +289,8 @@
 
 .portfolio-panel .company-count {
     font-size: 13px;
-    color: #666;
+    color: var(--amber-glow);
+    font-weight: 600;
 }
 
 /* Company Cards */
@@ -203,9 +299,9 @@
     background: white;
     border: 1px solid var(--border-subtle);
     border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 12px;
-    transition: all 0.2s ease;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
     cursor: pointer;
     overflow: hidden;
 }
@@ -213,22 +309,27 @@
 .portfolio-panel .company-card:hover {
     border-color: var(--sage);
     transform: translateX(-4px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+                0 0 0 1px rgba(74, 124, 89, 0.2);
 }
 
 .portfolio-panel .company-card.threat {
     border-left: 3px solid var(--dusty-rose);
+    background: linear-gradient(135deg, white 0%, rgba(199, 125, 125, 0.03) 100%);
 }
 
 .portfolio-panel .company-card.validated {
     border-left: 3px solid var(--sage);
+    background: linear-gradient(135deg, white 0%, rgba(74, 124, 89, 0.03) 100%);
 }
 
 .portfolio-panel .company-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    padding-right: 40px; /* Space for delete button */
+}
+
+.portfolio-panel .company-mention {
+    margin-bottom: 12px;
 }
 
 .portfolio-panel .company-name {
@@ -238,11 +339,16 @@
 }
 
 .portfolio-panel .mention-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 13px;
     color: #666;
+}
+
+.portfolio-panel .mention-badge svg {
+    width: 12px;
+    height: 12px;
 }
 
 .portfolio-panel .mention-badge.positive {
@@ -281,11 +387,38 @@
     font-weight: 500;
 }
 
+.portfolio-panel .watchlist-label {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
 /* Empty State */
 .portfolio-panel .empty-state {
     text-align: center;
     padding: 48px 24px;
     color: #666;
+}
+
+.portfolio-panel .empty-icon {
+    margin-bottom: 16px;
+    color: var(--gray-400);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.portfolio-panel .empty-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.7; }
 }
 
 .portfolio-panel .empty-state h4 {
@@ -303,8 +436,8 @@
 /* Delete Button */
 .portfolio-panel .delete-button {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
     width: 28px;
     height: 28px;
     border: none;
@@ -355,6 +488,63 @@
     font-size: 12px;
     color: #666;
     text-align: center;
+}
+
+/* Watchlist Section Specific */
+.portfolio-panel .watchlist-section {
+    margin-top: 32px;
+}
+
+.portfolio-panel .company-list-section {
+    margin-bottom: 32px;
+}
+
+.portfolio-panel .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.portfolio-panel .list-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--deep-ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.portfolio-panel .section-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--sage);
+}
+
+.portfolio-panel .section-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Watchlist Specific Styles */
+.portfolio-panel .company-card.watchlist {
+    border-left: 3px solid #F59E0B;
+}
+
+.portfolio-panel .mention-badge.watchlist {
+    color: #F59E0B;
+}
+
+.portfolio-panel .company-card.watchlist:hover {
+    border-color: #F59E0B;
+    transform: translateX(-4px);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.portfolio-panel .company-card.watchlist .delete-button:hover {
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
 }
 
 /* Smart Highlighting System */

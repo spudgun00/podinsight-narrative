@@ -1,0 +1,106 @@
+<!-- Topic Customization Panel Reference Implementation -->
+<!-- This file shows the complete HTML structure for the topic customization feature -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic Customization Panel - Reference Implementation</title>
+    <style>
+        /* Panel styling matches Portfolio panel pattern */
+        .topic-customization-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 26, 46, 0.35);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .topic-customization-backdrop.active {
+            opacity: 1;
+        }
+        
+        .topic-customization-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 420px;
+            background: white;
+            box-shadow: -2px 0 12px rgba(0, 0, 0, 0.08);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 1000;
+        }
+        
+        .topic-customization-panel[data-state="open"] {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>Topic Customization Panel - Implementation Details</h1>
+    
+    <h2>Key Features Implemented:</h2>
+    <ol>
+        <li><strong>Customize Button:</strong> Added ⚙️ Customize Topics button in chart header</li>
+        <li><strong>Right-Side Panel:</strong> 420px wide sliding panel matching Portfolio design</li>
+        <li><strong>Topic Selection:</strong>
+            <ul>
+                <li>7 topics available (4 default + 3 new)</li>
+                <li>Max 4 selections enforced</li>
+                <li>Min 1 selection required</li>
+                <li>Checkbox-style selection with visual feedback</li>
+            </ul>
+        </li>
+        <li><strong>Mock Data:</strong> Added data for Developer Tools, Vertical SaaS, AI Infrastructure</li>
+        <li><strong>Persistence:</strong> Selections saved to localStorage</li>
+        <li><strong>Smooth Transitions:</strong> Chart updates dynamically when topics change</li>
+    </ol>
+    
+    <h2>Demo Flow:</h2>
+    <p>The exact demo flow requested has been implemented:</p>
+    <ol>
+        <li>User clicks Customize button</li>
+        <li>Panel slides in from right</li>
+        <li>User unchecks B2B SaaS (lowest momentum)</li>
+        <li>User checks Developer Tools</li>
+        <li>Apply button becomes enabled</li>
+        <li>Click Apply - chart updates smoothly</li>
+        <li>Toast notification confirms update</li>
+    </ol>
+    
+    <h2>Files Modified:</h2>
+    <ul>
+        <li><code>demo/features/narrative-pulse/narrative-pulse.html</code> - Added button and panel HTML</li>
+        <li><code>demo/features/narrative-pulse/narrative-pulse.js</code> - Added customization logic</li>
+        <li><code>demo/styles/components.css</code> - Added panel styling</li>
+    </ul>
+    
+    <h2>Topic Data:</h2>
+    <pre>
+    Default Topics:
+    - AI Agents: +85% momentum, 147 mentions
+    - Capital Efficiency: +17% momentum, 89 mentions
+    - DePIN: +190% momentum, 201 mentions
+    - B2B SaaS: +3% momentum, 43 mentions
+    
+    Additional Topics:
+    - Developer Tools: +47% momentum, 94 mentions
+    - Vertical SaaS: +65% momentum, 112 mentions
+    - AI Infrastructure: +92% momentum, 156 mentions
+    </pre>
+    
+    <h2>Technical Implementation:</h2>
+    <ul>
+        <li>State management in NarrativePulse object</li>
+        <li>Event delegation for topic selection</li>
+        <li>Dynamic chart recreation on topic change</li>
+        <li>LocalStorage key: 'narrativePulse.selectedTopics'</li>
+        <li>Toast notifications for user feedback</li>
+        <li>Smooth cubic-bezier transitions</li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!-- Synthea.ai Logo Component -->
+<!-- 
+  Usage: Include this HTML structure wherever you need the logo.
+  Customize size by adjusting the scale transform on .synthea-logo-component
+-->
+
+<style>
+  .synthea-logo-component {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .synthea-logo-mark {
+    position: relative;
+    width: 51.2px; /* Exact width for 40% overlap */
+    height: 48.6px; /* Exact height for triangular arrangement */
+    flex-shrink: 0;
+  }
+  
+  .synthea-logo-circle {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #4a7c59;
+    opacity: 0.85;
+  }
+  
+  /* Top left circle */
+  .synthea-logo-circle:nth-child(1) {
+    left: 0;
+    top: 0;
+  }
+  
+  /* Top right circle - 40% overlap */
+  .synthea-logo-circle:nth-child(2) {
+    left: 19.2px;
+    top: 0;
+  }
+  
+  /* Bottom center circle */
+  .synthea-logo-circle:nth-child(3) {
+    left: 9.6px;
+    top: 16.6px;
+  }
+  
+  .synthea-logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .synthea-logo-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2C2C2C;
+    line-height: 1;
+    margin: 0;
+  }
+  
+  .synthea-logo-tagline {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B6B6B;
+    line-height: 1.2;
+    margin: 0;
+  }
+  
+  /* Size variants */
+  .synthea-logo-component.small {
+    transform: scale(0.75);
+    transform-origin: left center;
+  }
+  
+  .synthea-logo-component.large {
+    transform: scale(1.5);
+    transform-origin: left center;
+  }
+  
+  .synthea-logo-component.retina {
+    transform: scale(2);
+    transform-origin: left center;
+  }
+  
+  /* Dark mode variant */
+  .synthea-logo-component.dark .synthea-logo-name {
+    color: #FFFFFF;
+  }
+  
+  .synthea-logo-component.dark .synthea-logo-tagline {
+    color: #B8B8B8;
+  }
+  
+  /* Compact variant (no tagline) */
+  .synthea-logo-component.compact .synthea-logo-tagline {
+    display: none;
+  }
+</style>
+
+<!-- Logo Component -->
+<div class="synthea-logo-component">
+  <div class="synthea-logo-mark">
+    <div class="synthea-logo-circle"></div>
+    <div class="synthea-logo-circle"></div>
+    <div class="synthea-logo-circle"></div>
+  </div>
+  <div class="synthea-logo-text">
+    <h1 class="synthea-logo-name">synthea.ai</h1>
+    <p class="synthea-logo-tagline">Synthesized intelligence for venture capital</p>
+  </div>
+</div>
+
+<!-- Example usage variants -->
+<div style="margin-top: 40px; padding: 20px; background: #f5f5f5;">
+  <h3>Size Variants:</h3>
+  
+  <!-- Small -->
+  <div class="synthea-logo-component small">
+    <div class="synthea-logo-mark">
+      <div class="synthea-logo-circle"></div>
+      <div class="synthea-logo-circle"></div>
+      <div class="synthea-logo-circle"></div>
+    </div>
+    <div class="synthea-logo-text">
+      <h1 class="synthea-logo-name">synthea.ai</h1>
+      <p class="synthea-logo-tagline">Synthesized intelligence for venture capital</p>
+    </div>
+  </div>
+  
+  <br><br>
+  
+  <!-- Compact (no tagline) -->
+  <div class="synthea-logo-component compact">
+    <div class="synthea-logo-mark">
+      <div class="synthea-logo-circle"></div>
+      <div class="synthea-logo-circle"></div>
+      <div class="synthea-logo-circle"></div>
+    </div>
+    <div class="synthea-logo-text">
+      <h1 class="synthea-logo-name">synthea.ai</h1>
+      <p class="synthea-logo-tagline">Synthesized intelligence for venture capital</p>
+    </div>
+  </div>
+</div>

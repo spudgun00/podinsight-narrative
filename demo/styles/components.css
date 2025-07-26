@@ -148,15 +148,16 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 2px;
         }
         
         /* Logo Mark - SVG */
         .logo-mark {
-            width: 35px;
-            height: 35px;
+            width: 56px;
+            height: 56px;
             transition: opacity 0.2s ease;
             cursor: pointer;
+            transform: translateY(8px); /* Drop by 8px for visual balance */
         }
         
         /* Hover state for logo mark */
@@ -169,7 +170,7 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            padding-top: 2px; /* Fine-tune baseline alignment */
+            justify-content: space-between;
         }
         
         .logo {
@@ -178,16 +179,17 @@
             font-weight: 600; /* Semi-Bold */
             color: #2C2C2C;
             line-height: 1;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.11em;
         }
         
         .tagline {
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 400; /* Regular */
-            color: #6B6B6B;
+            color: #B5B5B5;
             line-height: 1;
             letter-spacing: 0.01em;
+            text-transform: lowercase;
         }
         .ticker-value {
             color: var(--sage);
@@ -366,6 +368,7 @@
             color: var(--gray-600) !important;
             font-weight: 400 !important;      /* Normal weight, not bold */
             margin: 0;
+            letter-spacing: 0.01em;           /* Subtle letter spacing */
         }
         
         /* Uppercase subtitle variant for inline headers like "PATTERN EMERGENCE • LAST 48 HOURS" */
@@ -570,13 +573,15 @@
         }
         .all-episodes-link {
             font-size: 0.875rem;
-            color: var(--sage);
+            color: var(--gray-600);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 400;
             transition: all 0.2s ease;
+            opacity: 0.8;
         }
         .all-episodes-link:hover {
-            color: #3d6348;
+            color: var(--sage);
+            opacity: 1;
         }
         /* Narrative Feed Section - Enhanced with Expandable Entries */
         .narrative-feed {
@@ -1686,6 +1691,146 @@
             color: var(--gray-600);
             line-height: 1.5;
         }
+        
+        /* Tracked Topics Styles */
+        .tracked-topics-header {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .signal-item.tracked-topic {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .topic-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+        
+        .topic-momentum {
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 0.025em;
+        }
+        
+        .topic-stats {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            margin-bottom: 0.375rem;
+        }
+        
+        .topic-keywords {
+            font-size: 0.813rem;
+            color: var(--gray-500);
+            font-style: italic;
+            margin-bottom: 0.375rem;
+        }
+        
+        .topic-context {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+        
+        /* Portfolio Empty State */
+        .portfolio-empty-state {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .empty-state-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state-subtitle {
+            font-size: 0.813rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state-message {
+            background: var(--warm-paper);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        
+        .empty-state-status {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        .empty-state-benefits {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .benefit-text {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+            text-align: left;
+        }
+        
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .benefit-list li {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            padding: 0.375rem 0;
+            position: relative;
+            padding-left: 1.25rem;
+            text-align: left;
+        }
+        
+        .benefit-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+        }
+        
+        .configure-portfolio-link {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--sage);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .configure-portfolio-link:hover {
+            color: var(--deep-ink);
+            transform: translateX(3px);
+        }
+        
         /* Backdrop for dimming main content */
         .panel-backdrop {
             position: fixed;
@@ -2792,4 +2937,213 @@ body.portfolio-open {
 .episode-card:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
     transform: translateY(-2px);
+}
+
+/* ===== CRYPTO-PROFESSIONAL ENHANCEMENTS ===== */
+
+/* Enhance cards with subtle depth - maintain warm aesthetic */
+.signal-card, .episode-card, .narrative-card {
+    /* Keep existing styles and add subtle shadow */
+    box-shadow: var(--shadow-subtle);
+    transition: box-shadow 0.3s ease;
+}
+
+.signal-card:hover, .episode-card:hover, .narrative-card:hover {
+    box-shadow: var(--shadow-medium);
+    /* NO glows or trading-terminal effects */
+}
+
+/* Narrative momentum indicators - thoughtful not urgent */
+.momentum-indicator {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    background-color: var(--crypto-purple-light);
+    color: var(--crypto-purple);
+}
+
+.momentum-positive {
+    color: var(--professional-green);
+    /* No animations or urgency */
+}
+
+.momentum-negative {
+    color: var(--professional-red);
+    /* No flashing or alerts */
+}
+
+/* Consensus visualization - analytical not actionable */
+.consensus-level {
+    background: linear-gradient(90deg, 
+        var(--dusty-rose) 0%, 
+        var(--amber-glow) 50%, 
+        var(--sage) 100%
+    );
+    /* Warm gradient suggesting evolution not action */
+}
+
+/* Subtle purple accent for navigation and active states */
+.nav-active, .tab-active {
+    border-bottom: 2px solid var(--crypto-purple);
+    /* Subtle nod to crypto */
+}
+
+/* Topic badges in Narrative Pulse */
+.topic-badge {
+    /* Keep existing warm colors but add subtle purple on hover */
+    transition: all 0.3s ease;
+}
+
+.topic-badge:hover {
+    border-color: var(--crypto-purple);
+}
+
+/* Time-based gradient for narrative evolution */
+.narrative-timeline {
+    background: linear-gradient(180deg, 
+        var(--warm-paper) 0%, 
+        var(--light-sage) 100%
+    );
+    /* Suggests flow of time and ideas */
+}
+
+/* Enhanced priority colors using new professional sentiment colors */
+.episode-card.priority-critical {
+    border-left-color: var(--professional-red) !important;
+}
+
+.episode-card.priority-opportunity {
+    border-left-color: var(--professional-green) !important;
+}
+
+/* Protocol name styling - monospace for crypto elements */
+.protocol-name {
+    font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    color: var(--text-primary-enhanced);
+}
+
+/* Percentage values with proper formatting */
+.percentage-value {
+    font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+}
+
+/* Enhanced synthesis text for better readability */
+.synthesis-text, .narrative-summary {
+    line-height: 1.8;
+    font-size: 16px;
+    color: var(--text-primary-enhanced);
+    letter-spacing: -0.01em;
+}
+
+/* ===== SUBTLE VISUAL ENHANCEMENTS WITH PURPLE ACCENTS ===== */
+
+/* Enhanced filter select with subtle purple on active */
+.podcast-filter-select:focus {
+    outline: none;
+    border-color: var(--crypto-purple);
+    box-shadow: 0 0 0 3px var(--crypto-purple-light);
+}
+
+/* Control buttons with purple accent on active state */
+.control-button.active {
+    background: var(--crypto-purple-light);
+    border-color: var(--crypto-purple);
+    color: var(--crypto-purple);
+}
+
+.control-button.active:hover {
+    background: var(--crypto-purple);
+    color: white;
+}
+
+/* Time controls with purple accent */
+.time-control.active {
+    background: var(--crypto-purple-light);
+    color: var(--crypto-purple);
+    font-weight: 600;
+}
+
+/* View mode buttons with purple accent */
+.view-mode-btn.active {
+    background: var(--crypto-purple-light);
+    border-color: var(--crypto-purple);
+    color: var(--crypto-purple);
+}
+
+/* Search dropdown with subtle purple on hover */
+.search-suggestion:hover,
+.quick-filter:hover {
+    background: var(--crypto-purple-light);
+    border-left: 2px solid var(--crypto-purple);
+}
+
+/* Signal cards with subtle purple interaction */
+.signal-card:hover {
+    border-color: var(--crypto-purple);
+    box-shadow: 0 0 0 1px var(--crypto-purple);
+}
+
+/* Episode cards with priority colors updated */
+.episode-card.priority-critical {
+    border-left-color: var(--professional-red) !important;
+}
+
+.episode-card.priority-opportunity {
+    border-left-color: var(--professional-green) !important;
+}
+
+/* Portfolio button with subtle purple pulse */
+.portfolio-button:hover {
+    background: var(--crypto-purple);
+    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.2);
+}
+
+.pulse-indicator.active {
+    background: var(--crypto-purple);
+    animation: pulse-purple 2s infinite;
+}
+
+@keyframes pulse-purple {
+    0% {
+        box-shadow: 0 0 0 0 rgba(107, 70, 193, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(107, 70, 193, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(107, 70, 193, 0);
+    }
+}
+
+/* Topic badges in Narrative Pulse with purple hover */
+.topic-badge:hover {
+    border-color: var(--crypto-purple);
+    background: var(--crypto-purple-light);
+}
+
+/* Active topic line in chart */
+.topic-line.active .topic-path {
+    stroke: var(--crypto-purple);
+    stroke-width: 4;
+}
+
+/* Enhanced section headers with subtle underline */
+.section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--crypto-purple);
+    margin-top: 8px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.section-header:hover .section-title::after {
+    width: 60px;
+    opacity: 1;
 }

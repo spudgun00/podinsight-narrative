@@ -6,6 +6,7 @@
  */
             /* Narrative Intelligence color palette */
         :root {
+            /* Keep all existing warm editorial colors */
             --deep-ink: #1a1a2e;
             --warm-paper: #fafaf9;
             --sage: #4a7c59;
@@ -17,4 +18,19 @@
             --gray-600: #6b7280;
             --gray-400: #9ca3af;
             --gray-200: #e5e7eb;
+            
+            /* Subtle Crypto Accents */
+            --crypto-purple: #6B46C1;        /* Subtle Ethereum reference for accents only */
+            --crypto-purple-light: #EDE9FE;  /* Very light purple for backgrounds */
+            --professional-green: #059669;   /* Thoughtful bullish (not trading green) */
+            --professional-red: #DC2626;     /* Thoughtful bearish (not panic red) */
+            --consensus-blue: #2563EB;       /* For consensus visualization */
+            
+            /* Enhanced Text Hierarchy */
+            --text-primary-enhanced: #111827;     /* Slightly darker for better contrast */
+            --text-secondary-enhanced: #4B5563;   /* Better readability */
+            
+            /* Subtle Depth */
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.07);
         }

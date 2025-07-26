@@ -31,16 +31,16 @@ class PortfolioManager {
         // Configuration for both lists
         this.listConfig = {
             portfolio: {
-                storageKey: 'patternFlow_portfolio_companies',
-                container: '.portfolio-companies',
+                storageKey: 'patternFlow_portfolio_protocols',
+                container: '.portfolio-protocols',
                 countElement: '.portfolio-count',
                 cardClass: 'validated',
                 iconClass: 'positive',
                 icon: '✓'
             },
             watchlist: {
-                storageKey: 'patternFlow_watchlist_companies',
-                container: '.watchlist-companies',
+                storageKey: 'patternFlow_watchlist_protocols',
+                container: '.watchlist-protocols',
                 countElement: '.watchlist-count',
                 cardClass: 'watchlist',
                 iconClass: 'watchlist',
@@ -48,10 +48,10 @@ class PortfolioManager {
             }
         };
         
-        // Initialize companies data for both lists
-        this.companies = {
-            portfolio: this.loadCompanies('portfolio'),
-            watchlist: this.loadCompanies('watchlist')
+        // Initialize protocols data for both lists
+        this.protocols = {
+            portfolio: this.loadProtocols('portfolio'),
+            watchlist: this.loadProtocols('watchlist')
         };
         
         // Initialize from localStorage or defaults
@@ -108,62 +108,62 @@ class PortfolioManager {
         }
     }
     
-    // Load companies from localStorage for a specific list
-    loadCompanies(listType) {
-        // For demo purposes, always return the default companies
+    // Load protocols from localStorage for a specific list
+    loadProtocols(listType) {
+        // For demo purposes, always return the default protocols
         // Don't load from localStorage so they reappear on refresh
         if (listType === 'portfolio') {
             return [
-                { name: 'Anthropic', mentions: 7, sentiment: '5 positive, 2 neutral', status: 'validated' },
-                { name: 'OpenAI', mentions: 12, sentiment: 'Competitive landscape intensifying', status: 'threat' }
+                { name: 'EigenLayer', mentions: 18, sentiment: '15 bullish, 3 neutral', status: 'Momentum building' },
+                { name: 'Celestia', mentions: 12, sentiment: 'Modular thesis validated', status: 'Competitive moat' }
             ];
         }
         return [];
     }
     
-    // Save companies to localStorage for a specific list
-    saveCompanies(listType) {
+    // Save protocols to localStorage for a specific list
+    saveProtocols(listType) {
         // For demo purposes, don't save to localStorage
         // Companies will reset on page refresh
         // const config = this.listConfig[listType];
-        // localStorage.setItem(config.storageKey, JSON.stringify(this.companies[listType]));
+        // localStorage.setItem(config.storageKey, JSON.stringify(this.protocols[listType]));
     }
     
     // Bind form submission handlers
     bindFormHandlers() {
-        const forms = document.querySelectorAll('.add-company-form');
+        const forms = document.querySelectorAll('.add-protocol-form');
         forms.forEach(form => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const listType = form.getAttribute('data-list');
-                const input = form.querySelector('.company-input');
-                const companyName = input.value.trim();
+                const input = form.querySelector('.protocol-input');
+                const protocolName = input.value.trim();
                 
-                if (companyName) {
-                    this.addCompany(companyName, listType);
+                if (protocolName) {
+                    this.addProtocol(protocolName, listType);
                     input.value = '';
                 }
             });
         });
     }
     
-    // Add a company to a specific list
-    addCompany(name, listType) {
-        const company = {
+    // Add a protocol to a specific list
+    addProtocol(name, listType) {
+        const protocol = {
             name: name,
             mentions: 0,
             sentiment: 'Monitoring for signals',
             status: listType === 'watchlist' ? 'watchlist' : 'neutral'
         };
         
-        this.companies[listType].push(company);
-        this.saveCompanies(listType);
+        this.protocols[listType].push(protocol);
+        this.saveProtocols(listType);
         this.renderList(listType);
         this.updateListCount(listType);
         
-        // Update portfolio count in state if it's a portfolio company
+        // Update portfolio count in state if it's a protocol in the portfolio
         if (listType === 'portfolio') {
-            this.state.portfolioCount = this.companies.portfolio.length;
+            this.state.portfolioCount = this.protocols.portfolio.length;
             this.saveState();
             this.updateUI();
         }
@@ -174,7 +174,7 @@ class PortfolioManager {
         const config = this.listConfig[listType];
         const countElement = document.querySelector(config.countElement);
         if (countElement) {
-            countElement.textContent = `(${this.companies[listType].length})`;
+            countElement.textContent = `(${this.protocols[listType].length})`;
         }
     }
     
@@ -190,9 +190,9 @@ class PortfolioManager {
         const container = document.querySelector(config.container);
         if (!container) return;
         
-        const companies = this.companies[listType];
+        const protocols = this.protocols[listType];
         
-        if (companies.length === 0) {
+        if (protocols.length === 0) {
             const emptyIcon = listType === 'watchlist' ? 
                 `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -206,42 +206,42 @@ class PortfolioManager {
                 <div class="empty-state">
                     <div class="empty-icon">${emptyIcon}</div>
                     <p>${listType === 'watchlist' ? 
-                        'Add companies to monitor for investment opportunities' : 
-                        'Add portfolio companies to track mentions'}</p>
+                        'Add protocols to monitor for opportunities' : 
+                        'Add protocols to track mentions'}</p>
                 </div>
             `;
             return;
         }
         
-        // Render company cards with appropriate styling
-        container.innerHTML = companies.map(company => {
-            const cardClass = company.status === 'threat' ? 'threat' : 
-                             company.status === 'watchlist' ? 'watchlist' : 
+        // Render protocol cards with appropriate styling
+        container.innerHTML = protocols.map(protocol => {
+            const cardClass = protocol.status === 'threat' ? 'threat' : 
+                             protocol.status === 'watchlist' ? 'watchlist' : 
                              config.cardClass;
-            const iconClass = company.status === 'threat' ? 'threat' : config.iconClass;
-            const icon = company.status === 'threat' ? 
+            const iconClass = protocol.status === 'threat' ? 'threat' : config.iconClass;
+            const icon = protocol.status === 'threat' ? 
                 '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2L11 10H1L6 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 4.5V7.5M6 8.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' : 
                 '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-            const mentions = company.mentions || 0;
+            const mentions = protocol.mentions || 0;
             
             return `
-                <div class="company-card ${cardClass}" data-company="${company.name}" data-list="${listType}">
-                    <button class="delete-button" aria-label="Remove ${company.name}">
+                <div class="protocol-card ${cardClass}" data-protocol="${protocol.name}" data-list="${listType}">
+                    <button class="delete-button" aria-label="Remove ${protocol.name}">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                             <path d="M4 3.5L10 10.5M10 3.5L4 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </button>
-                    <div class="company-header">
-                        <span class="company-name">${company.name}</span>
+                    <div class="protocol-header">
+                        <span class="protocol-name">${protocol.name}</span>
                     </div>
-                    <div class="company-mention">
+                    <div class="protocol-mention">
                         <span class="mention-badge ${iconClass}">${icon} ${mentions} mentions</span>
                     </div>
-                    <div class="company-details">
-                        ${company.sentiment}
-                        ${company.status === 'validated' ? '<span class="validated-label">Thesis validated</span>' : ''}
-                        ${company.status === 'threat' ? '<span class="threat-label">Competitive threat</span>' : ''}
-                        ${company.status === 'watchlist' ? '<span class="watchlist-label">Watchlist</span>' : ''}
+                    <div class="protocol-details">
+                        ${protocol.sentiment}
+                        ${protocol.status === 'validated' ? '<span class="validated-label">Thesis validated</span>' : ''}
+                        ${protocol.status === 'threat' ? '<span class="threat-label">Competitive threat</span>' : ''}
+                        ${protocol.status === 'watchlist' ? '<span class="watchlist-label">Monitoring</span>' : ''}
                     </div>
                 </div>
             `;
@@ -285,7 +285,7 @@ class PortfolioManager {
         const mentionText = this.state.newMentions > 0 
             ? `, ${this.state.newMentions} new mentions` 
             : '';
-        this.button.setAttribute('aria-label', `Company tracking${mentionText}`);
+        this.button.setAttribute('aria-label', `Protocol tracking${mentionText}`);
     }
     
     
@@ -334,6 +334,40 @@ class PortfolioManager {
         this.saveState();
     }
     
+    openPanel() {
+        this.state.panelState = 'open';
+        
+        const panel = document.querySelector('.portfolio-panel');
+        const backdrop = document.querySelector('.portfolio-backdrop');
+        
+        // Add class to body to hide scrollbar
+        document.body.classList.add('portfolio-open');
+        
+        panel.setAttribute('data-state', 'open');
+        backdrop.style.display = 'block';
+        setTimeout(() => backdrop.classList.add('active'), 10);
+        
+        // Mark mentions as viewed after a delay
+        setTimeout(() => {
+            this.state.newMentions = 0;
+            this.updateUI();
+            this.saveState();
+        }, 2000);
+        
+        // Dispatch custom event for panel toggle
+        const event = new CustomEvent('portfolio-panel-toggle', {
+            detail: {
+                isOpen: true,
+                portfolioCount: this.state.portfolioCount,
+                newMentions: this.state.newMentions
+            }
+        });
+        window.dispatchEvent(event);
+        
+        this.updateUI();
+        this.saveState();
+    }
+    
     closePanel(e) {
         if (e) e.preventDefault();
         
@@ -361,8 +395,8 @@ class PortfolioManager {
     handleDelete(e) {
         e.stopPropagation(); // Prevent card click
         const button = e.currentTarget;
-        const card = button.closest('.company-card');
-        const companyName = card.querySelector('.company-name').textContent;
+        const card = button.closest('.protocol-card');
+        const protocolName = card.querySelector('.protocol-name').textContent;
         const listType = card.getAttribute('data-list');
         
         // Add removing animation class
@@ -371,12 +405,12 @@ class PortfolioManager {
         // Wait for animation then remove
         setTimeout(() => {
             // Remove from data array
-            this.companies[listType] = this.companies[listType].filter(c => c.name !== companyName);
-            this.saveCompanies(listType);
+            this.protocols[listType] = this.protocols[listType].filter(c => c.name !== protocolName);
+            this.saveProtocols(listType);
             
-            // Update portfolio count in state if it's a portfolio company
+            // Update portfolio count in state if it's a portfolio protocol
             if (listType === 'portfolio') {
-                this.state.portfolioCount = this.companies.portfolio.length;
+                this.state.portfolioCount = this.protocols.portfolio.length;
                 this.saveState();
                 this.updateUI();
             }

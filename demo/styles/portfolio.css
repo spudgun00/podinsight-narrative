@@ -159,12 +159,12 @@
     letter-spacing: 0.5px;
 }
 
-.portfolio-panel .add-company-form {
+.portfolio-panel .add-protocol-form {
     display: flex;
     gap: 8px;
 }
 
-.portfolio-panel .company-input {
+.portfolio-panel .protocol-input {
     flex: 1;
     padding: 12px 16px;
     border: 2px solid var(--gray-200);
@@ -174,12 +174,12 @@
     transition: all 0.2s ease;
 }
 
-.portfolio-panel .company-input::placeholder {
+.portfolio-panel .protocol-input::placeholder {
     color: var(--gray-400);
     font-weight: 400;
 }
 
-.portfolio-panel .company-input:focus {
+.portfolio-panel .protocol-input:focus {
     outline: none;
     border-color: var(--sage);
     box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
@@ -287,14 +287,14 @@
     color: var(--deep-ink);
 }
 
-.portfolio-panel .company-count {
+.portfolio-panel .protocol-count {
     font-size: 13px;
     color: var(--amber-glow);
     font-weight: 600;
 }
 
-/* Company Cards */
-.portfolio-panel .company-card {
+/* Protocol Cards */
+.portfolio-panel .protocol-card {
     position: relative;
     background: white;
     border: 1px solid var(--border-subtle);
@@ -306,33 +306,33 @@
     overflow: hidden;
 }
 
-.portfolio-panel .company-card:hover {
+.portfolio-panel .protocol-card:hover {
     border-color: var(--sage);
     transform: translateX(-4px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
                 0 0 0 1px rgba(74, 124, 89, 0.2);
 }
 
-.portfolio-panel .company-card.threat {
+.portfolio-panel .protocol-card.threat {
     border-left: 3px solid var(--dusty-rose);
     background: linear-gradient(135deg, white 0%, rgba(199, 125, 125, 0.03) 100%);
 }
 
-.portfolio-panel .company-card.validated {
+.portfolio-panel .protocol-card.validated {
     border-left: 3px solid var(--sage);
     background: linear-gradient(135deg, white 0%, rgba(74, 124, 89, 0.03) 100%);
 }
 
-.portfolio-panel .company-header {
+.portfolio-panel .protocol-header {
     margin-bottom: 4px;
     padding-right: 40px; /* Space for delete button */
 }
 
-.portfolio-panel .company-mention {
+.portfolio-panel .protocol-mention {
     margin-bottom: 12px;
 }
 
-.portfolio-panel .company-name {
+.portfolio-panel .protocol-name {
     font-size: 15px;
     font-weight: 600;
     color: var(--deep-ink);
@@ -359,7 +359,7 @@
     color: var(--dusty-rose);
 }
 
-.portfolio-panel .company-details {
+.portfolio-panel .protocol-details {
     font-size: 13px;
     color: #666;
     line-height: 1.5;
@@ -453,7 +453,7 @@
     z-index: 10;
 }
 
-.portfolio-panel .company-card:hover .delete-button {
+.portfolio-panel .protocol-card:hover .delete-button {
     opacity: 1;
 }
 
@@ -463,7 +463,7 @@
 }
 
 /* Removal Animation */
-.portfolio-panel .company-card.removing {
+.portfolio-panel .protocol-card.removing {
     animation: removeCard 0.3s ease-out forwards;
     pointer-events: none;
 }
@@ -495,7 +495,7 @@
     margin-top: 32px;
 }
 
-.portfolio-panel .company-list-section {
+.portfolio-panel .protocol-list-section {
     margin-bottom: 32px;
 }
 
@@ -528,7 +528,7 @@
 }
 
 /* Watchlist Specific Styles */
-.portfolio-panel .company-card.watchlist {
+.portfolio-panel .protocol-card.watchlist {
     border-left: 3px solid #F59E0B;
 }
 
@@ -536,28 +536,28 @@
     color: #F59E0B;
 }
 
-.portfolio-panel .company-card.watchlist:hover {
+.portfolio-panel .protocol-card.watchlist:hover {
     border-color: #F59E0B;
     transform: translateX(-4px);
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
 }
 
-.portfolio-panel .company-card.watchlist .delete-button:hover {
+.portfolio-panel .protocol-card.watchlist .delete-button:hover {
     background: rgba(245, 158, 11, 0.1);
     color: #F59E0B;
 }
 
 /* Smart Highlighting System */
 body.portfolio-open [data-mentions*="anthropic"],
-body.portfolio-open [data-company="anthropic"],
+body.portfolio-open [data-protocol="anthropic"],
 body.portfolio-open [data-mentions*="openai"],
-body.portfolio-open [data-company="openai"] {
+body.portfolio-open [data-protocol="openai"] {
     position: relative;
     z-index: 10;
 }
 
 body.portfolio-open [data-mentions*="anthropic"]::before,
-body.portfolio-open [data-company="anthropic"]::before {
+body.portfolio-open [data-protocol="anthropic"]::before {
     content: '';
     position: absolute;
     inset: -6px;
@@ -571,7 +571,7 @@ body.portfolio-open [data-company="anthropic"]::before {
 }
 
 body.portfolio-open [data-mentions*="openai"]::before,
-body.portfolio-open [data-company="openai"]::before {
+body.portfolio-open [data-protocol="openai"]::before {
     content: '';
     position: absolute;
     inset: -6px;

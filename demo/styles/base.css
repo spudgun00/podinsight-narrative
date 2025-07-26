@@ -15,3 +15,23 @@
             color: var(--deep-ink);
             line-height: 1.6;
         }
+        
+        /* Add monospace for specific crypto elements */
+        .protocol-name, .token-ticker, .percentage-value {
+            font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Enhance readability for long-form analysis */
+        .synthesis-text, .narrative-summary {
+            line-height: 1.7;
+            font-size: 16px;
+            color: var(--text-primary-enhanced);
+        }
+        
+        /* Research publication feel */
+        .section-header {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }

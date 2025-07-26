@@ -12,7 +12,7 @@
         .header-main {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0.5rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -590,4 +590,47 @@
         .footer-copyright {
             font-size: 0.875rem;
             color: var(--gray-600);
+        }
+        
+        /* ===== NARRATIVE FOCUS ENHANCEMENTS ===== */
+        
+        /* More generous spacing for thoughtful consumption */
+        .narrative-section {
+            margin-bottom: 3rem; /* Increased from default */
+        }
+        
+        .intelligence-brief {
+            padding: 2rem; /* Generous padding */
+            background-color: var(--warm-paper);
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* Emphasize synthesis over data */
+        .synthesis-primary {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--deep-ink);
+        }
+        
+        /* Enhanced spacing for sections */
+        .dashboard-section {
+            margin-bottom: 3rem;
+        }
+        
+        /* Better content hierarchy */
+        .content-section {
+            padding: 2rem 0;
+        }
+        
+        /* Improved sidebar spacing */
+        .synthesis-sidebar {
+            padding: 2rem;
+        }
+        
+        /* Enhanced readability for analysis sections */
+        .analysis-content {
+            max-width: 65ch;
+            line-height: 1.8;
+            font-size: 16px;
         }

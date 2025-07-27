@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthea.ai Logo Comparison</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafaf9;
+            padding: 2rem;
+            margin: 0;
+        }
+        
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo-version {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .logo-version h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-mark {
+            width: 44px;
+            height: 44px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2C2C2C;
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+        
+        .tagline {
+            font-size: 12.5px;
+            font-weight: 400;
+            color: #9B9B9B;
+            line-height: 1;
+            letter-spacing: 0.01em;
+            text-transform: lowercase;
+        }
+        
+        .note {
+            font-size: 14px;
+            color: #666;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-container">
+        <!-- Current Logo -->
+        <div class="logo-version">
+            <h2>Current Logo (Three Circles)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="1">
+                        <circle r="13" cx="14" cy="16" />
+                        <circle r="13" cx="30" cy="16" />
+                        <circle r="13" cx="22" cy="30" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Full circles with transparent fill showing all overlaps</p>
+        </div>
+        
+        <!-- Flower Version (Overlapping Parts Only) -->
+        <div class="logo-version">
+            <h2>Alternative Logo (Flower/Overlap Only)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Petal fills -->
+                    <g fill="#4a7c59" fill-opacity="0.1">
+                        <!-- Top petal (intersection of circles 1 and 2) -->
+                        <path d="M 22 16 
+                                 A 13 13 0 0 1 14 3 
+                                 A 13 13 0 0 1 30 3 
+                                 A 13 13 0 0 1 22 16 Z" />
+                        
+                        <!-- Bottom left petal (intersection of circles 1 and 3) -->
+                        <path d="M 18.5 23 
+                                 A 13 13 0 0 1 8 20 
+                                 A 13 13 0 0 1 14 30 
+                                 A 13 13 0 0 1 18.5 23 Z" />
+                        
+                        <!-- Bottom right petal (intersection of circles 2 and 3) -->
+                        <path d="M 25.5 23 
+                                 A 13 13 0 0 1 30 30 
+                                 A 13 13 0 0 1 36 20 
+                                 A 13 13 0 0 1 25.5 23 Z" />
+                    </g>
+                    
+                    <!-- Center triangle with darker fill -->
+                    <path d="M 22 16 L 18.5 23 L 25.5 23 Z" fill="#4a7c59" fill-opacity="0.3" />
+                    
+                    <!-- Petal strokes -->
+                    <g fill="none" stroke="#4a7c59" stroke-width="1">
+                        <!-- Top petal stroke -->
+                        <path d="M 22 16 
+                                 A 13 13 0 0 1 14 3 
+                                 A 13 13 0 0 1 30 3 
+                                 A 13 13 0 0 1 22 16 Z" />
+                        
+                        <!-- Bottom left petal stroke -->
+                        <path d="M 18.5 23 
+                                 A 13 13 0 0 1 8 20 
+                                 A 13 13 0 0 1 14 30 
+                                 A 13 13 0 0 1 18.5 23 Z" />
+                        
+                        <!-- Bottom right petal stroke -->
+                        <path d="M 25.5 23 
+                                 A 13 13 0 0 1 30 30 
+                                 A 13 13 0 0 1 36 20 
+                                 A 13 13 0 0 1 25.5 23 Z" />
+                        
+                        <!-- Center triangle stroke -->
+                        <path d="M 22 16 L 18.5 23 L 25.5 23 Z" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Only the overlapping sections forming a flower-like pattern</p>
+        </div>
+    </div>
+    
+    <!-- Additional flower version with cleaner approach -->
+    <div class="comparison-container" style="margin-top: 3rem;">
+        <div class="logo-version">
+            <h2>Alternative Flower Version (Path-based)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Create the flower shape using paths for the intersection areas -->
+                    <g fill="#4a7c59" fill-opacity="0.25">
+                        <!-- Top petal (intersection of top two circles) -->
+                        <path d="M 22 16 A 13 13 0 0 1 14 3 A 13 13 0 0 1 30 3 A 13 13 0 0 1 22 16" />
+                        
+                        <!-- Bottom left petal -->
+                        <path d="M 18 23 A 13 13 0 0 1 7 20 A 13 13 0 0 1 14 30 A 13 13 0 0 1 18 23" />
+                        
+                        <!-- Bottom right petal -->
+                        <path d="M 26 23 A 13 13 0 0 1 30 30 A 13 13 0 0 1 37 20 A 13 13 0 0 1 26 23" />
+                    </g>
+                    
+                    <!-- Center triangle (overlap of all three) -->
+                    <path d="M 22 16 L 18 23 L 26 23 Z" fill="#4a7c59" fill-opacity="0.4" />
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Simplified flower pattern using geometric paths</p>
+        </div>
+        
+        <!-- Original shade flower version -->
+        <div class="logo-version">
+            <h2>Flower Version (Original Sage Shades)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Petals with original sage green -->
+                    <g fill="#4a7c59">
+                        <!-- Top petal -->
+                        <path d="M 22 16 A 13 13 0 0 1 14 3 A 13 13 0 0 1 30 3 A 13 13 0 0 1 22 16" fill-opacity="0.3" />
+                        
+                        <!-- Bottom left petal -->
+                        <path d="M 18 23 A 13 13 0 0 1 7 20 A 13 13 0 0 1 14 30 A 13 13 0 0 1 18 23" fill-opacity="0.3" />
+                        
+                        <!-- Bottom right petal -->
+                        <path d="M 26 23 A 13 13 0 0 1 30 30 A 13 13 0 0 1 37 20 A 13 13 0 0 1 26 23" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center with darker sage -->
+                    <path d="M 22 16 L 18 23 L 26 23 Z" fill="#4a7c59" fill-opacity="0.6" />
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Original sage green with darker center</p>
+        </div>
+        
+        <!-- Yellow center version -->
+        <div class="logo-version">
+            <h2>Flower Version (Yellow Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Petals with sage green -->
+                    <g fill="#4a7c59">
+                        <!-- Top petal -->
+                        <path d="M 22 16 A 13 13 0 0 1 14 3 A 13 13 0 0 1 30 3 A 13 13 0 0 1 22 16" fill-opacity="0.3" />
+                        
+                        <!-- Bottom left petal -->
+                        <path d="M 18 23 A 13 13 0 0 1 7 20 A 13 13 0 0 1 14 30 A 13 13 0 0 1 18 23" fill-opacity="0.3" />
+                        
+                        <!-- Bottom right petal -->
+                        <path d="M 26 23 A 13 13 0 0 1 30 30 A 13 13 0 0 1 37 20 A 13 13 0 0 1 26 23" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Yellow center -->
+                    <path d="M 22 16 L 18 23 L 26 23 Z" fill="#f4a261" fill-opacity="0.8" />
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with amber yellow center</p>
+        </div>
+    </div>
+    
+    <!-- Third row with better clipping mask versions -->
+    <div class="comparison-container" style="margin-top: 3rem;">
+        <!-- Original Style Exact Match -->
+        <div class="logo-version">
+            <h2>Trinity Knot (As Requested)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Trinity knot design as shown in ff.png -->
+                    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
+                        <!-- Top vesica/almond shape -->
+                        <path d="M 22 10
+                                 C 18 10, 15 13, 15 17
+                                 C 15 19, 16 20.5, 17.5 21.5
+                                 L 22 21.5
+                                 L 26.5 21.5
+                                 C 28 20.5, 29 19, 29 17
+                                 C 29 13, 26 10, 22 10 Z" />
+                        
+                        <!-- Bottom left vesica/almond shape -->
+                        <path d="M 17.5 21.5
+                                 C 15.5 22.5, 14 24, 14 26
+                                 C 14 30, 17 33, 21 33
+                                 C 23 33, 24.5 32, 25.5 30.5
+                                 L 22 26
+                                 L 17.5 21.5 Z" />
+                        
+                        <!-- Bottom right vesica/almond shape -->
+                        <path d="M 26.5 21.5
+                                 L 22 26
+                                 L 18.5 30.5
+                                 C 19.5 32, 21 33, 23 33
+                                 C 27 33, 30 30, 30 26
+                                 C 30 24, 28.5 22.5, 26.5 21.5 Z" />
+                        
+                        <!-- Horizontal center line -->
+                        <line x1="15" y1="21.5" x2="29" y2="21.5" />
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Trinity knot design - three pointed loops with horizontal connector</p>
+        </div>
+        
+        <!-- Original Sage Shades Clipping Version -->
+        <div class="logo-version">
+            <h2>Overlap Only (Deeper Sage)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="sage-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="sage-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="sage-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#sage-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#sage-circle1)">
+                        <g clip-path="url(#sage-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Overlapping sections with darker center</p>
+        </div>
+        
+        <!-- Yellow Center Clipping Version -->
+        <div class="logo-version">
+            <h2>Overlap Only (Yellow Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="yellow-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="yellow-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="yellow-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#yellow-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#yellow-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#yellow-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) - Yellow -->
+                    <g clip-path="url(#yellow-circle1)">
+                        <g clip-path="url(#yellow-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#f4a261" fill-opacity="0.8" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with amber yellow center</p>
+        </div>
+        
+        <!-- Teal Center Clipping Version -->
+        <div class="logo-version">
+            <h2>Overlap Only (Teal Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="teal-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="teal-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="teal-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#teal-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#teal-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#teal-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) - Teal -->
+                    <g clip-path="url(#teal-circle1)">
+                        <g clip-path="url(#teal-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#20b2aa" fill-opacity="0.8" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with teal center</p>
+        </div>
+    </div>
+    
+    <!-- Fourth row with yellow and red versions -->
+    <div class="comparison-container" style="margin-top: 3rem;">
+        <!-- Pure Yellow Center Version -->
+        <div class="logo-version">
+            <h2>Overlap Only (Bright Yellow Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="brightyellow-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="brightyellow-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="brightyellow-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#brightyellow-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#brightyellow-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#brightyellow-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) - Bright Yellow -->
+                    <g clip-path="url(#brightyellow-circle1)">
+                        <g clip-path="url(#brightyellow-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#FFD700" fill-opacity="0.9" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with bright yellow center</p>
+        </div>
+        
+        <!-- Red Center Version -->
+        <div class="logo-version">
+            <h2>Overlap Only (Red Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="red-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="red-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="red-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#red-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#red-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#red-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) - Red -->
+                    <g clip-path="url(#red-circle1)">
+                        <g clip-path="url(#red-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#DC143C" fill-opacity="0.8" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with crimson red center</p>
+        </div>
+        
+        <!-- Dusty Rose Center Version (using brand color) -->
+        <div class="logo-version">
+            <h2>Overlap Only (Dusty Rose Center)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="rose-circle1">
+                            <circle r="13" cx="14" cy="16" />
+                        </clipPath>
+                        <clipPath id="rose-circle2">
+                            <circle r="13" cx="30" cy="16" />
+                        </clipPath>
+                        <clipPath id="rose-circle3">
+                            <circle r="13" cx="22" cy="30" />
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#rose-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#rose-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#rose-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3" />
+                    </g>
+                    
+                    <!-- Center overlap (all three) - Dusty Rose -->
+                    <g clip-path="url(#rose-circle1)">
+                        <g clip-path="url(#rose-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#c77d7d" fill-opacity="0.8" />
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence for venture capital</div>
+                </div>
+            </div>
+            <p class="note">Sage petals with dusty rose center (brand color)</p>
+        </div>
+    </div>
+    
+    <!-- Fifth row with current logo and stroke version -->
+    <div class="comparison-container" style="margin-top: 3rem;">
+        <!-- Current Logo from demo.html -->
+        <div class="logo-version">
+            <h2>Current Logo (Live Version)</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(8px);">
+                    <defs>
+                        <clipPath id="current-circle1">
+                            <circle r="13" cx="14" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="current-circle2">
+                            <circle r="13" cx="30" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="current-circle3">
+                            <circle r="13" cx="22" cy="30"></circle>
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#current-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#current-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#current-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#current-circle1)">
+                        <g clip-path="url(#current-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text" style="margin-left: 10px;">
+                    <div class="logo" style="letter-spacing: 0.11em;">synthea.ai</div>
+                    <div class="tagline" style="color: #B8B8B8;">synthesized intelligence</div>
+                </div>
+            </div>
+            <p class="note">Currently deployed logo with trinity knot pattern</p>
+        </div>
+        
+        <!-- Current Logo with #FAFAFA stroke -->
+        <div class="logo-version">
+            <h2>Current Logo with #FAFAFA Stroke</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(8px);">
+                    <defs>
+                        <clipPath id="stroke-circle1">
+                            <circle r="13" cx="14" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="stroke-circle2">
+                            <circle r="13" cx="30" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="stroke-circle3">
+                            <circle r="13" cx="22" cy="30"></circle>
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Add strokes to the clipping paths -->
+                    <circle r="13" cx="14" cy="16" fill="none" stroke="#FAFAFA" stroke-width="1"></circle>
+                    <circle r="13" cx="30" cy="16" fill="none" stroke="#FAFAFA" stroke-width="1"></circle>
+                    <circle r="13" cx="22" cy="30" fill="none" stroke="#FAFAFA" stroke-width="1"></circle>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#stroke-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#stroke-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#stroke-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#stroke-circle1)">
+                        <g clip-path="url(#stroke-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text" style="margin-left: 10px;">
+                    <div class="logo" style="letter-spacing: 0.11em;">synthea.ai</div>
+                    <div class="tagline" style="color: #B8B8B8;">synthesized intelligence</div>
+                </div>
+            </div>
+            <p class="note">Current logo with off-white (#FAFAFA) 1pt stroke</p>
+        </div>
+        
+        <!-- Current Logo with white 2pt stroke -->
+        <div class="logo-version">
+            <h2>Current Logo with White 2pt Stroke</h2>
+            <div class="logo-container">
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(8px);">
+                    <defs>
+                        <clipPath id="stroke2-circle1">
+                            <circle r="13" cx="14" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="stroke2-circle2">
+                            <circle r="13" cx="30" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="stroke2-circle3">
+                            <circle r="13" cx="22" cy="30"></circle>
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Add strokes to the clipping paths -->
+                    <circle r="13" cx="14" cy="16" fill="none" stroke="#FFFFFF" stroke-width="2"></circle>
+                    <circle r="13" cx="30" cy="16" fill="none" stroke="#FFFFFF" stroke-width="2"></circle>
+                    <circle r="13" cx="22" cy="30" fill="none" stroke="#FFFFFF" stroke-width="2"></circle>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#stroke2-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#stroke2-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#stroke2-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#stroke2-circle1)">
+                        <g clip-path="url(#stroke2-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text" style="margin-left: 10px;">
+                    <div class="logo" style="letter-spacing: 0.11em;">synthea.ai</div>
+                    <div class="tagline" style="color: #B8B8B8;">synthesized intelligence</div>
+                </div>
+            </div>
+            <p class="note">Current logo with white (#FFFFFF) 2pt stroke</p>
+        </div>
+    </div>
+</body>
+</html>

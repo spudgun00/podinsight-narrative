@@ -95,8 +95,8 @@ const EpisodePanel = {
                 <div class="intelligence-section">
                     <h2 class="section-header">Notable Mentions</h2>
                     <div class="mentions-empty">
-                        <p>⚠️ No portfolio companies detected in this episode</p>
-                        <span class="add-portfolio-hint">[+ Add your portfolio companies to get alerts]</span>
+                        <p>⚠️ No tracked protocols detected in this episode</p>
+                        <span class="add-portfolio-hint">[+ Add your protocols to get alerts]</span>
                     </div>
                 </div>
 
@@ -307,6 +307,26 @@ const EpisodePanel = {
         this.container.querySelector('.episode-title').textContent = data.episodeTitle;
         this.container.querySelector('.episode-guest').textContent = data.episodeGuest;
         
+        // Update podcast logo with actual image
+        const podcastLogo = this.container.querySelector('.podcast-logo');
+        const podcastImages = {
+            'Bankless': 'images/bankless.jpeg',
+            'What Bitcoin Did': 'images/whatbitcoindid.jpeg',
+            'Unchained': 'images/unchained.jpeg',
+            'The Pomp Podcast': 'images/pomp.jpeg',
+            'Crypto 101': 'images/crypto101.png',
+            'The Journey Man': 'images/journeyman.jpeg',
+            'Empire': 'images/empire.jpeg',
+            'Token Metrics': 'images/tokenmetrics.jpeg',
+            'The Breakdown': 'images/breakdown.webp',
+            'Epicenter': 'images/epicenter.png'
+        };
+        
+        const imagePath = podcastImages[data.podcastName];
+        if (imagePath) {
+            podcastLogo.innerHTML = `<img src="${imagePath}" alt="${data.podcastName} logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+        }
+        
         // Parse episode time
         const timeParts = data.episodeTime.split('•').map(s => s.trim());
         if (timeParts[0]) this.container.querySelector('.panel-time-ago').textContent = timeParts[0];
@@ -380,21 +400,21 @@ const EpisodePanel = {
     
     generateContext: function(data) {
         // Generate market context based on episode content
-        const hasAI = data.episodeTitle.toLowerCase().includes('ai') || 
-                     data.insights.some(i => i.toLowerCase().includes('ai'));
-        const hasValuation = data.insights.some(i => i.toLowerCase().includes('valuation'));
+        const hasRWA = data.episodeTitle.toLowerCase().includes('rwa') || 
+                     data.insights.some(i => i.toLowerCase().includes('rwa'));
+        const hasStaking = data.insights.some(i => i.toLowerCase().includes('staking'));
         
         const context = [];
-        if (hasAI) {
-            context.push('AI investment thesis shifting from horizontal platforms to vertical applications');
-            context.push('Proprietary data becoming primary differentiator in AI deals');
+        if (hasRWA) {
+            context.push('RWA tokenization thesis validated by institutional capital inflows');
+            context.push('BlackRock leading traditional finance into tokenization era');
         }
-        if (hasValuation) {
-            context.push('Valuation metrics normalizing after 18-month correction cycle');
-            context.push('Market establishing new baseline multiples across all stages');
+        if (hasStaking) {
+            context.push('Restaking yields proving sustainable through multiple market cycles');
+            context.push('EigenLayer ecosystem establishing new DeFi primitives');
         }
-        context.push('Multiple sources confirming similar market observations this week');
-        context.push('Pattern consistent with broader industry consolidation trends');
+        context.push('Multiple crypto podcasts confirming similar market observations this week');
+        context.push('Pattern consistent with broader institutional adoption trends');
         
         return context;
     },
@@ -409,9 +429,9 @@ const EpisodePanel = {
                 borderColor: 'var(--sage)',
                 titleColor: 'var(--sage)',
                 items: [
-                    'Vertical AI applications with domain expertise',
-                    'Capital efficiency metrics over growth at all costs',
-                    'Structured liquidation preferences in hot deals'
+                    'RWA tokenization with institutional backing',
+                    'ETH restaking yields sustaining 15-25% APY',
+                    'Bitcoin L2s crossing $2B TVL milestone'
                 ]
             },
             {
@@ -421,9 +441,9 @@ const EpisodePanel = {
                 borderColor: 'var(--amber-glow)',
                 titleColor: '#d97706',
                 items: [
-                    'AI infrastructure consolidation plays',
-                    'Retention-based valuation models',
-                    'Cross-border AI regulatory arbitrage'
+                    'Gaming token accumulation by smart money',
+                    'Privacy coin contrarian opportunities',
+                    'Cross-chain liquidity aggregation protocols'
                 ]
             },
             {
@@ -433,9 +453,9 @@ const EpisodePanel = {
                 borderColor: 'var(--dusty-rose)',
                 titleColor: '#b91c1c',
                 items: [
-                    'Horizontal AI platforms without differentiation',
-                    'Growth-at-all-costs narratives',
-                    'Clean term sheets at premium valuations'
+                    'Memecoins showing exhaustion patterns',
+                    'High FDV low float token launches',
+                    'L1 rotation thesis losing momentum'
                 ]
             }
         ];
@@ -448,17 +468,17 @@ const EpisodePanel = {
         const patterns = [];
         if (data.priorityType === 'critical') {
             patterns.push(
-                { number: '4th', label: 'Major investor this week with similar thesis' },
-                { number: '87%', label: 'Of discussions now include this theme' }
+                { number: '4th', label: 'Major whale this week with similar thesis' },
+                { number: '87%', label: 'Of crypto podcasts now include this theme' }
             );
         } else {
             patterns.push(
                 { number: '12+', label: 'Sources confirming this market trend' },
-                { number: '3x', label: 'Increase in related deal activity' }
+                { number: '3x', label: 'Increase in on-chain activity' }
             );
         }
         patterns.push(
-            { number: '15', label: 'Portfolio companies potentially impacted' },
+            { number: '15', label: 'Tracked protocols potentially impacted' },
             { number: '2nd', label: 'Time this guest has discussed this topic' }
         );
         return patterns;

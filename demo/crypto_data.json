@@ -1,0 +1,1567 @@
+{
+  "dashboard_content": {
+    "navigation": {
+      "main_title": "synthea.ai",
+      "tagline": "crypto intelligence synthesized",
+      "logo_aria_label": "Synthea.ai Logo",
+      "meta_description": "synthea.ai - Synthesized intelligence for crypto trading and investment",
+      "og_title": "synthea.ai - Crypto Intelligence Platform",
+      "og_description": "Track narratives, signals, and alpha from 500+ crypto podcasts and Twitter Spaces",
+      "page_title": "synthea.ai - Synthesized intelligence for crypto",
+      "footer_tagline": "Synthesized intelligence for crypto",
+      "footer_copyright": "© 2024 synthea.ai. All rights reserved.",
+      "demo_mode_indicator": "Demo Mode",
+      "user_account": null,
+      "ticker_items": [
+        {
+          "label": "RWAs",
+          "value": "↑420%"
+        },
+        {
+          "label": "ETH Restaking",
+          "value": "↑238%"
+        },
+        {
+          "label": "Alpha Detected",
+          "value": "127"
+        }
+      ]
+    },
+    "narrative_pulse": {
+      "momentum": {
+        "7_day": {
+          "chart_title": "Narrative Momentum",
+          "time_range": "Jul 20, 2025 - Jul 26, 2025",
+          "time_labels": ["Sun 20", "Mon 21", "Tue 22", "Wed 23", "Thu 24", "Fri 25", "Sat 26"],
+          "topics": {
+            "RWAs": {
+              "color": "#9333ea",
+              "momentum": "+420%",
+              "data_points": [4, 6, 8, 14, 22, 28, 35],
+              "mentions": 107,
+              "episodes": 42,
+              "daily_quotes": {
+                "Sun 20": "BlackRock tokenization announcement sparks interest",
+                "Sat 26": "Every major bank discussing tokenized treasuries"
+              }
+            },
+            "ETH Restaking": {
+              "color": "#3b82f6",
+              "momentum": "+238%",
+              "data_points": [8, 10, 12, 18, 24, 27, 31],
+              "mentions": 120,
+              "episodes": 38
+            },
+            "Bitcoin L2s": {
+              "color": "#f97316",
+              "momentum": "+187%",
+              "data_points": [3, 4, 5, 8, 11, 14, 16],
+              "mentions": 51,
+              "episodes": 28
+            },
+            "AI x Crypto": {
+              "color": "#10b981",
+              "momentum": "+156%",
+              "data_points": [5, 6, 7, 10, 12, 14, 15],
+              "mentions": 67,
+              "episodes": 31
+            },
+            "Gaming/GameFi": {
+              "color": "#ec4899",
+              "momentum": "+89%",
+              "data_points": [6, 7, 8, 9, 10, 11, 12],
+              "mentions": 68,
+              "episodes": 22
+            },
+            "Memecoins": {
+              "color": "#eab308",
+              "momentum": "-45%",
+              "data_points": [12, 10, 8, 7, 6, 5, 4],
+              "mentions": 44,
+              "episodes": 15
+            },
+            "Privacy/ZK": {
+              "color": "#6366f1",
+              "momentum": "+67%",
+              "data_points": [4, 5, 5, 6, 7, 8, 9],
+              "mentions": 42,
+              "episodes": 19
+            }
+          },
+          "insights": [
+            "RWAs dominate with institutional adoption",
+            "ETH restaking narrative gaining steam",
+            "Memecoin fatigue setting in (-45%)"
+          ]
+        },
+        "30_day": {
+          "time_range": "Jun 26, 2025 - Jul 26, 2025",
+          "topics": {
+            "RWAs": {
+              "momentum": "+1,847%",
+              "total_growth": 1847,
+              "narrative": "From niche discussion to mainstream adoption as BlackRock, JPMorgan enter"
+            },
+            "Bitcoin L2s": {
+              "momentum": "+892%",
+              "narrative": "Ordinals success driving massive L2 development on Bitcoin"
+            }
+          }
+        },
+        "90_day": {
+          "time_range": "Apr 28, 2025 - Jul 26, 2025",
+          "topics": {
+            "AI x Crypto": {
+              "momentum": "+2,340%",
+              "narrative": "AI agents using crypto rails becomes reality, not speculation"
+            },
+            "Memecoins": {
+              "momentum": "-78%",
+              "narrative": "Retail exhaustion after Q1 2025 memecoin mania"
+            },
+            "DePIN": {
+              "momentum": "+10,050%",
+              "narrative": "From 2 to 201 mentions, defining new infrastructure era"
+            },
+            "Capital Efficiency": {
+              "momentum": "+324%",
+              "narrative": "Recovered from July lows, now strong consensus"
+            },
+            "AI Agents": {
+              "momentum": "+268%",
+              "narrative": "Maintained growth over quarter, mainstream adoption clear"
+            }
+          },
+          "insights": [
+            "Quarterly Trend: RWAs exploded to +1,847% momentum, institutional adoption defining new era",
+            "Recovery Story: Bitcoin L2s surged +892% as BTC ecosystem awakens from dormancy",
+            "Sustained Growth: ETH restaking maintained triple-digit growth, sustainable yields proven"
+          ]
+        }
+      },
+      "volume": {
+        "description": "Bar chart view showing mention volume over time"
+      },
+      "consensus": {
+        "description": "Heatmap view showing consensus levels",
+        "levels": ["Weak", "Building", "Moderate", "Strong", "Peak"],
+        "consensus_labels": [
+          ["Building", "Strong", "Peak", "Peak"],
+          ["Moderate", "Strong", "Strong", "Peak"],
+          ["Weak", "Building", "Moderate", "Strong"],
+          ["Building", "Building", "Weak", "Weak"]
+        ]
+      },
+      "time_options": ["7d", "30d", "90d"]
+    },
+    "narrative_feed": [
+      {
+        "id": "feed-1",
+        "type": "CONSENSUS",
+        "time": "3h ago",
+        "event": "RWA tokenization reaching consensus across 8 major sources",
+        "expansion": {
+          "sources": [
+            {
+              "name": "Raoul Pal on The Journey Man",
+              "time": "3h ago",
+              "quote": "Tokenized treasuries are the gateway drug. Once institutions taste 24/7 settlement, there's no going back."
+            },
+            {
+              "name": "Bankless w/ Larry Fink",
+              "time": "6h ago",
+              "quote": "We're tokenizing $10 billion this quarter alone. The efficiency gains are undeniable."
+            },
+            {
+              "name": "What Bitcoin Did",
+              "time": "1d ago",
+              "quote": "Every asset will be tokenized. The question isn't if, it's which chain wins."
+            }
+          ],
+          "dissent": {
+            "name": "Arthur Hayes on Unchained",
+            "time": "2d ago",
+            "quote": "Everyone's rushing into RWAs at the top. Real alpha is in pure crypto plays."
+          }
+        }
+      },
+      {
+        "id": "feed-2",
+        "type": "DIVERGENCE",
+        "time": "8h ago",
+        "event": "Vitalik diverges from L2 scaling consensus, proposes L3 focus",
+        "expansion": {
+          "contrarian": {
+            "name": "Vitalik on Bankless",
+            "time": "8h ago",
+            "quote": "L2s are becoming too centralized. The real scaling solution is app-specific L3s with shared security."
+          },
+          "mainstream": [
+            {
+              "name": "Arbitrum team (multiple podcasts)",
+              "time": "This week",
+              "quote": "L2s are just getting started. We're seeing 100x cost reduction already."
+            },
+            {
+              "name": "Polygon leadership on Empire",
+              "time": "4d ago",
+              "quote": "L2 dominance is inevitable. L3s add unnecessary complexity."
+            }
+          ]
+        }
+      },
+      {
+        "id": "feed-3",
+        "type": "TREND",
+        "time": "1d ago",
+        "event": "Restaking yields mentioned 31 times as sustainable income source",
+        "momentum": "31 mentions this week vs. 9 mentions last week (+244%)"
+      },
+      {
+        "id": "feed-4",
+        "type": "WHALE-INTEL",
+        "time": "12h ago",
+        "event": "Major funds rotating from DeFi blue chips to RWA protocols",
+        "impact": "Aave, Compound seeing outflows. Ondo, Centrifuge seeing massive inflows."
+      },
+      {
+        "id": "feed-5",
+        "type": "PATTERN",
+        "time": "2d ago",
+        "event": "Bitcoin L2 thesis validated by Muneeb Ali, Eric Wall, Udi Wertheimer",
+        "implications": "3 previously skeptical voices now building on Bitcoin. Stacks seeing 400% developer growth."
+      }
+    ],
+    "notable_signals": {
+      "market_narratives": {
+        "count": 127,
+        "trending": "↑ 34 from last week",
+        "label": "Narrative Shifts",
+        "signals": [
+          {
+            "trend": "DeFi → RWAs shift",
+            "count": 47,
+            "source": "Multiple podcasts",
+            "insight": "Institutional entry driving narrative. Yield farming out, treasury tokenization in."
+          },
+          {
+            "trend": "Monolithic → Modular shift",
+            "count": 38,
+            "source": "Bankless, Bell Curve, Empire",
+            "insight": "Celestia's success proving modular thesis. Every L1 scrambling to modularize."
+          },
+          {
+            "trend": "NFT → Gaming pivot",
+            "count": 29,
+            "source": "Various gaming podcasts",
+            "insight": "NFT projects pivoting to gaming. Ownership narrative evolving to utility."
+          },
+          {
+            "trend": "Memecoin exhaustion",
+            "count": 24,
+            "source": "UpOnly, Cobie streams",
+            "insight": "Retail fatigue after 1000x plays disappeared. Smart money rotating to infrastructure."
+          },
+          {
+            "trend": "Privacy tech resurgence",
+            "count": 18,
+            "source": "ZK Podcast, Bankless",
+            "insight": "Regulatory clarity making privacy tech investable again. ZK everything."
+          },
+          {
+            "trend": "AI agents using crypto rails",
+            "count": 15,
+            "source": "AI x Crypto pods",
+            "insight": "First working examples live. Truth Terminal has $300k treasury, trades autonomously."
+          }
+        ]
+      },
+      "thesis_validation": {
+        "count": 42,
+        "trending": "↑ 12 reaching validation",
+        "label": "Alpha Signals",
+        "signals": [
+          {
+            "thesis": "Restaking > Liquid staking",
+            "status": "GAINING VALIDATION",
+            "sources": "EigenLayer, Babylon, Symbiotic all over $5B TVL",
+            "insight": "Native yields plus restaking rewards creating sustainable 15-25% APY."
+          },
+          {
+            "thesis": "Bitcoin programmability via L2s",
+            "status": "GAINING VALIDATION",
+            "sources": "Lightning, Stacks, BitVM showing traction",
+            "insight": "Bitcoin DeFi TVL crossed $2B. The orange coin is waking up."
+          },
+          {
+            "thesis": "Perp DEXs > Spot DEXs",
+            "status": "VALIDATED",
+            "sources": "dYdX, GMX, Vertex data",
+            "insight": "Perps volume 10x spot. Traders want leverage, not just swaps."
+          },
+          {
+            "thesis": "Chain abstraction critical",
+            "status": "EARLY SIGNALS",
+            "sources": "Particle, Socket discussions",
+            "insight": "Users hate bridging. Winners will abstract chains entirely."
+          }
+        ],
+        "tracked_topics": [
+          {
+            "name": "RWAs",
+            "momentum": 420,
+            "mentions": 107,
+            "episodes": 42,
+            "keywords": ["Tokenized treasuries", "BlackRock", "Institutional DeFi"],
+            "context": "Larry Fink Bankless appearance drove massive interest"
+          },
+          {
+            "name": "ETH Restaking", 
+            "momentum": 238,
+            "mentions": 120,
+            "episodes": 38,
+            "keywords": ["EigenLayer", "Shared security", "AVS", "Liquid restaking"],
+            "context": "15-25% sustainable yields attracting billions"
+          },
+          {
+            "name": "Bitcoin L2s",
+            "momentum": 187,
+            "mentions": 51,
+            "episodes": 28,
+            "keywords": ["Lightning", "Stacks", "BitVM", "Orange DeFi"],
+            "context": "Ordinals success proving Bitcoin wants more functionality"
+          },
+          {
+            "name": "AI x Crypto",
+            "momentum": 156,
+            "mentions": 67,
+            "episodes": 31,
+            "keywords": ["AI agents", "Crypto rails", "Autonomous economy"],
+            "context": "Truth Terminal making $50k/day changed everything"
+          },
+          {
+            "name": "Privacy/ZK",
+            "momentum": 67,
+            "mentions": 42,
+            "episodes": 19,
+            "keywords": ["ZK rollups", "Privacy coins", "Confidential DeFi"],
+            "context": "Regulatory clarity making privacy investable again"
+          }
+        ]
+      },
+      "notable_deals": {
+        "count": 23,
+        "trending": "8 unicorns",
+        "label": "Token Launches & Raises",
+        "signals": [
+          {
+            "company": "EigenLayer",
+            "details": "Token launch at $15B FDV",
+            "insight": "Restaking narrative validated. Every L1 launching restaking now.*"
+          },
+          {
+            "company": "Monad (rumored)",
+            "details": "Series B at $3B valuation",
+            "insight": "Parallel EVM attracting massive interest. Jump and Paradigm leading."
+          },
+          {
+            "company": "Movement Labs",
+            "details": "Series A at $300M",
+            "insight": "Move language gaining traction. Aptos ecosystem expanding rapidly."
+          }
+        ]
+      },
+      "portfolio_mentions": {
+        "count": 31,
+        "trending": "↑ 7 competitive threats",
+        "label": "Protocol Intelligence",
+        "empty_state": {
+          "title": "PROTOCOL TRACKING",
+          "subtitle": "Protocol & position intelligence",
+          "status": "No protocols configured",
+          "benefits": [
+            "Track mentions across all podcasts",
+            "Monitor competitive landscape",
+            "Get sentiment analysis on holdings"
+          ],
+          "cta": "→ Configure Portfolio"
+        }
+      },
+      "whale_sentiment": {
+        "count": 18,
+        "trending": "↓ Risk-off mode emerging",
+        "label": "Smart Money Flows",
+        "signals": [
+          {
+            "trend": "Rotation to Bitcoin",
+            "source": "On-chain data + podcast discussions",
+            "impact": "BTC dominance hitting 58%, highest since 2021"
+          },
+          {
+            "trend": "Stablecoin yields priority",
+            "source": "Multiple DeFi podcasts",
+            "impact": "USDC/USDT pools seeing massive inflows at 15% APY"
+          },
+          {
+            "trend": "VC tokens underperforming",
+            "source": "Cobie, Hsaka discussions",
+            "impact": "High FDV, low float tokens getting crushed. Community coins outperforming 10x"
+          }
+        ]
+      }
+    },
+    "priority_briefings": [
+      {
+        "id": "briefing-1",
+        "priority": "critical",
+        "priority_label": "Portfolio Alert",
+        "podcast": "Bankless",
+        "time": "3h ago",
+        "duration": "89 min",
+        "influence": "High (96)",
+        "title": "Why Every Asset Will Be Tokenized",
+        "guest": "Larry Fink, CEO of BlackRock",
+        "key_insights": [
+          "BlackRock tokenizing $10B in treasuries this quarter alone",
+          "24/7 settlement and instant liquidity changing institutional mindset",
+          "Ethereum becoming the default settlement layer for RWAs"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: RWA tokenization accelerating"
+          },
+          {
+            "type": "portfolio",
+            "text": "⚠ Portfolio Alert: Your protocol mentioned by name"
+          }
+        ]
+      },
+      {
+        "id": "briefing-2",
+        "priority": "opportunity",
+        "priority_label": "Alpha Signal",
+        "podcast": "What Bitcoin Did",
+        "time": "12h ago",
+        "duration": "76 min",
+        "influence": "High (89)",
+        "title": "Bitcoin L2s: The Next Trillion Dollar Opportunity",
+        "guest": "Muneeb Ali, Founder of Stacks",
+        "key_insights": [
+          "Bitcoin DeFi TVL crossed $2B, growing 400% quarterly",
+          "Ordinals proved Bitcoin users want more functionality",
+          "Major exchanges integrating Bitcoin L2 support Q4 2025"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Market Signal: Bitcoin ecosystem expansion"
+          }
+        ]
+      },
+      {
+        "id": "briefing-3",
+        "priority": "elevated",
+        "priority_label": "Narrative Shift",
+        "podcast": "The Defiant",
+        "time": "1d ago",
+        "duration": "64 min",
+        "influence": "High (84)",
+        "title": "Why I'm Rotating Everything to Restaking",
+        "guest": "Su Zhu, Three Arrows Capital (Reformed)",
+        "key_insights": [
+          "Sustainable 15-25% yields through ETH restaking changing the game",
+          "Risk-adjusted returns beating everything in TradFi",
+          "EigenLayer TVL passing $40B, still early days"
+        ],
+        "signals": [
+          {
+            "type": "whale",
+            "text": "◇ Whale Intel: Major funds rotating to restaking"
+          }
+        ]
+      },
+      {
+        "id": "briefing-4",
+        "priority": "critical",
+        "priority_label": "Ecosystem Alert",
+        "podcast": "Unchained",
+        "time": "18h ago",
+        "duration": "92 min",
+        "influence": "High (91)",
+        "title": "The Modular Thesis: Why Monolithic Chains Are Dead",
+        "guest": "Mustafa Al-Bassam, CEO of Celestia",
+        "key_insights": [
+          "Celestia passing $1B in data availability fees annualized",
+          "Every major L1 announcing modular roadmap",
+          "Rollup costs down 99% using Celestia vs Ethereum"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: Modular blockchain architecture"
+          },
+          {
+            "type": "competitive",
+            "text": "⚠ Competitive Intel: Ethereum dominance challenged"
+          }
+        ]
+      },
+      {
+        "id": "briefing-5",
+        "priority": "opportunity",
+        "priority_label": "Alpha Signal",
+        "podcast": "Empire",
+        "time": "1d ago",
+        "duration": "71 min",
+        "influence": "83% influence",
+        "title": "AI Agents Are Trading Crypto Better Than Humans",
+        "guest": "Andy Ayrey, Creator of Truth Terminal",
+        "key_insights": [
+          "Truth Terminal AI agent has $300k treasury, makes $50k/day trading",
+          "AI agents using crypto rails for autonomous economic activity",
+          "New token launches specifically targeting AI agent traders"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Emerging: AI x Crypto convergence"
+          },
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: Autonomous AI economy"
+          }
+        ]
+      },
+      {
+        "id": "briefing-6",
+        "priority": "elevated",
+        "priority_label": "Sentiment Shift",
+        "podcast": "UpOnly",
+        "time": "2d ago",
+        "duration": "118 min",
+        "influence": "78% influence",
+        "title": "The Death of Memecoins and Rise of Real Yield",
+        "guest": "Cobie & Ledger",
+        "key_insights": [
+          "Memecoin volume down 80% from March peaks",
+          "Retail rotating to sustainable yield strategies",
+          "Quality projects with real revenue seeing inflows"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Narrative Shift: Speculation → Sustainability"
+          },
+          {
+            "type": "market",
+            "text": "◆ Smart Money: Rotating to yield"
+          }
+        ]
+      },
+      {
+        "id": "briefing-7",
+        "priority": "opportunity",
+        "priority_label": "Infrastructure Play",
+        "podcast": "Bell Curve",
+        "time": "2d ago",
+        "duration": "82 min",
+        "influence": "76% influence",
+        "title": "Chain Abstraction: The $100B Opportunity Nobody Sees",
+        "guest": "Founders of Particle Network",
+        "key_insights": [
+          "Users losing $500M annually to bad bridging UX",
+          "Chain abstraction making crypto actually usable",
+          "First movers in abstraction seeing explosive growth"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Infrastructure Opportunity"
+          },
+          {
+            "type": "market",
+            "text": "◆ UX Revolution"
+          }
+        ]
+      },
+      {
+        "id": "briefing-8",
+        "priority": "elevated",
+        "priority_label": "Regulatory Signal",
+        "podcast": "Decrypt Daily",
+        "time": "3d ago",
+        "duration": "58 min",
+        "influence": "Medium influence",
+        "title": "Privacy Coins Are Back: Regulatory Clarity Changes Everything",
+        "guest": "Zooko Wilcox, Founder of Zcash",
+        "key_insights": [
+          "US Treasury approves privacy tech for compliant use cases",
+          "Enterprise demand for confidential DeFi exploding",
+          "Privacy coins up 300% since regulatory clarity"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Privacy Tech Renaissance"
+          },
+          {
+            "type": "market",
+            "text": "◆ Regulatory Tailwind"
+          }
+        ]
+      },
+      {
+        "id": "briefing-9",
+        "priority": "opportunity",
+        "priority_label": "Whale Activity",
+        "podcast": "The Journey Man",
+        "time": "3d ago",
+        "duration": "95 min",
+        "influence": "87% influence",
+        "title": "The Banana Zone: Why This Cycle Goes to $10T",
+        "guest": "Raoul Pal",
+        "key_insights": [
+          "Global liquidity cycle perfectly aligned with crypto adoption",
+          "Institutional allocation still under 1%, heading to 5%",
+          "Every major bank launching crypto products in 2025"
+        ],
+        "signals": [
+          {
+            "type": "macro",
+            "text": "◇ Macro Tailwind"
+          },
+          {
+            "type": "market",
+            "text": "◆ Institutional FOMO"
+          }
+        ]
+      }
+    ],
+    "weekly_brief": {
+      "hours_analyzed": 876,
+      "last_updated": "42 mins ago",
+      "collapsed_summary": "RWA tokenization dominates [8 sources agree, led by Fink/Bankless, Pal/Journey Man] with institutions tokenizing billions monthly. Notable divergence: Vitalik challenges L2 consensus, proposes L3 focus. Blindspot: Privacy tech renaissance as regulations clarify.",
+      "expanded": {
+        "consensus": [
+          {
+            "title": "RWAs are the next trillion-dollar narrative",
+            "sources": "Fink/Bankless, Pal/Journey Man, multiple DeFi podcasts",
+            "detail": "Tokenized treasuries offering instant settlement winning institutional adoption"
+          },
+          {
+            "title": "Restaking sustainable yields changing DeFi",
+            "sources": "Su Zhu/Defiant, multiple yield farmers confirm 15-25% APY",
+            "detail": "EigenLayer model being copied by every major protocol"
+          },
+          {
+            "title": "Bitcoin programmability finally happening",
+            "sources": "Muneeb/WBD, Eric Wall, Udi all building on Bitcoin",
+            "detail": "Bitcoin DeFi TVL crossed $2B, L2s gaining real traction"
+          }
+        ],
+        "contrarian": [
+          {
+            "title": "Memecoins dead, quality projects rising",
+            "sources": "Cobie/UpOnly dissenting from CT consensus",
+            "detail": "Smart money rotating to revenue-generating protocols"
+          },
+          {
+            "title": "L3s > L2s according to Vitalik",
+            "sources": "Vitalik/Bankless challenging entire L2 ecosystem",
+            "detail": "App-specific L3s could obsolete general purpose L2s"
+          }
+        ],
+        "blindspots": [
+          {
+            "title": "Privacy tech quietly gaining enterprise adoption",
+            "sources": "ZK Podcast deep dives, zero coverage elsewhere",
+            "detail": "Regulatory clarity making confidential DeFi possible"
+          },
+          {
+            "title": "AI agents accumulating significant treasuries",
+            "sources": "Truth Terminal has $300k, others following",
+            "detail": "Autonomous AI economy forming without human intervention"
+          }
+        ]
+      },
+      "download_button": "Download Full Brief (PDF)",
+      "share_options": ["Share via Discord", "Post on X/Twitter"],
+      "email_template": {
+        "subject": "Crypto Intelligence Brief - Week [X], [Month] [Year]",
+        "body": "Key Highlights:\n• RWA tokenization reaching escape velocity\n• ETH restaking offering sustainable 15-25% yields\n• Bitcoin L2s finally gaining real traction\n• Memecoin exhaustion driving quality rotation"
+      },
+      "discord_notification": {
+        "implementation": "clipboard_copy",
+        "message_format": "📊 *Crypto Intelligence Brief - Week [X], [Month]*\n\nKey narratives:\n• RWAs dominating with institutional adoption\n• Restaking yields sustainable at 15-25%\n• Bitcoin L2s crossing $2B TVL\n• Memecoins dying, quality rising\n\nView full brief: [URL]",
+        "toast": {
+          "message": "Brief copied to clipboard - paste in Discord!",
+          "duration_seconds": 3,
+          "style": "Fixed position notification"
+        }
+      }
+    },
+    "sidebar_widgets": {
+      "velocity_tracking": {
+        "title": "Velocity Tracking",
+        "themes": [
+          {
+            "theme": "RWAs",
+            "change": "+420% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "ETH Restaking",
+            "change": "+238% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "Bitcoin L2s",
+            "change": "+187% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "Memecoins",
+            "change": "-45% w/w",
+            "direction": "negative"
+          },
+          {
+            "theme": "AI x Crypto",
+            "change": "+156% w/w",
+            "direction": "positive"
+          }
+        ]
+      },
+      "influence_metrics": {
+        "title": "Influence Metrics",
+        "people": [
+          {
+            "name": "Vitalik Buterin",
+            "score": "High (98)"
+          },
+          {
+            "name": "Raoul Pal",
+            "score": "High (92)"
+          },
+          {
+            "name": "Larry Fink",
+            "score": "High (89)"
+          },
+          {
+            "name": "Arthur Hayes",
+            "score": "Medium (76)"
+          },
+          {
+            "name": "Cobie",
+            "score": "Medium (71)"
+          }
+        ]
+      },
+      "consensus_monitor": {
+        "title": "Consensus Monitor",
+        "topics": [
+          {
+            "topic": "RWAs",
+            "level": "Peak (>90% agreement)"
+          },
+          {
+            "topic": "Restaking Yields",
+            "level": "Strong (>80% agreement)"
+          },
+          {
+            "topic": "Bitcoin L2s",
+            "level": "Building (60-80% agreement)"
+          },
+          {
+            "topic": "Memecoins",
+            "level": "Weak (<40% agreement)"
+          }
+        ]
+      },
+      "topic_correlations": {
+        "title": "Topic Correlations",
+        "correlations": [
+          {
+            "topics": "RWAs + Institutional",
+            "percentage": 84
+          },
+          {
+            "topics": "Restaking + Yield",
+            "percentage": 76
+          },
+          {
+            "topics": "AI + Autonomous",
+            "percentage": 68
+          },
+          {
+            "topics": "Privacy + Enterprise",
+            "percentage": 52
+          }
+        ]
+      }
+    },
+    "search": {
+      "placeholder": "What's the crypto narrative?",
+      "shortcut_hint": "⌘K",
+      "rotating_placeholders": [
+        "What's the alpha on...",
+        "Which whales are discussing...",
+        "Show me contrarian takes on...",
+        "What's pumping next..."
+      ],
+      "suggestions": [
+        {
+          "query": "What's the consensus on RWAs?",
+          "meta": "42 sources"
+        },
+        {
+          "query": "ETH restaking yields sustainable?",
+          "meta": "28 sources"
+        },
+        {
+          "query": "Vitalik latest thoughts on scaling",
+          "meta": "7 episodes"
+        }
+      ],
+      "trending_topics": [
+        {
+          "topic": "RWAs",
+          "trend": "↑420% w/w"
+        },
+        {
+          "topic": "ETH Restaking",
+          "trend": "↑238% w/w"
+        },
+        {
+          "topic": "Bitcoin L2s",
+          "trend": "↑187% w/w"
+        }
+      ],
+      "quick_filters": [
+        "Consensus views",
+        "Contrarian alpha",
+        "Whale movements",
+        "Token launches",
+        "Key influencers"
+      ],
+      "filter_queries": {
+        "consensus": "What's the consensus on ",
+        "contrarian": "Contrarian views on ",
+        "whale": "Whale activity in ",
+        "launches": "Recent launches in ",
+        "people": "What is [person] saying about "
+      },
+      "results_template": {
+        "confidence_badge": "92% confidence",
+        "source_count": "Based on 28 podcast discussions",
+        "key_insight_template": "Strong consensus forming: RWA tokenization reaching escape velocity as institutions enter...",
+        "play_clip_durations": "30-50 seconds",
+        "action_buttons": [
+          "View Deep Analysis",
+          "Share Alpha",
+          "Save to Research"
+        ]
+      },
+      "placeholder_rotation": {
+        "enabled": true,
+        "interval_seconds": 3,
+        "behavior": "Cycles through placeholders when search input is focused"
+      },
+      "audio_playback": {
+        "clip_duration_range": "30-50 seconds",
+        "generation": "Random duration generated per clip",
+        "simulation_duration": "5 seconds actual playback"
+      }
+    },
+    "portfolio": {
+      "panel_header": "Protocol Tracking",
+      "stats_summary": {
+        "total_positions": "Total Positions",
+        "mentions_this_week": "Mentions This Week",
+        "positive_sentiment": "Bullish Sentiment"
+      },
+      "sections": {
+        "portfolio": {
+          "label": "YOUR PROTOCOLS",
+          "placeholder": "Enter protocol name",
+          "button": "+ Add",
+          "import_text": "Or import your portfolio:",
+          "import_buttons": ["Upload CSV", "Connect Wallet"],
+          "header": "YOUR HOLDINGS",
+          "empty_state": "Add protocols to track mentions and sentiment"
+        },
+        "watchlist": {
+          "label": "WATCHLIST PROTOCOLS",
+          "placeholder": "Enter protocol name",
+          "button": "+ Add",
+          "header": "YOUR WATCHLIST",
+          "empty_state": "Add protocols to monitor for entry opportunities"
+        }
+      },
+      "default_companies": [
+        {
+          "name": "EigenLayer",
+          "mentions": 18,
+          "sentiment": "15 bullish, 3 neutral",
+          "status": "Momentum building"
+        },
+        {
+          "name": "Celestia",
+          "mentions": 12,
+          "sentiment": "Modular thesis validated",
+          "status": "Competitive moat"
+        }
+      ],
+      "footer": "Import formats: CSV, Zapper, Zerion, DeBank",
+      "stats_values": {
+        "total_positions": 24,
+        "mentions_this_week": 127,
+        "positive_sentiment": "+84%"
+      },
+      "button_states": {
+        "new_mentions_cycle": "3→5→8→3 every 5 minutes",
+        "aria_label": "Protocol tracking"
+      },
+      "update_cycle": {
+        "interval_minutes": 5,
+        "sequence": [3, 5, 8],
+        "persistence": {
+          "localStorage_keys": [
+            "synthea_portfolio_state",
+            "synthea_newMentionsValue", 
+            "synthea_nextMentionsUpdateTime"
+          ],
+          "behavior": "Continues cycle even after page refresh"
+        }
+      },
+      "filter_dropdown": {
+        "options": [
+          "Curated for You",
+          "All Episodes",
+          "Bankless",
+          "What Bitcoin Did",
+          "The Defiant",
+          "Unchained",
+          "Empire",
+          "UpOnly",
+          "Bell Curve",
+          "The Journey Man",
+          "Decrypt Daily"
+        ],
+        "default": "Curated for You",
+        "behavior": "Complete DOM replacement when filtering"
+      }
+    },
+    "global": {
+      "section_headers": {
+        "narrative_pulse": "Narrative Pulse",
+        "narrative_feed": "Narrative Feed",
+        "notable_signals": "Notable Signals",
+        "priority_briefings": "Priority Briefings",
+        "weekly_intelligence_brief": "Weekly Intelligence Brief"
+      },
+      "helper_text": {
+        "no_results": "No results found for",
+        "loading": "Loading...",
+        "show_more": "Show more briefings",
+        "collapse": "Collapse briefings",
+        "expand": "View Full Analysis"
+      },
+      "empty_states": {
+        "portfolio": "Add protocols to track mentions and sentiment",
+        "watchlist": "Add protocols to monitor for entry opportunities"
+      },
+      "error_messages": [],
+      "tooltips": {
+        "influence_score": "Based on follower count, on-chain impact, and citation frequency",
+        "consensus_level": "Percentage of sources in agreement",
+        "momentum": "Week-over-week change in mentions"
+      },
+      "button_labels": {
+        "close": "×",
+        "delete": "×",
+        "play": "Play clip",
+        "download": "Download Full Brief (PDF)",
+        "share_discord": "Share via Discord",
+        "post_twitter": "Post on X"
+      }
+    },
+    "episode_panel": {
+      "trigger": "Click on any Priority Briefing episode card",
+      "animation": "Slides in from right with backdrop",
+      "close_methods": ["X button", "backdrop click", "ESC key"],
+      "sections": {
+        "header": {
+          "podcast_info": {
+            "logo": "Dynamic based on podcast",
+            "name": "[Podcast Name]",
+            "meta": "[Time ago] • [Duration] • [Influence score]"
+          },
+          "episode_title": "[Episode Title]",
+          "episode_guest": "[Guest Name and Title]"
+        },
+        "episode_intelligence": {
+          "title": "Episode Intelligence",
+          "subsections": {
+            "the_facts": {
+              "title": "The Facts",
+              "content": "Key insights converted to objective facts"
+            },
+            "the_context": {
+              "title": "The Context",
+              "examples": [
+                "RWA narrative shifting from experimentation to institutional adoption",
+                "Restaking yields proving sustainable as more validators join",
+                "Bitcoin ecosystem awakening after Ordinals proved demand",
+                "Multiple credible sources confirming similar observations this week"
+              ]
+            }
+          }
+        },
+        "market_signals": {
+          "title": "Market Signals",
+          "categories": [
+            {
+              "type": "MOMENTUM",
+              "icon": "📈",
+              "background": "#f3e8ff",
+              "borderColor": "#9333ea",
+              "items": [
+                "RWA tokenization with institutional backing",
+                "ETH restaking yields sustaining 15-25% APY",
+                "Bitcoin L2s seeing real developer adoption"
+              ]
+            },
+            {
+              "type": "EMERGING",
+              "icon": "⚡",
+              "background": "#fef3c7",
+              "borderColor": "#f59e0b",
+              "items": [
+                "AI agents using crypto for autonomous trading",
+                "Privacy tech gaining enterprise adoption",
+                "Modular blockchain architecture winning"
+              ]
+            },
+            {
+              "type": "DECLINING",
+              "icon": "📉",
+              "background": "#fee2e2",
+              "borderColor": "#ef4444",
+              "items": [
+                "Memecoin mania exhaustion setting in",
+                "High FDV, low float tokens getting crushed",
+                "Monolithic L1 narratives losing steam"
+              ]
+            }
+          ]
+        },
+        "pattern_recognition": {
+          "title": "Pattern Recognition",
+          "patterns": [
+            { "number": "8th", "label": "Major source validating RWA thesis this week" },
+            { "number": "84%", "label": "Of discussions now include yield sustainability" },
+            { "number": "23", "label": "Protocols potentially impacted by narrative" },
+            { "number": "3rd", "label": "Time this guest has been bullish on topic" }
+          ]
+        },
+        "notable_mentions": {
+          "title": "Notable Mentions",
+          "empty_state": {
+            "icon": "⚠️",
+            "message": "No portfolio protocols detected in this episode",
+            "hint": "[+ Add your protocols to get alerts]"
+          }
+        },
+        "essential_quote": {
+          "title": "Essential Quote",
+          "examples": [
+            {
+              "text": "Tokenized treasuries are the gateway drug. Once institutions taste instant settlement, there's no going back.",
+              "attribution": "[Guest Name] @ 24:31"
+            },
+            {
+              "text": "We're still early. Wait until sovereign wealth funds arrive.",
+              "attribution": "[Guest Name] @ 18:45"
+            },
+            {
+              "text": "The real alpha is hiding in plain sight - sustainable yield is the new narrative.",
+              "attribution": "[Guest Name] @ 32:10"
+            }
+          ],
+          "actions": {
+            "copy": "Copy quote to clipboard",
+            "play_clip": {
+              "duration": "18 seconds",
+              "progress_bar": "Audio progress animation"
+            }
+          }
+        },
+        "related_episodes": {
+          "title": "Related Episodes",
+          "examples": [
+            {
+              "title": "Unchained: The Modular Thesis",
+              "note": "Relevant: Confirms infrastructure unbundling across chains"
+            },
+            {
+              "title": "Empire: Yield Farming 2.0",
+              "note": "Relevant: Deep dive on sustainable yield strategies"
+            },
+            {
+              "title": "Bell Curve: Chain Abstraction",
+              "note": "Relevant: Technical architecture enabling seamless UX"
+            }
+          ]
+        }
+      },
+      "action_bar": {
+        "buttons": [
+          { "label": "Download PDF", "style": "primary" },
+          { "label": "Email", "style": "secondary" },
+          { "label": "Share", "style": "tertiary" },
+          { "label": "Play", "style": "tertiary" },
+          { "label": "Read", "style": "tertiary" }
+        ]
+      }
+    },
+    "ui_states": {
+      "loading_states": {
+        "skeleton_screens": {
+          "narrative_pulse": "SVG skeleton with bars and axis",
+          "components": "Loading... text placeholder"
+        },
+        "animations": {
+          "shimmer": "3s ease-in-out infinite",
+          "pulse": "2s infinite",
+          "fade_in": "300ms ease"
+        }
+      },
+      "notifications": {
+        "discord_toast": {
+          "message": "Brief copied to clipboard - paste in Discord!",
+          "duration": "3 seconds",
+          "style": "Fixed position toast notification"
+        }
+      },
+      "empty_states": {
+        "portfolio": {
+          "icon": "Chart SVG",
+          "message": "Add protocols to track mentions and sentiment"
+        },
+        "watchlist": {
+          "icon": "Search SVG",
+          "message": "Add protocols to monitor for entry opportunities"
+        },
+        "no_results": {
+          "priority_briefings": "No episodes found for [filter]"
+        }
+      },
+      "timing_intervals": {
+        "portfolio_button_cycle": {
+          "interval": "5 minutes",
+          "sequence": [3, 5, 8],
+          "description": "New mentions badge cycles 3→5→8→3"
+        },
+        "search_placeholder_rotation": {
+          "interval": "3 seconds",
+          "placeholders": [
+            "What's the alpha on...",
+            "Which whales are discussing...",
+            "Show me contrarian takes on...",
+            "What's pumping next..."
+          ]
+        },
+        "audio_playback": {
+          "search_clips": "30-50 seconds (random)",
+          "quote_clips": "18 seconds (fixed)",
+          "simulation_duration": "5 seconds"
+        },
+        "animations": {
+          "panel_slide": "300ms",
+          "hover_transition": "200ms",
+          "filter_delay": "200ms"
+        }
+      }
+    }
+    },
+    "episode_panel": {
+      "podcast_image_mappings": {
+        "Bankless": "images/bankless.jpeg",
+        "What Bitcoin Did": "images/whatbitcoindid.jpeg",
+        "The Defiant": "images/thedefiant.jpeg",
+        "Unchained": "images/unchained.jpeg",
+        "Empire": "images/empire.jpeg",
+        "UpOnly": "images/uponly.jpeg",
+        "Bell Curve": "images/bellcurve.jpeg",
+        "The Journey Man": "images/journeyman.jpeg",
+        "Decrypt Daily": "images/decryptdaily.jpeg",
+        "Epicenter": "images/epicenter.jpeg"
+      },
+      "market_signals_template": [
+        {
+          "title": "MOMENTUM",
+          "icon": "📈",
+          "background": "#f3e8ff",
+          "borderColor": "#9333ea",
+          "titleColor": "#9333ea",
+          "items": [
+            "RWA tokenization with institutional backing",
+            "ETH restaking yields sustaining 15-25% APY",
+            "Bitcoin L2s seeing real developer adoption"
+          ]
+        },
+        {
+          "title": "EMERGING",
+          "icon": "⚡",
+          "background": "#fef3c7",
+          "borderColor": "#f59e0b",
+          "titleColor": "#f59e0b",
+          "items": [
+            "AI agents using crypto for autonomous trading",
+            "Privacy tech gaining enterprise adoption",
+            "Modular blockchain architecture winning"
+          ]
+        },
+        {
+          "title": "DECLINING",
+          "icon": "📉",
+          "background": "#fee2e2",
+          "borderColor": "#ef4444",
+          "titleColor": "#ef4444",
+          "items": [
+            "Memecoin mania exhaustion setting in",
+            "High FDV, low float tokens getting crushed",
+            "Monolithic L1 narratives losing steam"
+          ]
+        }
+      ],
+      "pattern_templates": {
+        "critical": [
+          { "number": "8th", "label": "Major source validating thesis this week" },
+          { "number": "84%", "label": "Of discussions now include this theme" },
+          { "number": "23", "label": "Protocols potentially impacted" },
+          { "number": "3rd", "label": "Time this guest has discussed topic" }
+        ],
+        "default": [
+          { "number": "15+", "label": "Sources confirming this narrative" },
+          { "number": "5x", "label": "Increase in protocol activity" },
+          { "number": "23", "label": "Related protocols affected" },
+          { "number": "2nd", "label": "Major pivot by this guest" }
+        ]
+      },
+      "quote_templates": [
+        {
+          "type": "rwa",
+          "text": "Tokenized treasuries are the gateway drug. Once institutions taste instant settlement, there's no going back.",
+          "attribution_suffix": " @ 24:31"
+        },
+        {
+          "type": "yield",
+          "text": "Sustainable yield is the new narrative. Ponzis are dead.",
+          "attribution_suffix": " @ 18:45"
+        },
+        {
+          "type": "default",
+          "text": "The real alpha is hiding in plain sight.",
+          "attribution_suffix": " @ 32:10"
+        }
+      ],
+      "related_episodes_template": [
+        {
+          "title": "Unchained: The Modular Thesis",
+          "note": "Relevant: Confirms infrastructure unbundling across chains"
+        },
+        {
+          "title": "Empire: Yield Farming 2.0",
+          "note": "Relevant: Deep dive on sustainable yield strategies"
+        },
+        {
+          "title": "Bell Curve: Chain Abstraction",
+          "note": "Relevant: Technical architecture enabling seamless UX"
+        }
+      ]
+    },
+    "search_results_template": {
+      "confidence_format": "92% confidence",
+      "source_count_format": "Based on 28 podcast discussions",
+      "key_insight_template": "Strong consensus forming: RWA tokenization reaching escape velocity as institutions enter...",
+      "clip_duration_range": "30-50 seconds",
+      "source_cards": [
+        {
+          "podcast": "Larry Fink on Bankless",
+          "time_format": "3 hours ago",
+          "quote_preview": "We're tokenizing $10 billion this quarter alone. The efficiency gains are undeniable...",
+          "play_button_text": "Play clip"
+        },
+        {
+          "podcast": "Raoul Pal on The Journey Man",
+          "time_format": "12 hours ago",
+          "quote_preview": "This is the banana zone. Global liquidity plus institutional FOMO equals $10 trillion market...",
+          "play_button_text": "Play clip"
+        }
+      ],
+      "action_buttons": [
+        "View Deep Analysis",
+        "Share Alpha",
+        "Save to Research"
+      ]
+    },
+    "demo_data": {
+      "topics": {
+        "RWAs": { 
+          "color": "#9333ea", 
+          "momentum": "+420%", 
+          "mentions": 312, 
+          "episodes": 42 
+        },
+        "ETH Restaking": { 
+          "color": "#3b82f6", 
+          "momentum": "+238%", 
+          "mentions": 287, 
+          "episodes": 38 
+        },
+        "Bitcoin L2s": { 
+          "color": "#f97316", 
+          "momentum": "+187%", 
+          "mentions": 156, 
+          "episodes": 28 
+        },
+        "Memecoins": { 
+          "color": "#eab308", 
+          "momentum": "-45%", 
+          "mentions": 89, 
+          "episodes": 15 
+        }
+      },
+      "chart_consensus_data": {
+        "levels": [
+          [0.9, 0.8, 0.95, 0.92],
+          [0.7, 0.8, 0.85, 0.9],
+          [0.4, 0.6, 0.7, 0.8],
+          [0.5, 0.5, 0.3, 0.3]
+        ],
+        "labels": [
+          ["Building", "Strong", "Peak", "Peak"],
+          ["Moderate", "Strong", "Strong", "Peak"],
+          ["Weak", "Building", "Moderate", "Strong"],
+          ["Building", "Building", "Weak", "Weak"]
+        ]
+      }
+    },
+    "audit_summary": {
+    "total_data_points": 1842,
+    "podcasts_captured": [
+      "Bankless",
+      "What Bitcoin Did",
+      "The Defiant",
+      "Unchained",
+      "Empire",
+      "UpOnly",
+      "Bell Curve",
+      "The Journey Man",
+      "Decrypt Daily",
+      "Epicenter",
+      "The Breakdown",
+      "Uncommon Core",
+      "The Scoop",
+      "The Pomp Podcast",
+      "Coin Stories",
+      "ZK Podcast",
+      "The Delphi Podcast",
+      "On The Brink",
+      "Token Terminal",
+      "DeFi Edge",
+      "The Block",
+      "The Decrypt",
+      "The Chopping Block",
+      "Flippening"
+    ],
+    "protocols_entities": [
+      "EigenLayer",
+      "Celestia",
+      "Ethereum",
+      "Bitcoin",
+      "Stacks",
+      "Lightning Network",
+      "Arbitrum",
+      "Optimism",
+      "Polygon",
+      "Avalanche",
+      "Solana",
+      "Cosmos",
+      "Uniswap",
+      "Aave",
+      "Compound",
+      "MakerDAO",
+      "Curve",
+      "Convex",
+      "Lido",
+      "Rocket Pool",
+      "Frax",
+      "GMX",
+      "dYdX",
+      "Synthetix",
+      "Chainlink",
+      "The Graph",
+      "Filecoin",
+      "Arweave",
+      "Ondo Finance",
+      "Centrifuge",
+      "Maple Finance",
+      "Goldfinch",
+      "TrueFi",
+      "BlackRock",
+      "JPMorgan",
+      "Fidelity"
+    ],
+    "people_mentioned": [
+      "Vitalik Buterin",
+      "Raoul Pal",
+      "Larry Fink",
+      "Arthur Hayes",
+      "Cobie",
+      "Su Zhu",
+      "CZ (Changpeng Zhao)",
+      "Brian Armstrong",
+      "Sam Bankman-Fried",
+      "Do Kwon",
+      "Andre Cronje",
+      "Stani Kulechov",
+      "Hayden Adams",
+      "Anatoly Yakovenko",
+      "Muneeb Ali",
+      "Mustafa Al-Bassam",
+      "Robert Leshner",
+      "kain.eth",
+      "Ryan Sean Adams",
+      "David Hoffman",
+      "Laura Shin",
+      "Peter McCormack",
+      "Camila Russo",
+      "Anthony Pompliano",
+      "Mike Novogratz",
+      "Dan Morehead",
+      "Kyle Samani",
+      "Chris Dixon",
+      "Marc Andreessen",
+      "Naval Ravikant",
+      "Balaji Srinivasan",
+      "Eric Wall",
+      "Udi Wertheimer",
+      "Hsaka",
+      "Ledger",
+      "Andy Ayrey",
+      "Zooko Wilcox"
+    ],
+    "percentage_values_captured": 287,
+    "time_based_data_points": 156,
+    "empty_or_placeholder_values": 0,
+    "additional_data_captured": {
+      "episode_panel_templates": [
+        "10 podcast image mappings",
+        "3 market signal categories with crypto-specific items",
+        "Pattern recognition templates (critical and default)",
+        "3 quote variations (rwa, yield, default)",
+        "Related episodes template with crypto podcasts"
+      ],
+      "search_functionality": [
+        "4 rotating crypto-native placeholders",
+        "Search results template with confidence badges",
+        "2 source preview cards with crypto personalities",
+        "Random clip durations (30-50 seconds)",
+        "3 action buttons adapted for crypto"
+      ],
+      "demo_data_objects": [
+        "window.topics with 4 crypto topics",
+        "window.feedData with 5 crypto feed items",
+        "window.signalCounts with 5 categories",
+        "window.priorityBriefings with crypto podcasts",
+        "window.sidebarMetrics with crypto data",
+        "window.signalPanelData with crypto arrays",
+        "window.chartViewData with consensus levels",
+        "window.tickerData with crypto metrics"
+      ],
+      "timing_values": [
+        "Search placeholder rotation: 3 seconds",
+        "Portfolio button cycle: 5 minutes (3→5→8)",
+        "Panel slide animation: 300ms",
+        "Hover transition: 200ms",
+        "Filter delay: 200ms",
+        "Audio clip durations: 18 seconds (quotes), 30-50 seconds (search)"
+      ],
+      "accessibility_labels": [
+        "Logo aria-label: Synthea.ai Logo",
+        "Portfolio button aria-label: Protocol tracking",
+        "Close button aria-labels throughout",
+        "Delete button aria-labels with protocol names"
+      ]
+    }
+  },
+  "replacement_guide": {
+    "crypto_specific_terms": {
+      "terms": {
+        "Portfolio Company": "Protocol/Project",
+        "LP Sentiment": "Community/DAO Sentiment",
+        "Limited Partners": "Token Holders/Stakers",
+        "Series A/B/C": "Seed/Strategic/Public Round",
+        "ARR": "TVL/Protocol Revenue",
+        "DPI": "APY/Staking Rewards",
+        "Unicorn": "Blue Chip Protocol",
+        "M&A": "Protocol Merger/Acquisition",
+        "Board Meeting": "DAO Governance Call",
+        "Term Sheet": "Tokenomics/Whitepaper",
+        "Due Diligence": "Audit/Research",
+        "Carry": "Performance Fee/Treasury",
+        "Fund Vintage": "Launch Date/Genesis",
+        "Burn Rate": "Treasury Burn/Runway",
+        "Exit": "Token Launch/Liquidity",
+        "IPO": "TGE/CEX Listing",
+        "Valuation": "FDV/Market Cap",
+        "Partner Meeting": "Trading Review",
+        "Thesis Validation": "Trend Confirmation"
+      },
+      "topics": {
+        "AI Infrastructure": "RWAs (Real World Assets)",
+        "B2B SaaS": "DeFi Protocols",
+        "Developer Tools": "Web3 Infrastructure",
+        "Enterprise Software": "Institutional DeFi",
+        "Consumer Apps": "Consumer dApps",
+        "Vertical AI": "Vertical DeFi",
+        "Infrastructure Plays": "L1/L2 Infrastructure",
+        "Capital Efficiency": "Yield Optimization"
+      },
+      "metrics": {
+        "Monthly Active Users": "Daily Active Addresses",
+        "Churn Rate": "Wallet Retention",
+        "Customer Acquisition Cost": "User Acquisition Cost",
+        "Lifetime Value": "Wallet LTV",
+        "Net Revenue Retention": "TVL Growth Rate",
+        "Gross Margins": "Protocol Take Rate"
+      },
+      "crypto_podcasts": [
+        "Bankless",
+        "What Bitcoin Did",
+        "The Defiant",
+        "Unchained",
+        "Empire",
+        "UpOnly",
+        "Bell Curve",
+        "The Journey Man",
+        "Decrypt Daily",
+        "Epicenter",
+        "The Breakdown",
+        "Uncommon Core",
+        "The Scoop",
+        "The Pomp Podcast"
+      ],
+      "realistic_momentum_ranges": {
+        "explosive_growth": "200-500%",
+        "strong_growth": "100-200%",
+        "moderate_growth": "50-100%",
+        "stable": "0-50%",
+        "declining": "-20% to -80%"
+      }
+    }
+  }
+}

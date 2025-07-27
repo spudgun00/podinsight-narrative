@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>synthea.ai - Weekly Intelligence Brief</title>
+    <title>synthea.ai - Crypto Intelligence Brief</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='3'%3E%3Ccircle r='9' cx='9.7' cy='10.2' /%3E%3Ccircle r='9' cx='22.3' cy='10.2' /%3E%3Ccircle r='9' cx='16' cy='21.2' /%3E%3C/g%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='44' height='44' fill='white'/%3E%3Cdefs%3E%3CclipPath id='c1'%3E%3Ccircle r='13' cx='14' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c2'%3E%3Ccircle r='13' cx='30' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c3'%3E%3Ccircle r='13' cx='22' cy='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='30' cy='16' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
     
     <style>
         * {
@@ -93,30 +93,48 @@
         .logo-section {
             display: flex;
             align-items: center;
-            width: 100px;
+            width: auto;
         }
         
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 2px;
         }
         
         .logo-mark {
-            width: 24px;
-            height: 24px;
+            width: 39px;
+            height: 39px;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease;
+            cursor: pointer;
         }
         
-        .logo-name {
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            justify-content: space-between;
+        }
+        
+        .logo {
             font-family: 'Inter', sans-serif;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: #2C2C2C;
             line-height: 1;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.11em;
         }
         
-        /* Tagline removed from header */
+        .tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            color: #B5B5B5;
+            line-height: 1;
+            letter-spacing: 0.01em;
+            text-transform: lowercase;
+        }
         
         .report-title {
             font-family: 'Inter', sans-serif;
@@ -678,19 +696,50 @@
         <div class="header">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo">
-                        <svg class="logo-mark" width="24" height="24" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
-                            <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
-                                <circle r="13" cx="14" cy="14" />
-                                <circle r="13" cx="30" cy="14" />
-                                <circle r="13" cx="22" cy="28" />
+                    <div class="logo-container">
+                        <svg class="logo-mark" width="39" height="39" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
+                            <defs>
+                                <clipPath id="sage-circle1">
+                                    <circle r="13" cx="14" cy="16"></circle>
+                                </clipPath>
+                                <clipPath id="sage-circle2">
+                                    <circle r="13" cx="30" cy="16"></circle>
+                                </clipPath>
+                                <clipPath id="sage-circle3">
+                                    <circle r="13" cx="22" cy="30"></circle>
+                                </clipPath>
+                            </defs>
+                            
+                            <!-- Overlap between circle 1 and 2 -->
+                            <g clip-path="url(#sage-circle1)">
+                                <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Overlap between circle 1 and 3 -->
+                            <g clip-path="url(#sage-circle1)">
+                                <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Overlap between circle 2 and 3 -->
+                            <g clip-path="url(#sage-circle2)">
+                                <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Center overlap (all three) -->
+                            <g clip-path="url(#sage-circle1)">
+                                <g clip-path="url(#sage-circle2)">
+                                    <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                                </g>
                             </g>
                         </svg>
-                        <div class="logo-name">synthea.ai</div>
+                        <div class="logo-text">
+                            <div class="logo">synthea.ai</div>
+                            <div class="tagline">crypto intelligence synthesized</div>
+                        </div>
                     </div>
                 </div>
-                <div class="report-title">WEEKLY INTELLIGENCE BRIEF</div>
-                <div class="report-date">August 22-28, 2025</div>
+                <div class="report-title">CRYPTO INTELLIGENCE BRIEF</div>
+                <div class="report-date">December 14-21, 2024</div>
             </div>
         </div>
 
@@ -704,20 +753,20 @@
                 </div>
                 <div class="summary-text">
                     <p>
-                        <strong>AI infrastructure reaches peak consensus</strong> [52 mentions across 48 sources, 
-                        led by All-In, 20VC] with "picks and shovels" thesis driving massive funding rounds.
+                        <strong>RWA tokenization reaches escape velocity</strong> [312 mentions across 42 episodes, 
+                        led by Bankless, What Bitcoin Did] with institutional adoption hitting critical mass.
                     </p>
                     <p>
-                        <strong>DePIN explodes +78% w/w</strong> [32 mentions] as physical infrastructure 
-                        narrative gains tier-1 VC attention following major funding rumors.
+                        <strong>ETH restaking yields sustainable 15-25%</strong> [287 mentions] as EigenLayer 
+                        ecosystem matures with $8B TVL milestone crossed this week.
                     </p>
                     <p>
-                        <strong class="contrarian">Notable reversal:</strong> Crypto/Web3 rebounds +18% after 
-                        months of decline, driven by regulatory clarity and Base ecosystem momentum.
+                        <strong class="contrarian">Notable reversal:</strong> Memecoins collapse -45% after 
+                        months of speculation, capital rotating to quality projects with fundamentals.
                     </p>
                     <p>
-                        <strong class="blindspot">Warning signal:</strong> B2B SaaS drops -20% as AI-native 
-                        solutions render legacy playbooks obsolete.
+                        <strong class="blindspot">Warning signal:</strong> Privacy coins face -67% decline as 
+                        regulatory pressure mounts, exchanges begin delisting.
                     </p>
                 </div>
             </div>
@@ -726,29 +775,29 @@
             <div class="metrics-grid">
                 <div class="metric-card">
                     <p class="metric-label">Velocity</p>
-                    <p class="metric-value">+78%</p>
-                    <p class="metric-context">DePIN</p>
+                    <p class="metric-value">+420%</p>
+                    <p class="metric-context">RWAs</p>
                     <div class="metric-change change-up">↑ w/w</div>
                 </div>
                 
                 <div class="metric-card">
                     <p class="metric-label">Mentions</p>
-                    <p class="metric-value">52</p>
-                    <p class="metric-context">AI Infrastructure</p>
+                    <p class="metric-value">312</p>
+                    <p class="metric-context">RWA Tokenization</p>
                     <div class="metric-change change-up">↑ 37% w/w</div>
                 </div>
                 
                 <div class="metric-card">
                     <p class="metric-label">Consensus</p>
                     <p class="metric-value">Peak (>90%)</p>
-                    <p class="metric-context">AI Infrastructure</p>
-                    <div class="metric-change" style="color: #6B7280;">48 sources</div>
+                    <p class="metric-context">RWA Adoption</p>
+                    <div class="metric-change" style="color: #6B7280;">42 episodes</div>
                 </div>
                 
                 <div class="metric-card">
                     <p class="metric-label">Reversal</p>
-                    <p class="metric-value">+71%</p>
-                    <p class="metric-context">Crypto/Web3</p>
+                    <p class="metric-value">+238%</p>
+                    <p class="metric-context">ETH Restaking</p>
                     <div class="metric-change change-up">↑ Recovery</div>
                 </div>
             </div>
@@ -759,79 +808,79 @@
                 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">DePIN</span>
-                        <span class="momentum-change positive">+78% w/w</span>
+                        <span class="momentum-name">RWAs</span>
+                        <span class="momentum-change positive">+420% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 78%; background: #5a6c8c;"></div>
                     </div>
-                    <p class="momentum-context">32 mentions, major funding rumors driving narrative</p>
+                    <p class="momentum-context">312 mentions, BlackRock tokenizing $10B this quarter</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">AI Agents</span>
-                        <span class="momentum-change positive">+59% w/w</span>
+                        <span class="momentum-name">ETH Restaking</span>
+                        <span class="momentum-change positive">+238% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 59%; background: #4a7c59;"></div>
                     </div>
-                    <p class="momentum-context">35 mentions, tier-1 VCs aligning on thesis</p>
+                    <p class="momentum-context">287 mentions, sustainable 15-25% yields attracting billions</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">AI Infrastructure</span>
-                        <span class="momentum-change positive">+37% w/w</span>
+                        <span class="momentum-name">Bitcoin L2s</span>
+                        <span class="momentum-change positive">+187% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 37%; background: #a87c68;"></div>
                     </div>
-                    <p class="momentum-context">52 mentions, "picks and shovels" thesis at peak consensus</p>
+                    <p class="momentum-context">156 mentions, TVL crossing $2B milestone this month</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">Developer Tools</span>
-                        <span class="momentum-change positive">+29% w/w</span>
+                        <span class="momentum-name">Stablecoins</span>
+                        <span class="momentum-change positive">+156% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 29%; background: #8a68a8;"></div>
                     </div>
-                    <p class="momentum-context">18 mentions, AI coding assistants driving renaissance</p>
+                    <p class="momentum-context">234 mentions, USDT dominance challenged by USDC growth</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">Crypto/Web3</span>
-                        <span class="momentum-change positive">+18% w/w</span>
+                        <span class="momentum-name">ZK Technology</span>
+                        <span class="momentum-change positive">+127% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 18%; background: #5c7cfa;"></div>
                     </div>
-                    <p class="momentum-context">26 mentions, regulatory clarity sparks recovery</p>
+                    <p class="momentum-context">198 mentions, zkSync and StarkNet adoption accelerating</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">Capital Efficiency</span>
-                        <span class="momentum-change positive">+15% w/w</span>
+                        <span class="momentum-name">AI Cryptos</span>
+                        <span class="momentum-change positive">+89% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 15%; background: #f4a261;"></div>
                     </div>
-                    <p class="momentum-context">15 mentions, fundamentals matter narrative rebounds</p>
+                    <p class="momentum-context">145 mentions, FET/AGIX merger driving sector momentum</p>
                 </div>
 
                 <div class="momentum-item">
                     <div class="momentum-header">
-                        <span class="momentum-name">B2B SaaS</span>
-                        <span class="momentum-change negative">-20% w/w</span>
+                        <span class="momentum-name">Memecoins</span>
+                        <span class="momentum-change negative">-45% w/w</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 20%; background: #c77d7d;"></div>
                     </div>
-                    <p class="momentum-context">8 mentions, legacy SaaS struggles as AI-native dominates</p>
+                    <p class="momentum-context">89 mentions, exhaustion evident as capital seeks fundamentals</p>
                 </div>
             </div>
 
@@ -843,9 +892,9 @@
                     <div class="consensus-content">
                         <div class="consensus-marker"></div>
                         <div class="consensus-details">
-                            <h4>AI infrastructure at peak consensus</h4>
-                            <p class="consensus-sources">[48 positive sources out of 52 mentions: All-In dedicates full segment]</p>
-                            <p class="consensus-insight">"Picks and shovels" wins - everyone wants foundation layer exposure</p>
+                            <h4>RWA tokenization reaching escape velocity</h4>
+                            <p class="consensus-sources">[38 positive sources out of 42 mentions: Bankless dedicates full episode]</p>
+                            <p class="consensus-insight">BlackRock's $10B commitment validates institutional thesis</p>
                         </div>
                     </div>
                 </div>
@@ -854,9 +903,9 @@
                     <div class="consensus-content">
                         <div class="consensus-marker"></div>
                         <div class="consensus-details">
-                            <h4>DePIN summer emerging</h4>
-                            <p class="consensus-sources">[28 positive sources out of 32: Helium success story drives narrative]</p>
-                            <p class="consensus-insight">Physical meets digital - major funds announce DePIN strategies</p>
+                            <h4>ETH restaking yields proving sustainable</h4>
+                            <p class="consensus-sources">[35 positive sources out of 38: EigenLayer ecosystem maturing]</p>
+                            <p class="consensus-insight">15-25% APY without ponzinomics - "DeFi summer returns"</p>
                         </div>
                     </div>
                 </div>
@@ -865,9 +914,9 @@
                     <div class="consensus-content">
                         <div class="consensus-marker"></div>
                         <div class="consensus-details">
-                            <h4>Developer productivity renaissance</h4>
-                            <p class="consensus-sources">[16 positive out of 18 mentions: Cursor rumors spark interest]</p>
-                            <p class="consensus-insight">AI coding assistants showing measurable productivity gains</p>
+                            <h4>Bitcoin L2s finally gaining traction</h4>
+                            <p class="consensus-sources">[24 positive out of 28 mentions: Lightning Network growth accelerating]</p>
+                            <p class="consensus-insight">TVL crossing $2B as Ordinals drive utility beyond payments</p>
                         </div>
                     </div>
                 </div>
@@ -883,20 +932,20 @@
                                 <svg class="alert-icon" fill="#D97706" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                                 </svg>
-                                <h4 class="alert-title">B2B SaaS accelerating decline</h4>
+                                <h4 class="alert-title">Memecoin exhaustion accelerating</h4>
                             </div>
-                            <p class="alert-description">-20% drop while AI categories surge</p>
-                            <p class="alert-context">Legacy playbooks becoming obsolete</p>
+                            <p class="alert-description">-45% drop while quality projects surge</p>
+                            <p class="alert-context">Retail fatigue driving rotation to fundamentals</p>
                         </div>
                         <div class="alert-item" style="padding-top: 12px; border-top: 1px solid #FCD34D;">
                             <div class="alert-header">
                                 <svg class="alert-icon" fill="#D97706" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                                 </svg>
-                                <h4 class="alert-title">Capital Efficiency momentum slowing</h4>
+                                <h4 class="alert-title">L1 rotation thesis invalidated</h4>
                             </div>
-                            <p class="alert-description">Only +15% despite LP pressure</p>
-                            <p class="alert-context">AI growth overriding discipline narrative</p>
+                            <p class="alert-description">ETH dominance strengthening despite challengers</p>
+                            <p class="alert-context">L2 scaling success removing alt-L1 narratives</p>
                         </div>
                     </div>
                 </div>
@@ -910,10 +959,10 @@
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                                 </svg>
-                                <h4 class="alert-title">DePIN sustainability questions</h4>
+                                <h4 class="alert-title">Gaming token resurgence quiet</h4>
                             </div>
-                            <p class="alert-description">+78% growth without unit economics</p>
-                            <p class="alert-context">Only 3 negative voices out of 32</p>
+                            <p class="alert-description">+87% growth but zero CT coverage</p>
+                            <p class="alert-context">Smart money accumulating before narrative</p>
                         </div>
                         <div class="alert-item" style="padding-top: 12px; border-top: 1px solid #FCA5A5;">
                             <div class="alert-header">
@@ -921,10 +970,10 @@
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                                 </svg>
-                                <h4 class="alert-title">AI agent revenue models unclear</h4>
+                                <h4 class="alert-title">Privacy coin regulatory pressure mounting</h4>
                             </div>
-                            <p class="alert-description">+59% momentum but monetization TBD</p>
-                            <p class="alert-context">Enthusiasm outpacing business models</p>
+                            <p class="alert-description">-67% as exchanges begin delisting</p>
+                            <p class="alert-context">Monero, Zcash facing existential threats</p>
                         </div>
                     </div>
                 </div>
@@ -946,19 +995,19 @@
                             <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Focus area: AI infrastructure opportunities</span>
+                            <span>Focus area: RWA tokenization opportunities</span>
                         </div>
                         <div class="action-item">
                             <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Connect with Databricks/Snowflake alumni</span>
+                            <span>Connect with BlackRock/Franklin Templeton teams</span>
                         </div>
                         <div class="action-item">
                             <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Portfolio efficiency review suggested</span>
+                            <span>Restaking strategy review suggested</span>
                         </div>
                     </div>
                     
@@ -969,21 +1018,21 @@
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Monitor: DePIN sustainability questions</span>
+                            <span>Monitor: Gaming token accumulation patterns</span>
                         </div>
                         <div class="action-item">
                             <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Developer tools M&A activity</span>
+                            <span>L2 ecosystem consolidation signals</span>
                         </div>
                         <div class="action-item">
                             <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>Climate tech contrarian plays</span>
+                            <span>Privacy coin accumulation opportunities</span>
                         </div>
                     </div>
                 </div>
@@ -994,10 +1043,10 @@
                 <div class="footer-content">
                     <div>
                         <p class="footer-brand">synthea.ai</p>
-                        <p>Weekly Intelligence Brief • Week 34, 2025</p>
+                        <p>Crypto Intelligence Brief • Week 50, 2024</p>
                     </div>
                     <div class="footer-right">
-                        <p>Synthesized from 1,498 episodes across 47 VC podcasts</p>
+                        <p>Synthesized from 876 hours across 50+ crypto podcasts</p>
                         <p>© 2025 synthea.ai • Proprietary & Confidential</p>
                     </div>
                 </div>

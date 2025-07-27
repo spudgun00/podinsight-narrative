@@ -58,6 +58,13 @@
                     }
                 };
                 
+                // Get unique topics from 7-day data as the primary source
+                const sevenDayTopics = Object.keys(window.narrativePulseData.sevenDayData.topics);
+                
+                // Update available topics to be crypto-specific
+                this.availableTopics = sevenDayTopics;
+                this.selectedTopics = sevenDayTopics;
+                
                 // Calculate dynamic momentum for all topics in all time ranges
                 Object.keys(this.timeRangeData).forEach(timeRange => {
                     const data = this.timeRangeData[timeRange];

@@ -11,7 +11,7 @@ const NarrativePulse = {
     chartWidth: 800,
     chartHeight: 300,
     padding: 50,
-    dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
+    dateLabels: ['Sun 20', 'Mon 21', 'Tue 22', 'Wed 23', 'Thu 24', 'Fri 25', 'Sat 26'],
     xPositions: [], // Will be calculated in init
     hideTooltipTimer: null,
     mouseMoveFrame: null, // For requestAnimationFrame debouncing
@@ -19,17 +19,17 @@ const NarrativePulse = {
     // Time range data configurations
     timeRangeConfigs: {
         '7 days': {
-            dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
+            dateLabels: ['Sun 20', 'Mon 21', 'Tue 22', 'Wed 23', 'Thu 24', 'Fri 25', 'Sat 26'],
             dataPoints: 7,
             interval: 'daily'
         },
         '30 days': {
-            dateLabels: ['Aug 1-7', 'Aug 8-14', 'Aug 15-21', 'Aug 22-28'],
+            dateLabels: ['Jun 26-Jul 2', 'Jul 3-9', 'Jul 10-16', 'Jul 17-26'],
             dataPoints: 4,
             interval: 'weekly'
         },
         '90 days': {
-            dateLabels: ['Jun 5', 'Jun 12', 'Jun 19', 'Jun 26', 'Jul 3', 'Jul 10', 'Jul 17', 'Jul 24', 'Jul 31', 'Aug 7', 'Aug 14', 'Aug 21', 'Aug 28'],
+            dateLabels: ['Apr 28', 'May 5', 'May 12', 'May 19', 'May 26', 'Jun 2', 'Jun 9', 'Jun 16', 'Jun 23', 'Jun 30', 'Jul 7', 'Jul 14', 'Jul 21'],
             dataPoints: 13,
             interval: 'weekly'
         }
@@ -45,22 +45,22 @@ const NarrativePulse = {
     currentView: 'momentum',
     
     // Topic customization state
-    availableTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
-    selectedTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
+    availableTopics: ['RWAs', 'ETH Restaking', 'Bitcoin L2s', 'AI x Crypto', 'Gaming/GameFi', 'Memecoins', 'Privacy/ZK'],
+    selectedTopics: ['RWAs', 'ETH Restaking', 'Bitcoin L2s', 'AI x Crypto', 'Gaming/GameFi'], // Default to top 5
     tempSelectedTopics: [],
-    maxTopics: 7,
+    maxTopics: 5,
     panel: null,
     backdrop: null,
     hasChanges: false,
     
     // Consensus sentiment data
     consensusData: {
-        'AI Agents': {
-            'Aug 7': { positive: 70, neutral: 7, negative: 2, total: 79, percent: 88.6, level: 'Strong',
+        'RWAs': {
+            'Jul 14': { positive: 98, neutral: 7, negative: 2, total: 107, percent: 91.6, level: 'Peak',
                 advocates: [
-                    { name: 'Brad Gerstner', firm: 'Altimeter' },
-                    { name: 'Reid Hoffman', firm: 'Greylock' },
-                    { name: 'Elad Gil', firm: 'Solo GP' }
+                    { name: 'Larry Fink', firm: 'BlackRock' },
+                    { name: 'Raoul Pal', firm: 'Real Vision' },
+                    { name: 'Sergey Nazarov', firm: 'Chainlink' }
                 ],
                 dissent: null
             },
@@ -806,43 +806,43 @@ const NarrativePulse = {
             '7 days': [
                 {
                     highlight: 'Weekly Momentum:',
-                    text: 'DePIN accelerating +28.8% this week, leading narrative shift'
+                    text: 'RWAs dominate with institutional adoption'
                 },
                 {
                     highlight: 'Velocity Spike:',
-                    text: 'Vertical SaaS mentions up 55.6% as specialization gains traction'
+                    text: 'ETH restaking narrative gaining steam'
                 },
                 {
                     highlight: 'Daily Pattern:',
-                    text: 'Developer tools discussion peaks mid-week, 46.9% weekly growth'
+                    text: 'Memecoin fatigue setting in (-45%)'
                 }
             ],
             '30 days': [
                 {
                     highlight: 'Strong Consensus:',
-                    text: 'AI infrastructure investment thesis validated across 12 sources'
+                    text: 'RWA tokenization reaching escape velocity as institutions enter'
                 },
                 {
                     highlight: 'Narrative Shift:',
-                    text: 'From "growth at all costs" to "efficient growth" - mentioned 47 times'
+                    text: 'From DeFi yields to restaking rewards - sustainable 15-25% APY'
                 },
                 {
                     highlight: 'Emerging Theme:',
-                    text: 'Developer tools seeing renewed interest after 2-year lull'
+                    text: 'Bitcoin L2s proving viability with $2B+ TVL milestone'
                 }
             ],
             '90 days': [
                 {
                     highlight: 'Quarterly Trend:',
-                    text: 'DePIN exploded from 2 to 201 mentions, defining new infrastructure era'
+                    text: 'RWAs exploded to +1,847% momentum, institutional adoption defining new era'
                 },
                 {
                     highlight: 'Recovery Story:',
-                    text: 'Capital efficiency sentiment recovered from July lows, now strong consensus'
+                    text: 'Bitcoin L2s surged +892% as BTC ecosystem awakens from dormancy'
                 },
                 {
                     highlight: 'Sustained Growth:',
-                    text: 'AI Agents maintained 268% growth over quarter, mainstream adoption clear'
+                    text: 'ETH restaking maintained triple-digit growth, sustainable yields proven'
                 }
             ]
         };
@@ -911,43 +911,43 @@ const NarrativePulse = {
             '7 days': [
                 {
                     highlight: 'Weekly Momentum:',
-                    text: 'DePIN accelerating +28.8% this week, leading narrative shift'
+                    text: 'RWAs dominate with institutional adoption'
                 },
                 {
                     highlight: 'Velocity Spike:',
-                    text: 'Vertical SaaS mentions up 55.6% as specialization gains traction'
+                    text: 'ETH restaking narrative gaining steam'
                 },
                 {
                     highlight: 'Daily Pattern:',
-                    text: 'Developer tools discussion peaks mid-week, 46.9% weekly growth'
+                    text: 'Memecoin fatigue setting in (-45%)'
                 }
             ],
             '30 days': [
                 {
                     highlight: 'Strong Consensus:',
-                    text: 'AI infrastructure investment thesis validated across 12 sources'
+                    text: 'RWA tokenization reaching escape velocity as institutions enter'
                 },
                 {
                     highlight: 'Narrative Shift:',
-                    text: 'From "growth at all costs" to "efficient growth" - mentioned 47 times'
+                    text: 'From DeFi yields to restaking rewards - sustainable 15-25% APY'
                 },
                 {
                     highlight: 'Emerging Theme:',
-                    text: 'Developer tools seeing renewed interest after 2-year lull'
+                    text: 'Bitcoin L2s proving viability with $2B+ TVL milestone'
                 }
             ],
             '90 days': [
                 {
                     highlight: 'Quarterly Trend:',
-                    text: 'DePIN exploded from 2 to 201 mentions, defining new infrastructure era'
+                    text: 'RWAs exploded to +1,847% momentum, institutional adoption defining new era'
                 },
                 {
                     highlight: 'Recovery Story:',
-                    text: 'Capital efficiency sentiment recovered from July lows, now strong consensus'
+                    text: 'Bitcoin L2s surged +892% as BTC ecosystem awakens from dormancy'
                 },
                 {
                     highlight: 'Sustained Growth:',
-                    text: 'AI Agents maintained 268% growth over quarter, mainstream adoption clear'
+                    text: 'ETH restaking maintained triple-digit growth, sustainable yields proven'
                 }
             ]
         };
@@ -2026,9 +2026,9 @@ const NarrativePulse = {
                 this.selectedTopics = savedTopics.filter(topic => 
                     this.availableTopics.includes(topic)
                 );
-                // Ensure we have at least one topic
+                // Ensure we have at least one topic, but limit to maxTopics
                 if (this.selectedTopics.length === 0) {
-                    this.selectedTopics = [...this.availableTopics];
+                    this.selectedTopics = this.availableTopics.slice(0, this.maxTopics);
                 }
             } catch (e) {
                 console.error('Error loading saved topics:', e);
@@ -2071,16 +2071,15 @@ const NarrativePulse = {
         // Store the initial selected topics for comparison
         this.tempSelectedTopics = [...this.selectedTopics];
         
-        // Topic stats for the demo
+        // Topic stats for the demo (crypto data)
         const topicStats = {
-            'AI Agents': { momentum: '+85%', mentions: 147 },
-            'AI Infrastructure': { momentum: '+92%', mentions: 156 },
-            'Capital Efficiency': { momentum: '+17%', mentions: 89 },
-            'DePIN': { momentum: '+190%', mentions: 201 },
-            'Crypto/Web3': { momentum: '+45%', mentions: 78 },
-            'B2B SaaS': { momentum: '+3%', mentions: 43 },
-            'Developer Tools': { momentum: '+47%', mentions: 94 },
-            'Vertical SaaS': { momentum: '+65%', mentions: 112 }
+            'RWAs': { momentum: '+420%', mentions: 312 },
+            'ETH Restaking': { momentum: '+238%', mentions: 287 },
+            'Bitcoin L2s': { momentum: '+187%', mentions: 156 },
+            'AI x Crypto': { momentum: '+156%', mentions: 143 },
+            'Gaming/GameFi': { momentum: '+89%', mentions: 98 },
+            'Memecoins': { momentum: '-45%', mentions: 89 },
+            'Privacy/ZK': { momentum: '+67%', mentions: 76 }
         };
         
         this.availableTopics.forEach(topic => {

@@ -16,10 +16,10 @@ const IntelligenceBrief = {
             downloadBtn.addEventListener('click', () => this.downloadPDF());
         }
         
-        // Slack button
-        const slackBtn = this.container.querySelector('.brief-action-btn[title="Share via Slack"]');
-        if (slackBtn) {
-            slackBtn.addEventListener('click', () => this.shareViaSlack());
+        // Discord button
+        const discordBtn = this.container.querySelector('.brief-action-btn[title="Share via Discord"]');
+        if (discordBtn) {
+            discordBtn.addEventListener('click', () => this.shareViaDiscord());
         }
         
         // Email Brief button
@@ -63,25 +63,26 @@ const IntelligenceBrief = {
         const year = today.getFullYear();
         
         // Email parameters
-        const subject = `VCPulse Weekly Intelligence Brief - Week ${weekNum}, ${month} ${year}`;
+        const subject = `Crypto Intelligence Brief - Week ${weekNum}, ${month} ${year}`;
         
         const body = `Hi team,
 
-Please find this week's VCPulse Intelligence Brief below.
+Please find this week's Crypto Intelligence Brief below.
 
 Key Highlights:
-• AI infrastructure dominates with Series A at 20-30x ARR
-• DePIN showing 190% momentum (contrarian signal)
-• Developer tools consolidation emerging as blindspot
+• RWA tokenization reaching escape velocity
+• ETH restaking offering sustainable 15-25% yields
+• Bitcoin L2s finally gaining real traction
+• Memecoin exhaustion driving quality rotation
 
 View the full brief here: ${window.location.origin}/demo/pdf/weekly-brief.html
 
 Best regards,
-VCPulse Intelligence Team
+Synthea.ai Intelligence Team
 
 --
-Synthesized from 1,498 hours across 47 VC podcasts
-© ${year} VCPulse • Proprietary & Confidential`;
+Synthesized from 876 hours across 50+ crypto podcasts
+© ${year} Synthea.ai • Proprietary & Confidential`;
 
         // Create mailto link
         const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -90,7 +91,7 @@ Synthesized from 1,498 hours across 47 VC podcasts
         window.location.href = mailtoLink;
     },
     
-    shareViaSlack: function() {
+    shareViaDiscord: function() {
         // Get current date for the message
         const today = new Date();
         const weekNum = Math.ceil(((today - new Date(today.getFullYear(), 0, 1)) / 86400000 + 1) / 7);
@@ -98,20 +99,21 @@ Synthesized from 1,498 hours across 47 VC podcasts
                           "July", "August", "September", "October", "November", "December"];
         const month = monthNames[today.getMonth()];
         
-        // Create Slack message
-        const message = `📊 *VCPulse Weekly Intelligence Brief - Week ${weekNum}, ${month}*\n\n` +
-                       `Key highlights:\n` +
-                       `• AI infrastructure dominates with Series A at 20-30x ARR\n` +
-                       `• DePIN showing 190% momentum (contrarian signal)\n` +
-                       `• Developer tools consolidation emerging as blindspot\n\n` +
+        // Create Discord message
+        const message = `📊 *Crypto Intelligence Brief - Week ${weekNum}, ${month}*\n\n` +
+                       `Key narratives:\n` +
+                       `• RWAs dominating with institutional adoption\n` +
+                       `• Restaking yields sustainable at 15-25%\n` +
+                       `• Bitcoin L2s crossing $2B TVL\n` +
+                       `• Memecoins dying, quality rising\n\n` +
                        `View full brief: ${window.location.origin}/demo/pdf/weekly-brief.html`;
         
         // Copy to clipboard and show notification
         navigator.clipboard.writeText(message).then(() => {
             // Create notification
             const notification = document.createElement('div');
-            notification.className = 'slack-notification';
-            notification.textContent = 'Brief copied to clipboard - paste in Slack!';
+            notification.className = 'discord-notification';
+            notification.textContent = 'Brief copied to clipboard - paste in Discord!';
             document.body.appendChild(notification);
             
             // Show notification

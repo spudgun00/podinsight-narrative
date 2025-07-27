@@ -1,6 +1,6 @@
 /**
  * PatternFlow Intelligence Search
- * Premium search interface for venture capital intelligence
+ * Premium search interface for crypto trading intelligence
  */
 
 class PatternFlowSearch {
@@ -14,10 +14,10 @@ class PatternFlowSearch {
         
         // Rotating placeholders
         this.placeholders = [
-            "What's the consensus on...",
-            "Which VCs are talking about...",
-            "Show me contrarian views on...",
-            "What's gaining momentum in..."
+            "What's the alpha on...",
+            "Which whales are discussing...",
+            "Show me contrarian takes on...",
+            "What's pumping next..."
         ];
         this.placeholderIndex = 0;
         this.placeholderInterval = null;
@@ -61,13 +61,17 @@ class PatternFlowSearch {
         
         // Check if results overlay exists, if not create it
         if (!document.getElementById('searchResults')) {
+            // Generate initial random durations
+            const duration1 = Math.floor(Math.random() * 21) + 30; // 30-50 seconds
+            const duration2 = Math.floor(Math.random() * 21) + 30; // 30-50 seconds
+            
             const resultsHtml = `
                 <div class="search-results" id="searchResults">
                     <button class="close-results" onclick="patternFlowSearch.closeResults()">×</button>
                     
                     <div class="results-header">
                         <div class="results-title">Intelligence synthesis for:</div>
-                        <div class="query-display" id="queryDisplay">What's the consensus on vertical AI?</div>
+                        <div class="query-display" id="queryDisplay">What's the consensus on RWAs?</div>
                     </div>
                     
                     <div class="synthesis-content">
@@ -78,7 +82,7 @@ class PatternFlowSearch {
                         
                         <div class="key-insight">
                             <div class="insight-text">
-                                <strong>Strong consensus forming:</strong> Vertical AI applications with <span class="highlight">proprietary data moats</span> are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to <span class="highlight">"AI for specific workflows"</span> with deep domain expertise.
+                                <strong>Strong consensus forming:</strong> RWA tokenization reaching escape velocity as institutions enter. <span class="highlight">BlackRock tokenizing $10B</span> this quarter alone. The narrative has shifted from "everything on-chain" to <span class="highlight">"institutional-grade tokenization"</span> with regulatory clarity.
                             </div>
                         </div>
                         
@@ -87,36 +91,48 @@ class PatternFlowSearch {
                                 <div class="source-header">
                                     <div class="source-info">
                                         <span>🎙️</span>
-                                        <span>Brad Gerstner on 20VC</span>
-                                        <span>• 2 days ago</span>
+                                        <span>Larry Fink on Bankless</span>
+                                        <span>• 2 days ago • 0:${duration1}</span>
                                     </div>
-                                    <button class="play-btn">▶</button>
                                 </div>
                                 <div class="quote-text">
-                                    "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow..."
+                                    "We're tokenizing $10 billion this quarter alone. The efficiency gains are undeniable..."
                                 </div>
+                                <button class="play-clip-btn" data-duration="${duration1}">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="7" cy="7" r="6"/>
+                                        <path d="M5.5 4.5v5l4-2.5z" fill="currentColor" stroke="none"/>
+                                    </svg>
+                                    Play clip
+                                </button>
                             </div>
                             
                             <div class="source-card">
                                 <div class="source-header">
                                     <div class="source-info">
                                         <span>🎙️</span>
-                                        <span>Elad Gil on Invest Like Best</span>
-                                        <span>• 4 days ago</span>
+                                        <span>Raoul Pal on The Journey Man</span>
+                                        <span>• 4 days ago • 0:${duration2}</span>
                                     </div>
-                                    <button class="play-btn">▶</button>
                                 </div>
                                 <div class="quote-text">
-                                    "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance..."
+                                    "This is the banana zone. Global liquidity plus institutional FOMO equals $10 trillion market..."
                                 </div>
+                                <button class="play-clip-btn" data-duration="${duration2}">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="7" cy="7" r="6"/>
+                                        <path d="M5.5 4.5v5l4-2.5z" fill="currentColor" stroke="none"/>
+                                    </svg>
+                                    Play clip
+                                </button>
                             </div>
                         </div>
                     </div>
                     
                     <div class="action-row">
                         <button class="btn btn-primary" onclick="patternFlowSearch.viewDeepAnalysis()">View Deep Analysis</button>
-                        <button class="btn" onclick="patternFlowSearch.shareInsight()">Share Insight</button>
-                        <button class="btn" onclick="patternFlowSearch.saveToNotebook()">Save to Notebook</button>
+                        <button class="btn" onclick="patternFlowSearch.shareInsight()">Share Alpha</button>
+                        <button class="btn" onclick="patternFlowSearch.saveToNotebook()">Save to Research</button>
                     </div>
                 </div>
             `;
@@ -146,10 +162,10 @@ class PatternFlowSearch {
         }
         
         // Play button clicks
-        document.querySelectorAll('.play-btn').forEach(btn => {
+        document.querySelectorAll('.play-clip-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                alert('In production: Play audio snippet from podcast');
+                this.handlePlayClip(btn);
             });
         });
     }
@@ -288,7 +304,7 @@ class PatternFlowSearch {
             clearInterval(this.placeholderInterval);
             this.placeholderInterval = null;
         }
-        this.searchInput.placeholder = "What are VCs discussing?";
+        this.searchInput.placeholder = "What's the crypto narrative?";
     }
     
     fillSearch(query) {
@@ -302,9 +318,9 @@ class PatternFlowSearch {
     filterBy(type) {
         const filterQueries = {
             'consensus': "What's the consensus on ",
-            'contrarian': "Contrarian views on ",
-            'emerging': "Emerging themes in ",
-            'deals': "Recent deals in ",
+            'contrarian': "Contrarian alpha on ",
+            'whale': "Whale activity in ",
+            'launches': "Recent launches in ",
             'people': "What is [person] saying about "
         };
         this.searchInput.value = filterQueries[type] || "";
@@ -334,25 +350,56 @@ class PatternFlowSearch {
         this.updateResultsForQuery(this.searchInput.value);
     }
     
+    generateClipDuration() {
+        // Generate random duration between 30-50 seconds
+        const seconds = Math.floor(Math.random() * 21) + 30; // 30-50 seconds
+        return `0:${seconds}`;
+    }
+    
     updateResultsForQuery(query) {
         const confidenceBadge = document.querySelector('.confidence-badge');
         const sourceCount = document.querySelector('.source-count');
         const insightText = document.querySelector('.insight-text');
+        const sourceCards = document.querySelectorAll('.source-card');
         
         if (!confidenceBadge || !sourceCount || !insightText) return;
+        
+        // Update source cards with random durations
+        sourceCards.forEach(card => {
+            const sourceInfo = card.querySelector('.source-info');
+            if (sourceInfo) {
+                // Get existing text and split by bullets
+                const spans = sourceInfo.querySelectorAll('span');
+                if (spans.length >= 3) {
+                    const duration = this.generateClipDuration();
+                    // Check if duration already exists to avoid duplicating
+                    const currentText = spans[2].textContent;
+                    if (!currentText.includes('0:')) {
+                        // Only add duration if it doesn't already exist
+                        spans[2].textContent = currentText + ` • ${duration}`;
+                    }
+                    
+                    // Also update the play button data attribute
+                    const playBtn = card.querySelector('.play-clip-btn');
+                    if (playBtn) {
+                        playBtn.setAttribute('data-duration', duration.replace('0:', ''));
+                    }
+                }
+            }
+        });
         
         if (query.toLowerCase().includes('contrarian')) {
             confidenceBadge.textContent = '76% confidence';
             sourceCount.textContent = 'Based on 3 dissenting voices';
-            insightText.innerHTML = '<strong>Limited contrarian views:</strong> While the majority is bullish on AI, Peter Thiel and others question <span class="highlight">timeline to profitability</span>. "We\'re building infrastructure for use cases that don\'t exist yet."';
-        } else if (query.toLowerCase().includes('series a')) {
+            insightText.innerHTML = '<strong>Limited contrarian views:</strong> While the majority is bullish on RWAs, Arthur Hayes warns <span class="highlight">rushing into RWAs at the top</span>. "Real alpha is in pure crypto plays, not TradFi tokenization."';
+        } else if (query.toLowerCase().includes('restaking')) {
             confidenceBadge.textContent = '91% confidence';
-            sourceCount.textContent = 'Based on 8 recent discussions';
-            insightText.innerHTML = '<strong>Valuation normalization:</strong> Series A rounds settling at <span class="highlight">20-30x ARR</span> for AI companies, down from 50-100x in 2023. "Reality is setting in," per Benchmark\'s latest.';
-        } else if (query.toLowerCase().includes('brad gerstner')) {
+            sourceCount.textContent = 'Based on 28 recent discussions';
+            insightText.innerHTML = '<strong>Sustainable yields found:</strong> ETH restaking offering <span class="highlight">15-25% APY</span> through EigenLayer and competitors. "DeFi summer returns without the ponzinomics," per Su Zhu\'s latest.';
+        } else if (query.toLowerCase().includes('vitalik')) {
             confidenceBadge.textContent = '94% confidence';
-            sourceCount.textContent = 'Based on 3 recent appearances';
-            insightText.innerHTML = '<strong>Gerstner\'s thesis evolution:</strong> Shifted focus to <span class="highlight">AI infrastructure plays</span> and companies with "10x productivity gains". Emphasizing capital efficiency over growth at all costs.';
+            sourceCount.textContent = 'Based on 7 recent appearances';
+            insightText.innerHTML = '<strong>Vitalik\'s L3 thesis:</strong> Challenging L2 consensus, proposing <span class="highlight">app-specific L3s</span> with shared security. "L2s are becoming too centralized," warns Ethereum founder.';
         }
     }
     
@@ -372,11 +419,63 @@ class PatternFlowSearch {
     }
     
     shareInsight() {
-        alert('In production: Share to Slack, Email, or copy formatted insight');
+        alert('In production: Share to Discord, Twitter, or copy formatted insight');
     }
     
     saveToNotebook() {
         alert('In production: Save to your intelligence notebook for future reference');
+    }
+    
+    // Handle play clip animation
+    handlePlayClip(button) {
+        // Check if already playing
+        if (button.classList.contains('playing')) {
+            this.stopClip(button);
+            return;
+        }
+        
+        // Stop any other playing clips
+        document.querySelectorAll('.play-clip-btn.playing').forEach(btn => {
+            this.stopClip(btn);
+        });
+        
+        // Start playing this clip
+        button.classList.add('playing');
+        
+        // Update button content
+        const originalContent = button.innerHTML;
+        button.innerHTML = `
+            <div class="audio-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            Playing...
+        `;
+        
+        // Store original content for restoration
+        button.dataset.originalContent = originalContent;
+        
+        // Simulate clip duration (5 seconds)
+        button.playTimeout = setTimeout(() => {
+            this.stopClip(button);
+        }, 5000);
+    }
+    
+    stopClip(button) {
+        button.classList.remove('playing');
+        
+        // Clear timeout if exists
+        if (button.playTimeout) {
+            clearTimeout(button.playTimeout);
+            delete button.playTimeout;
+        }
+        
+        // Restore original content
+        if (button.dataset.originalContent) {
+            button.innerHTML = button.dataset.originalContent;
+            delete button.dataset.originalContent;
+        }
     }
     
     // Clean up method

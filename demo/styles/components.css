@@ -61,13 +61,13 @@
 
 /* Preserve priority colors for filtered cards */
 .episode-grid.filter-active .episode-card.priority-critical {
-    border-left-color: var(--priority-red) !important;
+    border-left-color: var(--professional-red) !important;
 }
 .episode-grid.filter-active .episode-card.priority-opportunity {
-    border-left-color: var(--priority-green) !important;
+    border-left-color: var(--professional-green) !important;
 }
 .episode-grid.filter-active .episode-card.priority-elevated {
-    border-left-color: var(--priority-amber) !important;
+    border-left-color: var(--amber-glow) !important;
 }
 
 /* Ensure filtered-out cards stay hidden with highest priority */
@@ -136,13 +136,13 @@
 
 /* Priority colors in filtered grid */
 .episode-grid-filtered .episode-card.priority-critical {
-    border-left-color: var(--priority-red) !important;
+    border-left-color: var(--professional-red) !important;
 }
 .episode-grid-filtered .episode-card.priority-opportunity {
-    border-left-color: var(--priority-green) !important;
+    border-left-color: var(--professional-green) !important;
 }
 .episode-grid-filtered .episode-card.priority-elevated {
-    border-left-color: var(--priority-amber) !important;
+    border-left-color: var(--amber-glow) !important;
 }
         /* Logo Container */
         .logo-container {
@@ -2802,13 +2802,19 @@ body.portfolio-open {
 }
 
 .topic-customization-panel .topic-item.disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+    background: var(--gray-50);
 }
 
 .topic-customization-panel .topic-item.disabled:hover {
-    background: white;
+    background: var(--gray-50);
     border-color: var(--gray-200);
+    transform: none;
+}
+
+.topic-customization-panel .topic-item.disabled .topic-stats {
+    opacity: 0.5;
 }
 
 .topic-customization-panel .topic-checkbox {
@@ -3048,16 +3054,20 @@ body.portfolio-open {
     box-shadow: 0 0 0 3px var(--crypto-purple-light);
 }
 
-/* Control buttons with purple accent on active state */
-.control-button.active {
-    background: var(--crypto-purple-light);
-    border-color: var(--crypto-purple);
-    color: var(--crypto-purple);
+/* Control buttons with purple accent on active state - higher specificity */
+.narrative-controls .control-button.active {
+    background: var(--crypto-purple-light) !important;
+    border-color: var(--crypto-purple) !important;
+    color: var(--crypto-purple) !important;
 }
 
-.control-button.active:hover {
-    background: var(--crypto-purple);
-    color: white;
+.narrative-controls .control-button.active:hover {
+    background: var(--crypto-purple) !important;
+    color: white !important;
+}
+
+.narrative-controls .control-button.active svg {
+    stroke: var(--crypto-purple) !important;
 }
 
 /* Time controls with purple accent */
@@ -3081,25 +3091,40 @@ body.portfolio-open {
     border-left: 2px solid var(--crypto-purple);
 }
 
-/* Signal cards with subtle purple interaction */
-.signal-card:hover {
-    border-color: var(--crypto-purple);
-    box-shadow: 0 0 0 1px var(--crypto-purple);
+/* Signal cards with subtle purple interaction - override earlier styles */
+.signals-grid .signal-card:hover {
+    border-color: var(--crypto-purple) !important;
+    box-shadow: 0 0 0 1px var(--crypto-purple), 0 4px 12px rgba(107, 70, 193, 0.1) !important;
+    transform: translateY(-2px);
 }
 
-/* Episode cards with priority colors updated */
-.episode-card.priority-critical {
+/* Episode cards with priority colors updated - fix all instances */
+.episode-card.priority-critical,
+.episode-grid .episode-card.priority-critical,
+.episode-grid-filtered .episode-card.priority-critical,
+.episode-grid.filter-active .episode-card.priority-critical {
     border-left-color: var(--professional-red) !important;
 }
 
-.episode-card.priority-opportunity {
+.episode-card.priority-opportunity,
+.episode-grid .episode-card.priority-opportunity,
+.episode-grid-filtered .episode-card.priority-opportunity,
+.episode-grid.filter-active .episode-card.priority-opportunity {
     border-left-color: var(--professional-green) !important;
 }
 
-/* Portfolio button with subtle purple pulse */
-.portfolio-button:hover {
-    background: var(--crypto-purple);
+.episode-card.priority-elevated,
+.episode-grid .episode-card.priority-elevated,
+.episode-grid-filtered .episode-card.priority-elevated,
+.episode-grid.filter-active .episode-card.priority-elevated {
+    border-left-color: var(--amber-glow) !important;
+}
+
+/* Portfolio button with subtle purple pulse - higher specificity to override earlier rule */
+.header-actions .portfolio-button:hover {
+    background: var(--crypto-purple) !important;
     box-shadow: 0 2px 8px rgba(107, 70, 193, 0.2);
+    border-color: var(--crypto-purple) !important;
 }
 
 .pulse-indicator.active {

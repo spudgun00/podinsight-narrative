@@ -1,0 +1,23 @@
+#!/bin/bash
+# Simple podserve command for the crypto version
+# Run from anywhere in the repo
+
+# Find the repo root (where this script lives)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DEMO_DIR="$SCRIPT_DIR/demo"
+
+# Check if demo directory exists
+if [ ! -d "$DEMO_DIR" ]; then
+    echo "Error: demo directory not found at $DEMO_DIR"
+    exit 1
+fi
+
+# Start the server
+echo "🚀 Starting Synthea.ai Crypto Intelligence Platform..."
+echo "📍 URL: http://localhost:9000/demo.html"
+echo ""
+echo "Press Ctrl+C to stop the server"
+echo ""
+
+# Change to demo directory and start server
+cd "$DEMO_DIR" && python3 -m http.server 9000

@@ -1,33 +1,33 @@
-// PatternFlow - Venture Capital Intelligence Demo Data
+// PatternFlow - Crypto Intelligence Demo Data
 // All demo data extracted from demo.html for maintainability
 
 // ============================================
 // 1. TOPIC VELOCITY DATA
 // ============================================
 window.topics = {
-    'AI Agents': { 
-        color: '#4a7c59', 
-        momentum: '+85%', 
-        mentions: 147, 
-        episodes: 23 
+    'RWAs': { 
+        color: '#9333ea', 
+        momentum: '+420%', 
+        mentions: 312, 
+        episodes: 42 
     },
-    'Capital Efficiency': { 
-        color: '#f4a261', 
-        momentum: '+17%', 
+    'ETH Restaking': { 
+        color: '#3b82f6', 
+        momentum: '+238%', 
+        mentions: 287, 
+        episodes: 38 
+    },
+    'Bitcoin L2s': { 
+        color: '#f97316', 
+        momentum: '+187%', 
+        mentions: 156, 
+        episodes: 28 
+    },
+    'Memecoins': { 
+        color: '#eab308', 
+        momentum: '-45%', 
         mentions: 89, 
-        episodes: 31 
-    },
-    'DePIN': { 
-        color: '#5a6c8c', 
-        momentum: '+190%', 
-        mentions: 201, 
-        episodes: 18 
-    },
-    'B2B SaaS': { 
-        color: '#c77d7d', 
-        momentum: '+3%', 
-        mentions: 43, 
-        episodes: 12 
+        episodes: 15 
     }
 };
 
@@ -37,55 +37,55 @@ window.topics = {
 window.feedData = [
     {
         id: 'feed-1',
-        time: '2h ago',
-        event: 'AI infrastructure preference emerging across 5 tier-1 sources',
+        time: '3h ago',
+        event: 'RWA tokenization reaching consensus across 8 major sources',
         category: 'consensus',
         expansion: {
             sources: [
                 {
-                    name: '20VC w/ Brad Gerstner',
-                    time: '2h ago',
-                    quote: 'Infrastructure is eating the world, not apps. We\'re seeing 10x better unit economics in picks-and-shovels plays.'
+                    name: 'Raoul Pal on The Journey Man',
+                    time: '3h ago',
+                    quote: 'Tokenized treasuries are the gateway drug. Once institutions taste 24/7 settlement, there\'s no going back.'
                 },
                 {
-                    name: 'All-In Podcast',
-                    time: '5h ago',
-                    quote: 'Every portfolio company wants AI features, but the real money is in the infrastructure layer.'
+                    name: 'Bankless w/ Larry Fink',
+                    time: '6h ago',
+                    quote: 'We\'re tokenizing $10 billion this quarter alone. The efficiency gains are undeniable.'
                 },
                 {
-                    name: 'Invest Like the Best',
+                    name: 'What Bitcoin Did',
                     time: '1d ago',
-                    quote: 'LPs are now explicitly asking for infrastructure allocation. It\'s becoming a separate mandate.'
+                    quote: 'Every asset will be tokenized. The question isn\'t if, it\'s which chain wins.'
                 }
             ],
             dissent: {
-                name: 'Peter Thiel on Founders Fund',
+                name: 'Arthur Hayes on Unchained',
                 time: '2d ago',
-                quote: 'When everyone rushes to the same conclusion, that\'s usually when the opportunity has passed.'
+                quote: 'Everyone\'s rushing into RWAs at the top. Real alpha is in pure crypto plays.'
             }
         }
     },
     {
         id: 'feed-2',
         time: '5h ago',
-        event: 'Peter Thiel diverges from mainstream AGI timeline consensus',
+        event: 'Vitalik diverges from L2 scaling consensus, proposes L3 focus',
         category: 'divergence',
         expansion: {
             contrarian: {
-                name: 'Peter Thiel on Tim Ferriss Show',
-                time: '5h ago',
-                quote: 'Everyone\'s talking about AGI in 2-3 years. I think we\'re seeing a classic bubble mentality. The real timeline is decades, not years.'
+                name: 'Vitalik on Bankless',
+                time: '8h ago',
+                quote: 'L2s are becoming too centralized. The real scaling solution is app-specific L3s with shared security.'
             },
             mainstream: [
                 {
-                    name: 'Sam Altman (multiple podcasts)',
+                    name: 'Arbitrum team (multiple podcasts)',
                     time: 'This week',
-                    quote: 'AGI could happen much sooner than most people think. We\'re measuring progress in months, not years.'
+                    quote: 'L2s are just getting started. We\'re seeing 100x cost reduction already.'
                 },
                 {
-                    name: 'Demis Hassabis on Lex Fridman',
-                    time: '3d ago',
-                    quote: 'The pace of progress suggests we\'re closer than ever. 2030 is conservative.'
+                    name: 'Polygon leadership on Empire',
+                    time: '4d ago',
+                    quote: 'L2 dominance is inevitable. L3s add unnecessary complexity.'
                 }
             ]
         }
@@ -93,74 +93,31 @@ window.feedData = [
     {
         id: 'feed-3',
         time: '1d ago',
-        event: 'Developer experience mentioned 12 times as key differentiator',
+        event: 'Restaking yields mentioned 31 times as sustainable income source',
         category: 'trend',
         expansion: {
-            pattern: [
-                {
-                    name: 'a16z Podcast',
-                    time: '1d ago',
-                    quote: 'DX is the new UX. If developers hate your tool, you\'re dead in the water.'
-                },
-                {
-                    name: 'Software Engineering Daily',
-                    time: '1d ago',
-                    quote: 'We\'re seeing 5x adoption rates when the developer experience is prioritized from day one.'
-                },
-                {
-                    name: 'Lenny\'s Podcast',
-                    time: '2d ago',
-                    quote: 'Even in B2B SaaS, the developer is often the champion. Ignore them at your peril.'
-                }
-            ],
-            momentum: '12 mentions this week vs. 3 mentions last week (+300%)'
+            pattern: [],
+            momentum: '31 mentions this week vs. 9 mentions last week (+244%)'
         }
     },
     {
         id: 'feed-4',
         time: '1d ago',
-        event: 'LP sentiment: CalPERS emphasizing DPI metrics',
-        category: 'lp-intel',
+        event: 'Major funds rotating from DeFi blue chips to RWA protocols',
+        category: 'whale-intel',
         expansion: {
-            indicators: [
-                {
-                    name: 'Institutional Investor Podcast',
-                    time: '1d ago',
-                    quote: 'CalPERS is done waiting for paper gains. They want DPI, and they want it now.'
-                },
-                {
-                    name: 'StrictlyVC Event Coverage',
-                    time: '2d ago',
-                    quote: 'Multiple endowments are pausing new commitments until they see distributions.'
-                }
-            ],
-            impact: 'First-time funds facing 18+ month raises. Established funds getting 50% of target.'
+            indicators: [],
+            impact: 'Aave, Compound seeing outflows. Ondo, Centrifuge seeing massive inflows.'
         }
     },
     {
         id: 'feed-5',
         time: '2d ago',
-        event: 'Vertical AI thesis validated by Brad Gerstner, Josh Wolfe, Harry Stebbings',
+        event: 'Bitcoin L2 thesis validated by Muneeb Ali, Eric Wall, Udi Wertheimer',
         category: 'pattern',
         expansion: {
-            validation: [
-                {
-                    name: 'Brad Gerstner on BG2',
-                    time: '2d ago',
-                    quote: 'Horizontal AI is a race to zero. Vertical AI with domain expertise is where fortunes will be made.'
-                },
-                {
-                    name: 'Josh Wolfe on TWIG',
-                    time: '2d ago',
-                    quote: 'We\'re only investing in AI companies that own the full stack in their vertical.'
-                },
-                {
-                    name: 'Harry Stebbings on 20VC',
-                    time: '3d ago',
-                    quote: 'Every horizontal AI company we passed on is now struggling. Every vertical play is thriving.'
-                }
-            ],
-            implications: '3 major funds have pivoted their AI thesis in the last 30 days. Watch for vertical-specific funds launching Q1.'
+            validation: [],
+            implications: '3 previously skeptical voices now building on Bitcoin. Stacks seeing 400% developer growth.'
         }
     }
 ];
@@ -170,29 +127,29 @@ window.feedData = [
 // ============================================
 window.signalCounts = {
     marketNarratives: {
-        count: 47,
-        trending: '↑ 14 from last week',
-        label: 'Shifting Themes'
+        count: 127,
+        trending: '↑ 34 from last week',
+        label: 'Narrative Shifts'
     },
     thesisValidation: {
-        count: 14,
-        trending: '↑ 3 reaching validation threshold',
-        label: 'Consensus Signals'
+        count: 42,
+        trending: '↑ 12 reaching validation',
+        label: 'Alpha Signals'
     },
     notableDeals: {
-        count: 9,
-        trending: '3 unicorns',
-        label: 'Tracked Rounds'
+        count: 23,
+        trending: '8 major launches',
+        label: 'Token Launches & Raises'
     },
     portfolioMentions: {
-        count: 17,
-        trending: '↑ 2 competitive threats',
-        label: 'Company Discussions'
+        count: 31,
+        trending: '↑ 7 competitive threats',
+        label: 'Protocol Intelligence'
     },
     lpSentiment: {
-        count: 5,
-        trending: '↓ Sentiment trending cautious',
-        label: 'Notable Shifts'
+        count: 18,
+        trending: '↓ Risk-off mode emerging',
+        label: 'Smart Money Flows'
     }
 };
 
@@ -204,58 +161,58 @@ window.priorityBriefings = [
         id: 'briefing-1',
         priority: 'critical',
         priorityLabel: 'Portfolio Alert',
-        podcast: '20VC with Harry Stebbings',
-        time: '2h ago',
-        duration: '72 min',
-        influence: 'High (94)',
-        title: 'Why We\'re Wrong About AI Valuations',
-        guest: 'Brad Gerstner, Founder & CEO at Altimeter Capital',
+        podcast: 'Bankless',
+        time: '3h ago',
+        duration: '89 min',
+        influence: 'High (96)',
+        title: 'Why Every Asset Will Be Tokenized',
+        guest: 'Larry Fink, CEO of BlackRock',
         keyInsights: [
-            'Series A valuations settling at 20-30x ARR, sustainable after 18 months of chaos',
-            'AI adoption driving 2-3x better retention in SaaS',
-            'Perplexity funding round discussed (terms unverified)*'
+            'BlackRock tokenizing $10B in treasuries this quarter alone',
+            '24/7 settlement and instant liquidity changing institutional mindset',
+            'Ethereum becoming the default settlement layer for RWAs'
         ],
         signals: [
-            { type: 'thesis', text: '✓ Thesis Match: Vertical AI thesis validated' },
-            { type: 'portfolio', text: '⚠ Portfolio Alert: Your company mentioned by name' }
+            { type: 'thesis', text: '✓ Thesis Match: RWA tokenization accelerating' },
+            { type: 'portfolio', text: '⚠ Portfolio Alert: Your protocol mentioned by name' }
         ]
     },
     {
         id: 'briefing-2',
         priority: 'opportunity',
-        priorityLabel: 'Thesis Match',
-        podcast: 'Stratechery',
-        time: '1d ago',
-        duration: '44 min',
-        influence: 'Medium (68)',
-        title: 'The State of SaaS',
-        guest: 'Host: Ben Thompson',
+        priorityLabel: 'Alpha Signal',
+        podcast: 'What Bitcoin Did',
+        time: '12h ago',
+        duration: '76 min',
+        influence: 'High (89)',
+        title: 'Bitcoin L2s: The Next Trillion Dollar Opportunity',
+        guest: 'Muneeb Ali, Founder of Stacks',
         keyInsights: [
-            'Vertical SaaS companies achieving 150%+ net revenue retention',
-            'Infrastructure costs dropping 80% YoY enabling new business models',
-            'Developer tools consolidation wave beginning - 3 major acquisitions coming'
+            'Bitcoin DeFi TVL crossed $2B, growing 400% quarterly',
+            'Ordinals proved Bitcoin users want more functionality',
+            'Major exchanges integrating Bitcoin L2 support Q4 2025'
         ],
         signals: [
-            { type: 'market', text: '◆ Market Signal: Aligns with your developer tools thesis' }
+            { type: 'market', text: '◆ Market Signal: Bitcoin ecosystem expansion' }
         ]
     },
     {
         id: 'briefing-3',
         priority: 'elevated',
-        priorityLabel: 'Market Signal',
-        podcast: 'Invest Like the Best',
-        time: '3h ago',
-        duration: '68 min',
-        influence: 'High (82)',
-        title: 'Why Developer Tools Are Harder Than We Thought',
-        guest: 'Dylan Field, CEO at Figma',
+        priorityLabel: 'Narrative Shift',
+        podcast: 'The Defiant',
+        time: '1d ago',
+        duration: '64 min',
+        influence: 'High (84)',
+        title: 'Why I\'m Rotating Everything to Restaking',
+        guest: 'Su Zhu, Three Arrows Capital (Reformed)',
         keyInsights: [
-            'Developer tool reality: need 1000+ free users before first paid conversion',
-            'Market bifurcating - small startups stay free forever, enterprises spending 5x more',
-            'Adobe\'s failed Figma acquisition creating M&A opportunity window'
+            'Sustainable 15-25% yields through ETH restaking changing the game',
+            'Risk-adjusted returns beating everything in TradFi',
+            'EigenLayer TVL passing $40B, still early days'
         ],
         signals: [
-            { type: 'lp', text: '◇ LP Intel: Multiple LPs questioning developer tool investments' }
+            { type: 'whale', text: '◇ Whale Intel: Major funds rotating to restaking' }
         ]
     }
 ];
@@ -266,49 +223,49 @@ window.priorityBriefings = [
 window.sidebarMetrics = {
     // Weekly Intelligence Brief
     brief: {
-        hoursAnalyzed: 1044,
-        lastUpdated: '36 mins ago',
-        collapsed: 'AI infrastructure dominates [12 sources agree, led by Gerstner/20VC, Gurley/Invest Like Best] with Series A at 20-30x ARR [Hoffman, Rabois confirm]. Notable divergence: DePIN momentum despite revenue questions. Potential blindspot: Developer tools consolidation discussions minimal.',
+        hoursAnalyzed: 876,
+        lastUpdated: '42 mins ago',
+        collapsed: 'RWA tokenization dominates [8 sources agree, led by Fink/Bankless, Pal/Journey Man] with institutions tokenizing billions monthly. Notable divergence: Vitalik challenges L2 consensus, proposes L3 focus. Blindspot: Privacy tech renaissance as regulations clarify.',
         expanded: {
             consensus: [
                 {
-                    title: 'AI infrastructure over applications',
-                    sources: 'Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree',
-                    detail: 'Vertical AI seeing 2-3x better retention than horizontal plays'
+                    title: 'RWAs are the next trillion-dollar narrative',
+                    sources: 'Fink/Bankless, Pal/Journey Man, multiple DeFi podcasts',
+                    detail: 'Tokenized treasuries offering instant settlement winning institutional adoption'
                 },
                 {
-                    title: 'Series A valuations stabilizing',
-                    sources: '12 sources confirm: Gerstner, Hoffman, Rabois leading',
-                    detail: '20-30x ARR becomes new normal after 18-month correction'
+                    title: 'Restaking sustainable yields changing DeFi',
+                    sources: 'Su Zhu/Defiant, multiple yield farmers confirm 15-25% APY',
+                    detail: 'EigenLayer model being copied by every major protocol'
                 },
                 {
-                    title: 'Capital efficiency replacing growth',
-                    sources: 'mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned',
-                    detail: 'LPs driving this narrative shift hard'
+                    title: 'Bitcoin programmability finally happening',
+                    sources: 'Muneeb/WBD, Eric Wall, Udi all building on Bitcoin',
+                    detail: 'Bitcoin DeFi TVL crossed $2B, L2s gaining real traction'
                 }
             ],
             contrarian: [
                 {
-                    title: 'DePIN showing 190% momentum without revenue',
-                    sources: 'Thiel only dissenter on Founders Fund pod, everyone else bullish',
-                    detail: 'Either massive opportunity or bubble forming'
+                    title: 'Memecoins dead, quality projects rising',
+                    sources: 'Cobie/UpOnly dissenting from CT consensus',
+                    detail: 'Smart money rotating to revenue-generating protocols'
                 },
                 {
-                    title: 'Consumer AI skepticism rising',
-                    sources: 'Benchmark\'s Gurley, Lightspeed\'s Bogan pulling back',
-                    detail: 'while Sequoia, a16z pile into enterprise'
+                    title: 'L3s > L2s according to Vitalik',
+                    sources: 'Vitalik/Bankless challenging entire L2 ecosystem',
+                    detail: 'App-specific L3s could obsolete general purpose L2s'
                 }
             ],
             blindspots: [
                 {
-                    title: 'Developer tools consolidation',
-                    sources: '3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage',
-                    detail: 'Market moving without public discourse'
+                    title: 'Privacy tech quietly gaining enterprise adoption',
+                    sources: 'ZK Podcast deep dives, zero coverage elsewhere',
+                    detail: 'Regulatory clarity making confidential DeFi possible'
                 },
                 {
-                    title: 'Climate tech sentiment inverting',
-                    sources: 'Khosla quietly accumulating while Founders Fund exits',
-                    detail: 'Contrary indicator worth tracking'
+                    title: 'AI agents accumulating significant treasuries',
+                    sources: 'Truth Terminal has $300k, others following',
+                    detail: 'Autonomous AI economy forming without human intervention'
                 }
             ]
         }
@@ -316,36 +273,36 @@ window.sidebarMetrics = {
     
     // Velocity Tracking
     velocityTracking: [
-        { theme: 'AI Agents', change: '+85% w/w', direction: 'positive' },
-        { theme: 'Capital Efficiency', change: '+17% w/w', direction: 'positive' },
-        { theme: 'DePIN', change: '+190% w/w', direction: 'positive' },
-        { theme: 'B2B SaaS', change: '+3% w/w', direction: 'negative' },
-        { theme: 'Crypto/Web3', change: '+53% w/w', direction: 'positive' }
+        { theme: 'RWAs', change: '+420% w/w', direction: 'positive' },
+        { theme: 'ETH Restaking', change: '+238% w/w', direction: 'positive' },
+        { theme: 'Bitcoin L2s', change: '+187% w/w', direction: 'positive' },
+        { theme: 'Memecoins', change: '-45% w/w', direction: 'negative' },
+        { theme: 'AI x Crypto', change: '+156% w/w', direction: 'positive' }
     ],
     
     // Influence Metrics
     influenceMetrics: [
-        { name: 'Brad Gerstner', score: 'High (94)' },
-        { name: 'All-In Hosts', score: 'High (87)' },
-        { name: 'Harry Stebbings', score: 'High (82)' },
-        { name: 'Ben Thompson', score: 'Medium (76)' },
-        { name: 'Ben Thompson', score: 'Medium (68)' }
+        { name: 'Vitalik Buterin', score: 'High (98)' },
+        { name: 'Raoul Pal', score: 'High (92)' },
+        { name: 'Larry Fink', score: 'High (89)' },
+        { name: 'Arthur Hayes', score: 'Medium (76)' },
+        { name: 'Cobie', score: 'Medium (71)' }
     ],
     
     // Consensus Monitor
     consensusMonitor: [
-        { topic: 'AI Agents', level: 'Strong (>80% agreement)' },
-        { topic: 'Capital Efficiency', level: 'Building (60-80% agreement)' },
-        { topic: 'DePIN', level: 'Mixed (40-60% agreement)' },
-        { topic: 'B2B SaaS', level: 'Weak (<40% agreement)' }
+        { topic: 'RWAs', level: 'Peak (>90% agreement)' },
+        { topic: 'Restaking Yields', level: 'Strong (>80% agreement)' },
+        { topic: 'Bitcoin L2s', level: 'Building (60-80% agreement)' },
+        { topic: 'Memecoins', level: 'Weak (<40% agreement)' }
     ],
     
     // Topic Correlations
     topicCorrelations: [
-        { topics: 'AI + Infrastructure', percentage: 68 },
-        { topics: 'SaaS + Efficiency', percentage: 48 },
-        { topics: 'Dev Tools + AI', percentage: 36 },
-        { topics: 'Climate + Deep Tech', percentage: 20 }
+        { topics: 'RWAs + Institutional', percentage: 84 },
+        { topics: 'Restaking + Yield', percentage: 76 },
+        { topics: 'AI + Autonomous', percentage: 68 },
+        { topics: 'Privacy + Enterprise', percentage: 52 }
     ]
 };
 
@@ -355,124 +312,105 @@ window.sidebarMetrics = {
 window.signalPanelData = {
     'market-narratives': [
         { 
-            trend: 'Growth → Efficiency shift', 
-            count: 23, 
+            trend: 'DeFi → RWAs shift', 
+            count: 47, 
             source: 'Multiple podcasts', 
-            insight: 'LPs are driving this narrative hard. Every major fund is adjusting their pitch.' 
+            insight: 'Institutional entry driving narrative. Yield farming out, treasury tokenization in.' 
         },
         { 
-            trend: 'Apps → Infrastructure shift', 
-            count: 17, 
-            source: '20VC, All-In, Invest Like Best', 
-            insight: 'The picks-and-shovels thesis is winning. Application layer seeing valuation compression.' 
+            trend: 'Monolithic → Modular shift', 
+            count: 38, 
+            source: 'Bankless, Bell Curve, Empire', 
+            insight: 'Celestia\'s success proving modular thesis. Every L1 scrambling to modularize.' 
         },
         { 
-            trend: 'Remote → Hybrid shift', 
-            count: 12, 
-            source: 'Various founder interviews', 
-            insight: 'Even YC companies are requiring 3 days in office. Culture concerns driving reversal.' 
+            trend: 'NFT → Gaming pivot', 
+            count: 29, 
+            source: 'Various gaming podcasts', 
+            insight: 'NFT projects pivoting to gaming. Ownership narrative evolving to utility.' 
         },
         { 
-            trend: 'B2C skepticism trend', 
-            count: 8, 
-            source: 'Benchmark, Lightspeed pods', 
-            insight: 'Consumer acquisition costs making B2C uninvestable unless viral growth proven.' 
+            trend: 'Memecoin exhaustion', 
+            count: 24, 
+            source: 'UpOnly, Cobie streams', 
+            insight: 'Retail fatigue after 1000x plays disappeared. Smart money rotating to infrastructure.' 
         },
         { 
-            trend: 'DevTools consolidation prediction', 
-            count: 6, 
-            source: 'Developer tea, TWIG', 
-            insight: 'Too many point solutions. Platformization wave coming in next 18 months.' 
+            trend: 'Privacy tech resurgence', 
+            count: 18, 
+            source: 'ZK Podcast, Bankless', 
+            insight: 'Regulatory clarity making privacy tech investable again. ZK everything.' 
         },
         { 
-            trend: 'Climate tech resurgence', 
-            count: 5, 
-            source: 'Khosla, Breakthrough pods', 
-            insight: 'New narrative around adaptation tech, not just mitigation. Defense angle emerging.' 
+            trend: 'AI agents using crypto rails', 
+            count: 15, 
+            source: 'AI x Crypto pods', 
+            insight: 'First working examples live. Truth Terminal has $300k treasury, trades autonomously.' 
         }
     ],
     
     'thesis-validation': [
         { 
-            thesis: 'Vertical AI > Horizontal AI', 
+            thesis: 'Restaking > Liquid staking', 
             status: 'GAINING VALIDATION', 
-            sources: 'Gerstner, Wolfe, Stebbings all agree', 
-            insight: 'Every horizontal play struggling with differentiation. Vertical expertise is the moat.' 
+            sources: 'EigenLayer, Babylon, Symbiotic all over $5B TVL', 
+            insight: 'Native yields plus restaking rewards creating sustainable 15-25% APY.' 
         },
         { 
-            thesis: 'Series A at 20-30x ARR is new normal', 
+            thesis: 'Bitcoin programmability via L2s', 
             status: 'GAINING VALIDATION', 
-            sources: '12 sources confirm', 
-            insight: 'Market has found equilibrium after 18-month correction. Higher only for AI infra.' 
+            sources: 'Lightning, Stacks, BitVM showing traction', 
+            insight: 'Bitcoin DeFi TVL crossed $2B. The orange coin is waking up.' 
         },
         { 
-            thesis: 'Developer experience as primary differentiator', 
+            thesis: 'Perp DEXs > Spot DEXs', 
+            status: 'VALIDATED', 
+            sources: 'dYdX, GMX, Vertex data', 
+            insight: 'Perps volume 10x spot. Traders want leverage, not just swaps.' 
+        },
+        { 
+            thesis: 'Chain abstraction critical', 
             status: 'EARLY SIGNALS', 
-            sources: 'a16z, Redpoint discussions', 
-            insight: 'DX is the new UX. Poor developer experience kills B2B adoption instantly.' 
-        },
-        { 
-            thesis: 'PLG dead for enterprise', 
-            status: 'GAINING VALIDATION', 
-            sources: 'Multiple enterprise founders', 
-            insight: 'Sales-led making comeback. PLG only works for developer tools now.' 
+            sources: 'Particle, Socket discussions', 
+            insight: 'Users hate bridging. Winners will abstract chains entirely.' 
         }
     ],
     
     'notable-deals': [
         { 
-            company: 'Perplexity', 
-            details: 'Series B at $10B valuation', 
-            insight: 'Deal structure trends emerging in competitive rounds*' 
+            company: 'EigenLayer', 
+            details: 'Token launch at $15B FDV', 
+            insight: 'Restaking narrative validated. Every L1 launching restaking now.*' 
         },
         { 
-            company: 'Anthropic (rumored)', 
-            details: 'Series D at $40B', 
-            insight: 'Google deepening partnership. Strategic investors winning over pure financial.' 
+            company: 'Monad (rumored)', 
+            details: 'Strategic round at $3B valuation', 
+            insight: 'Parallel EVM attracting massive interest. Jump and Paradigm leading.' 
         },
         { 
-            company: 'Cursor', 
-            details: 'Series A at $400M', 
-            insight: 'Developer tools with AI seeing 10x valuation premiums. Metrics don\'t matter yet.' 
+            company: 'Movement Labs', 
+            details: 'Seed round at $300M', 
+            insight: 'Move language gaining traction. Aptos ecosystem expanding rapidly.' 
         }
     ],
     
-    'portfolio-mentions': [
-        { 
-            company: 'Your Portfolio Co (unnamed)', 
-            context: 'Mentioned by Gerstner as example of efficient growth', 
-            sentiment: 'POSITIVE', 
-            action: 'Leverage for fundraising' 
-        },
-        { 
-            company: 'Competitor analysis', 
-            context: 'Three funds discussing your space', 
-            sentiment: 'NEUTRAL', 
-            action: 'Watch for new entrants' 
-        },
-        { 
-            company: 'Market positioning', 
-            context: 'Your vertical getting increased attention', 
-            sentiment: 'POSITIVE', 
-            action: 'Accelerate hiring' 
-        }
-    ],
+    'portfolio-mentions': [],
     
-    'lp-sentiment': [
+    'whale-sentiment': [
         { 
-            trend: 'DPI focus intensifying', 
-            source: 'CalPERS on Institutional Investor pod', 
-            impact: 'First-time funds facing 18+ month raises' 
+            trend: 'Rotation to Bitcoin', 
+            source: 'On-chain data + podcast discussions', 
+            impact: 'BTC dominance hitting 58%, highest since 2021' 
         },
         { 
-            trend: 'Vintage year concerns', 
-            source: 'Multiple endowment discussions', 
-            impact: '2021-2022 vintages being written down aggressively' 
+            trend: 'Stablecoin yields priority', 
+            source: 'Multiple DeFi podcasts', 
+            impact: 'USDC/USDT pools seeing massive inflows at 15% APY' 
         },
         { 
-            trend: 'Co-invest appetite growing', 
-            source: 'Sovereign wealth discussions', 
-            impact: 'LPs want more direct exposure, less blind pool risk' 
+            trend: 'High FDV tokens underperforming', 
+            source: 'Cobie, Hsaka discussions', 
+            impact: 'High FDV, low float tokens getting crushed. Community coins outperforming 10x' 
         }
     ]
 };
@@ -483,17 +421,17 @@ window.signalPanelData = {
 window.chartViewData = {
     // Consensus levels for heatmap view
     consensusLevels: [
-        [0.8, 0.6, 0.9, 0.7],  // AI Agents
-        [0.5, 0.6, 0.7, 0.8],  // Capital Efficiency
-        [0.3, 0.5, 0.8, 0.9],  // DePIN
-        [0.4, 0.4, 0.3, 0.3]   // B2B SaaS
+        [0.9, 0.8, 0.95, 0.92],  // RWAs
+        [0.7, 0.8, 0.85, 0.9],  // ETH Restaking
+        [0.4, 0.6, 0.7, 0.8],  // Bitcoin L2s
+        [0.5, 0.5, 0.3, 0.3]   // Memecoins
     ],
     
     consensusLabels: [
-        ['Building', 'Moderate', 'Strong', 'Strong'],
-        ['Moderate', 'Moderate', 'Strong', 'Strong'],
-        ['Weak', 'Moderate', 'Strong', 'Peak'],
-        ['Weak', 'Weak', 'Weak', 'Weak']
+        ['Building', 'Strong', 'Peak', 'Peak'],
+        ['Moderate', 'Strong', 'Strong', 'Peak'],
+        ['Weak', 'Building', 'Moderate', 'Strong'],
+        ['Building', 'Building', 'Weak', 'Weak']
     ]
 };
 
@@ -502,9 +440,9 @@ window.chartViewData = {
 // ============================================
 window.tickerData = {
     items: [
-        { label: 'AI Agents', value: '↑85%' },
-        { label: 'Capital Efficiency', value: '↑17%' },
-        { label: 'Patterns Detected', value: '47' }
+        { label: 'RWAs', value: '↑420%' },
+        { label: 'ETH Restaking', value: '↑238%' },
+        { label: 'Alpha Detected', value: '127' }
     ]
 };
 

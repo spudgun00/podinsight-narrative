@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Components Consistency Test</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--deep-ink);
+        }
+        
+        .synthesis-sidebar {
+            background: white;
+        }
+        
+        button {
+            margin-top: 2rem;
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Sidebar Components Consistency</h1>
+        
+        <aside class="synthesis-sidebar">
+            <!-- Velocity Tracking -->
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Velocity Tracking</h4>
+                <p class="section-description">Topic momentum over past 7 days</p>
+                <div class="influence-list" id="velocityTrackingList">
+                    <!-- Will be populated -->
+                </div>
+            </div>
+            
+            <!-- Influence Metrics -->
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Influence Metrics</h4>
+                <p class="section-description">Who's shaping the conversation</p>
+                <div class="influence-list">
+                    <div class="influence-item">
+                        <span class="influence-name">Brad Gerstner</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 94%;"></div>
+                        </div>
+                        <span class="influence-score">94%</span>
+                    </div>
+                    <div class="influence-item">
+                        <span class="influence-name">All-In Hosts</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 87%;"></div>
+                        </div>
+                        <span class="influence-score">87%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Consensus Monitor -->
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Consensus Monitor</h4>
+                <p class="section-description">Market agreement levels by topic</p>
+                <div class="influence-list consensus-monitor-container">
+                    <!-- Will be populated -->
+                </div>
+            </div>
+        </aside>
+        
+        <button onclick="loadData()">Load Components</button>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        function loadData() {
+            console.log('Loading components...');
+            
+            // Initialize the component
+            const container = document.querySelector('.synthesis-sidebar');
+            if (container && container.parentElement) {
+                IntelligenceBrief.init(container.parentElement);
+                console.log('All components loaded with consistent styling');
+            }
+        }
+        
+        // Auto-load on page ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(loadData, 500);
+        });
+    </script>
+</body>
+</html>

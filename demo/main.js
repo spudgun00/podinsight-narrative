@@ -334,6 +334,40 @@ class PortfolioManager {
         this.saveState();
     }
     
+    openPanel() {
+        this.state.panelState = 'open';
+        
+        const panel = document.querySelector('.portfolio-panel');
+        const backdrop = document.querySelector('.portfolio-backdrop');
+        
+        // Add class to body to hide scrollbar
+        document.body.classList.add('portfolio-open');
+        
+        panel.setAttribute('data-state', 'open');
+        backdrop.style.display = 'block';
+        setTimeout(() => backdrop.classList.add('active'), 10);
+        
+        // Mark mentions as viewed after a delay
+        setTimeout(() => {
+            this.state.newMentions = 0;
+            this.updateUI();
+            this.saveState();
+        }, 2000);
+        
+        // Dispatch custom event for panel toggle
+        const event = new CustomEvent('portfolio-panel-toggle', {
+            detail: {
+                isOpen: true,
+                portfolioCount: this.state.portfolioCount,
+                newMentions: this.state.newMentions
+            }
+        });
+        window.dispatchEvent(event);
+        
+        this.updateUI();
+        this.saveState();
+    }
+    
     closePanel(e) {
         if (e) e.preventDefault();
         

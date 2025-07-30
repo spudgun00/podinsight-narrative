@@ -9,9 +9,9 @@
     bottom: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(26, 26, 46, 0.6) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    background: rgba(0, 0, 0, 0.3) !important;  /* Black 30% for consistency */
+    backdrop-filter: blur(4px) !important; /* 4px blur for Episode panel */
+    -webkit-backdrop-filter: blur(4px) !important;
     z-index: 99998 !important; /* Very high to cover everything */
     pointer-events: auto !important;
 }

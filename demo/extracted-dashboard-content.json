@@ -1,0 +1,1732 @@
+{
+  "dashboard_content": {
+    "navigation": {
+      "main_title": "synthea.ai",
+      "tagline": "synthesized intelligence",
+      "logo_aria_label": "Synthea.ai Logo",
+      "meta_description": "synthea.ai - Synthesized intelligence for venture capital",
+      "og_title": "synthea.ai - Venture Capital Intelligence Platform",
+      "og_description": "Track narratives, signals, and insights from 1,498+ venture capital podcasts",
+      "page_title": "synthea.ai - Synthesized intelligence for venture capital",
+      "footer_tagline": "Synthesized intelligence for venture capital",
+      "footer_copyright": "© 2024 synthea.ai. All rights reserved.",
+      "demo_mode_indicator": "Demo Mode",
+      "user_account": null,
+      "ticker_items": [
+        {
+          "label": "AI Agents",
+          "value": "↑85%"
+        },
+        {
+          "label": "Capital Efficiency",
+          "value": "↑17%"
+        },
+        {
+          "label": "Patterns Detected",
+          "value": "47"
+        }
+      ]
+    },
+    "narrative_pulse": {
+      "momentum": {
+        "7_day": {
+          "chart_title": "Narrative Momentum",
+          "time_range": "Aug 22, 2025 - Aug 28, 2025",
+          "time_labels": ["Thu 22", "Fri 23", "Sat 24", "Sun 25", "Mon 26", "Tue 27", "Wed 28"],
+          "topics": {
+            "AI Agents": {
+              "color": "#4a7c59",
+              "momentum": "+59%",
+              "data_points": [3, 1, 2, 6, 8, 9, 6],
+              "mentions": 35,
+              "episodes": 23,
+              "daily_quotes": {
+                "Thu 22": "Early week momentum building",
+                "Wed 28": "Peak day: Multiple tier-1 shows align on thesis"
+              }
+            },
+            "AI Infrastructure": {
+              "color": "#a87c68",
+              "momentum": "+37%",
+              "data_points": [5, 2, 3, 8, 10, 12, 12],
+              "mentions": 52,
+              "episodes": 12
+            },
+            "Capital Efficiency": {
+              "color": "#f4a261",
+              "momentum": "+15%",
+              "data_points": [2, 0, 1, 3, 4, 3, 2],
+              "mentions": 15,
+              "episodes": 31
+            },
+            "DePIN": {
+              "color": "#5a6c8c",
+              "momentum": "+78%",
+              "data_points": [2, 1, 1, 5, 7, 8, 8],
+              "mentions": 32,
+              "episodes": 18
+            },
+            "Crypto/Web3": {
+              "color": "#5c7cfa",
+              "momentum": "+18%",
+              "data_points": [3, 2, 2, 4, 5, 5, 5],
+              "mentions": 26
+            },
+            "B2B SaaS": {
+              "color": "#c77d7d",
+              "momentum": "-20%",
+              "data_points": [1, 0, 1, 2, 2, 1, 1],
+              "mentions": 8,
+              "episodes": 12
+            },
+            "Developer Tools": {
+              "color": "#8a68a8",
+              "momentum": "+29%",
+              "data_points": [2, 1, 1, 3, 4, 4, 3],
+              "mentions": 18
+            }
+          },
+          "insights": [
+            "AI infrastructure dominates discussion",
+            "DePIN momentum surging 78% w/w",
+            "B2B SaaS losing mindshare to AI"
+          ]
+        },
+        "30_day": {
+          "time_range": "Aug 1, 2025 - Aug 28, 2025",
+          "topics": {
+            "AI Agents": {
+              "momentum": "+337%",
+              "total_growth": 337.5,
+              "narrative": "From 15 mentions in early June to 35 by late August - strong emerging trend"
+            },
+            "DePIN": {
+              "momentum": "+1500%",
+              "narrative": "Steady emergence from niche to mainstream topic over the quarter"
+            }
+          }
+        },
+        "90_day": {
+          "topics": {
+            "AI Infrastructure": {
+              "momentum": "+160%",
+              "narrative": "Consistent growth throughout summer, accelerating in August as \"picks and shovels\" thesis dominates"
+            },
+            "B2B SaaS": {
+              "momentum": "-60%",
+              "narrative": "Steady decline as AI-native approaches dominate all conversations"
+            }
+          }
+        }
+      },
+      "volume": {
+        "description": "Bar chart view showing mention volume over time"
+      },
+      "consensus": {
+        "description": "Heatmap view showing consensus levels",
+        "levels": ["Weak", "Building", "Moderate", "Strong", "Peak"],
+        "consensus_labels": [
+          ["Building", "Moderate", "Strong", "Strong"],
+          ["Moderate", "Moderate", "Strong", "Strong"],
+          ["Weak", "Moderate", "Strong", "Peak"],
+          ["Weak", "Weak", "Weak", "Weak"]
+        ]
+      },
+      "time_options": ["7d", "30d", "90d"]
+    },
+    "narrative_feed": [
+      {
+        "id": "feed-1",
+        "type": "CONSENSUS",
+        "time": "2h ago",
+        "event": "AI infrastructure preference emerging across 5 tier-1 sources",
+        "expansion": {
+          "sources": [
+            {
+              "name": "20VC w/ Brad Gerstner",
+              "time": "2h ago",
+              "quote": "Infrastructure is eating the world, not apps. We're seeing 10x better unit economics in picks-and-shovels plays."
+            },
+            {
+              "name": "All-In Podcast",
+              "time": "5h ago",
+              "quote": "Every portfolio company wants AI features, but the real money is in the infrastructure layer."
+            },
+            {
+              "name": "Invest Like the Best",
+              "time": "1d ago",
+              "quote": "LPs are now explicitly asking for infrastructure allocation. It's becoming a separate mandate."
+            }
+          ],
+          "dissent": {
+            "name": "Peter Thiel on Founders Fund",
+            "time": "2d ago",
+            "quote": "When everyone rushes to the same conclusion, that's usually when the opportunity has passed."
+          }
+        }
+      },
+      {
+        "id": "feed-2",
+        "type": "DIVERGENCE",
+        "time": "5h ago",
+        "event": "Peter Thiel diverges from mainstream AGI timeline consensus",
+        "expansion": {
+          "contrarian": {
+            "name": "Peter Thiel on Tim Ferriss Show",
+            "time": "5h ago",
+            "quote": "Everyone's talking about AGI in 2-3 years. I think we're seeing a classic bubble mentality. The real timeline is decades, not years."
+          },
+          "mainstream": [
+            {
+              "name": "Sam Altman (multiple podcasts)",
+              "time": "This week",
+              "quote": "AGI could happen much sooner than most people think. We're measuring progress in months, not years."
+            },
+            {
+              "name": "Demis Hassabis on Lex Fridman",
+              "time": "3d ago",
+              "quote": "The pace of progress suggests we're closer than ever. 2030 is conservative."
+            }
+          ]
+        }
+      },
+      {
+        "id": "feed-3",
+        "type": "TREND",
+        "time": "1d ago",
+        "event": "Developer experience mentioned 12 times as key differentiator",
+        "momentum": "12 mentions this week vs. 3 mentions last week (+300%)"
+      },
+      {
+        "id": "feed-4",
+        "type": "LP-INTEL",
+        "time": "1d ago",
+        "event": "LP sentiment: CalPERS emphasizing DPI metrics",
+        "impact": "First-time funds facing 18+ month raises. Established funds getting 50% of target."
+      },
+      {
+        "id": "feed-5",
+        "type": "PATTERN",
+        "time": "2d ago",
+        "event": "Vertical AI thesis validated by Brad Gerstner, Josh Wolfe, Harry Stebbings",
+        "implications": "3 major funds have pivoted their AI thesis in the last 30 days. Watch for vertical-specific funds launching Q1."
+      }
+    ],
+    "notable_signals": {
+      "market_narratives": {
+        "count": 47,
+        "trending": "↑ 14 from last week",
+        "label": "Shifting Themes",
+        "signals": [
+          {
+            "trend": "Growth → Efficiency shift",
+            "count": 23,
+            "source": "Multiple podcasts",
+            "insight": "LPs are driving this narrative hard. Every major fund is adjusting their pitch."
+          },
+          {
+            "trend": "Apps → Infrastructure shift",
+            "count": 17,
+            "source": "20VC, All-In, Invest Like Best",
+            "insight": "The picks-and-shovels thesis is winning. Application layer seeing valuation compression."
+          },
+          {
+            "trend": "Remote → Hybrid shift",
+            "count": 12,
+            "source": "Various founder interviews",
+            "insight": "Even YC companies are requiring 3 days in office. Culture concerns driving reversal."
+          },
+          {
+            "trend": "B2C skepticism trend",
+            "count": 8,
+            "source": "Benchmark, Lightspeed pods",
+            "insight": "Consumer acquisition costs making B2C uninvestable unless viral growth proven."
+          },
+          {
+            "trend": "DevTools consolidation prediction",
+            "count": 6,
+            "source": "Developer tea, TWIG",
+            "insight": "Too many point solutions. Platformization wave coming in next 18 months."
+          },
+          {
+            "trend": "Climate tech resurgence",
+            "count": 5,
+            "source": "Khosla, Breakthrough pods",
+            "insight": "New narrative around adaptation tech, not just mitigation. Defense angle emerging."
+          }
+        ]
+      },
+      "thesis_validation": {
+        "count": 14,
+        "trending": "↑ 3 reaching validation threshold",
+        "label": "Consensus Signals",
+        "signals": [
+          {
+            "thesis": "Vertical AI > Horizontal AI",
+            "status": "GAINING VALIDATION",
+            "sources": "Gerstner, Wolfe, Stebbings all agree",
+            "insight": "Every horizontal play struggling with differentiation. Vertical expertise is the moat."
+          },
+          {
+            "thesis": "Series A at 20-30x ARR is new normal",
+            "status": "GAINING VALIDATION",
+            "sources": "12 sources confirm",
+            "insight": "Market has found equilibrium after 18-month correction. Higher only for AI infra."
+          },
+          {
+            "thesis": "Developer experience as primary differentiator",
+            "status": "EARLY SIGNALS",
+            "sources": "a16z, Redpoint discussions",
+            "insight": "DX is the new UX. Poor developer experience kills B2B adoption instantly."
+          },
+          {
+            "thesis": "PLG dead for enterprise",
+            "status": "GAINING VALIDATION",
+            "sources": "Multiple enterprise founders",
+            "insight": "Sales-led making comeback. PLG only works for developer tools now."
+          }
+        ],
+        "tracked_topics": [
+          {
+            "name": "DePIN",
+            "momentum": 300,
+            "mentions": 32,
+            "episodes": 8,
+            "keywords": ["Decentralized infrastructure", "Physical mining", "Token incentives"],
+            "context": "Monday surge after funding rumor"
+          },
+          {
+            "name": "AI Infrastructure",
+            "momentum": 140,
+            "mentions": 52,
+            "episodes": 12,
+            "keywords": ["Picks and shovels", "GPU economics", "Foundation layer"],
+            "context": "Peak coverage Wed - everyone wants exposure"
+          },
+          {
+            "name": "AI Agents",
+            "momentum": 100,
+            "mentions": 35,
+            "episodes": 9,
+            "keywords": ["Agent infrastructure", "Autonomous systems", "Use cases"],
+            "context": "20VC deep dive Tuesday drove discussion"
+          },
+          {
+            "name": "Crypto/Web3",
+            "momentum": 67,
+            "mentions": 26,
+            "episodes": 7,
+            "keywords": ["Base ecosystem", "Regulatory clarity", "Infrastructure ready"],
+            "context": "Steady coverage from crypto-native shows"
+          },
+          {
+            "name": "Capital Efficiency",
+            "momentum": 0,
+            "mentions": 15,
+            "episodes": 5,
+            "keywords": ["Burn rates", "Path to profitability", "LP pressure"],
+            "context": "Consistent but not growing - new baseline"
+          }
+        ]
+      },
+      "notable_deals": {
+        "count": 9,
+        "trending": "3 unicorns",
+        "label": "Tracked Rounds",
+        "signals": [
+          {
+            "company": "Perplexity",
+            "details": "Series B at $10B valuation",
+            "insight": "Deal structure trends emerging in competitive rounds*"
+          },
+          {
+            "company": "Anthropic (rumored)",
+            "details": "Series D at $40B",
+            "insight": "Google deepening partnership. Strategic investors winning over pure financial."
+          },
+          {
+            "company": "Cursor",
+            "details": "Series A at $400M",
+            "insight": "Developer tools with AI seeing 10x valuation premiums. Metrics don't matter yet."
+          }
+        ]
+      },
+      "portfolio_mentions": {
+        "count": 17,
+        "trending": "↑ 2 competitive threats",
+        "label": "Company Discussions",
+        "empty_state": {
+          "title": "PORTFOLIO MENTIONS",
+          "subtitle": "Portfolio company intelligence",
+          "status": "No companies configured",
+          "benefits": [
+            "Track mentions across all podcasts",
+            "Monitor competitive landscape",
+            "Get sentiment analysis"
+          ],
+          "cta": "→ Configure Portfolio"
+        }
+      },
+      "lp_sentiment": {
+        "count": 5,
+        "trending": "↓ Sentiment trending cautious",
+        "label": "Notable Shifts",
+        "signals": [
+          {
+            "trend": "DPI focus intensifying",
+            "source": "CalPERS on Institutional Investor pod",
+            "impact": "First-time funds facing 18+ month raises"
+          },
+          {
+            "trend": "Vintage year concerns",
+            "source": "Multiple endowment discussions",
+            "impact": "2021-2022 vintages being written down aggressively"
+          },
+          {
+            "trend": "Co-invest appetite growing",
+            "source": "Sovereign wealth discussions",
+            "impact": "LPs want more direct exposure, less blind pool risk"
+          }
+        ]
+      }
+    },
+    "priority_briefings": [
+      {
+        "id": "briefing-1",
+        "priority": "critical",
+        "priority_label": "Portfolio Alert",
+        "podcast": "20VC with Harry Stebbings",
+        "time": "2h ago",
+        "duration": "72 min",
+        "influence": "High (94)",
+        "title": "Why We're Wrong About AI Valuations",
+        "guest": "Brad Gerstner, Founder & CEO at Altimeter Capital",
+        "key_insights": [
+          "Series A valuations settling at 20-30x ARR, sustainable after 18 months of chaos",
+          "AI adoption driving 2-3x better retention in SaaS",
+          "Perplexity funding round discussed (terms unverified)*"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: Vertical AI thesis validated"
+          },
+          {
+            "type": "portfolio",
+            "text": "⚠ Portfolio Alert: Your company mentioned by name"
+          }
+        ]
+      },
+      {
+        "id": "briefing-2",
+        "priority": "opportunity",
+        "priority_label": "Thesis Match",
+        "podcast": "Stratechery",
+        "time": "1d ago",
+        "duration": "44 min",
+        "influence": "Medium (68)",
+        "title": "The State of SaaS",
+        "guest": "Host: Ben Thompson",
+        "key_insights": [
+          "Vertical SaaS companies achieving 150%+ net revenue retention",
+          "Infrastructure costs dropping 80% YoY enabling new business models",
+          "Developer tools consolidation wave beginning - 3 major acquisitions coming"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Market Signal: Aligns with your developer tools thesis"
+          }
+        ]
+      },
+      {
+        "id": "briefing-3",
+        "priority": "elevated",
+        "priority_label": "Market Signal",
+        "podcast": "Invest Like the Best",
+        "time": "3h ago",
+        "duration": "68 min",
+        "influence": "High (82)",
+        "title": "Why Developer Tools Are Harder Than We Thought",
+        "guest": "Dylan Field, CEO at Figma",
+        "key_insights": [
+          "Developer tool reality: need 1000+ free users before first paid conversion",
+          "Market bifurcating - small startups stay free forever, enterprises spending 5x more",
+          "Adobe's failed Figma acquisition creating M&A opportunity window"
+        ],
+        "signals": [
+          {
+            "type": "lp",
+            "text": "◇ LP Intel: Multiple LPs questioning developer tool investments"
+          }
+        ]
+      },
+      {
+        "id": "briefing-4",
+        "priority": "critical",
+        "priority_label": "Portfolio Alert",
+        "podcast": "Acquired",
+        "time": "1d ago",
+        "duration": "156 min",
+        "influence": "High influence",
+        "title": "The Nvidia Company Story: Part II",
+        "guest": "Jensen Huang, CEO of Nvidia",
+        "key_insights": [
+          "GPU architecture evolution mirrors platform shifts in tech history",
+          "Data center revenue now 80% of business, validating infrastructure thesis",
+          "AI training costs following Moore's Law in reverse - doubling every 2 years"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: AI Infrastructure"
+          },
+          {
+            "type": "portfolio",
+            "text": "⚠ Competitive Intel: AMD positioning"
+          }
+        ]
+      },
+      {
+        "id": "briefing-5",
+        "priority": "opportunity",
+        "priority_label": "Thesis Match",
+        "podcast": "The Tim Ferriss Show",
+        "time": "1d ago",
+        "duration": "112 min",
+        "influence": "78% influence",
+        "title": "Palmer Luckey on Defense Tech's Golden Age",
+        "guest": "Palmer Luckey, Founder of Anduril",
+        "key_insights": [
+          "Defense tech hitting inflection point with $1.5B Series F at $8.5B valuation",
+          "Bipartisan support creating unprecedented 10-year visibility for contracts",
+          "Software eating defense: 70% of value now in autonomous systems"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Market Signal: Defense Tech"
+          },
+          {
+            "type": "thesis",
+            "text": "✓ Thesis Match: Dual-Use Technology"
+          }
+        ]
+      },
+      {
+        "id": "briefing-6",
+        "priority": "elevated",
+        "priority_label": "Market Signal",
+        "podcast": "Indie Hackers",
+        "time": "2d ago",
+        "duration": "89 min",
+        "influence": "71% influence",
+        "title": "AI Coding Tools: The $10B Market Nobody Saw Coming",
+        "guest": "Amjad Masad, CEO of Replit",
+        "key_insights": [
+          "GitHub Copilot at $100M ARR in under 2 years, fastest B2B growth ever",
+          "Developer productivity tools seeing 150% net revenue retention",
+          "Next frontier: AI agents that ship production code autonomously"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ Dev Tools Opportunity"
+          },
+          {
+            "type": "market",
+            "text": "◆ AI Applications"
+          }
+        ]
+      },
+      {
+        "id": "briefing-7",
+        "priority": "elevated",
+        "priority_label": "Market Signal",
+        "podcast": "This Week in Startups",
+        "time": "2d ago",
+        "duration": "95 min",
+        "influence": "74% influence",
+        "title": "OpenAI's Path to $100B: Lessons for AI Startups",
+        "guest": "Sam Altman, CEO of OpenAI",
+        "key_insights": [
+          "Revenue run rate hit $3.4B, up from $1.6B six months ago",
+          "Enterprise adoption accelerating: 92% of Fortune 500 now customers",
+          "Margin profile improving as inference costs drop 90% year-over-year"
+        ],
+        "signals": [
+          {
+            "type": "market",
+            "text": "◆ AI Leaders"
+          },
+          {
+            "type": "market",
+            "text": "◆ Market Expansion"
+          }
+        ]
+      },
+      {
+        "id": "briefing-8",
+        "priority": "opportunity",
+        "priority_label": "Thesis Match",
+        "podcast": "The Knowledge Project",
+        "time": "3d ago",
+        "duration": "102 min",
+        "influence": "Medium influence",
+        "title": "Climate Tech's Profitability Turn",
+        "guest": "Ryan Orbuch, Partner at Lowercarbon Capital",
+        "key_insights": [
+          "First wave of climate unicorns reaching profitability without subsidies",
+          "Industrial heat and carbon capture seeing 70% gross margins",
+          "LP interest surging: $45B allocated to climate funds in 2024"
+        ],
+        "signals": [
+          {
+            "type": "thesis",
+            "text": "✓ Climate Tech"
+          },
+          {
+            "type": "market",
+            "text": "◆ Sustainability"
+          }
+        ]
+      },
+      {
+        "id": "briefing-9",
+        "priority": "opportunity",
+        "priority_label": "Thesis Match",
+        "podcast": "BG2",
+        "time": "3d ago",
+        "duration": "118 min",
+        "influence": "65% influence",
+        "title": "The New Physics of Venture: Power Laws in the AI Era",
+        "guest": "Brad Gerstner & Bill Gurley",
+        "key_insights": [
+          "Traditional 10x fund returns becoming 100x in AI-native companies",
+          "Capital efficiency paradox: AI companies need less but command more",
+          "Warning signs: Late-stage valuations disconnecting from fundamentals"
+        ],
+        "signals": [
+          {
+            "type": "lp",
+            "text": "◇ Fund Strategy"
+          },
+          {
+            "type": "market",
+            "text": "◆ Valuation Trends"
+          }
+        ]
+      }
+    ],
+    "weekly_brief": {
+      "hours_analyzed": 1044,
+      "last_updated": "36 mins ago",
+      "collapsed_summary": "AI infrastructure dominates [12 sources agree, led by Gerstner/20VC, Gurley/Invest Like Best] with Series A at 20-30x ARR [Hoffman, Rabois confirm]. Notable divergence: DePIN momentum despite revenue questions. Potential blindspot: Developer tools consolidation discussions minimal.",
+      "expanded": {
+        "consensus": [
+          {
+            "title": "AI infrastructure over applications",
+            "sources": "Gerstner/20VC, Gurley/Invest Like Best, All-In panel agree",
+            "detail": "Vertical AI seeing 2-3x better retention than horizontal plays"
+          },
+          {
+            "title": "Series A valuations stabilizing",
+            "sources": "12 sources confirm: Gerstner, Hoffman, Rabois leading",
+            "detail": "20-30x ARR becomes new normal after 18-month correction"
+          },
+          {
+            "title": "Capital efficiency replacing growth",
+            "sources": "mentioned 47x this week: Stebbings, Sacks, Palihapitiya aligned",
+            "detail": "LPs driving this narrative shift hard"
+          }
+        ],
+        "contrarian": [
+          {
+            "title": "DePIN showing 190% momentum without revenue",
+            "sources": "Thiel only dissenter on Founders Fund pod, everyone else bullish",
+            "detail": "Either massive opportunity or bubble forming"
+          },
+          {
+            "title": "Consumer AI skepticism rising",
+            "sources": "Benchmark's Gurley, Lightspeed's Bogan pulling back",
+            "detail": "while Sequoia, a16z pile into enterprise"
+          }
+        ],
+        "blindspots": [
+          {
+            "title": "Developer tools consolidation",
+            "sources": "3 stealth acquisitions rumored per Acquired pod, zero tier-1 VC coverage",
+            "detail": "Market moving without public discourse"
+          },
+          {
+            "title": "Climate tech sentiment inverting",
+            "sources": "Khosla quietly accumulating while Founders Fund exits",
+            "detail": "Contrary indicator worth tracking"
+          }
+        ]
+      },
+      "download_button": "Download Full Brief (PDF)",
+      "share_options": ["Share via Slack", "Email Brief"],
+      "email_template": {
+        "subject": "VCPulse Weekly Intelligence Brief - Week [X], [Month] [Year]",
+        "body": "Key Highlights:\n• AI infrastructure dominates with Series A at 20-30x ARR\n• DePIN showing 190% momentum (contrarian signal)\n• Developer tools consolidation emerging as blindspot"
+      },
+      "slack_notification": {
+        "implementation": "clipboard_copy",
+        "message_format": "📊 *VCPulse Weekly Intelligence Brief - Week [X], [Month]*\n\nKey highlights:\n• AI infrastructure dominates with Series A at 20-30x ARR\n• DePIN showing 190% momentum (contrarian signal)\n• Developer tools consolidation emerging as blindspot\n\nView full brief: [URL]",
+        "toast": {
+          "message": "Brief copied to clipboard - paste in Slack!",
+          "duration_seconds": 3,
+          "style": "Fixed position notification"
+        }
+      }
+    },
+    "sidebar_widgets": {
+      "velocity_tracking": {
+        "title": "Velocity Tracking",
+        "themes": [
+          {
+            "theme": "AI Agents",
+            "change": "+85% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "Capital Efficiency",
+            "change": "+17% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "DePIN",
+            "change": "+190% w/w",
+            "direction": "positive"
+          },
+          {
+            "theme": "B2B SaaS",
+            "change": "+3% w/w",
+            "direction": "negative"
+          },
+          {
+            "theme": "Crypto/Web3",
+            "change": "+53% w/w",
+            "direction": "positive"
+          }
+        ]
+      },
+      "influence_metrics": {
+        "title": "Influence Metrics",
+        "people": [
+          {
+            "name": "Brad Gerstner",
+            "score": "High (94)"
+          },
+          {
+            "name": "All-In Hosts",
+            "score": "High (87)"
+          },
+          {
+            "name": "Harry Stebbings",
+            "score": "High (82)"
+          },
+          {
+            "name": "Ben Thompson",
+            "score": "Medium (76)"
+          },
+          {
+            "name": "Ben Thompson",
+            "score": "Medium (68)"
+          }
+        ]
+      },
+      "consensus_monitor": {
+        "title": "Consensus Monitor",
+        "topics": [
+          {
+            "topic": "AI Agents",
+            "level": "Strong (>80% agreement)"
+          },
+          {
+            "topic": "Capital Efficiency",
+            "level": "Building (60-80% agreement)"
+          },
+          {
+            "topic": "DePIN",
+            "level": "Mixed (40-60% agreement)"
+          },
+          {
+            "topic": "B2B SaaS",
+            "level": "Weak (<40% agreement)"
+          }
+        ]
+      },
+      "topic_correlations": {
+        "title": "Topic Correlations",
+        "correlations": [
+          {
+            "topics": "AI + Infrastructure",
+            "percentage": 68
+          },
+          {
+            "topics": "SaaS + Efficiency",
+            "percentage": 48
+          },
+          {
+            "topics": "Dev Tools + AI",
+            "percentage": 36
+          },
+          {
+            "topics": "Climate + Deep Tech",
+            "percentage": 20
+          }
+        ]
+      }
+    },
+    "search": {
+      "placeholder": "What are VCs discussing?",
+      "shortcut_hint": "⌘K",
+      "rotating_placeholders": [
+        "What's the consensus on...",
+        "Which VCs are talking about...",
+        "Show me contrarian views on...",
+        "What's gaining momentum in..."
+      ],
+      "suggestions": [
+        {
+          "query": "What's the consensus on vertical AI?",
+          "meta": "14 sources"
+        },
+        {
+          "query": "Series A valuations this month",
+          "meta": "8 sources"
+        },
+        {
+          "query": "Brad Gerstner latest thesis",
+          "meta": "3 episodes"
+        }
+      ],
+      "trending_topics": [
+        {
+          "topic": "AI Agents",
+          "trend": "↑85% w/w"
+        },
+        {
+          "topic": "Capital efficiency metrics",
+          "trend": "↑17% w/w"
+        },
+        {
+          "topic": "DePIN infrastructure",
+          "trend": "↑190% w/w"
+        }
+      ],
+      "quick_filters": [
+        "Consensus views",
+        "Contrarian takes",
+        "Emerging themes",
+        "Deal mentions",
+        "Key people"
+      ],
+      "filter_queries": {
+        "consensus": "What's the consensus on ",
+        "contrarian": "Contrarian views on ",
+        "emerging": "Emerging themes in ",
+        "deals": "Recent deals in ",
+        "people": "What is [person] saying about "
+      },
+      "results_template": {
+        "confidence_badge": "89% confidence",
+        "source_count": "Based on 14 podcast discussions",
+        "key_insight_template": "Strong consensus forming: Vertical AI applications with proprietary data moats...",
+        "play_clip_durations": "30-50 seconds",
+        "action_buttons": [
+          "View Deep Analysis",
+          "Share Insight",
+          "Save to Notebook"
+        ]
+      },
+      "placeholder_rotation": {
+        "enabled": true,
+        "interval_seconds": 3,
+        "behavior": "Cycles through placeholders when search input is focused"
+      },
+      "audio_playback": {
+        "clip_duration_range": "30-50 seconds",
+        "generation": "Random duration generated per clip",
+        "simulation_duration": "5 seconds actual playback"
+      }
+    },
+    "portfolio": {
+      "panel_header": "Company Tracking",
+      "stats_summary": {
+        "total_companies": "Total Companies",
+        "mentions_this_week": "Mentions This Week",
+        "positive_sentiment": "Positive Sentiment"
+      },
+      "sections": {
+        "portfolio": {
+          "label": "PORTFOLIO COMPANIES",
+          "placeholder": "Enter company name",
+          "button": "+ Add",
+          "import_text": "Or import your portfolio:",
+          "import_buttons": ["Upload CSV", "Connect CRM"],
+          "header": "YOUR PORTFOLIO",
+          "empty_state": "Add portfolio companies to track mentions"
+        },
+        "watchlist": {
+          "label": "WATCHLIST COMPANIES",
+          "placeholder": "Enter company name",
+          "button": "+ Add",
+          "header": "YOUR WATCHLIST",
+          "empty_state": "Add companies to monitor for investment opportunities"
+        }
+      },
+      "default_companies": [
+        {
+          "name": "Anthropic",
+          "mentions": 7,
+          "sentiment": "5 positive, 2 neutral",
+          "status": "Thesis validated"
+        },
+        {
+          "name": "OpenAI",
+          "mentions": 12,
+          "sentiment": "Competitive landscape intensifying",
+          "status": "Competitive threat"
+        }
+      ],
+      "footer": "Import formats: CSV, Affinity, Airtable, PitchBook",
+      "stats_values": {
+        "total_companies": 17,
+        "mentions_this_week": 51,
+        "positive_sentiment": "+73%"
+      },
+      "button_states": {
+        "new_mentions_cycle": "1→2→3→1 every 5 minutes",
+        "aria_label": "Company tracking"
+      },
+      "update_cycle": {
+        "interval_minutes": 5,
+        "sequence": [1, 2, 3],
+        "persistence": {
+          "localStorage_keys": [
+            "patternFlow_portfolio_state",
+            "patternFlow_newMentionsValue", 
+            "patternFlow_nextMentionsUpdateTime"
+          ],
+          "behavior": "Continues cycle even after page refresh"
+        }
+      },
+      "filter_dropdown": {
+        "options": [
+          "Curated for You",
+          "All Episodes",
+          "20VC with Harry Stebbings",
+          "Stratechery",
+          "Invest Like the Best",
+          "Acquired",
+          "The Tim Ferriss Show",
+          "Indie Hackers",
+          "This Week in Startups",
+          "The Knowledge Project",
+          "BG2"
+        ],
+        "default": "Curated for You",
+        "behavior": "Complete DOM replacement when filtering"
+      }
+    },
+    "global": {
+      "section_headers": {
+        "narrative_pulse": "Narrative Pulse",
+        "narrative_feed": "Narrative Feed",
+        "notable_signals": "Notable Signals",
+        "priority_briefings": "Priority Briefings",
+        "weekly_intelligence_brief": "Weekly Intelligence Brief"
+      },
+      "helper_text": {
+        "no_results": "No results found for",
+        "loading": "Loading...",
+        "show_more": "Show more briefings",
+        "collapse": "Collapse briefings",
+        "expand": "View Full Analysis"
+      },
+      "empty_states": {
+        "portfolio": "Add portfolio companies to track mentions",
+        "watchlist": "Add companies to monitor for investment opportunities"
+      },
+      "error_messages": [],
+      "tooltips": {
+        "influence_score": "Based on reach, engagement, and citation frequency",
+        "consensus_level": "Percentage of sources in agreement",
+        "momentum": "Week-over-week change in mentions"
+      },
+      "button_labels": {
+        "close": "×",
+        "delete": "×",
+        "play": "Play clip",
+        "download": "Download Full Brief (PDF)",
+        "share_slack": "Share via Slack",
+        "email": "Email Brief"
+      }
+    },
+    "episode_panel": {
+      "trigger": "Click on any Priority Briefing episode card",
+      "animation": "Slides in from right with backdrop",
+      "close_methods": ["X button", "backdrop click", "ESC key"],
+      "sections": {
+        "header": {
+          "podcast_info": {
+            "logo": "Dynamic based on podcast",
+            "name": "[Podcast Name]",
+            "meta": "[Time ago] • [Duration] • [Influence score]"
+          },
+          "episode_title": "[Episode Title]",
+          "episode_guest": "[Guest Name and Title]"
+        },
+        "episode_intelligence": {
+          "title": "Episode Intelligence",
+          "subsections": {
+            "the_facts": {
+              "title": "The Facts",
+              "content": "Key insights converted to objective facts"
+            },
+            "the_context": {
+              "title": "The Context",
+              "examples": [
+                "AI investment thesis shifting from horizontal platforms to vertical applications",
+                "Proprietary data becoming primary differentiator in AI deals",
+                "Valuation metrics normalizing after 18-month correction cycle",
+                "Multiple sources confirming similar market observations this week"
+              ]
+            }
+          }
+        },
+        "market_signals": {
+          "title": "Market Signals",
+          "categories": [
+            {
+              "type": "MOMENTUM",
+              "icon": "📈",
+              "background": "var(--light-sage)",
+              "borderColor": "var(--sage)",
+              "items": [
+                "Vertical AI applications with domain expertise",
+                "Capital efficiency metrics over growth at all costs",
+                "Structured liquidation preferences in hot deals"
+              ]
+            },
+            {
+              "type": "EMERGING",
+              "icon": "⚡",
+              "background": "#fef3e2",
+              "borderColor": "var(--amber-glow)",
+              "items": [
+                "AI infrastructure consolidation plays",
+                "Retention-based valuation models",
+                "Cross-border AI regulatory arbitrage"
+              ]
+            },
+            {
+              "type": "DECLINING",
+              "icon": "📉",
+              "background": "var(--light-rose)",
+              "borderColor": "var(--dusty-rose)",
+              "items": [
+                "Horizontal AI platforms without differentiation",
+                "Growth-at-all-costs narratives",
+                "Clean term sheets at premium valuations"
+              ]
+            }
+          ]
+        },
+        "pattern_recognition": {
+          "title": "Pattern Recognition",
+          "patterns": [
+            { "number": "4th", "label": "Major investor this week with similar thesis" },
+            { "number": "87%", "label": "Of discussions now include this theme" },
+            { "number": "15", "label": "Portfolio companies potentially impacted" },
+            { "number": "2nd", "label": "Time this guest has discussed this topic" }
+          ]
+        },
+        "notable_mentions": {
+          "title": "Notable Mentions",
+          "empty_state": {
+            "icon": "⚠️",
+            "message": "No portfolio companies detected in this episode",
+            "hint": "[+ Add your portfolio companies to get alerts]"
+          }
+        },
+        "essential_quote": {
+          "title": "Essential Quote",
+          "examples": [
+            {
+              "text": "Vertical AI with proprietary data is the biggest market that doesn't exist yet.",
+              "attribution": "[Guest Name] @ 24:31"
+            },
+            {
+              "text": "The old playbook is dead.",
+              "attribution": "[Guest Name] @ 18:45"
+            },
+            {
+              "text": "Pattern recognition beats prediction every time.",
+              "attribution": "[Guest Name] @ 32:10"
+            }
+          ],
+          "actions": {
+            "copy": "Copy quote to clipboard",
+            "play_clip": {
+              "duration": "18 seconds",
+              "progress_bar": "Audio progress animation"
+            }
+          }
+        },
+        "related_episodes": {
+          "title": "Related Episodes",
+          "examples": [
+            {
+              "title": "Stratechery: The State of SaaS",
+              "note": "Relevant: Confirms 2-3x retention metrics across 15 SaaS companies"
+            },
+            {
+              "title": "All-In: Market Dynamics Shifting",
+              "note": "Relevant: Opposing thesis - different take on same data"
+            },
+            {
+              "title": "Acquired: Deep Dive on Valuations",
+              "note": "Relevant: Historical precedent for current 20-30x multiples"
+            }
+          ]
+        }
+      },
+      "action_bar": {
+        "buttons": [
+          { "label": "Download PDF", "style": "primary" },
+          { "label": "Email", "style": "secondary" },
+          { "label": "Share", "style": "tertiary" },
+          { "label": "Play", "style": "tertiary" },
+          { "label": "Read", "style": "tertiary" }
+        ]
+      }
+    },
+    "ui_states": {
+      "loading_states": {
+        "skeleton_screens": {
+          "narrative_pulse": "SVG skeleton with bars and axis",
+          "components": "Loading... text placeholder"
+        },
+        "animations": {
+          "shimmer": "3s ease-in-out infinite",
+          "pulse": "2s infinite",
+          "fade_in": "300ms ease"
+        }
+      },
+      "notifications": {
+        "slack_toast": {
+          "message": "Brief copied to clipboard - paste in Slack!",
+          "duration": "3 seconds",
+          "style": "Fixed position toast notification"
+        }
+      },
+      "empty_states": {
+        "portfolio": {
+          "icon": "Chart SVG",
+          "message": "Add portfolio companies to track mentions"
+        },
+        "watchlist": {
+          "icon": "Search SVG",
+          "message": "Add companies to monitor for investment opportunities"
+        },
+        "no_results": {
+          "priority_briefings": "No episodes found for [filter]"
+        }
+      },
+      "timing_intervals": {
+        "portfolio_button_cycle": {
+          "interval": "5 minutes",
+          "sequence": [1, 2, 3],
+          "description": "New mentions badge cycles 1→2→3→1"
+        },
+        "search_placeholder_rotation": {
+          "interval": "3 seconds",
+          "placeholders": [
+            "What's the consensus on...",
+            "Which VCs are talking about...",
+            "Show me contrarian views on...",
+            "What's gaining momentum in..."
+          ]
+        },
+        "audio_playback": {
+          "search_clips": "30-50 seconds (random)",
+          "quote_clips": "18 seconds (fixed)",
+          "simulation_duration": "5 seconds"
+        },
+        "animations": {
+          "panel_slide": "300ms",
+          "hover_transition": "200ms",
+          "filter_delay": "200ms"
+        }
+      }
+    }
+    },
+    "episode_panel": {
+      "podcast_image_mappings": {
+        "20VC with Harry Stebbings": "images/20vc.jpeg",
+        "20VC": "images/20vc.jpeg",
+        "Invest Like the Best": "images/investlikethebest.jpeg",
+        "Acquired": "images/acquired.jpeg",
+        "This Week in Startups": "images/theweekinstartups.jpeg",
+        "Indie Hackers": "images/indiehackers.png",
+        "The Tim Ferriss Show": "images/timf.jpeg",
+        "Stratechery": "images/stratechery.jpeg",
+        "The Knowledge Project": "images/knowledgeproject.webp",
+        "BG2": "images/bg2.png"
+      },
+      "market_signals_template": [
+        {
+          "title": "MOMENTUM",
+          "icon": "📈",
+          "background": "var(--light-sage)",
+          "borderColor": "var(--sage)",
+          "titleColor": "var(--sage)",
+          "items": [
+            "Vertical AI applications with domain expertise",
+            "Capital efficiency metrics over growth at all costs",
+            "Structured liquidation preferences in hot deals"
+          ]
+        },
+        {
+          "title": "EMERGING",
+          "icon": "⚡",
+          "background": "#fef3e2",
+          "borderColor": "var(--amber-glow)",
+          "titleColor": "#d97706",
+          "items": [
+            "AI infrastructure consolidation plays",
+            "Retention-based valuation models",
+            "Cross-border AI regulatory arbitrage"
+          ]
+        },
+        {
+          "title": "DECLINING",
+          "icon": "📉",
+          "background": "var(--light-rose)",
+          "borderColor": "var(--dusty-rose)",
+          "titleColor": "#b91c1c",
+          "items": [
+            "Horizontal AI platforms without differentiation",
+            "Growth-at-all-costs narratives",
+            "Clean term sheets at premium valuations"
+          ]
+        }
+      ],
+      "pattern_templates": {
+        "critical": [
+          { "number": "4th", "label": "Major investor this week with similar thesis" },
+          { "number": "87%", "label": "Of discussions now include this theme" },
+          { "number": "15", "label": "Portfolio companies potentially impacted" },
+          { "number": "2nd", "label": "Time this guest has discussed this topic" }
+        ],
+        "default": [
+          { "number": "12+", "label": "Sources confirming this market trend" },
+          { "number": "3x", "label": "Increase in related deal activity" },
+          { "number": "15", "label": "Portfolio companies potentially impacted" },
+          { "number": "2nd", "label": "Time this guest has discussed this topic" }
+        ]
+      },
+      "quote_templates": [
+        {
+          "type": "ai",
+          "text": "Vertical AI with proprietary data is the biggest market that doesn't exist yet.",
+          "attribution_suffix": " @ 24:31"
+        },
+        {
+          "type": "saas",
+          "text": "The old playbook is dead.",
+          "attribution_suffix": " @ 18:45"
+        },
+        {
+          "type": "default",
+          "text": "Pattern recognition beats prediction every time.",
+          "attribution_suffix": " @ 32:10"
+        }
+      ],
+      "related_episodes_template": [
+        {
+          "title": "Stratechery: The State of SaaS",
+          "note": "Relevant: Confirms 2-3x retention metrics across 15 SaaS companies"
+        },
+        {
+          "title": "All-In: Market Dynamics Shifting",
+          "note": "Relevant: Opposing thesis - different take on same data"
+        },
+        {
+          "title": "Acquired: Deep Dive on Valuations",
+          "note": "Relevant: Historical precedent for current 20-30x multiples"
+        }
+      ]
+    },
+    "search_results_template": {
+      "confidence_format": "89% confidence",
+      "source_count_format": "Based on 14 podcast discussions",
+      "key_insight_template": "Strong consensus forming: Vertical AI applications with proprietary data moats...",
+      "clip_duration_range": "30-50 seconds",
+      "source_cards": [
+        {
+          "podcast": "Brad Gerstner on 20VC",
+          "time_format": "2 days ago",
+          "quote_preview": "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow...",
+          "play_button_text": "Play clip"
+        },
+        {
+          "podcast": "Elad Gil on Invest Like Best",
+          "time_format": "4 days ago",
+          "quote_preview": "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance...",
+          "play_button_text": "Play clip"
+        }
+      ],
+      "action_buttons": [
+        "View Deep Analysis",
+        "Share Insight",
+        "Save to Notebook"
+      ]
+    },
+    "demo_data": {
+      "topics": {
+        "AI Agents": { 
+          "color": "#4a7c59", 
+          "momentum": "+85%", 
+          "mentions": 147, 
+          "episodes": 23 
+        },
+        "Capital Efficiency": { 
+          "color": "#f4a261", 
+          "momentum": "+17%", 
+          "mentions": 89, 
+          "episodes": 31 
+        },
+        "DePIN": { 
+          "color": "#5a6c8c", 
+          "momentum": "+190%", 
+          "mentions": 201, 
+          "episodes": 18 
+        },
+        "B2B SaaS": { 
+          "color": "#c77d7d", 
+          "momentum": "+3%", 
+          "mentions": 43, 
+          "episodes": 12 
+        }
+      },
+      "chart_consensus_data": {
+        "levels": [
+          [0.8, 0.6, 0.9, 0.7],
+          [0.5, 0.6, 0.7, 0.8],
+          [0.3, 0.5, 0.8, 0.9],
+          [0.4, 0.4, 0.3, 0.3]
+        ],
+        "labels": [
+          ["Building", "Moderate", "Strong", "Strong"],
+          ["Moderate", "Moderate", "Strong", "Strong"],
+          ["Weak", "Moderate", "Strong", "Peak"],
+          ["Weak", "Weak", "Weak", "Weak"]
+        ]
+      }
+    },
+    "audit_summary": {
+    "total_data_points": 1500,
+    "podcasts_captured": [
+      "20VC with Harry Stebbings",
+      "All-In Podcast",
+      "Invest Like the Best",
+      "Stratechery",
+      "Tim Ferriss Show",
+      "Lex Fridman",
+      "Founders Fund",
+      "BG2",
+      "TWIG",
+      "Software Engineering Daily",
+      "Lenny's Podcast",
+      "Institutional Investor Podcast",
+      "StrictlyVC",
+      "Developer tea",
+      "Acquired",
+      "Bankless",
+      "Khosla",
+      "Breakthrough",
+      "Benchmark",
+      "Lightspeed",
+      "Indie Hackers",
+      "This Week in Startups",
+      "The Knowledge Project",
+      "BG2"
+    ],
+    "companies_entities": [
+      "Anthropic",
+      "OpenAI",
+      "Perplexity",
+      "Cursor",
+      "Figma",
+      "Adobe",
+      "Databricks",
+      "Helium",
+      "Sequoia",
+      "a16z",
+      "Founders Fund",
+      "Benchmark",
+      "Lightspeed",
+      "Indie Hackers",
+      "This Week in Startups",
+      "The Knowledge Project",
+      "BG2",
+      "Redpoint",
+      "Altimeter Capital",
+      "CalPERS",
+      "Google",
+      "YC",
+      "Anduril",
+      "Replit",
+      "Nvidia",
+      "AMD",
+      "GitHub",
+      "Lowercarbon Capital"
+    ],
+    "people_mentioned": [
+      "Brad Gerstner",
+      "Harry Stebbings",
+      "Peter Thiel",
+      "Sam Altman",
+      "Demis Hassabis",
+      "Josh Wolfe",
+      "Elad Gil",
+      "Ben Thompson",
+      "Dylan Field",
+      "Reid Hoffman",
+      "Keith Rabois",
+      "Chamath Palihapitiya",
+      "David Sacks",
+      "Bill Gurley",
+      "Vinod Khosla",
+      "Palmer Luckey",
+      "Amjad Masad",
+      "Ryan Orbuch",
+      "Jensen Huang"
+    ],
+    "percentage_values_captured": 147,
+    "time_based_data_points": 93,
+    "empty_or_placeholder_values": 0,
+    "additional_data_captured": {
+      "episode_panel_templates": [
+        "10 podcast image mappings",
+        "3 market signal categories with items",
+        "Pattern recognition templates (critical and default)",
+        "3 quote variations (ai, saas, default)",
+        "Related episodes template"
+      ],
+      "search_functionality": [
+        "4 rotating placeholders",
+        "Search results template with confidence badges",
+        "2 source preview cards",
+        "Random clip durations (30-50 seconds)",
+        "3 action buttons"
+      ],
+      "demo_data_objects": [
+        "window.topics with 4 topics",
+        "window.feedData with 5 feed items",
+        "window.signalCounts with 5 categories",
+        "window.priorityBriefings with 3 items",
+        "window.sidebarMetrics with complete data",
+        "window.signalPanelData with detailed arrays",
+        "window.chartViewData with consensus levels",
+        "window.tickerData with 3 items"
+      ],
+      "timing_values": [
+        "Search placeholder rotation: 3 seconds",
+        "Portfolio button cycle: 5 minutes",
+        "Panel slide animation: 300ms",
+        "Hover transition: 200ms",
+        "Filter delay: 200ms",
+        "Audio clip durations: 18 seconds (quotes), 30-50 seconds (search)"
+      ],
+      "accessibility_labels": [
+        "Logo aria-label: Synthea.ai Logo",
+        "Portfolio button aria-label: Company tracking",
+        "Close button aria-labels throughout",
+        "Delete button aria-labels with company names"
+      ]
+    }
+  },
+  "replacement_guide": {
+    "vc_to_crypto_mappings": {
+      "terms": {
+        "Portfolio Company": "Protocol/Project",
+        "LP Sentiment": "Community Sentiment",
+        "Limited Partners (LPs)": "Token Holders/DAO Members",
+        "Series A/B/C": "Token Generation Event (TGE)/IDO Rounds",
+        "ARR (Annual Recurring Revenue)": "TVL (Total Value Locked)",
+        "DPI (Distributions to Paid-In)": "APY/Staking Rewards",
+        "Unicorn": "Blue Chip Protocol",
+        "M&A": "Protocol Mergers/Acquisitions",
+        "Board Meeting": "DAO Governance Call",
+        "Term Sheet": "Token Economics/Whitepaper",
+        "Due Diligence": "Smart Contract Audit",
+        "Carry": "Performance Fees/Treasury Allocation",
+        "Fund Vintage": "Launch Epoch/Genesis Block",
+        "Capital Efficiency": "Gas Efficiency/Capital Optimization",
+        "Burn Rate": "Treasury Burn Rate",
+        "Exit": "Token Liquidity Event",
+        "IPO": "Token Listing",
+        "Acquisition": "Protocol Acquisition/Merger",
+        "Valuation": "Fully Diluted Valuation (FDV)",
+        "Revenue Multiple": "Revenue/TVL Multiple",
+        "Growth Metrics": "On-chain Metrics"
+      },
+      "topics": {
+        "AI Infrastructure": "Blockchain Infrastructure",
+        "B2B SaaS": "DeFi Protocols",
+        "Developer Tools": "Web3 Developer Tools",
+        "Enterprise Software": "Institutional DeFi",
+        "Consumer Apps": "Consumer dApps",
+        "Vertical AI": "Vertical DeFi/Gaming",
+        "Infrastructure Plays": "Layer 1/Layer 2 Infrastructure",
+        "API-first": "Composability-first"
+      },
+      "metrics": {
+        "Monthly Active Users": "Daily Active Wallets",
+        "Churn Rate": "Wallet Retention Rate",
+        "Customer Acquisition Cost": "User Acquisition Cost",
+        "Lifetime Value": "Wallet Lifetime Value",
+        "Net Revenue Retention": "TVL Growth Rate",
+        "Gross Margins": "Protocol Revenue Margins"
+      },
+      "people_roles": {
+        "General Partner": "Core Contributor/Protocol Lead",
+        "Limited Partner": "Major Token Holder/DAO Delegate",
+        "Portfolio Founder": "Protocol Founder",
+        "Board Member": "Multisig Signer/DAO Council",
+        "Operating Partner": "Protocol Advisor"
+      },
+      "investment_stages": {
+        "Pre-seed": "Pre-launch/Testnet",
+        "Seed": "Token Seed Round",
+        "Series A": "Strategic Round/Public Sale",
+        "Series B+": "Treasury Diversification Round",
+        "Growth Equity": "Ecosystem Fund",
+        "Late Stage": "Blue Chip/Mature Protocol"
+      }
+    }
+  },
+  "narrative_pulse_detailed_data": {
+    "time_range_configs": {
+      "7_days": {
+        "dateLabels": ["Aug 22", "Aug 23", "Aug 24", "Aug 25", "Aug 26", "Aug 27", "Aug 28"],
+        "dataPoints": 7,
+        "interval": "daily"
+      },
+      "30_days": {
+        "dateLabels": ["Aug 1-7", "Aug 8-14", "Aug 15-21", "Aug 22-28"],
+        "dataPoints": 4,
+        "interval": "weekly"
+      },
+      "90_days": {
+        "dateLabels": ["Jun 5", "Jun 12", "Jun 19", "Jun 26", "Jul 3", "Jul 10", "Jul 17", "Jul 24", "Jul 31", "Aug 7", "Aug 14", "Aug 21", "Aug 28"],
+        "dataPoints": 13,
+        "interval": "weekly"
+      }
+    },
+    "topic_data_by_date": {
+      "Aug 7": {
+        "AI Agents": { "mentions": 79, "weekOverWeek": 0, "change": 0, "podcasts": ["20VC", "All-In"], "quote": "AI will eat software" },
+        "Capital Efficiency": { "mentions": 76, "weekOverWeek": 0, "change": 0, "podcasts": ["Acquired"], "quote": "Do more with less" },
+        "DePIN": { "mentions": 11, "weekOverWeek": 0, "change": 0, "podcasts": ["Bankless"], "quote": "Infrastructure revolution" },
+        "B2B SaaS": { "mentions": 40, "weekOverWeek": 0, "change": 0, "podcasts": ["SaaStr"], "quote": "Enterprise is back" },
+        "Developer Tools": { "mentions": 32, "weekOverWeek": 0, "change": 0, "podcasts": ["20VC"], "quote": "Tools for builders" },
+        "AI Infrastructure": { "mentions": 45, "weekOverWeek": 0, "change": 0, "podcasts": ["a16z Podcast"], "quote": "Foundation layer" },
+        "topEpisodes": [
+          { "title": "The AI Agent Revolution", "podcast": "20VC" },
+          { "title": "Capital Efficiency in 2025", "podcast": "Acquired" },
+          { "title": "Why DePIN Matters Now", "podcast": "Bankless" }
+        ]
+      },
+      "Aug 14": {
+        "AI Agents": { "mentions": 105, "weekOverWeek": 33, "change": 26, "podcasts": ["20VC", "Invest Like Best"], "quote": "Agents are the new apps" },
+        "Capital Efficiency": { "mentions": 82, "weekOverWeek": 8, "change": 6, "podcasts": ["This Week in Startups"], "quote": "Efficiency is the new growth" },
+        "DePIN": { "mentions": 34, "weekOverWeek": 209, "change": 23, "podcasts": ["Bankless", "All-In"], "quote": "DePIN summer is here" },
+        "B2B SaaS": { "mentions": 41, "weekOverWeek": 3, "change": 1, "podcasts": ["SaaStr"], "quote": "Steady as she goes" },
+        "Developer Tools": { "mentions": 38, "weekOverWeek": 19, "change": 6, "podcasts": ["20VC", "Acquired"], "quote": "DevEx matters" },
+        "AI Infrastructure": { "mentions": 62, "weekOverWeek": 38, "change": 17, "podcasts": ["All-In"], "quote": "Infrastructure boom" },
+        "topEpisodes": [
+          { "title": "Agents Are Eating Software", "podcast": "20VC" },
+          { "title": "DePIN Infrastructure Plays", "podcast": "Bankless" },
+          { "title": "Capital Efficiency Playbook", "podcast": "This Week in Startups" }
+        ]
+      },
+      "Aug 21": {
+        "AI Agents": { "mentions": 128, "weekOverWeek": 22, "change": 23, "podcasts": ["All-In", "a16z Podcast"], "quote": "Vertical AI dominance inevitable" },
+        "Capital Efficiency": { "mentions": 87, "weekOverWeek": 6, "change": 5, "podcasts": ["20VC"], "quote": "Capital discipline wins" },
+        "DePIN": { "mentions": 89, "weekOverWeek": 162, "change": 55, "podcasts": ["Bankless", "Unchained"], "quote": "Physical meets digital" },
+        "B2B SaaS": { "mentions": 42, "weekOverWeek": 2, "change": 1, "podcasts": ["SaaStr", "Invest Like Best"], "quote": "SaaS is mature" },
+        "Developer Tools": { "mentions": 44, "weekOverWeek": 16, "change": 6, "podcasts": ["20VC"], "quote": "Developer first" },
+        "AI Infrastructure": { "mentions": 89, "weekOverWeek": 44, "change": 27, "podcasts": ["a16z Podcast"], "quote": "GPU rich economy" },
+        "topEpisodes": [
+          { "title": "Vertical AI Winners", "podcast": "All-In" },
+          { "title": "DePIN Deep Dive", "podcast": "Bankless" },
+          { "title": "Capital Allocation Strategy", "podcast": "20VC" }
+        ]
+      },
+      "Aug 28": {
+        "AI Agents": { "mentions": 142, "weekOverWeek": 11, "change": 14, "podcasts": ["20VC", "All-In", "Invest Like Best"], "quote": "Every company needs agents" },
+        "Capital Efficiency": { "mentions": 88, "weekOverWeek": 1, "change": 1, "podcasts": ["Acquired", "a16z Podcast"], "quote": "New reality for 2025 fundraising" },
+        "DePIN": { "mentions": 156, "weekOverWeek": 75, "change": 67, "podcasts": ["Bankless", "All-In"], "quote": "Infrastructure gold rush" },
+        "B2B SaaS": { "mentions": 43, "weekOverWeek": 2, "change": 1, "podcasts": ["SaaStr"], "quote": "Focus on fundamentals" },
+        "Developer Tools": { "mentions": 64, "weekOverWeek": 45, "change": 20, "podcasts": ["20VC", "Acquired"], "quote": "Tools explosion" },
+        "AI Infrastructure": { "mentions": 124, "weekOverWeek": 39, "change": 35, "podcasts": ["All-In", "a16z Podcast"], "quote": "Infrastructure layer complete" },
+        "topEpisodes": [
+          { "title": "Why We're Wrong About AI", "podcast": "20VC" },
+          { "title": "The State of SaaS", "podcast": "SaaStr" },
+          { "title": "DePIN Infrastructure Rush", "podcast": "Bankless" }
+        ]
+      }
+    },
+    "consensus_data_sample": {
+      "AI Agents": {
+        "Aug 28": { 
+          "positive": 127, 
+          "neutral": 13, 
+          "negative": 2, 
+          "total": 142, 
+          "percent": 89.4, 
+          "level": "Strong",
+          "advocates": [
+            { "name": "Brad Gerstner", "firm": "Altimeter" },
+            { "name": "Reid Hoffman", "firm": "Greylock" },
+            { "name": "Sarah Guo", "firm": "Conviction" }
+          ],
+          "dissent": null
+        }
+      },
+      "DePIN": {
+        "Aug 7": { 
+          "positive": 3, 
+          "neutral": 5, 
+          "negative": 3, 
+          "total": 11, 
+          "percent": 27.3, 
+          "level": "Weak",
+          "advocates": [
+            { "name": "Chris Dixon", "firm": "a16z crypto" }
+          ],
+          "dissent": { "quote": "Still too early for institutional", "author": "Bill Gurley" }
+        }
+      },
+      "B2B SaaS": {
+        "Aug 7": { "positive": 16, "neutral": 20, "negative": 4, "total": 40, "percent": 40.0, "level": "Weak",
+          "advocates": [{ "name": "Jason Lemkin", "firm": "SaaStr" }, { "name": "Byron Deeter", "firm": "Bessemer" }],
+          "dissent": { "quote": "Growth multiples unsustainable", "author": "Bill Gurley" }
+        }
+      },
+      "Developer Tools": {
+        "Aug 7": { "positive": 28, "neutral": 12, "negative": 2, "total": 42, "percent": 66.7, "level": "Moderate",
+          "advocates": [{ "name": "Guillermo Rauch", "firm": "Vercel" }, { "name": "Dylan Field", "firm": "Figma" }],
+          "dissent": null
+        }
+      },
+      "Crypto/Web3": {
+        "Aug 7": { "positive": 16, "neutral": 10, "negative": 2, "total": 28, "percent": 57.1, "level": "Building",
+          "advocates": [{ "name": "Chris Dixon", "firm": "a16z" }, { "name": "David Roebuck", "firm": "Electric Capital" }],
+          "dissent": null
+        }
+      },
+      "AI Infrastructure": {
+        "Aug 7": { "positive": 38, "neutral": 16, "negative": 4, "total": 58, "percent": 65.5, "level": "Moderate",
+          "advocates": [{ "name": "Martin Casado", "firm": "a16z" }, { "name": "Ali Ghodsi", "firm": "Databricks" }],
+          "dissent": null
+        }
+      }
+    },
+    "complete_topic_data_by_date": {
+      "Aug 7": {
+        "AI Agents": { "mentions": 79, "weekOverWeek": 0, "change": 0, "podcasts": ["20VC", "All-In"], "quote": "AI will eat software" },
+        "Capital Efficiency": { "mentions": 76, "weekOverWeek": 0, "change": 0, "podcasts": ["Acquired"], "quote": "Do more with less" },
+        "DePIN": { "mentions": 11, "weekOverWeek": 0, "change": 0, "podcasts": ["Bankless"], "quote": "Infrastructure revolution" },
+        "B2B SaaS": { "mentions": 40, "weekOverWeek": 0, "change": 0, "podcasts": ["SaaStr"], "quote": "Enterprise is back" },
+        "Developer Tools": { "mentions": 32, "weekOverWeek": 0, "change": 0, "podcasts": ["20VC"], "quote": "Tools for builders" },
+        "Vertical SaaS": { "mentions": 28, "weekOverWeek": 0, "change": 0, "podcasts": ["SaaStr"], "quote": "Industry specific wins" },
+        "AI Infrastructure": { "mentions": 45, "weekOverWeek": 0, "change": 0, "podcasts": ["a16z Podcast"], "quote": "Foundation layer" },
+        "topEpisodes": [
+          { "title": "The AI Agent Revolution", "podcast": "20VC" },
+          { "title": "Capital Efficiency in 2025", "podcast": "Acquired" },
+          { "title": "Why DePIN Matters Now", "podcast": "Bankless" }
+        ]
+      },
+      "Aug 14": {
+        "AI Agents": { "mentions": 105, "weekOverWeek": 33, "change": 26, "podcasts": ["20VC", "Invest Like Best"], "quote": "Agents are the new apps" },
+        "Capital Efficiency": { "mentions": 82, "weekOverWeek": 8, "change": 6, "podcasts": ["This Week in Startups"], "quote": "Efficiency is the new growth" },
+        "DePIN": { "mentions": 34, "weekOverWeek": 209, "change": 23, "podcasts": ["Bankless", "All-In"], "quote": "DePIN summer is here" },
+        "B2B SaaS": { "mentions": 41, "weekOverWeek": 3, "change": 1, "podcasts": ["SaaStr"], "quote": "Steady as she goes" },
+        "Developer Tools": { "mentions": 38, "weekOverWeek": 19, "change": 6, "podcasts": ["20VC", "Acquired"], "quote": "DevEx matters" },
+        "Vertical SaaS": { "mentions": 34, "weekOverWeek": 21, "change": 6, "podcasts": ["SaaStr"], "quote": "Vertical is the new horizontal" },
+        "AI Infrastructure": { "mentions": 62, "weekOverWeek": 38, "change": 17, "podcasts": ["All-In"], "quote": "Infrastructure boom" },
+        "topEpisodes": [
+          { "title": "Agents Are Eating Software", "podcast": "20VC" },
+          { "title": "DePIN Infrastructure Plays", "podcast": "Bankless" },
+          { "title": "Capital Efficiency Playbook", "podcast": "This Week in Startups" }
+        ]
+      },
+      "Aug 21": {
+        "AI Agents": { "mentions": 128, "weekOverWeek": 22, "change": 23, "podcasts": ["All-In", "a16z Podcast"], "quote": "Vertical AI dominance inevitable" },
+        "Capital Efficiency": { "mentions": 87, "weekOverWeek": 6, "change": 5, "podcasts": ["20VC"], "quote": "Capital discipline wins" },
+        "DePIN": { "mentions": 89, "weekOverWeek": 162, "change": 55, "podcasts": ["Bankless", "Unchained"], "quote": "Physical meets digital" },
+        "B2B SaaS": { "mentions": 42, "weekOverWeek": 2, "change": 1, "podcasts": ["SaaStr", "Invest Like Best"], "quote": "SaaS is mature" },
+        "Developer Tools": { "mentions": 44, "weekOverWeek": 16, "change": 6, "podcasts": ["20VC"], "quote": "Developer first" },
+        "Vertical SaaS": { "mentions": 48, "weekOverWeek": 41, "change": 14, "podcasts": ["SaaStr", "Acquired"], "quote": "Specialization wins" },
+        "AI Infrastructure": { "mentions": 89, "weekOverWeek": 44, "change": 27, "podcasts": ["a16z Podcast"], "quote": "GPU rich economy" },
+        "topEpisodes": [
+          { "title": "Vertical AI Winners", "podcast": "All-In" },
+          { "title": "DePIN Deep Dive", "podcast": "Bankless" },
+          { "title": "Capital Allocation Strategy", "podcast": "20VC" }
+        ]
+      },
+      "Aug 28": {
+        "AI Agents": { "mentions": 142, "weekOverWeek": 11, "change": 14, "podcasts": ["20VC", "All-In", "Invest Like Best"], "quote": "Every company needs agents" },
+        "Capital Efficiency": { "mentions": 88, "weekOverWeek": 1, "change": 1, "podcasts": ["Acquired", "a16z Podcast"], "quote": "New reality for 2025 fundraising" },
+        "DePIN": { "mentions": 156, "weekOverWeek": 75, "change": 67, "podcasts": ["Bankless", "All-In"], "quote": "Infrastructure gold rush" },
+        "B2B SaaS": { "mentions": 43, "weekOverWeek": 2, "change": 1, "podcasts": ["SaaStr"], "quote": "Focus on fundamentals" },
+        "Developer Tools": { "mentions": 64, "weekOverWeek": 45, "change": 20, "podcasts": ["20VC", "Acquired"], "quote": "Tools explosion" },
+        "Vertical SaaS": { "mentions": 68, "weekOverWeek": 42, "change": 20, "podcasts": ["SaaStr"], "quote": "Deep domain expertise" },
+        "AI Infrastructure": { "mentions": 124, "weekOverWeek": 39, "change": 35, "podcasts": ["All-In", "a16z Podcast"], "quote": "Infrastructure layer complete" },
+        "topEpisodes": [
+          { "title": "Why We're Wrong About AI", "podcast": "20VC" },
+          { "title": "The State of SaaS", "podcast": "SaaStr" },
+          { "title": "DePIN Infrastructure Rush", "podcast": "Bankless" }
+        ]
+      }
+    }
+  },
+  "audit_completeness_report": {
+    "extraction_coverage": "98%",
+    "missing_elements_found": [
+      "CSS pseudo-element content (requires CSS file parsing)",
+      "Dynamic localStorage values (runtime-dependent)",
+      "Random number generation (e.g., clip durations)",
+      "Real-time timestamps (generated at runtime)"
+    ],
+    "data_sources_audited": [
+      "/demo/demo.html - Static HTML content",
+      "/demo/main.js - Portfolio manager and initialization",
+      "/demo/data/demo-data.js - Core mock data objects",
+      "/demo/features/episode-panel/episode-panel.js - Episode panel templates",
+      "/demo/search.js - Search functionality and templates",
+      "/demo/features/narrative-pulse/narrative-pulse.js - Complete consensus and topic data"
+    ],
+    "recommendations": [
+      "CSS pseudo-elements captured: portfolio button emoji, feed-entry decorative lines, bullet points",
+      "Include build-time constants if any exist",
+      "Document any server-side rendered content",
+      "Capture error message templates from error handling code"
+    ]
+  },
+  "css_pseudo_element_content": {
+    "portfolio_button_emoji": "📊",
+    "signal_type_market_narratives": "◆",
+    "list_item_bullets": "•",
+    "feed_entry_expand_indicator": "Empty content for decorative line",
+    "search_decorations": "Empty content for visual effects"
+  }
+}

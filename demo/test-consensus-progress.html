@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consensus Monitor Progress Bar Test</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--deep-ink);
+        }
+        
+        .synthesis-section {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Consensus Monitor Progress Bar Test</h1>
+        
+        <div class="synthesis-section">
+            <h4 class="synthesis-section-title">Consensus Monitor</h4>
+            <p class="section-description">Market agreement levels by topic</p>
+            <div class="consensus-monitor-container">
+                <!-- Progress bars will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <button onclick="testUpdate('7 days')">Test 7 Days</button>
+        <button onclick="testUpdate('30 days')">Test 30 Days</button>
+        <button onclick="testUpdate('90 days')">Test 90 Days</button>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load component -->
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        // Initialize the intelligence brief component
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.synthesis-section');
+            if (container) {
+                IntelligenceBrief.init(container);
+            }
+        });
+        
+        // Test function to trigger updates
+        function testUpdate(timeRange) {
+            window.dispatchEvent(new CustomEvent('timeRangeChanged', {
+                detail: { timeRange: timeRange }
+            }));
+        }
+    </script>
+</body>
+</html>

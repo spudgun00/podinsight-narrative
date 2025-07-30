@@ -32,6 +32,13 @@
         NarrativePulse.init = function(containerId) {
             // Initialize with new data source
             if (window.narrativePulseData) {
+                // Set available and selected topics from unified data
+                const topics = Object.keys(window.narrativePulseData.sevenDayData.topics);
+                this.availableTopics = [...topics];
+                this.selectedTopics = [...topics].slice(0, 7); // Max 7 topics
+                
+                console.log('Setting topics from unified data:', this.selectedTopics);
+                
                 // Map the new data structure to timeRangeData
                 this.timeRangeData = {
                     '7 days': window.narrativePulseData.sevenDayData,

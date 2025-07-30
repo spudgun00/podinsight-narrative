@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Narrative Feed Data</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="features/narrative-feed/narrative-feed.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 20px;
+        }
+        .test-info {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-family: var(--font-primary);
+        }
+        .test-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            color: var(--deep-ink);
+        }
+        .test-info p {
+            margin: 5px 0;
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+        .data-status {
+            font-weight: 600;
+        }
+        .status-loaded {
+            color: var(--sage);
+        }
+        .status-error {
+            color: var(--dusty-rose);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h1>Narrative Feed Data Test</h1>
+        <p>This page tests if the Narrative Feed properly loads data from unified-data.js</p>
+        <p class="data-status" id="dataStatus">Checking data...</p>
+    </div>
+
+    <!-- Narrative Feed Container -->
+    <div id="narrative-feed-container"></div>
+
+    <!-- Load Data and Scripts -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/narrative-feed/narrative-feed.js"></script>
+    <script>
+        // Check if data is loaded
+        window.addEventListener('DOMContentLoaded', function() {
+            const statusElement = document.getElementById('dataStatus');
+            
+            // Check unified data
+            if (window.unifiedData && window.unifiedData.narrativeFeed && window.unifiedData.narrativeFeed.items) {
+                const itemCount = window.unifiedData.narrativeFeed.items.length;
+                statusElement.innerHTML = `<span class="status-loaded">✓ Data loaded successfully! Found ${itemCount} feed items.</span>`;
+                
+                // Initialize Narrative Feed
+                const container = document.getElementById('narrative-feed-container');
+                if (container && window.NarrativeFeed) {
+                    // First, load the HTML structure
+                    fetch('features/narrative-feed/narrative-feed.html')
+                        .then(response => response.text())
+                        .then(html => {
+                            container.innerHTML = html;
+                            // Then initialize the component
+                            window.NarrativeFeed.init(container);
+                            console.log('Narrative Feed initialized with data from unified-data.js');
+                        })
+                        .catch(error => {
+                            console.error('Failed to load Narrative Feed HTML:', error);
+                            statusElement.innerHTML = '<span class="status-error">✗ Failed to load Narrative Feed HTML template</span>';
+                        });
+                } else {
+                    statusElement.innerHTML = '<span class="status-error">✗ NarrativeFeed component not loaded</span>';
+                }
+            } else {
+                statusElement.innerHTML = '<span class="status-error">✗ Data not loaded! Check if unified-data.js is properly included.</span>';
+            }
+            
+            // Log data structure for debugging
+            console.log('Unified Data:', window.unifiedData);
+            console.log('Narrative Feed Data:', window.unifiedData?.narrativeFeed);
+        });
+    </script>
+</body>
+</html>

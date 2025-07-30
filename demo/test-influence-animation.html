@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influence Metrics Animation Test</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--deep-ink);
+        }
+        
+        button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #3a6349;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Influence Metrics Animation Test</h1>
+        
+        <!-- Simulated synthesis sidebar -->
+        <aside class="synthesis-sidebar">
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Influence Metrics</h4>
+                <p class="section-description">Who's shaping the conversation</p>
+                <div class="influence-list">
+                    <div class="influence-item">
+                        <span class="influence-name">Brad Gerstner</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 94%;"></div>
+                        </div>
+                        <span class="influence-score">94</span>
+                    </div>
+                    <div class="influence-item">
+                        <span class="influence-name">All-In Hosts</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 87%;"></div>
+                        </div>
+                        <span class="influence-score">87</span>
+                    </div>
+                    <div class="influence-item">
+                        <span class="influence-name">Harry Stebbings</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 82%;"></div>
+                        </div>
+                        <span class="influence-score">82</span>
+                    </div>
+                    <div class="influence-item">
+                        <span class="influence-name">Josh Wolfe</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 76%;"></div>
+                        </div>
+                        <span class="influence-score">76</span>
+                    </div>
+                    <div class="influence-item">
+                        <span class="influence-name">Ben Thompson</span>
+                        <div class="influence-bar-container">
+                            <div class="influence-bar" style="width: 68%;"></div>
+                        </div>
+                        <span class="influence-score">68</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Consensus Monitor</h4>
+                <p class="section-description">Market agreement levels by topic</p>
+                <div class="influence-list consensus-monitor-container">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </aside>
+        
+        <button onclick="replayAnimation()">Replay Animation</button>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing animations...');
+            
+            // Initialize the component
+            const container = document.querySelector('.synthesis-sidebar');
+            if (container) {
+                IntelligenceBrief.init(container.parentElement);
+                console.log('IntelligenceBrief initialized - animations should start');
+            }
+        });
+        
+        function replayAnimation() {
+            console.log('Replaying animations...');
+            
+            // Reset all influence bars to 0
+            const bars = document.querySelectorAll('.influence-bar');
+            bars.forEach(bar => {
+                bar.style.transition = 'none';
+                bar.style.width = '0%';
+            });
+            
+            // Re-enable transitions and trigger animation
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    bar.style.transition = 'width 0.3s ease';
+                });
+                IntelligenceBrief.updateInfluenceMetrics();
+                IntelligenceBrief.updateConsensusMonitor('7 days');
+            }, 50);
+        }
+    </script>
+</body>
+</html>

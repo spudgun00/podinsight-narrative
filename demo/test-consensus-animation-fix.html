@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consensus Monitor Animation Fix Test</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--deep-ink);
+        }
+        
+        button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #3a6349;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Consensus Monitor Animation Fix</h1>
+        
+        <!-- Simulated synthesis sidebar -->
+        <aside class="synthesis-sidebar">
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Consensus Monitor</h4>
+                <p class="section-description">Market agreement levels by topic</p>
+                <div class="influence-list consensus-monitor-container">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </aside>
+        
+        <button onclick="replayAnimation()">Replay Animation</button>
+        <button onclick="debugBars()">Debug Bars</button>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, waiting for data...');
+            
+            // Give data time to load
+            setTimeout(() => {
+                console.log('Initializing Consensus Monitor...');
+                
+                // Initialize the component
+                const container = document.querySelector('.synthesis-sidebar');
+                if (container && container.parentElement) {
+                    IntelligenceBrief.init(container.parentElement);
+                    console.log('IntelligenceBrief initialized');
+                    
+                    // Check bars after a moment
+                    setTimeout(() => {
+                        debugBars();
+                    }, 1000);
+                }
+            }, 500);
+        });
+        
+        function replayAnimation() {
+            console.log('Replaying animation...');
+            
+            // Clear the container
+            const container = document.querySelector('.consensus-monitor-container');
+            container.innerHTML = '';
+            
+            // Re-run the update
+            setTimeout(() => {
+                IntelligenceBrief.updateConsensusMonitor('7 days');
+                
+                // Debug after update
+                setTimeout(() => {
+                    debugBars();
+                }, 500);
+            }, 100);
+        }
+        
+        function debugBars() {
+            console.log('Debugging bars...');
+            
+            const bars = document.querySelectorAll('.consensus-monitor-container .influence-bar');
+            console.log('Found bars:', bars.length);
+            
+            bars.forEach((bar, index) => {
+                const width = bar.style.width;
+                const computedWidth = window.getComputedStyle(bar).width;
+                const parent = bar.closest('.influence-item');
+                const label = parent ? parent.querySelector('.influence-name').textContent : 'Unknown';
+                
+                console.log(`Bar ${index} (${label}):`, {
+                    styleWidth: width,
+                    computedWidth: computedWidth,
+                    className: bar.className,
+                    parentWidth: window.getComputedStyle(bar.parentElement).width
+                });
+            });
+        }
+    </script>
+</body>
+</html>

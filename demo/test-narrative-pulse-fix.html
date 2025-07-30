@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narrative Pulse Fix Test</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            margin: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--warm-paper);
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .status {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: var(--sage); }
+        .error { color: var(--dusty-rose); }
+        #narrative-pulse-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Narrative Pulse Fix Test</h1>
+        
+        <div id="status" class="status">
+            <h2>Loading Status:</h2>
+            <div id="status-messages"></div>
+        </div>
+
+        <!-- Actual Narrative Pulse Container -->
+        <div id="narrative-pulse-container" class="loading">Loading Narrative Pulse...</div>
+    </div>
+
+    <!-- Load all required scripts in correct order -->
+    <script src="data/unified-data.js"></script>
+    <script src="data/data-adapter.js"></script>
+    <script src="features/narrative-pulse/unified-data-adapter.js"></script>
+    <script src="features/narrative-pulse/narrative-pulse.js"></script>
+    <script src="features/narrative-pulse/apply-data-updates.js"></script>
+
+    <script>
+        const statusDiv = document.getElementById('status-messages');
+        
+        function addStatus(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = isError ? 'error' : 'success';
+            div.innerHTML = (isError ? '✗ ' : '✓ ') + message;
+            statusDiv.appendChild(div);
+        }
+
+        // Check data loading
+        setTimeout(() => {
+            // Check unified data
+            if (window.unifiedData && window.unifiedData.narrativePulse) {
+                addStatus('Unified data loaded');
+                const topics = Object.keys(window.unifiedData.narrativePulse.topics);
+                addStatus('Found topics: ' + topics.join(', '));
+            } else {
+                addStatus('Failed to load unified data', true);
+            }
+
+            // Check narrativePulseData
+            if (window.narrativePulseData) {
+                addStatus('narrativePulseData created');
+                const sevenDayTopics = Object.keys(window.narrativePulseData.sevenDayData.topics);
+                addStatus('7-day data has ' + sevenDayTopics.length + ' topics');
+            } else {
+                addStatus('narrativePulseData not created', true);
+            }
+
+            // Load the HTML template and initialize
+            fetch('features/narrative-pulse/narrative-pulse.html')
+                .then(response => response.text())
+                .then(html => {
+                    const container = document.getElementById('narrative-pulse-container');
+                    container.classList.remove('loading');
+                    container.innerHTML = html;
+                    
+                    // Initialize NarrativePulse
+                    if (window.NarrativePulse && window.NarrativePulse.init) {
+                        try {
+                            window.NarrativePulse.init(container);
+                            addStatus('NarrativePulse initialized');
+                            
+                            // Check final state
+                            setTimeout(() => {
+                                if (window.NarrativePulse.timeRangeData) {
+                                    const topics = Object.keys(window.NarrativePulse.timeRangeData['7 days'].topics);
+                                    if (topics.length > 0) {
+                                        addStatus('timeRangeData populated with ' + topics.length + ' topics');
+                                        addStatus('Topics in chart: ' + topics.join(', '));
+                                        
+                                        // Show sample data
+                                        const sampleTopic = topics[0];
+                                        const sampleData = window.NarrativePulse.timeRangeData['7 days'].topics[sampleTopic];
+                                        console.log('Sample topic data:', sampleTopic, sampleData);
+                                    } else {
+                                        addStatus('timeRangeData is empty!', true);
+                                    }
+                                }
+                                
+                                // Check selected topics
+                                addStatus('Selected topics: ' + (window.NarrativePulse.selectedTopics || []).join(', '));
+                                
+                            }, 500);
+                            
+                        } catch (e) {
+                            addStatus('Error initializing: ' + e.message, true);
+                            console.error(e);
+                        }
+                    }
+                })
+                .catch(error => {
+                    addStatus('Failed to load template: ' + error.message, true);
+                });
+                
+        }, 1000);
+    </script>
+</body>
+</html>

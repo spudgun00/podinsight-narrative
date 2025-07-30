@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Data Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .success {
+            color: #4a7c59;
+            font-weight: 600;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unified Data Migration Test</h1>
+    
+    <div class="section">
+        <h2>Data Source Status</h2>
+        <div id="data-status"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Topics Comparison</h2>
+        <div class="grid">
+            <div>
+                <h3>Legacy Topics (4)</h3>
+                <div id="legacy-topics"></div>
+            </div>
+            <div>
+                <h3>All Topics (7)</h3>
+                <div id="all-topics"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Priority Briefings Comparison</h2>
+        <div class="grid">
+            <div>
+                <h3>Legacy Briefings (3)</h3>
+                <div id="legacy-briefings"></div>
+            </div>
+            <div>
+                <h3>All Briefings (9)</h3>
+                <div id="all-briefings"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Helper Functions Test</h2>
+        <div id="helper-functions"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Weekly Brief Data</h2>
+        <div id="weekly-brief-test"></div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="data/unified-data.js"></script>
+    <script src="data/data-adapter.js"></script>
+    
+    <script>
+        // Wait for data adapter to be ready
+        window.addEventListener('dataAdapterReady', function(e) {
+            console.log('Data adapter ready event received', e.detail);
+            runTests();
+        });
+        
+        // Fallback if event doesn't fire
+        setTimeout(runTests, 1000);
+        
+        function runTests() {
+            // Test 1: Data Source Status
+            const statusEl = document.getElementById('data-status');
+            if (window.unifiedData) {
+                statusEl.innerHTML = `
+                    <p class="success">✓ Unified data loaded successfully</p>
+                    <p>Version: ${window.unifiedData.meta.version}</p>
+                    <p>Last Updated: ${window.unifiedData.meta.lastUpdated}</p>
+                    <p>Episodes Analyzed: ${window.unifiedData.meta.analysis.episodesAnalyzed}</p>
+                `;
+            } else {
+                statusEl.innerHTML = '<p class="error">✗ Unified data not loaded</p>';
+            }
+            
+            // Test 2: Topics
+            const legacyTopicsEl = document.getElementById('legacy-topics');
+            const allTopicsEl = document.getElementById('all-topics');
+            
+            if (window.topics) {
+                const legacyTopics = Object.keys(window.topics);
+                legacyTopicsEl.innerHTML = `
+                    <p class="success">✓ ${legacyTopics.length} topics loaded</p>
+                    <ul>${legacyTopics.map(t => `<li>${t}</li>`).join('')}</ul>
+                `;
+            }
+            
+            if (window.getAllTopics) {
+                const allTopics = Object.keys(window.getAllTopics());
+                allTopicsEl.innerHTML = `
+                    <p class="success">✓ ${allTopics.length} topics available</p>
+                    <ul>${allTopics.map(t => `<li>${t}</li>`).join('')}</ul>
+                `;
+            }
+            
+            // Test 3: Briefings
+            const legacyBriefingsEl = document.getElementById('legacy-briefings');
+            const allBriefingsEl = document.getElementById('all-briefings');
+            
+            if (window.priorityBriefings) {
+                legacyBriefingsEl.innerHTML = `
+                    <p class="success">✓ ${window.priorityBriefings.length} briefings loaded</p>
+                    <ul>${window.priorityBriefings.map(b => `<li>${b.title}</li>`).join('')}</ul>
+                `;
+            }
+            
+            if (window.getAllBriefings) {
+                const allBriefings = window.getAllBriefings();
+                allBriefingsEl.innerHTML = `
+                    <p class="success">✓ ${allBriefings.length} briefings available</p>
+                    <ul>${allBriefings.map(b => `<li>${b.title}</li>`).join('')}</ul>
+                `;
+            }
+            
+            // Test 4: Helper Functions
+            const helperEl = document.getElementById('helper-functions');
+            const helpers = ['getAllTopics', 'getAllBriefings', 'getWeeklyBriefData', 'getMetadata'];
+            const results = helpers.map(fn => {
+                const exists = typeof window[fn] === 'function';
+                return `<p class="${exists ? 'success' : 'error'}">${exists ? '✓' : '✗'} window.${fn}()</p>`;
+            });
+            helperEl.innerHTML = results.join('');
+            
+            // Test 5: Weekly Brief
+            const weeklyEl = document.getElementById('weekly-brief-test');
+            if (window.getWeeklyBriefData) {
+                const weeklyData = window.getWeeklyBriefData();
+                weeklyEl.innerHTML = `
+                    <p class="success">✓ Weekly brief data available</p>
+                    <p>Executive Summary: ${weeklyData.executive.summary.substring(0, 100)}...</p>
+                    <p>Key Metrics: ${weeklyData.keyMetrics.length} metrics</p>
+                    <p>Topic Momentum: ${weeklyData.topicMomentum.length} topics</p>
+                    <p>Podcast Highlights: ${weeklyData.podcastHighlights.length} highlights</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

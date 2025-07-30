@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity Knot Logo Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fafaf9;
+            padding: 2rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .logo-mark {
+            width: 88px;
+            height: 88px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2C2C2C;
+            line-height: 1;
+            letter-spacing: -0.01em;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            font-weight: 400;
+            color: #9B9B9B;
+            line-height: 1;
+            letter-spacing: 0.01em;
+            text-transform: lowercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <svg class="logo-mark" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+            <!-- Trinity knot design matching ff.png -->
+            <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
+                <!-- Top vesica/almond shape -->
+                <path d="M 44 20
+                         C 36 20, 30 26, 30 34
+                         C 30 38, 32 41, 35 43
+                         L 44 43
+                         L 53 43
+                         C 56 41, 58 38, 58 34
+                         C 58 26, 52 20, 44 20 Z" />
+                
+                <!-- Bottom left vesica/almond shape -->
+                <path d="M 35 43
+                         C 31 45, 28 48, 28 52
+                         C 28 60, 34 66, 42 66
+                         C 46 66, 49 64, 51 61
+                         L 44 52
+                         L 35 43 Z" />
+                
+                <!-- Bottom right vesica/almond shape -->
+                <path d="M 53 43
+                         L 44 52
+                         L 37 61
+                         C 39 64, 42 66, 46 66
+                         C 54 66, 60 60, 60 52
+                         C 60 48, 57 45, 53 43 Z" />
+                
+                <!-- Horizontal center line -->
+                <line x1="30" y1="43" x2="58" y2="43" />
+            </g>
+        </svg>
+        <div class="logo-text">
+            <div class="logo">synthea.ai</div>
+            <div class="tagline">synthesized intelligence for venture capital</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='3'%3E%3Ccircle r='9' cx='9.7' cy='10.2' /%3E%3Ccircle r='9' cx='22.3' cy='10.2' /%3E%3Ccircle r='9' cx='16' cy='21.2' /%3E%3C/g%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='44' height='44' fill='white'/%3E%3Cdefs%3E%3CclipPath id='c1'%3E%3Ccircle r='13' cx='14' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c2'%3E%3Ccircle r='13' cx='30' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c3'%3E%3Ccircle r='13' cx='22' cy='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='30' cy='16' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
     
     <!-- Critical CSS -->
     <style>
@@ -55,16 +55,44 @@
     <header class="header">
         <div class="header-main">
             <div class="logo-container">
-                <svg class="logo-mark" width="35" height="35" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
-                    <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
-                        <circle r="13" cx="14" cy="14" />
-                        <circle r="13" cx="30" cy="14" />
-                        <circle r="13" cx="22" cy="28" />
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
+                    <defs>
+                        <clipPath id="sage-circle1">
+                            <circle r="13" cx="14" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="sage-circle2">
+                            <circle r="13" cx="30" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="sage-circle3">
+                            <circle r="13" cx="22" cy="30"></circle>
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#sage-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#sage-circle1)">
+                        <g clip-path="url(#sage-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                        </g>
                     </g>
                 </svg>
                 <div class="logo-text">
                     <div class="logo">synthea.ai</div>
-                    <div class="tagline">Synthesized intelligence for venture capital</div>
+                    <div class="tagline">synthesized intelligence</div>
                 </div>
             </div>
             
@@ -196,13 +224,20 @@
     
     <!-- Scripts -->
     <!-- Data -->
-    <script src="data/demo-data.js" defer></script>
-    <script src="data/narrative-pulse-data.js" defer></script>
+    <!-- <script src="data/demo-data.js" defer></script> -->
+    <!-- <script src="data/narrative-pulse-data.js" defer></script> -->
+    <!-- New unified data source -->
+    <script src="data/unified-data.js" defer></script>
+    <script src="data/data-adapter.js" defer></script>
+    <script src="data/data-validator.js" defer></script>
     
     <!-- Component Scripts -->
+    <script src="features/narrative-pulse/unified-data-adapter.js" defer></script>
+    <!-- <script src="features/narrative-pulse/data-transformer.js" defer></script> Removed to eliminate conflicts -->
     <script src="features/narrative-pulse/narrative-pulse.js" defer></script>
-    <script src="features/narrative-pulse/apply-data-updates.js" defer></script>
-    <script src="features/narrative-pulse/final-fixes.js" defer></script>
+    <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script>
+    <!-- <script src="features/narrative-pulse/apply-data-updates.js" defer></script> Removed - causing conflicts -->
+    <!-- <script src="features/narrative-pulse/final-fixes.js" defer></script> Removed - causing conflicts -->
     <script src="features/narrative-pulse/init.js" defer></script>
     
     <script src="features/narrative-feed/narrative-feed.js" defer></script>
@@ -211,7 +246,7 @@
     <script src="features/notable-signals/notable-signals.js" defer></script>
     <script src="features/notable-signals/init.js" defer></script>
     
-    <script src="features/priority-briefings/priority-briefings.js" defer></script>
+    <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script>
     <script src="features/priority-briefings/init.js" defer></script>
     
     <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
@@ -226,6 +261,10 @@
     
     <!-- Main Application Orchestrator -->
     <script src="main.js" defer></script>
+    
+    <!-- Debug Script -->
+    <!-- <script src="debug-narrative-pulse.js" defer></script> -->
+    <!-- <script src="verify-narrative-pulse.js" defer></script> -->
     
     <!-- No JavaScript Fallback -->
     <noscript>
@@ -409,6 +448,37 @@
         <!-- Footer -->
         <div class="panel-footer">
             Import formats: CSV, Affinity, Airtable, PitchBook
+        </div>
+    </div>
+
+    <!-- Topic Customization Panel -->
+    <div class="topic-customization-backdrop" style="display: none;"></div>
+    <div class="topic-customization-panel" data-state="closed">
+        <div class="panel-header">
+            <div>
+                <h2>Customize Topics</h2>
+                <p class="panel-subtitle">Select up to 5 topics to track their momentum</p>
+            </div>
+            <button class="close-button" data-action="closeCustomizationPanel">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="panel-content">
+            <div class="selection-info">
+                <span class="selection-count" id="selectionCount">0 of 5 topics selected</span>
+            </div>
+            
+            <div class="topic-list" id="topicList">
+                <!-- Topics will be dynamically populated here -->
+            </div>
+        </div>
+        
+        <div class="panel-footer">
+            <button class="secondary-button" data-action="resetTopics">Reset to Default</button>
+            <button class="primary-button" data-action="applyTopics" disabled>Apply Changes</button>
         </div>
     </div>
 </body>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Validation Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #1a1a2e;
+            margin-top: 0;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .status.valid {
+            background: #e8f0ea;
+            color: #4a7c59;
+            border: 1px solid #4a7c59;
+        }
+        .status.invalid {
+            background: #fee;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        .error {
+            color: #dc3545;
+            padding: 8px 12px;
+            background: #fee;
+            border-left: 4px solid #dc3545;
+            margin: 8px 0;
+        }
+        .warning {
+            color: #856404;
+            padding: 8px 12px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin: 8px 0;
+        }
+        .success {
+            color: #155724;
+            padding: 8px 12px;
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            margin: 8px 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        button {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #3d6449;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .fix-item {
+            padding: 8px 12px;
+            background: #e8f0ea;
+            border-left: 4px solid #4a7c59;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Unified Data Validation Test</h1>
+        
+        <div class="section">
+            <h2>Validation Status</h2>
+            <div id="validation-status"></div>
+            <button onclick="runValidation()">Run Validation</button>
+            <button onclick="runAutoFix()">Auto-Fix Issues</button>
+        </div>
+        
+        <div class="grid">
+            <div class="section">
+                <h2>Errors</h2>
+                <div id="errors"></div>
+            </div>
+            
+            <div class="section">
+                <h2>Warnings</h2>
+                <div id="warnings"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Data Structure Overview</h2>
+            <div id="structure-overview"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Auto-Fix Results</h2>
+            <div id="autofix-results"></div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="data/unified-data.js"></script>
+    <script src="data/data-adapter.js"></script>
+    <script src="data/data-validator.js"></script>
+    
+    <script>
+        function runValidation() {
+            if (!window.dataValidator) {
+                alert('Data validator not loaded');
+                return;
+            }
+            
+            const results = window.dataValidator.validate();
+            displayResults(results);
+        }
+        
+        function displayResults(results) {
+            // Status
+            const statusEl = document.getElementById('validation-status');
+            statusEl.innerHTML = `
+                <div class="status ${results.valid ? 'valid' : 'invalid'}">
+                    Status: ${results.summary.status}
+                    <br>Errors: ${results.summary.errorCount}
+                    <br>Warnings: ${results.summary.warningCount}
+                </div>
+            `;
+            
+            // Errors
+            const errorsEl = document.getElementById('errors');
+            if (results.errors.length === 0) {
+                errorsEl.innerHTML = '<div class="success">No errors found ✓</div>';
+            } else {
+                errorsEl.innerHTML = results.errors.map(error => 
+                    `<div class="error">${error}</div>`
+                ).join('');
+            }
+            
+            // Warnings
+            const warningsEl = document.getElementById('warnings');
+            if (results.warnings.length === 0) {
+                warningsEl.innerHTML = '<div class="success">No warnings ✓</div>';
+            } else {
+                warningsEl.innerHTML = results.warnings.map(warning => 
+                    `<div class="warning">${warning}</div>`
+                ).join('');
+            }
+        }
+        
+        function runAutoFix() {
+            if (!window.dataValidator) {
+                alert('Data validator not loaded');
+                return;
+            }
+            
+            const fixResults = window.dataValidator.autoFix();
+            
+            const resultsEl = document.getElementById('autofix-results');
+            if (fixResults.fixes.length === 0) {
+                resultsEl.innerHTML = '<div class="success">No fixes needed ✓</div>';
+            } else {
+                resultsEl.innerHTML = '<h3>Applied Fixes:</h3>' + 
+                    fixResults.fixes.map(fix => 
+                        `<div class="fix-item">${fix}</div>`
+                    ).join('');
+            }
+            
+            // Re-run validation after fixes
+            setTimeout(() => {
+                runValidation();
+            }, 500);
+        }
+        
+        function displayStructure() {
+            if (!window.unifiedData) {
+                return;
+            }
+            
+            const overviewEl = document.getElementById('structure-overview');
+            
+            const structure = {
+                'Metadata': {
+                    version: window.unifiedData.meta?.version,
+                    lastUpdated: window.unifiedData.meta?.lastUpdated,
+                    episodesAnalyzed: window.unifiedData.meta?.analysis?.episodesAnalyzed
+                },
+                'Topics': Object.keys(window.unifiedData.narrativePulse?.topics || {}).length,
+                'Priority Briefings': window.unifiedData.priorityBriefings?.items?.length || 0,
+                'Feed Items': window.unifiedData.narrativeFeed?.items?.length || 0,
+                'Notable Signals': Object.keys(window.unifiedData.notableSignals?.counts || {}).length
+            };
+            
+            overviewEl.innerHTML = '<pre>' + JSON.stringify(structure, null, 2) + '</pre>';
+        }
+        
+        // Run validation on load
+        window.addEventListener('load', () => {
+            displayStructure();
+            runValidation();
+        });
+    </script>
+</body>
+</html>

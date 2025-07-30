@@ -307,6 +307,26 @@ const EpisodePanel = {
         this.container.querySelector('.episode-title').textContent = data.episodeTitle;
         this.container.querySelector('.episode-guest').textContent = data.episodeGuest;
         
+        // Update podcast logo with actual image
+        const podcastLogo = this.container.querySelector('.podcast-logo');
+        const podcastImages = {
+            '20VC with Harry Stebbings': 'images/20vc.jpeg',
+            '20VC': 'images/20vc.jpeg',
+            'Invest Like the Best': 'images/investlikethebest.jpeg',
+            'Acquired': 'images/acquired.jpeg',
+            'This Week in Startups': 'images/theweekinstartups.jpeg',
+            'Indie Hackers': 'images/indiehackers.png',
+            'The Tim Ferriss Show': 'images/timf.jpeg',
+            'Stratechery': 'images/stratechery.jpeg',
+            'The Knowledge Project': 'images/knowledgeproject.webp',
+            'BG2': 'images/bg2.png'
+        };
+        
+        const imagePath = podcastImages[data.podcastName];
+        if (imagePath) {
+            podcastLogo.innerHTML = `<img src="${imagePath}" alt="${data.podcastName} logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+        }
+        
         // Parse episode time
         const timeParts = data.episodeTime.split('•').map(s => s.trim());
         if (timeParts[0]) this.container.querySelector('.panel-time-ago').textContent = timeParts[0];

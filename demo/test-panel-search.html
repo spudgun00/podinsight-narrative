@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Search Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .instructions {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .instructions h2 {
+            margin-top: 0;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+        .test-frame {
+            width: 100%;
+            height: 700px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>Search Panel Input Test</h2>
+        <p>This test verifies that the search input has been successfully added to the search panel header.</p>
+        
+        <h3>Test Steps:</h3>
+        <ol>
+            <li>Type "vertical AI" in the main search bar and press Enter</li>
+            <li>The search panel should open from the right</li>
+            <li>Check that the panel header shows:
+                <ul>
+                    <li>"Search: vertical AI" as the title</li>
+                    <li>A search input field below the title (pre-filled with "vertical AI")</li>
+                    <li>A search button next to the input</li>
+                </ul>
+            </li>
+            <li>Try typing a new search term (e.g., "Series A valuations") in the panel input</li>
+            <li>Press Enter or click the Search button</li>
+            <li>Check the console for: "New search from panel: Series A valuations"</li>
+            <li>The title should update to "Search: Series A valuations"</li>
+            <li>Verify that the "New Search" button at the bottom has been removed</li>
+        </ol>
+        
+        <h3>Expected Behavior:</h3>
+        <ul>
+            <li>✅ Search input is visible in the panel header</li>
+            <li>✅ Input is pre-filled with current search query</li>
+            <li>✅ Enter key triggers search</li>
+            <li>✅ Search button works</li>
+            <li>✅ Title updates with new search</li>
+            <li>✅ Console logs new searches</li>
+            <li>✅ No "New Search" button at bottom</li>
+        </ul>
+    </div>
+    
+    <iframe src="/demo.html" class="test-frame"></iframe>
+</body>
+</html>

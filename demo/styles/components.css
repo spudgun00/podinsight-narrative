@@ -148,15 +148,16 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 2px;
         }
         
         /* Logo Mark - SVG */
         .logo-mark {
-            width: 35px;
-            height: 35px;
+            width: 56px;
+            height: 56px;
             transition: opacity 0.2s ease;
             cursor: pointer;
+            transform: translateY(8px); /* Drop by 8px for visual balance */
         }
         
         /* Hover state for logo mark */
@@ -169,7 +170,7 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            padding-top: 2px; /* Fine-tune baseline alignment */
+            justify-content: space-between;
         }
         
         .logo {
@@ -178,16 +179,17 @@
             font-weight: 600; /* Semi-Bold */
             color: #2C2C2C;
             line-height: 1;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.11em;
         }
         
         .tagline {
             font-family: 'Inter', sans-serif;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 400; /* Regular */
-            color: #6B6B6B;
+            color: #B5B5B5;
             line-height: 1;
             letter-spacing: 0.01em;
+            text-transform: lowercase;
         }
         .ticker-value {
             color: var(--sage);
@@ -366,6 +368,7 @@
             color: var(--gray-600) !important;
             font-weight: 400 !important;      /* Normal weight, not bold */
             margin: 0;
+            letter-spacing: 0.01em;           /* Subtle letter spacing */
         }
         
         /* Uppercase subtitle variant for inline headers like "PATTERN EMERGENCE • LAST 48 HOURS" */
@@ -408,14 +411,14 @@
             position: absolute;
             background: rgba(255, 255, 255, 0.98);
             color: var(--deep-ink);
-            padding: 16px;
-            border-radius: 8px;
+            padding: 10px 12px;
+            border-radius: 4px;
             border: 1px solid var(--gray-200);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
             pointer-events: none;
             z-index: 10;
-            font-size: 11px;
-            max-width: 280px;
+            font-size: 12px;
+            max-width: 240px;
             opacity: 0;
             transition: opacity 200ms ease;
         }
@@ -429,40 +432,62 @@
             /* Momentum view uses rich content */
         }
         
+        /* Quote display in tooltips */
+        .tooltip-quote {
+            font-style: italic;
+            color: var(--gray-600);
+            font-size: 13px;
+            line-height: 1.4;
+            margin: 8px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+        
+        .quote-icon {
+            position: absolute;
+            left: 0;
+            top: -2px;
+            font-size: 18px;
+            color: var(--sage);
+            opacity: 0.3;
+            font-style: normal;
+        }
+        
         .chart-tooltip-volume {
             /* Volume view has specific styling */
-            max-width: 320px;
+            max-width: 260px;
         }
         
         .chart-tooltip-consensus {
             /* Consensus view has simpler content */
-            max-width: 240px;
+            max-width: 220px;
         }
         
         /* Rich Tooltip Content */
         .rich-tooltip-content {
             white-space: normal;
-            min-width: 200px;
+            min-width: 180px;
             font-size: 12px;
-            line-height: 1.5;
-            margin-top: -4px; /* Compensate for tooltip padding */
+            line-height: 1.4;
+            margin-top: -2px; /* Compensate for tooltip padding */
         }
         
         .tooltip-date {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--deep-ink);
+            opacity: 0.9;
         }
         
         .tooltip-divider {
             height: 1px;
             background: var(--gray-200);
-            margin: 8px 0;
+            margin: 6px 0;
         }
         
         .topic-section {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             padding: 4px 0;
         }
         
@@ -478,27 +503,42 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-bottom: 3px;
+            margin-bottom: 1px;
         }
         
         .topic-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             flex-shrink: 0;
         }
         
-        .topic-name {
-            font-weight: 500;
+        .rich-tooltip-content .topic-name,
+        .chart-tooltip-momentum .topic-name {
+            font-weight: 600;
             color: var(--deep-ink);
-            font-size: 12px;
+            font-size: 12px !important;
+            text-align: left;
+            flex: 1;
         }
         
         .topic-stats {
             color: var(--gray-600);
-            margin-left: 12px;
+            margin-left: 8px;
             font-size: 11px;
         }
+        
+        .topic-quote {
+            font-style: italic;
+            color: var(--gray-500);
+            font-size: 11px;
+            line-height: 1.4;
+            margin: 4px 0 0 12px;
+            padding-left: 8px;
+            border-left: 2px solid var(--gray-200);
+            opacity: 0.85;
+        }
+        
         .tooltip-line {
             margin: 0.25rem 0;
         }
@@ -570,13 +610,15 @@
         }
         .all-episodes-link {
             font-size: 0.875rem;
-            color: var(--sage);
+            color: var(--gray-600);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 400;
             transition: all 0.2s ease;
+            opacity: 0.8;
         }
         .all-episodes-link:hover {
-            color: #3d6348;
+            color: var(--sage);
+            opacity: 1;
         }
         /* Narrative Feed Section - Enhanced with Expandable Entries */
         .narrative-feed {
@@ -593,15 +635,18 @@
         .feed-entry {
             border-bottom: 1px solid var(--gray-200);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden; /* Contain hover highlight within boundaries */
         }
         .feed-entry:last-child {
             border-bottom: none;
         }
         .feed-entry-header:hover {
             background: var(--warm-paper);
-            margin: 0 -1rem;
+            margin: 0; /* Fixed: Removed negative margins to contain highlight */
             padding: 1rem;
         }
+        /* Old arrow styling - disabled, arrow now in category pill
         .feed-entry-header::after {
             content: '';
             position: absolute;
@@ -624,6 +669,7 @@
             transform: translateY(-50%) rotate(180deg);
             border-top-color: var(--sage);
         }
+        */
         .feed-time {
             font-size: 0.813rem;
             color: var(--sage);
@@ -637,13 +683,16 @@
         }
         .feed-category {
             font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
+            padding: 0.25rem 1.75rem 0.25rem 0.75rem; /* Added right padding for arrow */
             background: var(--light-sage);
             color: var(--sage);
             border-radius: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 600;
+            position: relative; /* Enable absolute positioning for arrow */
+            display: inline-block; /* Ensure proper layout */
+            vertical-align: middle; /* Align with text */
         }
         /* Expanded Content Styles */
         .feed-entry-content {
@@ -716,6 +765,47 @@
             color: #3d6348;
             gap: 0.5rem;
         }
+        
+        /* Feed Action Buttons - Share and Email (matching Weekly Intelligence Brief) */
+        .feed-action-separator {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 1rem 0 0.75rem 0;
+        }
+        
+        .feed-action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0;  /* No gap - use margins instead for exact spacing */
+            margin-top: 0.75rem;
+        }
+        
+        .feed-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: color 0.2s ease;
+        }
+        
+        .feed-action-link:hover {
+            color: var(--sage);
+        }
+        
+        .feed-action-link svg {
+            width: 12px;
+            height: 12px;
+            stroke: currentColor;
+        }
+        
+        .feed-action-divider {
+            color: var(--gray-400);
+            font-size: 0.75rem;
+            margin: 0 0.75rem;  /* Increased margin to match Weekly Brief spacing */
+        }
+        
         /* Category-specific colors for main feed */
         .feed-category.consensus {
             background: var(--light-sage);
@@ -736,6 +826,27 @@
         .feed-category.pattern {
             background: #f5f3f0;
             color: var(--gray-600);
+        }
+        /* Arrow styling for category pills */
+        .feed-category::after {
+            content: '→';
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.875rem;
+            color: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .feed-entry-header:hover .feed-category::after {
+            opacity: 1;
+        }
+        /* Rotate arrow when expanded */
+        .feed-entry.expanded .feed-category::after {
+            content: '↓';
+            opacity: 1;
         }
         /* Notable Signals Section - Professional Container Structure */
         .notable-signals-container {
@@ -821,7 +932,7 @@
             padding: 0.5rem 0;
         }
         .signal-label {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: var(--gray-600);
             margin-bottom: 0.5rem;
         }
@@ -839,7 +950,7 @@
         
         /* New insight-based styles */
         .signal-insight {
-            font-size: 1.15rem;
+            font-size: 0.95rem;
             font-weight: 500;
             color: var(--deep-ink);
             margin: 0.5rem 0;
@@ -867,6 +978,30 @@
         .strength-dot.active {
             background: #4a7c59;  /* Active dots - sage green */
             opacity: 0.8;
+        }
+        
+        /* Confidence Bar Styling */
+        .signal-strength {
+            justify-content: flex-start; /* Left align */
+        }
+        
+        .confidence-bar {
+            font-size: 10px;
+            color: #64748B;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: 0.01em;
+            white-space: nowrap; /* Keep on one line */
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .confidence-blocks {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -0.1em; /* Tighter spacing for blocks */
+            color: #4a7c59;
+            opacity: 0.9;
+            font-size: 9px; /* Slightly smaller blocks */
         }
         /* Priority Briefings Section (formerly Episode Intelligence) */
         .episode-section {
@@ -1429,50 +1564,113 @@
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--deep-ink);
-            margin-bottom: 1rem;
+            margin-bottom: 0.25rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .momentum-theme {
-            color: var(--deep-ink);
-        }
-        .momentum-change {
-            font-weight: 600;
-        }
-        .momentum-change.positive {
-            color: var(--sage);
-        }
-        .momentum-change.negative {
-            color: var(--dusty-rose);
-        }
-        .sentiment-block {
-            padding: 0.5rem;
-            background: var(--light-sage);
-            border-radius: 6px;
-            text-align: center;
-        }
-        .sentiment-block:nth-child(2) {
-            background: #e8f0ea;
-        }
-        .sentiment-block:nth-child(3) {
-            background: #f5f3f0;
-        }
-        .sentiment-block:nth-child(4) {
-            background: var(--light-rose);
-        }
-        .sentiment-value {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--deep-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .sentiment-label {
+        .section-description {
             font-size: 0.75rem;
             color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        /* Velocity tracking styles */
+        .velocity-change {
+            font-size: 0.813rem;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: right;
+        }
+        
+        /* Sparkline styles */
+        .velocity-item {
+            align-items: center;
+        }
+        
+        .velocity-sparkline {
+            margin: 0 8px;
+            vertical-align: middle;
+            opacity: 0.9;
+        }
+        /* Consensus Monitor Progress Bars - Matching Influence Metrics */
+        .consensus-monitor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .consensus-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .consensus-label {
+            flex: 1;
+            color: var(--deep-ink);
+            font-size: 0.813rem;
+            font-weight: 400;
+        }
+        
+        .consensus-bar-container {
+            width: 80px;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .consensus-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Override influence-bar colors based on consensus level */
+        .influence-bar.consensus-high {
+            background: var(--sage);
+        }
+        
+        .influence-bar.consensus-medium {
+            background: var(--amber-glow);
+        }
+        
+        .influence-bar.consensus-low {
+            background: var(--dusty-rose);
+        }
+        
+        .consensus-percentage {
+            font-weight: 600;
+            color: var(--sage);
+            min-width: 35px;
+            text-align: right;
+            font-size: 0.813rem;
+        }
+        
+        .consensus-trend {
+            min-width: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            justify-content: flex-end;
+        }
+        
+        .consensus-trend.trend-up {
+            color: var(--sage);
+        }
+        
+        .consensus-trend.trend-down {
+            color: var(--dusty-rose);
+        }
+        
+        .consensus-trend.trend-neutral {
+            color: var(--gray-600);
+        }
+        
+        .consensus-trend-arrow {
+            font-size: 0.625rem;
         }
         .synthesis-action {
             flex: 1;
@@ -1514,7 +1712,7 @@
             height: 100%;
             background: var(--sage);
             border-radius: 3px;
-            transition: width 0.3s ease;
+            transition: width 0.6s ease;
         }
         .influence-score {
             font-weight: 600;
@@ -1523,10 +1721,28 @@
             text-align: right;
         }
         .pie-label {
-            font-size: 0.75rem;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+            color: var(--deep-ink);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-align: center;
+            display: block;
+            line-height: 1.2;
+            margin-top: 4px;
+        }
+        
+        /* Animated pie chart styles */
+        .mini-pie-chart circle {
+            transition: stroke-dasharray 0.8s ease;
+        }
+        
+        .mini-pie-chart text {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.5s;
+        }
+        
+        .mini-pie-chart.animated text {
+            opacity: 1;
         }
         .feed-badge {
             font-size: 0.625rem;
@@ -1686,6 +1902,147 @@
             color: var(--gray-600);
             line-height: 1.5;
         }
+        
+        /* Tracked Topics Styles */
+        .tracked-topics-header {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .signal-item.tracked-topic {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Component-specific topic-name styles */
+        .signal-item .topic-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+        }
+        
+        .topic-momentum {
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: 0.025em;
+        }
+        
+        .topic-stats {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            margin-bottom: 0.375rem;
+        }
+        
+        .topic-keywords {
+            font-size: 0.813rem;
+            color: var(--gray-500);
+            font-style: italic;
+            margin-bottom: 0.375rem;
+        }
+        
+        .topic-context {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+        
+        /* Portfolio Empty State */
+        .portfolio-empty-state {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .empty-state-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--gray-600);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state-subtitle {
+            font-size: 0.813rem;
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state-message {
+            background: var(--warm-paper);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+        
+        .empty-state-status {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--deep-ink);
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        .empty-state-benefits {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .benefit-text {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+            text-align: left;
+        }
+        
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .benefit-list li {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            padding: 0.375rem 0;
+            position: relative;
+            padding-left: 1.25rem;
+            text-align: left;
+        }
+        
+        .benefit-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+        }
+        
+        .configure-portfolio-link {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--sage);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .configure-portfolio-link:hover {
+            color: var(--deep-ink);
+            transform: translateX(3px);
+        }
+        
         /* Backdrop for dimming main content */
         .panel-backdrop {
             position: fixed;
@@ -1738,7 +2095,7 @@
         
         /* Volume Tooltip Styles */
         .volume-tooltip-content {
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.4;
             color: var(--deep-ink);
             margin-top: -4px; /* Consistent top spacing */
@@ -1759,18 +2116,18 @@
         .volume-tooltip-content .tooltip-total {
             font-weight: 500;
             color: var(--gray-600);
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .volume-tooltip-content .tooltip-breakdown {
-            margin: 8px 0;
+            margin: 6px 0;
         }
         
         .volume-tooltip-content .breakdown-label {
             font-weight: 500;
             color: var(--gray-600);
             margin-bottom: 6px;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -1778,25 +2135,30 @@
         .volume-tooltip-content .topic-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 3px 0;
+            gap: 6px;
+            padding: 2px 0;
         }
         
         .volume-tooltip-content .topic-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
+            margin-right: 2px;
         }
         
         .volume-tooltip-content .topic-name {
             flex: 1;
             color: var(--deep-ink);
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
         }
         
         .volume-tooltip-content .topic-stats {
             color: var(--gray-600);
             font-weight: 500;
+            font-size: 11px;
         }
         
         .volume-tooltip-content .tooltip-episodes {
@@ -1922,31 +2284,32 @@
         
         /* Consensus Heatmap Tooltip */
         .consensus-heatmap-tooltip {
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 12px;
+            line-height: 1.4;
             color: var(--deep-ink);
             margin-top: -4px; /* Consistent top spacing */
         }
         
         .consensus-heatmap-tooltip .tooltip-title {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 4px;
         }
         
         .consensus-heatmap-tooltip .tooltip-consensus {
             color: var(--gray-700);
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            font-size: 11px;
         }
         
         .consensus-heatmap-tooltip .tooltip-mentions {
             color: var(--gray-600);
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .consensus-heatmap-tooltip .tooltip-sources {
             color: var(--gray-600);
-            font-size: 12px;
+            font-size: 11px;
         }
         
         /* Data Point Animations */
@@ -2546,13 +2909,12 @@ body.portfolio-open {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(26, 26, 46, 0.35);
+    background: rgba(0, 0, 0, 0.3);  /* Changed to black 30% for consistency */
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.4s ease, visibility 0.4s ease;  /* Changed to 0.4s */
     z-index: 999;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* Removed blur effect for consistency */
 }
 
 .topic-customization-backdrop.active {

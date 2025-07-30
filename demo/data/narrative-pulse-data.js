@@ -4,11 +4,11 @@
 window.narrativePulseData = {
     sevenDayData: {
         timeRange: {
-            start: 'Aug 22, 2025',
-            end: 'Aug 28, 2025',
+            start: 'Jul 19, 2025',
+            end: 'Jul 25, 2025',
             dataPoints: 7,
             interval: 'daily',
-            labels: ['Thu 22', 'Fri 23', 'Sat 24', 'Sun 25', 'Mon 26', 'Tue 27', 'Wed 28']
+            labels: ['Sat 19', 'Sun 20', 'Mon 21', 'Tue 22', 'Wed 23', 'Thu 24', 'Fri 25']
         },
         topics: {
             'AI Agents': {
@@ -20,17 +20,17 @@ window.narrativePulseData = {
                 endValue: 35,
                 weekTotal: 35,
                 dailyAverage: 5.0,
-                peakDay: 'Wed 28',
+                peakDay: 'Fri 25',
                 consensusLevel: 'Strong',
                 yPositions: {start: 180, end: 40},
                 quotes: {
-                    'Thu 22': 'Early week momentum building',
-                    'Fri 23': 'Gerstner mentions agent infrastructure on All-In',
-                    'Sat 24': 'Weekend lull, only crypto podcasts active',
-                    'Sun 25': 'Pomp discusses AI agents briefly',
-                    'Mon 26': 'Monday surge: 3 shows cover agent strategies',
-                    'Tue 27': '20VC deep dive with Anthropic drives discussion',
-                    'Wed 28': 'Peak day: Multiple tier-1 shows align on thesis'
+                    'Sat 19': 'Weekend start: early momentum building',
+                    'Sun 20': 'Pomp discusses AI agents briefly',
+                    'Mon 21': 'Monday surge: 3 shows cover agent strategies',
+                    'Tue 22': 'Gerstner mentions agent infrastructure on All-In',
+                    'Wed 23': '20VC deep dive with Anthropic drives discussion',
+                    'Thu 24': 'Continued strong coverage across tier-1 shows',
+                    'Fri 25': 'Peak day: Multiple tier-1 shows align on thesis'
                 }
             },
             'AI Infrastructure': {
@@ -42,17 +42,17 @@ window.narrativePulseData = {
                 endValue: 52,
                 weekTotal: 52,
                 dailyAverage: 7.4,
-                peakDay: 'Wed 28 & Thu 29',
+                peakDay: 'Thu 24 & Fri 25',
                 consensusLevel: 'Peak',
                 yPositions: {start: 200, end: 20},
                 quotes: {
-                    'Thu 22': 'Infrastructure thesis gains traction',
-                    'Fri 23': 'Databricks valuation sparks infrastructure debates',
-                    'Sat 24': 'Technical podcasts discuss GPU economics',
-                    'Sun 25': 'Light coverage, focus on compute costs',
-                    'Mon 26': 'Multiple shows: "picks and shovels" thesis',
-                    'Tue 27': 'All-In dedicates segment to AI infrastructure',
-                    'Wed 28': 'Peak coverage: everyone wants foundation layer'
+                    'Sat 19': 'Infrastructure thesis gains early traction',
+                    'Sun 20': 'Light weekend coverage, focus on compute costs',
+                    'Mon 21': 'Multiple shows: "picks and shovels" thesis',
+                    'Tue 22': 'Databricks valuation sparks infrastructure debates',
+                    'Wed 23': 'All-In dedicates segment to AI infrastructure',
+                    'Thu 24': 'Technical podcasts discuss GPU economics',
+                    'Fri 25': 'Peak coverage: everyone wants foundation layer'
                 }
             },
             'Capital Efficiency': {
@@ -64,17 +64,17 @@ window.narrativePulseData = {
                 endValue: 15,
                 weekTotal: 15,
                 dailyAverage: 2.1,
-                peakDay: 'Tue 27',
+                peakDay: 'Wed 23',
                 consensusLevel: 'Strong',
                 yPositions: {start: 195, end: 145},
                 quotes: {
-                    'Thu 22': 'Efficiency narrative continues from previous week',
-                    'Fri 23': 'End of week: LP meetings set efficiency tone',
-                    'Sat 24': 'No coverage on weekend shows',
-                    'Sun 25': 'Single mention on Acquired',
-                    'Mon 26': 'Board meeting prep drives efficiency talk',
-                    'Tue 27': 'Peak: multiple shows discuss burn rates',
-                    'Wed 28': 'Continued focus on path to profitability'
+                    'Sat 19': 'Efficiency narrative continues from previous week',
+                    'Sun 20': 'Single mention on Acquired',
+                    'Mon 21': 'Board meeting prep drives efficiency talk',
+                    'Tue 22': 'End of week: LP meetings set efficiency tone',
+                    'Wed 23': 'Peak: multiple shows discuss burn rates',
+                    'Thu 24': 'Continued focus on path to profitability',
+                    'Fri 25': 'Weekend prep: capital preservation themes'
                 }
             },
             'DePIN': {
@@ -86,17 +86,17 @@ window.narrativePulseData = {
                 endValue: 32,
                 weekTotal: 32,
                 dailyAverage: 4.6,
-                peakDay: 'Wed 28 & Thu 29',
+                peakDay: 'Thu 24 & Fri 25',
                 consensusLevel: 'Building',
                 yPositions: {start: 210, end: 65},
                 quotes: {
-                    'Thu 22': 'DePIN momentum building from prior week',
-                    'Fri 23': 'Helium case study surfaces on crypto pod',
-                    'Sat 24': 'Minimal weekend coverage',
-                    'Sun 25': 'Single mention on Bankless',
-                    'Mon 26': 'Monday catalyst: major funding rumor',
-                    'Tue 27': 'Multiple shows pick up DePIN narrative',
-                    'Wed 28': 'Peak interest: "physical meets digital"'
+                    'Sat 19': 'DePIN momentum building from prior week',
+                    'Sun 20': 'Single mention on Bankless',
+                    'Mon 21': 'Monday catalyst: major funding rumor',
+                    'Tue 22': 'Helium case study surfaces on crypto pod',
+                    'Wed 23': 'Multiple shows pick up DePIN narrative',
+                    'Thu 24': 'Increased coverage across crypto and VC pods',
+                    'Fri 25': 'Peak interest: "physical meets digital"'
                 }
             },
             'Crypto/Web3': {
@@ -108,17 +108,17 @@ window.narrativePulseData = {
                 endValue: 26,
                 weekTotal: 26,
                 dailyAverage: 3.7,
-                peakDay: 'Tue-Thu',
+                peakDay: 'Wed-Fri',
                 consensusLevel: 'Moderate',
                 yPositions: {start: 160, end: 120},
                 quotes: {
-                    'Thu 22': 'Crypto sentiment stabilizing',
-                    'Fri 23': 'Base ecosystem gains discussed',
-                    'Sat 24': 'Crypto-native pods maintain coverage',
-                    'Sun 25': 'Bankless covers DeFi resurgence',
-                    'Mon 26': 'Regulatory clarity boosts sentiment',
-                    'Tue 27': 'Multiple shows on Solana momentum',
-                    'Wed 28': 'Sustained interest in infrastructure'
+                    'Sat 19': 'Crypto-native pods maintain coverage',
+                    'Sun 20': 'Bankless covers DeFi resurgence',
+                    'Mon 21': 'Regulatory clarity boosts sentiment',
+                    'Tue 22': 'Base ecosystem gains discussed',
+                    'Wed 23': 'Multiple shows on Solana momentum',
+                    'Thu 24': 'Sustained interest in infrastructure',
+                    'Fri 25': 'Week ends with bullish crypto sentiment'
                 }
             },
             'B2B SaaS': {
@@ -130,17 +130,17 @@ window.narrativePulseData = {
                 endValue: 8,
                 weekTotal: 8,
                 dailyAverage: 1.1,
-                peakDay: 'Mon 26 & Tue 27',
+                peakDay: 'Mon 21 & Tue 22',
                 consensusLevel: 'Weak',
                 yPositions: {start: 150, end: 165},
                 quotes: {
-                    'Thu 22': 'B2B SaaS struggles continue',
-                    'Fri 23': 'Single mention of consolidation trends',
-                    'Sat 24': 'Zero coverage on weekend',
-                    'Sun 25': 'Acquired mentions M&A activity',
-                    'Mon 26': 'Brief discussion of mature markets',
-                    'Tue 27': 'Focus shifting to AI-native solutions',
-                    'Wed 28': 'Legacy SaaS struggles mentioned'
+                    'Sat 19': 'Zero coverage on weekend',
+                    'Sun 20': 'Acquired mentions M&A activity',
+                    'Mon 21': 'Brief discussion of mature markets',
+                    'Tue 22': 'Single mention of consolidation trends',
+                    'Wed 23': 'Focus shifting to AI-native solutions',
+                    'Thu 24': 'Legacy SaaS struggles mentioned',
+                    'Fri 25': 'B2B SaaS struggles continue into weekend'
                 }
             },
             'Developer Tools': {
@@ -152,17 +152,17 @@ window.narrativePulseData = {
                 endValue: 18,
                 weekTotal: 18,
                 dailyAverage: 2.6,
-                peakDay: 'Tue 27 & Wed 28',
+                peakDay: 'Wed 23 & Thu 24',
                 consensusLevel: 'Strong',
                 yPositions: {start: 170, end: 90},
                 quotes: {
-                    'Thu 22': 'Developer tools gaining momentum',
-                    'Fri 23': 'Cursor rumors spark dev tools interest',
-                    'Sat 24': 'Light weekend coverage',
-                    'Sun 25': 'Single mention on technical podcast',
-                    'Mon 26': 'GitHub Copilot adoption stats shared',
-                    'Tue 27': 'Multiple shows on AI coding assistants',
-                    'Wed 28': 'Peak: "developer productivity renaissance"'
+                    'Sat 19': 'Light weekend coverage',
+                    'Sun 20': 'Single mention on technical podcast',
+                    'Mon 21': 'GitHub Copilot adoption stats shared',
+                    'Tue 22': 'Cursor rumors spark dev tools interest',
+                    'Wed 23': 'Multiple shows on AI coding assistants',
+                    'Thu 24': 'Peak: "developer productivity renaissance"',
+                    'Fri 25': 'Developer tools momentum continues'
                 }
             }
         }
@@ -170,11 +170,11 @@ window.narrativePulseData = {
 
     thirtyDayData: {
         timeRange: {
-            start: 'Aug 1, 2025',
-            end: 'Aug 28, 2025',
+            start: 'Jun 26, 2025',
+            end: 'Jul 25, 2025',
             dataPoints: 4,
             interval: 'weekly',
-            labels: ['Aug 1-7', 'Aug 8-14', 'Aug 15-21', 'Aug 22-28']
+            labels: ['Jun 26-Jul 2', 'Jul 3-9', 'Jul 10-16', 'Jul 17-25']
         },
         topics: {
             'AI Agents': {
@@ -192,10 +192,10 @@ window.narrativePulseData = {
                 endValue: 35,
                 totalGrowth: 337.5,
                 weeklyNarrative: {
-                    'Aug 1-7': 'Early whispers about agent potential',
-                    'Aug 8-14': 'Gerstner validates thesis, momentum builds',
-                    'Aug 15-21': 'Multiple tier-1 VCs align on opportunity',
-                    'Aug 22-28': 'Mainstream adoption narrative emerges'
+                    'Jun 26-Jul 2': 'Early whispers about agent potential',
+                    'Jul 3-9': 'Gerstner validates thesis, momentum builds',
+                    'Jul 10-16': 'Multiple tier-1 VCs align on opportunity',
+                    'Jul 17-25': 'Mainstream adoption narrative emerges'
                 }
             },
             'AI Infrastructure': {
@@ -458,22 +458,22 @@ window.narrativePulseData = {
                 totalGrowth: -27.8,
                 totalMentions: 356,
                 consensusProgression: ['Moderate', 'Moderate', 'Moderate', 'Moderate', 'Weak', 'Weak', 'Weak', 'Weak', 'Weak', 'Building', 'Building', 'Weak', 'Building'],
-                narrative: 'Gradual decline through summer, signs of stabilization in August',
-                keyInflectionPoint: 'Week 10 (Aug 7): Regulatory clarity sparks modest recovery',
+                narrative: 'Gradual decline through early summer, signs of stabilization in July',
+                keyInflectionPoint: 'Week 10 (Jul 6): Regulatory clarity sparks modest recovery',
                 quotes: {
-                    'Jun 5': 'Strong coverage from crypto pods',
-                    'Jun 12': 'AI begins stealing attention',
-                    'Jun 19': 'Sentiment cooling continues',
-                    'Jun 26': 'Bear market narrative persists',
-                    'Jul 3': 'Summer doldrums hit',
-                    'Jul 10': 'Lowest point of coverage',
-                    'Jul 17': 'Sustained low interest',
-                    'Jul 24': 'Bottom forming',
-                    'Jul 31': 'Slight uptick begins',
-                    'Aug 7': 'Recovery to 28 mentions',
-                    'Aug 14': 'Base ecosystem excitement',
-                    'Aug 21': 'Dip on AI dominance',
-                    'Aug 28': 'Stabilizing with clear use cases'
+                    'Apr 27': 'Strong coverage from crypto pods',
+                    'May 4': 'AI begins stealing attention',
+                    'May 11': 'Sentiment cooling continues',
+                    'May 18': 'Bear market narrative persists',
+                    'May 25': 'Summer doldrums approaching',
+                    'Jun 1': 'Continued decline in interest',
+                    'Jun 8': 'Lowest point of coverage',
+                    'Jun 15': 'Sustained low interest',
+                    'Jun 22': 'Bottom forming',
+                    'Jun 29': 'Slight uptick begins',
+                    'Jul 6': 'Recovery to 28 mentions',
+                    'Jul 13': 'Base ecosystem excitement',
+                    'Jul 20': 'Stabilizing with clear use cases'
                 }
             },
             'B2B SaaS': {
@@ -489,19 +489,19 @@ window.narrativePulseData = {
                 narrative: 'Steady decline as AI-native approaches dominate all conversations',
                 keyInflectionPoint: 'Never recovered - continuous decline throughout quarter',
                 quotes: {
-                    'Jun 5': 'Consolidation wave discussed',
-                    'Jun 12': 'Growth challenges mounting',
-                    'Jun 19': 'M&A only bright spot',
-                    'Jun 26': 'Innovation concerns raised',
-                    'Jul 3': 'Focus shifts to profitability',
-                    'Jul 10': 'Market maturity accepted',
-                    'Jul 17': 'Legacy playbook questioned',
-                    'Jul 24': 'AI-native competition clear',
-                    'Jul 31': 'Existential questions raised',
-                    'Aug 7': 'Brief uptick to 15',
-                    'Aug 14': 'Reality sets in again',
-                    'Aug 21': 'Yesterday\'s opportunity',
-                    'Aug 28': 'Minimal coverage continues'
+                    'Apr 27': 'Consolidation wave discussed',
+                    'May 4': 'Growth challenges mounting',
+                    'May 11': 'M&A only bright spot',
+                    'May 18': 'Innovation concerns raised',
+                    'May 25': 'Focus shifts to profitability',
+                    'Jun 1': 'Market maturity accepted',
+                    'Jun 8': 'Legacy playbook questioned',
+                    'Jun 15': 'AI-native competition clear',
+                    'Jun 22': 'Existential questions raised',
+                    'Jun 29': 'Brief uptick to 15',
+                    'Jul 6': 'Reality sets in again',
+                    'Jul 13': 'Yesterday\'s opportunity',
+                    'Jul 20': 'Minimal coverage continues'
                 }
             },
             'Developer Tools': {
@@ -515,21 +515,21 @@ window.narrativePulseData = {
                 totalMentions: 155,
                 consensusProgression: ['Moderate', 'Moderate', 'Moderate', 'Moderate', 'Strong', 'Strong', 'Strong', 'Strong', 'Strong', 'Moderate', 'Strong', 'Strong', 'Strong'],
                 narrative: 'Consistent growth throughout quarter as AI transforms developer productivity',
-                keyInflectionPoint: 'Week 12 (Aug 21): AI coding assistants hit mainstream awareness',
+                keyInflectionPoint: 'Week 12 (Jul 13): AI coding assistants hit mainstream awareness',
                 quotes: {
-                    'Jun 5': 'Developer tools momentum building',
-                    'Jun 12': 'Early AI experiments',
-                    'Jun 19': 'Productivity metrics shared',
-                    'Jun 26': 'Tool consolidation discussed',
-                    'Jul 3': 'Next-gen tools emerge',
-                    'Jul 10': 'Adoption accelerating',
-                    'Jul 17': 'Enterprise interest grows',
-                    'Jul 24': 'ROI becomes clear',
-                    'Jul 31': 'Developer-first narrative',
-                    'Aug 7': 'Sustained developer interest',
-                    'Aug 14': 'Cursor raises huge round',
-                    'Aug 21': 'Multiple success stories',
-                    'Aug 28': 'Renaissance narrative peaks'
+                    'Apr 27': 'Developer tools momentum building',
+                    'May 4': 'Early AI experiments',
+                    'May 11': 'Productivity metrics shared',
+                    'May 18': 'Tool consolidation discussed',
+                    'May 25': 'Next-gen tools emerge',
+                    'Jun 1': 'Adoption accelerating',
+                    'Jun 8': 'Enterprise interest grows',
+                    'Jun 15': 'ROI becomes clear',
+                    'Jun 22': 'Developer-first narrative',
+                    'Jun 29': 'Sustained developer interest',
+                    'Jul 6': 'Cursor raises huge round',
+                    'Jul 13': 'Multiple success stories',
+                    'Jul 20': 'Renaissance narrative peaks'
                 }
             }
         }

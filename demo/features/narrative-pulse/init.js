@@ -24,6 +24,14 @@ function initNarrativePulse() {
             if (window.NarrativePulse) {
                 window.NarrativePulse.init(container);
                 console.log('Narrative Pulse component initialized successfully');
+                
+                // Force update insight cards with dynamic data after initialization
+                setTimeout(() => {
+                    if (window.NarrativePulse.updateInsightCards) {
+                        window.NarrativePulse.updateInsightCards();
+                        console.log('Updated insight cards with dynamic data');
+                    }
+                }, 100);
             } else {
                 console.error('NarrativePulse object not found');
             }

@@ -11,29 +11,13 @@ const NarrativePulse = {
     chartWidth: 800,
     chartHeight: 300,
     padding: 50,
-    dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
+    dateLabels: [], // Will be populated from unified data
     xPositions: [], // Will be calculated in init
     hideTooltipTimer: null,
     mouseMoveFrame: null, // For requestAnimationFrame debouncing
     
-    // Time range data configurations
-    timeRangeConfigs: {
-        '7 days': {
-            dateLabels: ['Aug 22', 'Aug 23', 'Aug 24', 'Aug 25', 'Aug 26', 'Aug 27', 'Aug 28'],
-            dataPoints: 7,
-            interval: 'daily'
-        },
-        '30 days': {
-            dateLabels: ['Aug 1-7', 'Aug 8-14', 'Aug 15-21', 'Aug 22-28'],
-            dataPoints: 4,
-            interval: 'weekly'
-        },
-        '90 days': {
-            dateLabels: ['Jun 5', 'Jun 12', 'Jun 19', 'Jun 26', 'Jul 3', 'Jul 10', 'Jul 17', 'Jul 24', 'Jul 31', 'Aug 7', 'Aug 14', 'Aug 21', 'Aug 28'],
-            dataPoints: 13,
-            interval: 'weekly'
-        }
-    },
+    // Time range data configurations - will be populated from unified data
+    // timeRangeConfigs: {}, // Removed - using unified data config instead
     
     // Event listener management
     eventListeners: {
@@ -45,10 +29,10 @@ const NarrativePulse = {
     currentView: 'momentum',
     
     // Topic customization state
-    availableTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
-    selectedTopics: ['AI Agents', 'AI Infrastructure', 'Capital Efficiency', 'DePIN', 'Crypto/Web3', 'B2B SaaS', 'Developer Tools'],
+    availableTopics: [], // Will be populated from unified-data.js
+    selectedTopics: [], // Will be populated from unified-data.js
     tempSelectedTopics: [],
-    maxTopics: 7,
+    maxTopics: 5,
     panel: null,
     backdrop: null,
     hasChanges: false,
@@ -56,7 +40,7 @@ const NarrativePulse = {
     // Consensus sentiment data
     consensusData: {
         'AI Agents': {
-            'Aug 7': { positive: 70, neutral: 7, negative: 2, total: 79, percent: 88.6, level: 'Strong',
+            'Jun 29': { positive: 70, neutral: 7, negative: 2, total: 79, percent: 88.6, level: 'Strong',
                 advocates: [
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
                     { name: 'Reid Hoffman', firm: 'Greylock' },
@@ -64,7 +48,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 14': { positive: 93, neutral: 10, negative: 2, total: 105, percent: 88.6, level: 'Strong',
+            'Jul 6': { positive: 93, neutral: 10, negative: 2, total: 105, percent: 88.6, level: 'Strong',
                 advocates: [
                     { name: 'Sarah Guo', firm: 'Conviction' },
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
@@ -72,7 +56,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 115, neutral: 11, negative: 2, total: 128, percent: 89.8, level: 'Strong',
+            'Jul 13': { positive: 115, neutral: 11, negative: 2, total: 128, percent: 89.8, level: 'Strong',
                 advocates: [
                     { name: 'Reid Hoffman', firm: 'Greylock' },
                     { name: 'Sarah Guo', firm: 'Conviction' },
@@ -80,7 +64,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 127, neutral: 13, negative: 2, total: 142, percent: 89.4, level: 'Strong',
+            'Jul 20': { positive: 127, neutral: 13, negative: 2, total: 142, percent: 89.4, level: 'Strong',
                 advocates: [
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
                     { name: 'Reid Hoffman', firm: 'Greylock' },
@@ -90,14 +74,14 @@ const NarrativePulse = {
             }
         },
         'Capital Efficiency': {
-            'Aug 7': { positive: 38, neutral: 30, negative: 8, total: 76, percent: 50.0, level: 'Moderate',
+            'Jun 29': { positive: 38, neutral: 30, negative: 8, total: 76, percent: 50.0, level: 'Moderate',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'David Sacks', firm: 'Craft Ventures' }
                 ],
                 dissent: null
             },
-            'Aug 14': { positive: 49, neutral: 28, negative: 5, total: 82, percent: 59.8, level: 'Moderate',
+            'Jul 6': { positive: 49, neutral: 28, negative: 5, total: 82, percent: 59.8, level: 'Moderate',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
@@ -105,7 +89,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 61, neutral: 22, negative: 4, total: 87, percent: 70.1, level: 'Strong',
+            'Jul 13': { positive: 61, neutral: 22, negative: 4, total: 87, percent: 70.1, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Keith Rabois', firm: 'Founders Fund' },
@@ -113,7 +97,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 71, neutral: 14, negative: 3, total: 88, percent: 80.7, level: 'Strong',
+            'Jul 20': { positive: 71, neutral: 14, negative: 3, total: 88, percent: 80.7, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'Brad Gerstner', firm: 'Altimeter' },
@@ -121,7 +105,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 76, neutral: 11, negative: 2, total: 89, percent: 85.4, level: 'Strong',
+            'Jul 20': { positive: 76, neutral: 11, negative: 2, total: 89, percent: 85.4, level: 'Strong',
                 advocates: [
                     { name: 'Bill Gurley', firm: 'Benchmark' },
                     { name: 'David Sacks', firm: 'Craft Ventures' },
@@ -131,20 +115,20 @@ const NarrativePulse = {
             }
         },
         'DePIN': {
-            'Aug 7': { positive: 3, neutral: 5, negative: 3, total: 11, percent: 27.3, level: 'Weak',
+            'Jun 29': { positive: 3, neutral: 5, negative: 3, total: 11, percent: 27.3, level: 'Weak',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' }
                 ],
                 dissent: { quote: 'Still too early for institutional', author: 'Bill Gurley' }
             },
-            'Aug 14': { positive: 17, neutral: 12, negative: 5, total: 34, percent: 50.0, level: 'Moderate',
+            'Jul 6': { positive: 17, neutral: 12, negative: 5, total: 34, percent: 50.0, level: 'Moderate',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' }
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 62, neutral: 22, negative: 5, total: 89, percent: 69.7, level: 'Strong',
+            'Jul 13': { positive: 62, neutral: 22, negative: 5, total: 89, percent: 69.7, level: 'Strong',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' },
@@ -152,7 +136,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 117, neutral: 35, negative: 4, total: 156, percent: 75.0, level: 'Strong',
+            'Jul 20': { positive: 117, neutral: 35, negative: 4, total: 156, percent: 75.0, level: 'Strong',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Katie Haun', firm: 'Haun Ventures' },
@@ -160,7 +144,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 181, neutral: 18, negative: 2, total: 201, percent: 90.0, level: 'Peak',
+            'Jul 20': { positive: 181, neutral: 18, negative: 2, total: 201, percent: 90.0, level: 'Peak',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z crypto' },
                     { name: 'Marc Andreessen', firm: 'a16z' },
@@ -170,27 +154,27 @@ const NarrativePulse = {
             }
         },
         'B2B SaaS': {
-            'Aug 7': { positive: 16, neutral: 20, negative: 4, total: 40, percent: 40.0, level: 'Weak',
+            'Jun 29': { positive: 16, neutral: 20, negative: 4, total: 40, percent: 40.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
                     { name: 'Byron Deeter', firm: 'Bessemer' }
                 ],
                 dissent: { quote: 'Growth multiples unsustainable', author: 'Bill Gurley' }
             },
-            'Aug 14': { positive: 16, neutral: 21, negative: 4, total: 41, percent: 39.0, level: 'Weak',
+            'Jul 6': { positive: 16, neutral: 21, negative: 4, total: 41, percent: 39.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' },
                     { name: 'Byron Deeter', firm: 'Bessemer' }
                 ],
                 dissent: { quote: 'Consolidation inevitable', author: 'David Sacks' }
             },
-            'Aug 21': { positive: 13, neutral: 25, negative: 4, total: 42, percent: 31.0, level: 'Weak',
+            'Jul 13': { positive: 13, neutral: 25, negative: 4, total: 42, percent: 31.0, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' }
                 ],
                 dissent: { quote: 'AI will eat most SaaS', author: 'Marc Andreessen' }
             },
-            'Aug 28': { positive: 13, neutral: 26, negative: 4, total: 43, percent: 30.2, level: 'Weak',
+            'Jul 20': { positive: 13, neutral: 26, negative: 4, total: 43, percent: 30.2, level: 'Weak',
                 advocates: [
                     { name: 'Jason Lemkin', firm: 'SaaStr' }
                 ],
@@ -198,14 +182,14 @@ const NarrativePulse = {
             }
         },
         'Developer Tools': {
-            'Aug 7': { positive: 28, neutral: 12, negative: 2, total: 42, percent: 66.7, level: 'Moderate',
+            'Jun 29': { positive: 28, neutral: 12, negative: 2, total: 42, percent: 66.7, level: 'Moderate',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dylan Field', firm: 'Figma' }
                 ],
                 dissent: null
             },
-            'Aug 14': { positive: 32, neutral: 10, negative: 2, total: 44, percent: 72.7, level: 'Strong',
+            'Jul 6': { positive: 32, neutral: 10, negative: 2, total: 44, percent: 72.7, level: 'Strong',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dylan Field', firm: 'Figma' },
@@ -213,7 +197,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 38, neutral: 8, negative: 2, total: 48, percent: 79.2, level: 'Strong',
+            'Jul 13': { positive: 38, neutral: 8, negative: 2, total: 48, percent: 79.2, level: 'Strong',
                 advocates: [
                     { name: 'Guillermo Rauch', firm: 'Vercel' },
                     { name: 'Dev Ittycheria', firm: 'MongoDB' },
@@ -221,7 +205,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 52, neutral: 10, negative: 2, total: 64, percent: 81.3, level: 'Strong',
+            'Jul 20': { positive: 52, neutral: 10, negative: 2, total: 64, percent: 81.3, level: 'Strong',
                 advocates: [
                     { name: 'Nat Friedman', firm: 'Former GitHub' },
                     { name: 'Dev Ittycheria', firm: 'MongoDB' },
@@ -231,28 +215,28 @@ const NarrativePulse = {
             }
         },
         'Crypto/Web3': {
-            'Aug 7': { positive: 16, neutral: 10, negative: 2, total: 28, percent: 57.1, level: 'Building',
+            'Jun 29': { positive: 16, neutral: 10, negative: 2, total: 28, percent: 57.1, level: 'Building',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z' },
                     { name: 'David Roebuck', firm: 'Electric Capital' }
                 ],
                 dissent: null
             },
-            'Aug 14': { positive: 14, neutral: 9, negative: 2, total: 25, percent: 56.0, level: 'Building',
+            'Jul 6': { positive: 14, neutral: 9, negative: 2, total: 25, percent: 56.0, level: 'Building',
                 advocates: [
                     { name: 'Chris Dixon', firm: 'a16z' },
                     { name: 'Jesse Walden', firm: 'Variant' }
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 12, neutral: 8, negative: 2, total: 22, percent: 54.5, level: 'Weak',
+            'Jul 13': { positive: 12, neutral: 8, negative: 2, total: 22, percent: 54.5, level: 'Weak',
                 advocates: [
                     { name: 'Linda Xie', firm: 'Scalar Capital' },
                     { name: 'Chris Dixon', firm: 'a16z' }
                 ],
                 dissent: { name: 'Howard Marks', firm: 'Oaktree', quote: 'Still seeking killer use cases' }
             },
-            'Aug 28': { positive: 15, neutral: 9, negative: 2, total: 26, percent: 57.7, level: 'Building',
+            'Jul 20': { positive: 15, neutral: 9, negative: 2, total: 26, percent: 57.7, level: 'Building',
                 advocates: [
                     { name: 'Jesse Walden', firm: 'Variant' },
                     { name: 'Chris Dixon', firm: 'a16z' },
@@ -262,14 +246,14 @@ const NarrativePulse = {
             }
         },
         'AI Infrastructure': {
-            'Aug 7': { positive: 38, neutral: 16, negative: 4, total: 58, percent: 65.5, level: 'Moderate',
+            'Jun 29': { positive: 38, neutral: 16, negative: 4, total: 58, percent: 65.5, level: 'Moderate',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' }
                 ],
                 dissent: null
             },
-            'Aug 14': { positive: 56, neutral: 16, negative: 4, total: 76, percent: 73.7, level: 'Strong',
+            'Jul 6': { positive: 56, neutral: 16, negative: 4, total: 76, percent: 73.7, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' },
@@ -277,7 +261,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 21': { positive: 82, neutral: 14, negative: 4, total: 100, percent: 82.0, level: 'Strong',
+            'Jul 13': { positive: 82, neutral: 14, negative: 4, total: 100, percent: 82.0, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Soumith Chintala', firm: 'Meta' },
@@ -285,7 +269,7 @@ const NarrativePulse = {
                 ],
                 dissent: null
             },
-            'Aug 28': { positive: 114, neutral: 20, negative: 4, total: 138, percent: 82.6, level: 'Strong',
+            'Jul 20': { positive: 114, neutral: 20, negative: 4, total: 138, percent: 82.6, level: 'Strong',
                 advocates: [
                     { name: 'Martin Casado', firm: 'a16z' },
                     { name: 'Ali Ghodsi', firm: 'Databricks' },
@@ -298,7 +282,7 @@ const NarrativePulse = {
     
     // Rich data for tooltips
     topicDataByDate: {
-        'Aug 7': {
+        'Jun 29': {
             'AI Agents': { mentions: 79, weekOverWeek: 0, change: 0, podcasts: ['20VC', 'All-In'], quote: 'AI will eat software' },
             'Capital Efficiency': { mentions: 76, weekOverWeek: 0, change: 0, podcasts: ['Acquired'], quote: 'Do more with less' },
             'DePIN': { mentions: 11, weekOverWeek: 0, change: 0, podcasts: ['Bankless'], quote: 'Infrastructure revolution' },
@@ -312,7 +296,7 @@ const NarrativePulse = {
                 { title: 'Why DePIN Matters Now', podcast: 'Bankless' }
             ]
         },
-        'Aug 14': {
+        'Jul 6': {
             'AI Agents': { mentions: 105, weekOverWeek: 33, change: 26, podcasts: ['20VC', 'Invest Like Best'], quote: 'Agents are the new apps' },
             'Capital Efficiency': { mentions: 82, weekOverWeek: 8, change: 6, podcasts: ['This Week in Startups'], quote: 'Efficiency is the new growth' },
             'DePIN': { mentions: 34, weekOverWeek: 209, change: 23, podcasts: ['Bankless', 'All-In'], quote: 'DePIN summer is here' },
@@ -326,7 +310,7 @@ const NarrativePulse = {
                 { title: 'Capital Efficiency Playbook', podcast: 'This Week in Startups' }
             ]
         },
-        'Aug 21': {
+        'Jul 13': {
             'AI Agents': { mentions: 128, weekOverWeek: 22, change: 23, podcasts: ['All-In', 'a16z Podcast'], quote: 'Vertical AI dominance inevitable' },
             'Capital Efficiency': { mentions: 87, weekOverWeek: 6, change: 5, podcasts: ['20VC'], quote: 'Capital discipline wins' },
             'DePIN': { mentions: 89, weekOverWeek: 162, change: 55, podcasts: ['Bankless', 'Unchained'], quote: 'Physical meets digital' },
@@ -340,7 +324,7 @@ const NarrativePulse = {
                 { title: 'Capital Allocation Strategy', podcast: '20VC' }
             ]
         },
-        'Aug 28': {
+        'Jul 20': {
             'AI Agents': { mentions: 142, weekOverWeek: 11, change: 14, podcasts: ['20VC', 'All-In', 'Invest Like Best'], quote: 'Every company needs agents' },
             'Capital Efficiency': { mentions: 88, weekOverWeek: 1, change: 1, podcasts: ['Acquired', 'a16z Podcast'], quote: 'New reality for 2025 fundraising' },
             'DePIN': { mentions: 156, weekOverWeek: 75, change: 67, podcasts: ['Bankless', 'All-In'], quote: 'Infrastructure gold rush' },
@@ -356,209 +340,11 @@ const NarrativePulse = {
         }
     },
     
-    // Complete time range data from narrative-pulse-complete-data.md
+    // Time range data - populated from unified data source
     timeRangeData: {
-        '7 days': {
-            topics: {
-                'AI Agents': {
-                    color: '#4a7c59',
-                    displayMomentum: '+59%',
-                    dataPoints: [3, 1, 2, 6, 8, 9, 6],
-                    consensus: [89, 88, 89, 90, 89, 88, 89],
-                    startValue: 22,
-                    endValue: 35,
-                    consensusLevel: 'Strong'
-                },
-                'AI Infrastructure': {
-                    color: '#a87c68',
-                    displayMomentum: '+37%',
-                    dataPoints: [5, 2, 3, 8, 10, 12, 12],
-                    consensus: [91, 91, 92, 92, 93, 93, 94],
-                    startValue: 38,
-                    endValue: 52,
-                    consensusLevel: 'Peak'
-                },
-                'Capital Efficiency': {
-                    color: '#f4a261',
-                    displayMomentum: '+15%',
-                    dataPoints: [2, 0, 1, 3, 4, 3, 2],
-                    consensus: [81, 82, 83, 84, 85, 85, 85],
-                    startValue: 13,
-                    endValue: 15,
-                    consensusLevel: 'Strong'
-                },
-                'DePIN': {
-                    color: '#5a6c8c',
-                    displayMomentum: '+78%',
-                    dataPoints: [2, 1, 1, 5, 7, 8, 8],
-                    consensus: [75, 78, 82, 85, 88, 90, 90],
-                    startValue: 18,
-                    endValue: 32,
-                    consensusLevel: 'Building'
-                },
-                'Crypto/Web3': {
-                    color: '#5c7cfa',
-                    displayMomentum: '+18%',
-                    dataPoints: [3, 2, 2, 4, 5, 5, 5],
-                    consensus: [60, 62, 64, 66, 68, 70, 72],
-                    startValue: 22,
-                    endValue: 26,
-                    consensusLevel: 'Moderate'
-                },
-                'B2B SaaS': {
-                    color: '#c77d7d',
-                    displayMomentum: '-20%',
-                    dataPoints: [1, 0, 1, 2, 2, 1, 1],
-                    consensus: [30, 30, 30, 30, 30, 30, 30],
-                    startValue: 10,
-                    endValue: 8,
-                    consensusLevel: 'Weak'
-                },
-                'Developer Tools': {
-                    color: '#8a68a8',
-                    displayMomentum: '+29%',
-                    dataPoints: [2, 1, 1, 3, 4, 4, 3],
-                    consensus: [81, 83, 85, 86, 87, 87, 87],
-                    startValue: 14,
-                    endValue: 18,
-                    consensusLevel: 'Strong'
-                }
-            }
-        },
-        '30 days': {
-            topics: {
-                'AI Agents': {
-                    color: '#4a7c59',
-                    displayMomentum: '+337%',
-                    dataPoints: [8, 15, 22, 35, 35],  // Aug 7, 14, 21, 28
-                    consensus: [60, 70, 80, 90, 90],
-                    startValue: 8,
-                    endValue: 35,
-                    consensusLevel: 'Strong'
-                },
-                'AI Infrastructure': {
-                    color: '#a87c68',
-                    displayMomentum: '+333%',
-                    dataPoints: [12, 25, 38, 52, 52],  // Aug 7, 14, 21, 28
-                    consensus: [85, 88, 90, 94, 94],
-                    startValue: 12,
-                    endValue: 52,
-                    consensusLevel: 'Peak'
-                },
-                'Capital Efficiency': {
-                    color: '#f4a261',
-                    displayMomentum: '+25%',
-                    dataPoints: [12, 14, 13, 15, 15],  // Aug 7, 14, 21, 28
-                    consensus: [70, 75, 73, 85, 85],
-                    startValue: 12,
-                    endValue: 15,
-                    consensusLevel: 'Strong'
-                },
-                'DePIN': {
-                    color: '#5a6c8c',
-                    displayMomentum: '+1500%',
-                    dataPoints: [2, 8, 18, 32, 32],  // Aug 7, 14, 21, 28
-                    consensus: [30, 50, 70, 90, 90],
-                    startValue: 2,
-                    endValue: 32,
-                    consensusLevel: 'Peak'
-                },
-                'Crypto/Web3': {
-                    color: '#5c7cfa',
-                    displayMomentum: '-7%',
-                    dataPoints: [28, 25, 22, 26, 26],  // Aug 7, 14, 21, 28
-                    consensus: [57, 52, 50, 58, 58],
-                    startValue: 28,
-                    endValue: 26,
-                    consensusLevel: 'Moderate'
-                },
-                'B2B SaaS': {
-                    color: '#c77d7d',
-                    displayMomentum: '-47%',
-                    dataPoints: [15, 12, 10, 8, 8],  // Aug 7, 14, 21, 28
-                    consensus: [33, 25, 20, 20, 20],
-                    startValue: 15,
-                    endValue: 8,
-                    consensusLevel: 'Weak'
-                },
-                'Developer Tools': {
-                    color: '#8a68a8',
-                    displayMomentum: '+200%',
-                    dataPoints: [6, 10, 14, 18, 18],  // Aug 7, 14, 21, 28
-                    consensus: [83, 80, 86, 89, 89],
-                    startValue: 6,
-                    endValue: 18,
-                    consensusLevel: 'Strong'
-                }
-            }
-        },
-        '90 days': {
-            topics: {
-                'AI Agents': {
-                    color: '#4a7c59',
-                    displayMomentum: '+775%',
-                    dataPoints: [4, 5, 6, 7, 8, 9, 10, 11, 12, 8, 15, 22, 35, 35],  // Last 5 match 30-day
-                    consensus: [30, 35, 40, 45, 50, 55, 60, 65, 70, 60, 70, 80, 90, 90],
-                    startValue: 4,
-                    endValue: 35,
-                    consensusLevel: 'Strong'
-                },
-                'AI Infrastructure': {
-                    color: '#a87c68',
-                    displayMomentum: '+867%',
-                    dataPoints: [6, 8, 10, 12, 15, 18, 22, 26, 30, 12, 25, 38, 52, 52],  // Last 5 match 30-day
-                    consensus: [40, 45, 50, 55, 65, 70, 75, 80, 85, 85, 88, 90, 94, 94],
-                    startValue: 6,
-                    endValue: 52,
-                    consensusLevel: 'Peak'
-                },
-                'Capital Efficiency': {
-                    color: '#f4a261',
-                    displayMomentum: '+36%',
-                    dataPoints: [11, 10, 9, 8, 8, 9, 10, 11, 12, 12, 14, 13, 15, 15],  // Last 5 match 30-day
-                    consensus: [75, 73, 65, 60, 58, 60, 65, 70, 73, 70, 75, 73, 85, 85],
-                    startValue: 11,
-                    endValue: 15,
-                    consensusLevel: 'Strong'
-                },
-                'DePIN': {
-                    color: '#5a6c8c',
-                    displayMomentum: '+3100%',
-                    dataPoints: [1, 1, 1, 2, 2, 3, 4, 5, 6, 2, 8, 18, 32, 32],  // Last 5 match 30-day
-                    consensus: [10, 10, 10, 15, 20, 25, 30, 35, 40, 30, 50, 70, 90, 90],
-                    startValue: 1,
-                    endValue: 32,
-                    consensusLevel: 'Peak'
-                },
-                'Crypto/Web3': {
-                    color: '#5c7cfa',
-                    displayMomentum: '-28%',
-                    dataPoints: [36, 34, 32, 30, 28, 26, 24, 23, 22, 28, 25, 22, 26, 26],  // Last 5 match 30-day
-                    consensus: [65, 63, 60, 58, 55, 50, 48, 45, 43, 57, 52, 50, 58, 58],
-                    startValue: 36,
-                    endValue: 26,
-                    consensusLevel: 'Moderate'
-                },
-                'B2B SaaS': {
-                    color: '#c77d7d',
-                    displayMomentum: '-60%',
-                    dataPoints: [20, 19, 18, 17, 16, 15, 14, 13, 12, 15, 12, 10, 8, 8],  // Last 5 match 30-day
-                    consensus: [35, 33, 32, 30, 28, 27, 26, 25, 24, 33, 25, 20, 20, 20],
-                    startValue: 20,
-                    endValue: 8,
-                    consensusLevel: 'Weak'
-                },
-                'Developer Tools': {
-                    color: '#8a68a8',
-                    displayMomentum: '+260%',
-                    dataPoints: [5, 5, 6, 6, 7, 8, 9, 10, 11, 6, 10, 14, 18, 18],  // Last 5 match 30-day
-                    consensus: [65, 65, 68, 70, 73, 75, 78, 80, 82, 83, 80, 86, 89, 89],
-                    startValue: 5,
-                    endValue: 18,
-                    consensusLevel: 'Strong'
-                }
-            }
-        }
+        '7 days': { topics: {} },
+        '30 days': { topics: {} },
+        '90 days': { topics: {} }
     },
     
     // Initialize the component
@@ -577,6 +363,9 @@ const NarrativePulse = {
             return;
         }
         
+        // Initialize data from unified data source
+        this.initializeDataFromUnifiedSource();
+        
         // Initialize data if not already set
         if (!this.topicDataByDate) {
             this.topicDataByDate = NarrativePulse.topicDataByDate;
@@ -585,18 +374,21 @@ const NarrativePulse = {
         // Calculate consistent x-positions for 5 data points
         // Set initial time range
         this.currentTimeRange = '7 days';
-        const config = this.timeRangeConfigs[this.currentTimeRange];
+        const config = window.unifiedData.narrativePulse.config.timeRanges[this.currentTimeRange];
         this.dateLabels = config.dateLabels;
         
         // Calculate X positions
         this.calculateXPositions();
         
+        // Debug initial setup
+        // NarrativePulse initialized
+        
         // Get panel elements (now at document level for proper viewport positioning)
         this.panel = document.querySelector('.topic-customization-panel');
         this.backdrop = document.querySelector('.topic-customization-backdrop');
         
-        // Load saved topics from localStorage
-        this.loadSelectedTopics();
+        // Load saved topics from localStorage - now handled in initializeDataFromUnifiedSource
+        // this.loadSelectedTopics();
         
         this.bindEvents();
         this.currentView = 'momentum'; // Set initial view
@@ -703,11 +495,29 @@ const NarrativePulse = {
         this.xPositions = this.dateLabels.map((_, i) => 
             this.padding + (i * ((this.chartWidth - 2 * this.padding) / (this.dateLabels.length - 1)))
         );
+        
     },
     
     // Get current time range data
     getCurrentData: function() {
         return this.timeRangeData[this.currentTimeRange];
+    },
+    
+    // Calculate momentum percentage from data points
+    calculateMomentum: function(dataPoints) {
+        if (!dataPoints || dataPoints.length < 2) return '0%';
+        
+        const start = dataPoints[0];
+        const end = dataPoints[dataPoints.length - 1];
+        
+        if (start === 0) {
+            return end > 0 ? `+${end}%` : '0%';
+        }
+        
+        const percentChange = ((end - start) / start) * 100;
+        const rounded = Math.round(percentChange);
+        
+        return `${rounded >= 0 ? '+' : ''}${rounded}%`;
     },
     
     // Get topic data for current time range
@@ -763,10 +573,18 @@ const NarrativePulse = {
         // Update UI text
         timeText.textContent = this.currentTimeRange;
         
+        // Dispatch custom event for other components to listen to
+        window.dispatchEvent(new CustomEvent('timeRangeChanged', {
+            detail: { timeRange: this.currentTimeRange }
+        }));
+        
         // Update date labels and recalculate x positions
-        const config = this.timeRangeConfigs[this.currentTimeRange];
+        const config = window.unifiedData.narrativePulse.config.timeRanges[this.currentTimeRange];
         this.dateLabels = config.dateLabels;
         this.calculateXPositions();
+        
+        // Time range changed
+        
         
         // Refresh current view with new data
         const chartContent = this.container.querySelector('#chartContent');
@@ -1036,7 +854,7 @@ const NarrativePulse = {
                         html += `
                             <g class="volume-bar-segment" data-date="${date}" data-topic="${topic}" data-mentions="${mentions}">
                                 <rect x="${x}" y="${currentY}" width="${barWidth}" height="${barHeight}"
-                                      fill="${topicData.color}" opacity="0.8" rx="2"
+                                      fill="${topicData.color}" opacity="0.8"
                                       class="volume-bar-rect"/>
                                 <!-- Hover dot (initially hidden) - positioned at top of this segment -->
                                 <circle cx="${x + barWidth/2}" cy="${currentY - 5}" r="4" 
@@ -1137,31 +955,7 @@ const NarrativePulse = {
                     `;
                 });
                 
-                // Add top episodes if available in current data
-                if (currentData.topEpisodes && currentData.topEpisodes[date]) {
-                    const episodes = currentData.topEpisodes[date];
-                    html += `
-                        </div>
-                        <div class="tooltip-divider"></div>
-                        <div class="tooltip-episodes">
-                            <div class="episodes-label">Top episodes this day:</div>
-                    `;
-                    
-                    episodes.forEach((episode, index) => {
-                        html += `
-                            <div class="episode-row">
-                                <span class="episode-number">${index + 1}.</span>
-                                <div class="episode-content">
-                                    <span class="episode-title">${episode.title}</span>
-                                    <span class="episode-podcast">- ${episode.podcast}</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                }
-                
-                html += '</div>';
+                html += '</div></div>';
                 
                 // Reset tooltip and add view-specific class
                 tooltip.className = 'chart-tooltip chart-tooltip-volume';
@@ -1402,6 +1196,14 @@ const NarrativePulse = {
         
         cellGroups.forEach(cellGroup => {
             const handleCellMouseEnter = (e) => {
+                e.stopPropagation(); // Prevent event bubbling
+                
+                // Clear any existing hide timer
+                if (this.hideTooltipTimer) {
+                    clearTimeout(this.hideTooltipTimer);
+                    this.hideTooltipTimer = null;
+                }
+                
                 const topic = cellGroup.dataset.topic;
                 const date = cellGroup.dataset.date;
                 const percent = parseFloat(cellGroup.dataset.percent);
@@ -1437,7 +1239,8 @@ const NarrativePulse = {
                 this.updateTooltipPosition(e);
             };
             
-            const handleCellMouseLeave = () => {
+            const handleCellMouseLeave = (e) => {
+                e.stopPropagation(); // Prevent event bubbling
                 this.hideTooltipWithDelay();
             };
             
@@ -1462,14 +1265,14 @@ const NarrativePulse = {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // Initial position (right of cursor)
-        let tooltipX = x + 15;
-        let tooltipY = y - 30;
-
-        // Get tooltip dimensions
+        // Get tooltip dimensions first
         const tooltipRect = tooltip.getBoundingClientRect();
         const tooltipWidth = tooltipRect.width;
         const tooltipHeight = tooltipRect.height;
+
+        // Initial position (right of cursor, above cursor)
+        let tooltipX = x + 15;
+        let tooltipY = y - 25; // Fixed offset above cursor - between original (-30) and center
 
         // Adjust horizontal position if tooltip goes off-screen
         if (tooltipX + tooltipWidth > rect.width - 20) {
@@ -1477,10 +1280,12 @@ const NarrativePulse = {
         }
 
         // Adjust vertical position if tooltip goes off-screen
-        // Increase the threshold to ensure tooltip isn't cut off when chart is near top of viewport
+        // Check if too close to top
         if (tooltipY < 20) {
-            tooltipY = y + 30; // Position below cursor with more clearance
-        } else if (tooltipY + tooltipHeight > rect.height - 10) {
+            tooltipY = 20;
+        } 
+        // Check if too close to bottom
+        else if (tooltipY + tooltipHeight > rect.height - 10) {
             tooltipY = rect.height - tooltipHeight - 10;
         }
 
@@ -1538,7 +1343,7 @@ const NarrativePulse = {
             const topicData = currentData.topics[topic];
             const yScale = this.calculateYScale(topicData.dataPoints);
             pathConfigs[topic] = {
-                momentum: topicData.displayMomentum,
+                momentum: this.calculateMomentum(topicData.dataPoints),
                 color: topicData.color,
                 yStart: yScale.start,
                 yEnd: yScale.end,
@@ -1560,14 +1365,15 @@ const NarrativePulse = {
         const range = maxDataValue - minDataValue;
         const padding = range * 0.1;
         const scaleMax = Math.ceil((maxDataValue + padding) / 10) * 10;
-        const scaleMin = Math.floor((minDataValue - padding) / 10) * 10;
+        const scaleMin = 0; // Always start at 0, never go negative
         
         // Calculate Y-axis labels
         const yAxisSteps = 5;
         const stepSize = (scaleMax - scaleMin) / (yAxisSteps - 1);
         const yAxisLabels = [];
         for (let i = 0; i < yAxisSteps; i++) {
-            yAxisLabels.push(Math.round(scaleMax - (i * stepSize)));
+            const value = Math.round(scaleMax - (i * stepSize));
+            yAxisLabels.push(Math.max(0, value)); // Ensure no negative values
         }
         
         chartContent.innerHTML = `
@@ -1651,6 +1457,81 @@ const NarrativePulse = {
         }, 50);
     },
     
+    // Topic mapping between unified data and component's internal names
+    unifiedToInternalTopicMap: {
+        'AI Infrastructure': 'AI Infrastructure',  // Same name
+        'Enterprise Agents': 'AI Agents',
+        'Defense Tech': 'Developer Tools',  // Map to similar topic for demo
+        'Exit Strategies': 'Capital Efficiency',  // Map to similar topic
+        'Vertical AI': 'Vertical SaaS',
+        'Traditional SaaS': 'B2B SaaS',
+        'Climate Tech': 'Crypto/Web3'  // Map to available slot
+    },
+    
+    // Initialize data from unified data source
+    initializeDataFromUnifiedSource: function() {
+        // Check if narrativePulseData is available (created by unified-data-adapter.js)
+        if (!window.narrativePulseData) {
+            console.warn('NarrativePulse: narrativePulseData not found, waiting...');
+            // Try again after a short delay
+            setTimeout(() => this.initializeDataFromUnifiedSource(), 100);
+            return;
+        }
+        
+        // Loading data from narrativePulseData
+        
+        // Set timeRangeData from narrativePulseData
+        this.timeRangeData = {
+            '7 days': window.narrativePulseData.sevenDayData,
+            '30 days': window.narrativePulseData.thirtyDayData,
+            '90 days': window.narrativePulseData.ninetyDayData
+        };
+        
+        // Extract available topics from the data
+        const topics = Object.keys(window.narrativePulseData.sevenDayData.topics);
+        this.availableTopics = [...topics];
+        
+        // Load saved topics or use first maxTopics
+        const savedTopics = localStorage.getItem('narrativePulse_selectedTopics');
+        if (savedTopics) {
+            try {
+                const parsed = JSON.parse(savedTopics);
+                this.selectedTopics = parsed.filter(topic => topics.includes(topic));
+            } catch (e) {
+                console.error('Failed to parse saved topics:', e);
+                this.selectedTopics = topics.slice(0, this.maxTopics);
+            }
+        } else {
+            this.selectedTopics = topics.slice(0, this.maxTopics);
+        }
+        
+        // If no topics selected, use defaults
+        if (this.selectedTopics.length === 0) {
+            this.selectedTopics = topics.slice(0, this.maxTopics);
+        }
+        
+        // Update time range configs with date labels from the data
+        // IMPORTANT: Use unified data config instead to ensure consistency
+        
+        // Comment out the old approach - we'll use unified data directly
+        // this.timeRangeConfigs = {
+        //     '7 days': {
+        //         dateLabels: window.narrativePulseData.sevenDayData.timeRange.labels,
+        //         dataPoints: window.narrativePulseData.sevenDayData.timeRange.dataPoints
+        //     },
+        //     '30 days': {
+        //         dateLabels: window.narrativePulseData.thirtyDayData.timeRange.labels,
+        //         dataPoints: window.narrativePulseData.thirtyDayData.timeRange.dataPoints
+        //     },
+        //     '90 days': {
+        //         dateLabels: window.narrativePulseData.ninetyDayData.timeRange.labels,
+        //         dataPoints: window.narrativePulseData.ninetyDayData.timeRange.dataPoints
+        //     }
+        // };
+        
+        // Topics loaded successfully
+    },
+    
     // Initialize momentum view interactions
     initMomentumView: function() {
         const chartContent = this.container.querySelector('#chartContent');
@@ -1700,12 +1581,15 @@ const NarrativePulse = {
                 const svgRect = svg.getBoundingClientRect();
                 const x = e.clientX - svgRect.left;
                 
-                // Map client X to SVG X coordinates
+                // Map client X to SVG viewBox coordinates
+                // The SVG has viewBox="0 0 800 280" so we need to map from rendered width to viewBox width
                 const containerWidth = svgRect.width;
-                const svgWidth = this.chartWidth; // Use actual chart width
-                const svgX = (x / containerWidth) * svgWidth;
+                const viewBoxWidth = 800; // From viewBox="0 0 800 280"
+                let svgX = (x / containerWidth) * viewBoxWidth;
                 
+                // Apply offset for 90-day view with 13 data points
                 // Find nearest date index based on SVG coordinates
+                // Simple nearest-point detection - same as 7-day and 30-day views
                 let nearestIndex = 0;
                 let minDistance = Math.abs(svgX - this.xPositions[0]);
                 
@@ -1717,8 +1601,25 @@ const NarrativePulse = {
                     }
                 }
                 
+                
+                
+                
                 // Update vertical line position
-                const nearestX = this.xPositions[nearestIndex];
+                let nearestX = this.xPositions[nearestIndex];
+                
+                // Apply offset for specific dates in 90-day view to fix May 2 and May 9 hover issue
+                if (this.currentTimeRange === '90 days') {
+                    const dateLabel = this.dateLabels[nearestIndex] || '';
+                    // Apply different offsets for each date
+                    if (dateLabel === 'May 2') {
+                        // May 2 needs to shift right by 8 pixels (was 5px too far left)
+                        nearestX = nearestX + 8;
+                    } else if (dateLabel === 'May 9') {
+                        // May 9 needs only 3 pixels
+                        nearestX = nearestX + 3;
+                    }
+                }
+                
                 if (verticalTracker) {
                     verticalTracker.setAttribute('x1', nearestX);
                     verticalTracker.setAttribute('x2', nearestX);
@@ -1773,11 +1674,7 @@ const NarrativePulse = {
         const date = this.dateLabels[dateIndex];
         const currentData = this.getCurrentData();
         
-        // For 30-day view, try to use the old structure if available
-        let dateData = null;
-        if (this.currentTimeRange === '30 days' && this.topicDataByDate && this.topicDataByDate[date]) {
-            dateData = this.topicDataByDate[date];
-        }
+        // Tooltip data ready
         
         // Clear hide timer
         if (this.hideTooltipTimer) {
@@ -1794,40 +1691,47 @@ const NarrativePulse = {
         const [month, day] = date.split(' ');
         const formattedDate = `${month} ${day}, 2025`;
         
-        // Build topic data from the new structure
+        // Build topic data from the unified structure
         const topicStats = [];
+        let dailyQuote = null;
         
-        if (dateData) {
-            // Use old structure for 30-day view
-            const topics = Object.entries(dateData)
-                .filter(([key]) => key !== 'topEpisodes' && this.selectedTopics.includes(key))
-                .sort((a, b) => b[1].mentions - a[1].mentions);
-            
-            topics.forEach(([topic, data]) => {
+        // Extract data based on time range
+        this.selectedTopics.forEach(topic => {
+            const topicData = currentData.topics[topic];
+            if (topicData && topicData.dataPoints[dateIndex] !== undefined) {
+                // Calculate week-over-week change if possible
+                let weekOverWeek = 0;
+                if (this.currentTimeRange === '7 days' && dateIndex >= 1) {
+                    const previousValue = topicData.dataPoints[dateIndex - 1];
+                    if (previousValue > 0) {
+                        weekOverWeek = Math.round(((topicData.dataPoints[dateIndex] - previousValue) / previousValue) * 100);
+                    }
+                }
+                
+                // Get quote from unified data if available
+                let quote = null;
+                if (this.currentTimeRange === '7 days' && topicData.quotes && topicData.quotes[date]) {
+                    quote = topicData.quotes[date];
+                }
+                
+                // Store the first quote we find as the daily quote
+                if (!dailyQuote && quote) {
+                    dailyQuote = quote;
+                }
+                
                 topicStats.push({
                     topic: topic,
-                    mentions: data.mentions,
-                    color: this.getTopicColor(topic),
-                    weekOverWeek: data.weekOverWeek || 0
+                    mentions: topicData.dataPoints[dateIndex],
+                    color: topicData.color,
+                    weekOverWeek: weekOverWeek,
+                    quote: quote,
+                    momentum: this.calculateMomentum(topicData.dataPoints)
                 });
-            });
-        } else {
-            // Use new structure for 7-day and 90-day views
-            this.selectedTopics.forEach(topic => {
-                const topicData = currentData.topics[topic];
-                if (topicData && topicData.dataPoints[dateIndex] !== undefined) {
-                    topicStats.push({
-                        topic: topic,
-                        mentions: topicData.dataPoints[dateIndex],
-                        color: topicData.color,
-                        weekOverWeek: 0 // Not available in new structure
-                    });
-                }
-            });
-            
-            // Sort by mentions
-            topicStats.sort((a, b) => b.mentions - a.mentions);
-        }
+            }
+        });
+        
+        // Sort by mentions
+        topicStats.sort((a, b) => b.mentions - a.mentions);
         
         // Build tooltip HTML
         let html = `
@@ -1837,8 +1741,9 @@ const NarrativePulse = {
         `;
         
         topicStats.forEach(stat => {
-            const changeText = stat.weekOverWeek > 0 ? 
-                `+${stat.weekOverWeek}% w/w` : '';
+            const changeText = stat.weekOverWeek !== 0 ? 
+                (stat.weekOverWeek > 0 ? `+${stat.weekOverWeek}%` : `${stat.weekOverWeek}%`) : 
+                (stat.momentum ? stat.momentum : '');
             const isFaded = stat.mentions < 10;
             
             html += `
@@ -1850,6 +1755,7 @@ const NarrativePulse = {
                     <div class="topic-stats">
                         ${stat.mentions} mentions${changeText ? ' • ' + changeText : ''}
                     </div>
+                    ${stat.quote ? `<div class="topic-quote">"${stat.quote}"</div>` : ''}
                 </div>
             `;
         });
@@ -1876,7 +1782,8 @@ const NarrativePulse = {
             'B2B SaaS': '#c77d7d',
             'Developer Tools': '#8a68a8',
             'Vertical SaaS': '#7d9c8d',
-            'AI Infrastructure': '#a87c68'
+            'AI Infrastructure': '#a87c68',
+            'Crypto/Web3': '#68a8a8'
         };
         return colors[topic] || '#6b7280';
     },
@@ -1950,7 +1857,7 @@ const NarrativePulse = {
                     }
                 }, 200); // Match the opacity transition duration
             }
-        }, 100);
+        }, 300); // Increased delay for consensus view
     },
     
     // Create loading skeleton
@@ -2018,7 +1925,7 @@ const NarrativePulse = {
     
     // Topic Customization Methods
     loadSelectedTopics: function() {
-        const saved = localStorage.getItem('narrativePulse.selectedTopics');
+        const saved = localStorage.getItem('narrativePulse_selectedTopics');
         if (saved) {
             try {
                 const savedTopics = JSON.parse(saved);
@@ -2026,18 +1933,19 @@ const NarrativePulse = {
                 this.selectedTopics = savedTopics.filter(topic => 
                     this.availableTopics.includes(topic)
                 );
-                // Ensure we have at least one topic
-                if (this.selectedTopics.length === 0) {
-                    this.selectedTopics = [...this.availableTopics];
-                }
             } catch (e) {
-                console.error('Error loading saved topics:', e);
+                console.error('Failed to parse saved topics:', e);
             }
+        }
+        
+        // If no saved topics or no valid topics, select first maxTopics from available
+        if (this.selectedTopics.length === 0 && this.availableTopics.length > 0) {
+            this.selectedTopics = [...this.availableTopics].slice(0, this.maxTopics);
         }
     },
     
     saveSelectedTopics: function() {
-        localStorage.setItem('narrativePulse.selectedTopics', JSON.stringify(this.selectedTopics));
+        localStorage.setItem('narrativePulse_selectedTopics', JSON.stringify(this.selectedTopics));
     },
     
     openCustomizationPanel: function() {
@@ -2066,22 +1974,34 @@ const NarrativePulse = {
     
     renderTopicList: function() {
         const topicList = document.querySelector('#topicList');
+        if (!topicList) {
+            console.error('Topic list element not found');
+            return;
+        }
         topicList.innerHTML = '';
         
         // Store the initial selected topics for comparison
         this.tempSelectedTopics = [...this.selectedTopics];
         
-        // Topic stats for the demo
-        const topicStats = {
-            'AI Agents': { momentum: '+85%', mentions: 147 },
-            'AI Infrastructure': { momentum: '+92%', mentions: 156 },
-            'Capital Efficiency': { momentum: '+17%', mentions: 89 },
-            'DePIN': { momentum: '+190%', mentions: 201 },
-            'Crypto/Web3': { momentum: '+45%', mentions: 78 },
-            'B2B SaaS': { momentum: '+3%', mentions: 43 },
-            'Developer Tools': { momentum: '+47%', mentions: 94 },
-            'Vertical SaaS': { momentum: '+65%', mentions: 112 }
-        };
+        // Generate topic stats dynamically from current data
+        const topicStats = {};
+        const currentData = this.getCurrentData();
+        // Rendering topic list
+        
+        // Build stats from the actual data
+        this.availableTopics.forEach(topic => {
+            const topicData = currentData.topics[topic];
+            if (topicData) {
+                topicStats[topic] = {
+                    momentum: this.calculateMomentum(topicData.dataPoints),
+                    mentions: topicData.mentions || topicData.weekTotal || 
+                             (topicData.dataPoints ? topicData.dataPoints.reduce((a, b) => a + b, 0) : 0)
+                };
+            } else {
+                // Fallback for missing topics
+                topicStats[topic] = { momentum: '0%', mentions: 0 };
+            }
+        });
         
         this.availableTopics.forEach(topic => {
             const stats = topicStats[topic];
@@ -2243,14 +2163,20 @@ const NarrativePulse = {
         const legend = this.container.querySelector('.pulse-legend');
         const currentData = this.getCurrentData();
         
-        // Get colors and momentum from current data
+        // Get colors and calculate momentum dynamically
         const topicColors = {};
         const topicMomentum = {};
         
         Object.keys(currentData.topics).forEach(topic => {
             const topicData = currentData.topics[topic];
             topicColors[topic] = topicData.color;
-            topicMomentum[topic] = topicData.displayMomentum;
+            
+            // The dataPoints array always contains the data for the current time range
+            // since getCurrentData() returns the data for this.currentTimeRange
+            const dataPoints = topicData.dataPoints;
+            
+            // Calculate momentum dynamically from the raw data
+            topicMomentum[topic] = this.calculateMomentum(dataPoints);
         });
         
         legend.innerHTML = '';
@@ -2298,19 +2224,6 @@ const NarrativePulse = {
         }, 2000);
     },
     
-    // Extend getTopicColor to include new topics
-    getTopicColor: function(topic) {
-        const colors = {
-            'AI Agents': '#4a7c59',
-            'Capital Efficiency': '#f4a261',
-            'DePIN': '#5a6c8c',
-            'B2B SaaS': '#c77d7d',
-            'Developer Tools': '#8a68a8',
-            'Vertical SaaS': '#7d9c8d',
-            'AI Infrastructure': '#a87c68'
-        };
-        return colors[topic] || '#6b7280';
-    }
 };
 
 // Export for use

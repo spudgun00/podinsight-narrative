@@ -4,12 +4,11 @@
 .portfolio-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(26, 26, 46, 0.35);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.3);  /* Changed to black 30% */
+    /* Removed blur effect */
     z-index: 999;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;  /* Changed to 0.4s */
     pointer-events: none;
 }
 
@@ -23,7 +22,7 @@
     position: fixed;
     top: 0;
     height: 100vh;
-    width: 420px;
+    width: 480px;  /* Changed from 420px to 480px */
     background: white;
     box-shadow: 
         -2px 0 12px rgba(0, 0, 0, 0.08),
@@ -36,19 +35,19 @@
     overflow-y: auto;    /* Keep vertical scroll functionality */
     
     /* Position off-screen to the right */
-    right: -420px;
-    transition: right 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    right: -480px;  /* Changed to match new width */
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);  /* Changed to 0.4s with Notable Signals easing */
 }
 
 .portfolio-panel[data-state="open"] {
     /* Slide in from right */
     right: 0;
-    animation: slideIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);  /* Changed to 0.4s with consistent easing */
 }
 
 @keyframes slideIn {
     from {
-        right: -420px;
+        right: -480px;  /* Changed to match new width */
         opacity: 0.8;
     }
     to {

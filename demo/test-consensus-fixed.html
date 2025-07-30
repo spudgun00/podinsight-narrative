@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consensus Monitor - Fixed Progress Bars</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--deep-ink);
+        }
+        
+        h2 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--deep-ink);
+        }
+        
+        .visual-guide {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        button:hover {
+            background: #3a6349;
+        }
+        
+        /* Test different percentage values */
+        .test-cases {
+            margin-top: 2rem;
+        }
+        
+        .test-case {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .test-case h3 {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-600);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="demo-section">
+            <h1>Consensus Monitor - Fixed Progress Bars</h1>
+            
+            <div class="visual-guide">
+                <strong>Expected Visual:</strong><br>
+                AI INFRA        [████████████████░░░] 85% ↑5%<br>
+                ENTERPRISE AI   [███████████████░░░░] 80% ↑8%<br>
+                SERIES A        [██████████████░░░░░] 70% →<br>
+                DEFENSE TECH    [███████████░░░░░░░░] 55% ↓5%<br><br>
+                <strong>Colors:</strong><br>
+                - Green (#10B981) for >75%<br>
+                - Orange (#F59E0B) for 50-75%<br>
+                - Red (#EF4444) for <50%
+            </div>
+            
+            <h2>Live Component</h2>
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Consensus Monitor</h4>
+                <p class="section-description">Market agreement levels by topic</p>
+                <div class="consensus-monitor-container">
+                    <!-- Progress bars will be rendered here -->
+                </div>
+            </div>
+            
+            <div class="test-controls">
+                <button onclick="testAnimation()">Test Animation</button>
+                <button onclick="testEdgeCases()">Test Edge Cases</button>
+                <button onclick="resetView()">Reset</button>
+            </div>
+        </div>
+        
+        <div class="demo-section test-cases">
+            <h2>Test Cases</h2>
+            
+            <div class="test-case">
+                <h3>Edge Case: Very Low Percentage (5%)</h3>
+                <div class="consensus-monitor-container" id="test-low">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="test-case">
+                <h3>Edge Case: 100% Consensus</h3>
+                <div class="consensus-monitor-container" id="test-full">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="test-case">
+                <h3>Edge Case: Mixed Percentages</h3>
+                <div class="consensus-monitor-container" id="test-mixed">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load component -->
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        // Initialize the main component
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.synthesis-section');
+            if (container) {
+                IntelligenceBrief.init(container);
+            }
+            
+            // Populate test cases
+            populateTestCases();
+        });
+        
+        function testAnimation() {
+            const container = document.querySelector('.consensus-monitor-container');
+            if (container) {
+                container.innerHTML = '';
+                setTimeout(() => {
+                    IntelligenceBrief.updateConsensusMonitor('7 days');
+                }, 100);
+            }
+        }
+        
+        function testEdgeCases() {
+            // Test with different percentages
+            const testData = [
+                { label: 'ZERO CONSENSUS', percentage: 0 },
+                { label: 'MINIMAL (5%)', percentage: 5 },
+                { label: 'HALF (50%)', percentage: 50 },
+                { label: 'NEAR FULL (95%)', percentage: 95 },
+                { label: 'COMPLETE (100%)', percentage: 100 }
+            ];
+            
+            const container = document.querySelector('.consensus-monitor-container');
+            container.innerHTML = '';
+            
+            testData.forEach(item => {
+                const consensusItem = document.createElement('div');
+                consensusItem.className = 'consensus-item';
+                
+                let levelClass = 'consensus-low';
+                if (item.percentage > 75) levelClass = 'consensus-high';
+                else if (item.percentage >= 50) levelClass = 'consensus-medium';
+                
+                consensusItem.innerHTML = `
+                    <div class="consensus-label">${item.label}</div>
+                    <div class="consensus-bar-container">
+                        <div class="consensus-bar ${levelClass}" 
+                             style="width: ${item.percentage}%;">
+                        </div>
+                    </div>
+                    <div class="consensus-percentage">${item.percentage}%</div>
+                    <div class="consensus-trend trend-neutral">
+                        <span class="consensus-trend-arrow">→</span>
+                        <span>0%</span>
+                    </div>
+                `;
+                
+                container.appendChild(consensusItem);
+            });
+        }
+        
+        function resetView() {
+            IntelligenceBrief.updateConsensusMonitor('7 days');
+        }
+        
+        function populateTestCases() {
+            // Low percentage test
+            const lowContainer = document.getElementById('test-low');
+            lowContainer.innerHTML = `
+                <div class="consensus-item">
+                    <div class="consensus-label">CRYPTO/WEB3</div>
+                    <div class="consensus-bar-container">
+                        <div class="consensus-bar consensus-low" style="width: 5%;"></div>
+                    </div>
+                    <div class="consensus-percentage">5%</div>
+                    <div class="consensus-trend trend-down">
+                        <span class="consensus-trend-arrow">↓</span>
+                        <span>3%</span>
+                    </div>
+                </div>
+            `;
+            
+            // Full percentage test
+            const fullContainer = document.getElementById('test-full');
+            fullContainer.innerHTML = `
+                <div class="consensus-item">
+                    <div class="consensus-label">AI INFRA</div>
+                    <div class="consensus-bar-container">
+                        <div class="consensus-bar consensus-high" style="width: 100%;"></div>
+                    </div>
+                    <div class="consensus-percentage">100%</div>
+                    <div class="consensus-trend trend-up">
+                        <span class="consensus-trend-arrow">↑</span>
+                        <span>15%</span>
+                    </div>
+                </div>
+            `;
+            
+            // Mixed percentages test
+            const mixedContainer = document.getElementById('test-mixed');
+            const mixedData = [
+                { label: 'AI AGENTS', percentage: 85, trend: 'up', trendValue: 12 },
+                { label: 'DEPIN', percentage: 45, trend: 'down', trendValue: 5 },
+                { label: 'SERIES A', percentage: 60, trend: 'neutral', trendValue: 0 }
+            ];
+            
+            mixedData.forEach(item => {
+                const consensusItem = document.createElement('div');
+                consensusItem.className = 'consensus-item';
+                
+                let levelClass = 'consensus-low';
+                if (item.percentage > 75) levelClass = 'consensus-high';
+                else if (item.percentage >= 50) levelClass = 'consensus-medium';
+                
+                let trendClass = `trend-${item.trend}`;
+                let trendArrow = item.trend === 'up' ? '↑' : item.trend === 'down' ? '↓' : '→';
+                
+                consensusItem.innerHTML = `
+                    <div class="consensus-label">${item.label}</div>
+                    <div class="consensus-bar-container">
+                        <div class="consensus-bar ${levelClass}" style="width: ${item.percentage}%;"></div>
+                    </div>
+                    <div class="consensus-percentage">${item.percentage}%</div>
+                    <div class="consensus-trend ${trendClass}">
+                        <span class="consensus-trend-arrow">${trendArrow}</span>
+                        <span>${item.trendValue}%</span>
+                    </div>
+                `;
+                
+                mixedContainer.appendChild(consensusItem);
+            });
+        }
+    </script>
+</body>
+</html>

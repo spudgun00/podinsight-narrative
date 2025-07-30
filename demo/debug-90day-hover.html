@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug 90-Day Hover Issue</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .instructions {
+            background: #222;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            margin-bottom: 20px;
+        }
+        h1 { color: #00ff00; }
+        code {
+            background: #333;
+            padding: 2px 5px;
+            color: #ffff00;
+        }
+        .warning {
+            color: #ff6666;
+            font-weight: bold;
+        }
+        ol li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐛 Debug 90-Day Hover Issue</h1>
+    
+    <div class="instructions">
+        <h2>How to Debug:</h2>
+        <ol>
+            <li>Open Chrome DevTools Console (F12)</li>
+            <li>Navigate to <code>http://localhost:8000/demo.html</code></li>
+            <li>Switch to <strong>90 days</strong> view</li>
+            <li>Make sure you're on <strong>Momentum</strong> view (curved lines)</li>
+            <li>Look for console logs with these emojis:
+                <ul>
+                    <li>📐 X POSITIONS CALCULATED - Shows calculated x positions for each date</li>
+                    <li>🔍 HOVER DEBUG - Shows mouse position calculations</li>
+                    <li>📍 INDEX SELECTION - Shows which date index is selected and why</li>
+                    <li>💬 TOOLTIP DATA - Shows what data is displayed in tooltip</li>
+                </ul>
+            </li>
+            <li class="warning">Hover over May 2 (leftmost point) and check console</li>
+            <li>Look for:
+                <ul>
+                    <li>Is <code>nearestIndex</code> = 0? (It should be for May 2)</li>
+                    <li>Is <code>dateShown</code> = "May 2"?</li>
+                    <li>Is <code>aiInfrastructureValue</code> = 45?</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Expected Console Output for May 2:</h3>
+        <pre style="background: #111; padding: 10px; overflow-x: auto;">
+📍 INDEX SELECTION: {
+    svgX: [some value near first xPosition],
+    nearestIndex: 0,
+    selectedDate: "May 2",
+    distanceToEachPoint: [
+        { index: 0, date: "May 2", xPosition: 50, distance: [smallest], isNearest: true },
+        { index: 1, date: "May 9", xPosition: 225, distance: [larger], isNearest: false },
+        ...
+    ]
+}
+
+💬 TOOLTIP DATA: {
+    dateIndex: 0,
+    dateShown: "May 2",
+    aiInfrastructureValue: 45,
+    ...
+}
+        </pre>
+
+        <h3>What to Look For:</h3>
+        <ul>
+            <li>If <code>nearestIndex</code> is 1 when hovering May 2, the x-position calculation is off</li>
+            <li>Check if <code>svgX</code> is closer to index 1's xPosition than index 0's</li>
+            <li>Compare <code>calculatedSvgX</code> with the actual <code>xPositions</code> array</li>
+            <li>Look for any offset between mouse position and calculated position</li>
+        </ul>
+
+        <h3>Possible Issues:</h3>
+        <ol>
+            <li><strong>SVG viewBox mismatch</strong> - The SVG might have a different coordinate system</li>
+            <li><strong>Container offset</strong> - The chart container might have padding/margin affecting calculations</li>
+            <li><strong>Transform on SVG</strong> - CSS transforms could affect mouse position mapping</li>
+            <li><strong>Data mismatch</strong> - The rendered points might not match the calculated positions</li>
+        </ol>
+    </div>
+</body>
+</html>

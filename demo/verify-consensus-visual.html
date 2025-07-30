@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consensus Monitor Visual Verification</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .verification-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--deep-ink);
+        }
+        
+        h2 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--deep-ink);
+        }
+        
+        .test-data {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        button:hover {
+            background: #3a6349;
+        }
+        
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e8f0ea;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="test-section">
+            <h1>Consensus Monitor Progress Bar Verification</h1>
+            
+            <div class="status" id="status">
+                Loading data...
+            </div>
+            
+            <h2>Test Data Preview</h2>
+            <div class="test-data" id="dataPreview"></div>
+            
+            <h2>Visual Output</h2>
+            <div class="synthesis-section">
+                <h4 class="synthesis-section-title">Consensus Monitor</h4>
+                <p class="section-description">Market agreement levels by topic</p>
+                <div class="consensus-monitor-container">
+                    <!-- Progress bars will be rendered here -->
+                </div>
+            </div>
+            
+            <h2>Controls</h2>
+            <div class="controls">
+                <button onclick="updateTimeRange('7 days')">7 Days</button>
+                <button onclick="updateTimeRange('30 days')">30 Days</button>
+                <button onclick="updateTimeRange('90 days')">90 Days</button>
+                <button onclick="testAnimation()">Test Animation</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Expected vs Actual</h2>
+            <p><strong>Expected Layout:</strong></p>
+            <pre>
+[Label]           [=================> 85% ↑12%]
+AI Infrastructure [=================> 85% ↑12%]
+Enterprise Agents [================> 80% ↑8%]
+Series A Strategy [============> 70% →]
+Defense Tech      [========> 55% ↓5%]
+            </pre>
+            
+            <p><strong>Color Coding:</strong></p>
+            <ul>
+                <li>High consensus (>75%): Green gradient (#059669 to #10B981)</li>
+                <li>Medium (50-75%): Orange gradient (#D97706 to #F59E0B)</li>
+                <li>Low (<50%): Red gradient (#DC2626 to #EF4444)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load component -->
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        let currentTimeRange = '7 days';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.synthesis-section');
+            if (container) {
+                // Initialize the component
+                IntelligenceBrief.init(container);
+                
+                // Display data preview
+                displayDataPreview();
+                
+                // Update status
+                updateStatus('Component initialized. Showing 7 days data.');
+            }
+        });
+        
+        function displayDataPreview() {
+            const dataPreview = document.getElementById('dataPreview');
+            if (window.unifiedData && 
+                window.unifiedData.intelligenceBrief && 
+                window.unifiedData.intelligenceBrief.metrics && 
+                window.unifiedData.intelligenceBrief.metrics.consensusMonitor) {
+                
+                const data = window.unifiedData.intelligenceBrief.metrics.consensusMonitor.slice(0, 4);
+                dataPreview.innerHTML = 'Consensus Monitor Data (first 4 items):\n' + 
+                    JSON.stringify(data, null, 2);
+            } else {
+                dataPreview.innerHTML = 'No consensus monitor data found!';
+            }
+        }
+        
+        function updateTimeRange(timeRange) {
+            currentTimeRange = timeRange;
+            window.dispatchEvent(new CustomEvent('timeRangeChanged', {
+                detail: { timeRange: timeRange }
+            }));
+            updateStatus(`Time range changed to: ${timeRange}`);
+        }
+        
+        function testAnimation() {
+            // Clear and re-render to test animation
+            const container = document.querySelector('.consensus-monitor-container');
+            if (container) {
+                container.innerHTML = '';
+                setTimeout(() => {
+                    IntelligenceBrief.updateConsensusMonitor(currentTimeRange);
+                    updateStatus('Animation test triggered.');
+                }, 100);
+            }
+        }
+        
+        function updateStatus(message) {
+            const status = document.getElementById('status');
+            const time = new Date().toLocaleTimeString();
+            status.innerHTML = `[${time}] ${message}`;
+        }
+    </script>
+</body>
+</html>

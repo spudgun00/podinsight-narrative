@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Consensus Bars</title>
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        body {
+            background: var(--warm-paper);
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        
+        .debug-info {
+            background: #f5f5f5;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+        
+        /* Force display for debugging */
+        .debug-bar {
+            width: 85% !important;
+            background: #10B981 !important;
+            height: 100% !important;
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>Consensus Bars Debug</h1>
+        
+        <h2>Static Test (Should Show Bars)</h2>
+        <div class="consensus-monitor-container">
+            <!-- Manual HTML to test if CSS works -->
+            <div class="consensus-item">
+                <div class="consensus-label">AI INFRA (85%)</div>
+                <div class="consensus-bar-container">
+                    <div class="consensus-bar consensus-high debug-bar"></div>
+                </div>
+                <div class="consensus-percentage">85%</div>
+                <div class="consensus-trend trend-up">
+                    <span class="consensus-trend-arrow">↑</span>
+                    <span>5%</span>
+                </div>
+            </div>
+            
+            <div class="consensus-item">
+                <div class="consensus-label">DEFENSE (55%)</div>
+                <div class="consensus-bar-container" style="margin-top: 0.5rem;">
+                    <div class="consensus-bar consensus-medium" style="width: 55%; background: #F59E0B; height: 100%; display: block;"></div>
+                </div>
+                <div class="consensus-percentage">55%</div>
+                <div class="consensus-trend trend-down">
+                    <span class="consensus-trend-arrow">↓</span>
+                    <span>5%</span>
+                </div>
+            </div>
+        </div>
+        
+        <h2>Dynamic Component Test</h2>
+        <div class="synthesis-section">
+            <h4 class="synthesis-section-title">Consensus Monitor</h4>
+            <p class="section-description">Market agreement levels by topic</p>
+            <div class="consensus-monitor-container" id="dynamic-container">
+                <!-- Will be populated by JS -->
+            </div>
+        </div>
+        
+        <div class="debug-info" id="debug-output">
+            Debug information will appear here...
+        </div>
+        
+        <button onclick="debugBars()">Debug Bar Widths</button>
+        <button onclick="manualTest()">Manual Test</button>
+    </div>
+    
+    <!-- Load data files -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/intelligence-brief/intelligence-brief.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.synthesis-section');
+            if (container) {
+                IntelligenceBrief.init(container);
+            }
+            
+            setTimeout(debugBars, 1000);
+        });
+        
+        function debugBars() {
+            const debugOutput = document.getElementById('debug-output');
+            let output = 'Bar Debug Information:\n\n';
+            
+            const bars = document.querySelectorAll('.consensus-bar');
+            bars.forEach((bar, index) => {
+                const computed = window.getComputedStyle(bar);
+                const container = bar.parentElement;
+                const containerComputed = window.getComputedStyle(container);
+                
+                output += `Bar ${index}:\n`;
+                output += `  Style width: ${bar.style.width}\n`;
+                output += `  Computed width: ${computed.width}\n`;
+                output += `  Computed height: ${computed.height}\n`;
+                output += `  Computed background: ${computed.backgroundColor}\n`;
+                output += `  Computed display: ${computed.display}\n`;
+                output += `  Container width: ${containerComputed.width}\n`;
+                output += `  Container height: ${containerComputed.height}\n`;
+                output += `  Classes: ${bar.className}\n\n`;
+            });
+            
+            debugOutput.textContent = output;
+        }
+        
+        function manualTest() {
+            const container = document.getElementById('dynamic-container');
+            container.innerHTML = `
+                <div class="consensus-item">
+                    <div class="consensus-label">MANUAL TEST</div>
+                    <div class="consensus-bar-container">
+                        <div class="consensus-bar consensus-high" style="width: 75%; background: #10B981; height: 100%; display: block;"></div>
+                    </div>
+                    <div class="consensus-percentage">75%</div>
+                    <div class="consensus-trend trend-up">
+                        <span>↑ 10%</span>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(debugBars, 100);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Progress Bar Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        
+        h2 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Test 1: Basic Progress Bar */
+        .test-container {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-label {
+            min-width: 120px;
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .progress-container {
+            flex: 1;
+            height: 22px;
+            background: #1E293B;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #10B981;
+            transition: width 0.6s ease;
+        }
+        
+        .progress-percentage {
+            min-width: 40px;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+        
+        /* Test 2: Using the actual consensus styles */
+        .consensus-monitor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .consensus-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .consensus-label {
+            min-width: 120px;
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .consensus-bar-container {
+            flex: 1;
+            height: 22px;
+            background: #1E293B;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .consensus-bar {
+            height: 100%;
+            border-radius: 4px;
+            position: relative;
+            transition: width 0.6s ease;
+        }
+        
+        .consensus-bar.consensus-high {
+            background: #10B981;
+        }
+        
+        .consensus-bar.consensus-medium {
+            background: #F59E0B;
+        }
+        
+        .consensus-bar.consensus-low {
+            background: #EF4444;
+        }
+        
+        .consensus-percentage {
+            color: #1a1a2e;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            min-width: 35px;
+        }
+        
+        .consensus-trend {
+            min-width: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Progress Bar Debug Test</h1>
+    
+    <div class="test-container">
+        <h2>Test 1: Basic Progress Bars</h2>
+        
+        <div class="progress-item">
+            <div class="progress-label">AI INFRA</div>
+            <div class="progress-container">
+                <div class="progress-fill" style="width: 85%;"></div>
+            </div>
+            <div class="progress-percentage">85%</div>
+        </div>
+        
+        <div class="progress-item">
+            <div class="progress-label">DEFENSE TECH</div>
+            <div class="progress-container">
+                <div class="progress-fill" style="width: 55%; background: #F59E0B;"></div>
+            </div>
+            <div class="progress-percentage">55%</div>
+        </div>
+        
+        <div class="progress-item">
+            <div class="progress-label">CRYPTO/WEB3</div>
+            <div class="progress-container">
+                <div class="progress-fill" style="width: 25%; background: #EF4444;"></div>
+            </div>
+            <div class="progress-percentage">25%</div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 2: Consensus Monitor Implementation</h2>
+        
+        <div class="consensus-monitor-container">
+            <div class="consensus-item">
+                <div class="consensus-label">AI INFRA</div>
+                <div class="consensus-bar-container">
+                    <div class="consensus-bar consensus-high" style="width: 85%;"></div>
+                </div>
+                <div class="consensus-percentage">85%</div>
+                <div class="consensus-trend">↑ 5%</div>
+            </div>
+            
+            <div class="consensus-item">
+                <div class="consensus-label">ENTERPRISE AI</div>
+                <div class="consensus-bar-container">
+                    <div class="consensus-bar consensus-high" style="width: 80%;"></div>
+                </div>
+                <div class="consensus-percentage">80%</div>
+                <div class="consensus-trend">↑ 8%</div>
+            </div>
+            
+            <div class="consensus-item">
+                <div class="consensus-label">SERIES A</div>
+                <div class="consensus-bar-container">
+                    <div class="consensus-bar consensus-medium" style="width: 70%;"></div>
+                </div>
+                <div class="consensus-percentage">70%</div>
+                <div class="consensus-trend">→ 0%</div>
+            </div>
+            
+            <div class="consensus-item">
+                <div class="consensus-label">DEFENSE TECH</div>
+                <div class="consensus-bar-container">
+                    <div class="consensus-bar consensus-medium" style="width: 55%;"></div>
+                </div>
+                <div class="consensus-percentage">55%</div>
+                <div class="consensus-trend">↓ 5%</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test 3: Check Width Animation</h2>
+        <button onclick="animateBar()">Animate Bar</button>
+        
+        <div class="progress-item" style="margin-top: 1rem;">
+            <div class="progress-label">TEST ANIMATION</div>
+            <div class="progress-container">
+                <div id="test-bar" class="progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-percentage" id="test-percentage">0%</div>
+        </div>
+    </div>
+    
+    <script>
+        function animateBar() {
+            const bar = document.getElementById('test-bar');
+            const percentage = document.getElementById('test-percentage');
+            
+            // Reset
+            bar.style.width = '0%';
+            percentage.textContent = '0%';
+            
+            // Animate after a short delay
+            setTimeout(() => {
+                bar.style.width = '75%';
+                percentage.textContent = '75%';
+            }, 100);
+        }
+        
+        // Test on load
+        window.addEventListener('load', () => {
+            console.log('Page loaded - bars should be visible');
+            
+            // Check if bars are rendering
+            const bars = document.querySelectorAll('.consensus-bar');
+            bars.forEach((bar, index) => {
+                console.log(`Bar ${index}: width = ${bar.style.width}, computed width = ${window.getComputedStyle(bar).width}`);
+            });
+        });
+    </script>
+</body>
+</html>

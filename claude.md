@@ -533,10 +533,3 @@ if (currentFilter !== 'all' && currentFilter !== 'curated') {
 
   This CLAUDE.md provides comprehensive context for any future AI assistance, covering the philosophy, technical
   details, and development guidelines needed to maintain consistency with your vision.
-
-  ## Prompt Optimization
-
-  When responding to requests, consider applying the Lyra prompt optimization methodology from .claude/commands/lyra.md:
-  - Use the 4-D approach (Deconstruct, Diagnose, Develop, Deliver) for complex requests
-  - Apply appropriate optimization techniques based on request type
-  - Ensure prompts are clear, specific, and structured for optimal AI performance

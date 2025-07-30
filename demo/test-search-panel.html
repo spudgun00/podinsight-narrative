@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Panel Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .test-results {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pass { color: green; font-weight: bold; }
+        .fail { color: red; font-weight: bold; }
+        .test-button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Panel Test Suite</h1>
+    
+    <button class="test-button" onclick="runTests()">Run All Tests</button>
+    
+    <div class="test-results" id="testResults">
+        <h2>Test Results:</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function runTests() {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            // Open the demo page in an iframe to test
+            const iframe = document.createElement('iframe');
+            iframe.src = '/demo.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            iframe.style.border = '1px solid #ccc';
+            iframe.style.marginTop = '20px';
+            document.body.appendChild(iframe);
+            
+            iframe.onload = function() {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const iframeWin = iframe.contentWindow;
+                
+                setTimeout(() => {
+                    // Test 1: Search panel exists
+                    const searchPanel = iframeDoc.getElementById('searchPanel');
+                    addTestResult('Search panel element exists', !!searchPanel);
+                    
+                    // Test 2: Search backdrop exists
+                    const searchBackdrop = iframeDoc.getElementById('searchBackdrop');
+                    addTestResult('Search backdrop element exists', !!searchBackdrop);
+                    
+                    // Test 3: Trigger search
+                    const searchInput = iframeDoc.getElementById('searchInput');
+                    if (searchInput) {
+                        searchInput.value = 'vertical AI';
+                        const enterEvent = new KeyboardEvent('keypress', { key: 'Enter' });
+                        searchInput.dispatchEvent(enterEvent);
+                        
+                        setTimeout(() => {
+                            // Test 4: Panel opens
+                            const panelActive = searchPanel?.classList.contains('active');
+                            addTestResult('Search panel opens on Enter', panelActive);
+                            
+                            // Test 5: Backdrop is active
+                            const backdropActive = searchBackdrop?.classList.contains('active');
+                            addTestResult('Search backdrop is active', backdropActive);
+                            
+                            // Test 6: Verify CSS values
+                            if (searchPanel) {
+                                const panelStyles = iframeWin.getComputedStyle(searchPanel);
+                                const backdropStyles = iframeWin.getComputedStyle(searchBackdrop);
+                                
+                                addTestResult('Panel width is 480px', panelStyles.width === '480px');
+                                addTestResult('Backdrop color is rgba(0, 0, 0, 0.3)', 
+                                    backdropStyles.backgroundColor === 'rgba(0, 0, 0, 0.3)');
+                                addTestResult('Backdrop has no blur', 
+                                    !backdropStyles.backdropFilter || backdropStyles.backdropFilter === 'none');
+                                addTestResult('Panel z-index is 1000', panelStyles.zIndex === '1000');
+                                addTestResult('Backdrop z-index is 999', backdropStyles.zIndex === '999');
+                            }
+                            
+                            // Test 7: Close button exists
+                            const closeBtn = iframeDoc.querySelector('.search-panel-close');
+                            addTestResult('Close button exists', !!closeBtn);
+                            
+                            // Test 8: Click close button
+                            if (closeBtn) {
+                                closeBtn.click();
+                                setTimeout(() => {
+                                    const panelClosed = !searchPanel?.classList.contains('active');
+                                    addTestResult('Panel closes on X button click', panelClosed);
+                                }, 500);
+                            }
+                        }, 1000);
+                    }
+                }, 1000);
+            };
+        }
+        
+        function addTestResult(testName, passed) {
+            const results = document.getElementById('results');
+            const testItem = document.createElement('div');
+            testItem.className = 'test-item';
+            testItem.innerHTML = `
+                <span>${testName}</span>
+                <span class="${passed ? 'pass' : 'fail'}">${passed ? 'PASS' : 'FAIL'}</span>
+            `;
+            results.appendChild(testItem);
+        }
+    </script>
+</body>
+</html>

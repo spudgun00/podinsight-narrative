@@ -6,7 +6,10 @@
     <title>synthea.ai - Weekly Intelligence Brief</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%234a7c59' stroke-width='3'%3E%3Ccircle r='9' cx='9.7' cy='10.2' /%3E%3Ccircle r='9' cx='22.3' cy='10.2' /%3E%3Ccircle r='9' cx='16' cy='21.2' /%3E%3C/g%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='44' height='44' fill='white'/%3E%3Cdefs%3E%3CclipPath id='c1'%3E%3Ccircle r='13' cx='14' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c2'%3E%3Ccircle r='13' cx='30' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c3'%3E%3Ccircle r='13' cx='22' cy='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='30' cy='16' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+    
+    <!-- Load unified data -->
+    <script src="../data/unified-data.js"></script>
     
     <style>
         * {
@@ -93,30 +96,48 @@
         .logo-section {
             display: flex;
             align-items: center;
-            width: 100px;
+            width: auto;
         }
         
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 2px;
         }
         
         .logo-mark {
-            width: 24px;
-            height: 24px;
+            width: 39px;
+            height: 39px;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease;
+            cursor: pointer;
         }
         
-        .logo-name {
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            justify-content: space-between;
+        }
+        
+        .logo {
             font-family: 'Inter', sans-serif;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: #2C2C2C;
             line-height: 1;
-            letter-spacing: -0.01em;
+            letter-spacing: 0.11em;
         }
         
-        /* Tagline removed from header */
+        .tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            color: #B5B5B5;
+            line-height: 1;
+            letter-spacing: 0.01em;
+            text-transform: lowercase;
+        }
         
         .report-title {
             font-family: 'Inter', sans-serif;
@@ -389,7 +410,11 @@
             border-radius: 9999px;
             position: relative;
             overflow: hidden;
+            width: 0;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        /* Width for .progress-fill.animate will be set inline via JavaScript */
         
         .progress-fill::after {
             content: '';
@@ -678,19 +703,50 @@
         <div class="header">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo">
-                        <svg class="logo-mark" width="24" height="24" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
-                            <g fill="#4a7c59" fill-opacity="0.1" stroke="#4a7c59" stroke-width="2">
-                                <circle r="13" cx="14" cy="14" />
-                                <circle r="13" cx="30" cy="14" />
-                                <circle r="13" cx="22" cy="28" />
+                    <div class="logo-container">
+                        <svg class="logo-mark" width="39" height="39" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
+                            <defs>
+                                <clipPath id="sage-circle1">
+                                    <circle r="13" cx="14" cy="16"></circle>
+                                </clipPath>
+                                <clipPath id="sage-circle2">
+                                    <circle r="13" cx="30" cy="16"></circle>
+                                </clipPath>
+                                <clipPath id="sage-circle3">
+                                    <circle r="13" cx="22" cy="30"></circle>
+                                </clipPath>
+                            </defs>
+                            
+                            <!-- Overlap between circle 1 and 2 -->
+                            <g clip-path="url(#sage-circle1)">
+                                <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Overlap between circle 1 and 3 -->
+                            <g clip-path="url(#sage-circle1)">
+                                <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Overlap between circle 2 and 3 -->
+                            <g clip-path="url(#sage-circle2)">
+                                <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                            </g>
+                            
+                            <!-- Center overlap (all three) -->
+                            <g clip-path="url(#sage-circle1)">
+                                <g clip-path="url(#sage-circle2)">
+                                    <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                                </g>
                             </g>
                         </svg>
-                        <div class="logo-name">synthea.ai</div>
+                        <div class="logo-text">
+                            <div class="logo">synthea.ai</div>
+                            <div class="tagline">synthesized intelligence</div>
+                        </div>
                     </div>
                 </div>
                 <div class="report-title">WEEKLY INTELLIGENCE BRIEF</div>
-                <div class="report-date">August 22-28, 2025</div>
+                <div class="report-date" id="report-date">Loading...</div>
             </div>
         </div>
 
@@ -700,176 +756,31 @@
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">Executive Summary</h2>
-                    <span class="card-meta">36 mins ago</span>
+                    <span class="card-meta" id="last-updated">Loading...</span>
                 </div>
-                <div class="summary-text">
-                    <p>
-                        <strong>AI infrastructure reaches peak consensus</strong> [52 mentions across 48 sources, 
-                        led by All-In, 20VC] with "picks and shovels" thesis driving massive funding rounds.
-                    </p>
-                    <p>
-                        <strong>DePIN explodes +78% w/w</strong> [32 mentions] as physical infrastructure 
-                        narrative gains tier-1 VC attention following major funding rumors.
-                    </p>
-                    <p>
-                        <strong class="contrarian">Notable reversal:</strong> Crypto/Web3 rebounds +18% after 
-                        months of decline, driven by regulatory clarity and Base ecosystem momentum.
-                    </p>
-                    <p>
-                        <strong class="blindspot">Warning signal:</strong> B2B SaaS drops -20% as AI-native 
-                        solutions render legacy playbooks obsolete.
-                    </p>
+                <div class="summary-text" id="executive-summary">
+                    <!-- Will be populated by JavaScript -->
                 </div>
             </div>
 
             <!-- Key Metrics -->
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <p class="metric-label">Velocity</p>
-                    <p class="metric-value">+78%</p>
-                    <p class="metric-context">DePIN</p>
-                    <div class="metric-change change-up">↑ w/w</div>
-                </div>
-                
-                <div class="metric-card">
-                    <p class="metric-label">Mentions</p>
-                    <p class="metric-value">52</p>
-                    <p class="metric-context">AI Infrastructure</p>
-                    <div class="metric-change change-up">↑ 37% w/w</div>
-                </div>
-                
-                <div class="metric-card">
-                    <p class="metric-label">Consensus</p>
-                    <p class="metric-value">Peak (>90%)</p>
-                    <p class="metric-context">AI Infrastructure</p>
-                    <div class="metric-change" style="color: #6B7280;">48 sources</div>
-                </div>
-                
-                <div class="metric-card">
-                    <p class="metric-label">Reversal</p>
-                    <p class="metric-value">+71%</p>
-                    <p class="metric-context">Crypto/Web3</p>
-                    <div class="metric-change change-up">↑ Recovery</div>
-                </div>
+            <div class="metrics-grid" id="metrics-grid">
+                <!-- Will be populated by JavaScript -->
             </div>
 
             <!-- Topic Momentum -->
             <div class="card">
                 <h3 class="card-title" style="margin-bottom: 16px;">Topic Momentum This Week</h3>
-                
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">DePIN</span>
-                        <span class="momentum-change positive">+78% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 78%; background: #5a6c8c;"></div>
-                    </div>
-                    <p class="momentum-context">32 mentions, major funding rumors driving narrative</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">AI Agents</span>
-                        <span class="momentum-change positive">+59% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 59%; background: #4a7c59;"></div>
-                    </div>
-                    <p class="momentum-context">35 mentions, tier-1 VCs aligning on thesis</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">AI Infrastructure</span>
-                        <span class="momentum-change positive">+37% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 37%; background: #a87c68;"></div>
-                    </div>
-                    <p class="momentum-context">52 mentions, "picks and shovels" thesis at peak consensus</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">Developer Tools</span>
-                        <span class="momentum-change positive">+29% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 29%; background: #8a68a8;"></div>
-                    </div>
-                    <p class="momentum-context">18 mentions, AI coding assistants driving renaissance</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">Crypto/Web3</span>
-                        <span class="momentum-change positive">+18% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 18%; background: #5c7cfa;"></div>
-                    </div>
-                    <p class="momentum-context">26 mentions, regulatory clarity sparks recovery</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">Capital Efficiency</span>
-                        <span class="momentum-change positive">+15% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 15%; background: #f4a261;"></div>
-                    </div>
-                    <p class="momentum-context">15 mentions, fundamentals matter narrative rebounds</p>
-                </div>
-
-                <div class="momentum-item">
-                    <div class="momentum-header">
-                        <span class="momentum-name">B2B SaaS</span>
-                        <span class="momentum-change negative">-20% w/w</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 20%; background: #c77d7d;"></div>
-                    </div>
-                    <p class="momentum-context">8 mentions, legacy SaaS struggles as AI-native dominates</p>
+                <div id="topic-momentum">
+                    <!-- Will be populated by JavaScript -->
                 </div>
             </div>
 
             <!-- Consensus Forming -->
             <div style="margin-bottom: 24px;">
                 <h3 style="font-weight: 600; color: #111827; margin-bottom: 12px;">Consensus Forming</h3>
-                
-                <div class="consensus-item">
-                    <div class="consensus-content">
-                        <div class="consensus-marker"></div>
-                        <div class="consensus-details">
-                            <h4>AI infrastructure at peak consensus</h4>
-                            <p class="consensus-sources">[48 positive sources out of 52 mentions: All-In dedicates full segment]</p>
-                            <p class="consensus-insight">"Picks and shovels" wins - everyone wants foundation layer exposure</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="consensus-item">
-                    <div class="consensus-content">
-                        <div class="consensus-marker"></div>
-                        <div class="consensus-details">
-                            <h4>DePIN summer emerging</h4>
-                            <p class="consensus-sources">[28 positive sources out of 32: Helium success story drives narrative]</p>
-                            <p class="consensus-insight">Physical meets digital - major funds announce DePIN strategies</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="consensus-item">
-                    <div class="consensus-content">
-                        <div class="consensus-marker"></div>
-                        <div class="consensus-details">
-                            <h4>Developer productivity renaissance</h4>
-                            <p class="consensus-sources">[16 positive out of 18 mentions: Cursor rumors spark interest]</p>
-                            <p class="consensus-insight">AI coding assistants showing measurable productivity gains</p>
-                        </div>
-                    </div>
+                <div id="consensus-forming">
+                    <!-- Will be populated by JavaScript -->
                 </div>
             </div>
 
@@ -877,55 +788,15 @@
             <div class="alert-grid">
                 <div>
                     <h3 style="font-weight: 600; color: #111827; margin-bottom: 12px;">Contrarian Signals</h3>
-                    <div class="alert-box warning-box">
-                        <div class="alert-item">
-                            <div class="alert-header">
-                                <svg class="alert-icon" fill="#D97706" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
-                                <h4 class="alert-title">B2B SaaS accelerating decline</h4>
-                            </div>
-                            <p class="alert-description">-20% drop while AI categories surge</p>
-                            <p class="alert-context">Legacy playbooks becoming obsolete</p>
-                        </div>
-                        <div class="alert-item" style="padding-top: 12px; border-top: 1px solid #FCD34D;">
-                            <div class="alert-header">
-                                <svg class="alert-icon" fill="#D97706" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                </svg>
-                                <h4 class="alert-title">Capital Efficiency momentum slowing</h4>
-                            </div>
-                            <p class="alert-description">Only +15% despite LP pressure</p>
-                            <p class="alert-context">AI growth overriding discipline narrative</p>
-                        </div>
+                    <div class="alert-box warning-box" id="contrarian-signals">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
 
                 <div>
                     <h3 style="font-weight: 600; color: #111827; margin-bottom: 12px;">Emerging Blindspots</h3>
-                    <div class="alert-box danger-box">
-                        <div class="alert-item">
-                            <div class="alert-header">
-                                <svg class="alert-icon" fill="#DC2626" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                                </svg>
-                                <h4 class="alert-title">DePIN sustainability questions</h4>
-                            </div>
-                            <p class="alert-description">+78% growth without unit economics</p>
-                            <p class="alert-context">Only 3 negative voices out of 32</p>
-                        </div>
-                        <div class="alert-item" style="padding-top: 12px; border-top: 1px solid #FCA5A5;">
-                            <div class="alert-header">
-                                <svg class="alert-icon" fill="#DC2626" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                                </svg>
-                                <h4 class="alert-title">AI agent revenue models unclear</h4>
-                            </div>
-                            <p class="alert-description">+59% momentum but monetization TBD</p>
-                            <p class="alert-context">Enthusiasm outpacing business models</p>
-                        </div>
+                    <div class="alert-box danger-box" id="blindspots">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -942,48 +813,15 @@
                 <div class="action-grid">
                     <div>
                         <h4>THIS WEEK</h4>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Focus area: AI infrastructure opportunities</span>
-                        </div>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Connect with Databricks/Snowflake alumni</span>
-                        </div>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Portfolio efficiency review suggested</span>
+                        <div id="actions-this-week">
+                            <!-- Will be populated by JavaScript -->
                         </div>
                     </div>
                     
                     <div>
                         <h4>MONITOR</h4>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Monitor: DePIN sustainability questions</span>
-                        </div>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Developer tools M&A activity</span>
-                        </div>
-                        <div class="action-item">
-                            <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Climate tech contrarian plays</span>
+                        <div id="actions-monitor">
+                            <!-- Will be populated by JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -994,15 +832,233 @@
                 <div class="footer-content">
                     <div>
                         <p class="footer-brand">synthea.ai</p>
-                        <p>Weekly Intelligence Brief • Week 34, 2025</p>
+                        <p id="footer-week">Loading...</p>
                     </div>
                     <div class="footer-right">
-                        <p>Synthesized from 1,498 episodes across 47 VC podcasts</p>
+                        <p id="footer-synthesis">Loading...</p>
                         <p>© 2025 synthea.ai • Proprietary & Confidential</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script>
+        // Wait for data to load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (window.unifiedData) {
+                populateDocument();
+            } else {
+                console.error('Unified data not loaded');
+            }
+        });
+        
+        function populateDocument() {
+            const data = window.unifiedData;
+            
+            // Update header date
+            document.getElementById('report-date').textContent = data.meta.dataWeek.range;
+            
+            // Update last updated time
+            document.getElementById('last-updated').textContent = data.meta.analysis.lastAnalysis;
+            
+            // Update footer
+            document.getElementById('footer-synthesis').textContent = 
+                `Synthesized from ${data.meta.analysis.episodesAnalyzed} episodes across ${data.meta.analysis.podcastsTracked} VC podcasts`;
+            document.getElementById('footer-week').textContent = 
+                `Weekly Intelligence Brief • Week ${data.meta.dataWeek.number}, ${data.meta.dataWeek.year}`;
+            
+            // Populate executive summary
+            const summaryDiv = document.getElementById('executive-summary');
+            data.weeklyBrief.executive.summary.forEach(item => {
+                const p = document.createElement('p');
+                if (item.type === 'contrarian') {
+                    p.innerHTML = `<strong class="contrarian">Notable reversal:</strong> ${item.text} ${item.details}`;
+                } else if (item.type === 'warning') {
+                    p.innerHTML = `<strong class="blindspot">Warning signal:</strong> ${item.text} ${item.details}`;
+                } else {
+                    p.innerHTML = `<strong>${item.text}</strong> ${item.details}`;
+                }
+                summaryDiv.appendChild(p);
+            });
+            
+            // Populate key metrics
+            const metricsGrid = document.getElementById('metrics-grid');
+            data.weeklyBrief.keyMetrics.forEach(metric => {
+                const card = document.createElement('div');
+                card.className = 'metric-card';
+                card.innerHTML = `
+                    <p class="metric-label">${metric.label}</p>
+                    <p class="metric-value">${metric.value}</p>
+                    <p class="metric-context">${metric.context}</p>
+                    <div class="metric-change ${metric.changeType === 'up' ? 'change-up' : metric.changeType === 'down' ? 'change-warn' : ''}" style="${metric.changeType === 'neutral' ? 'color: #6B7280;' : ''}">${metric.change}</div>
+                `;
+                metricsGrid.appendChild(card);
+            });
+            
+            // Populate topic momentum
+            const momentumDiv = document.getElementById('topic-momentum');
+            data.weeklyBrief.topicMomentum.forEach(topic => {
+                const item = document.createElement('div');
+                item.className = 'momentum-item';
+                const changeClass = topic.direction === 'positive' ? 'positive' : 'negative';
+                item.innerHTML = `
+                    <div class="momentum-header">
+                        <span class="momentum-name">${topic.topic}</span>
+                        <span class="momentum-change ${changeClass}">${topic.change}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="${Math.abs(topic.momentum)}" style="background: ${getTopicColor(topic.topic)};"></div>
+                    </div>
+                    <p class="momentum-context">${topic.mentions} mentions, ${topic.context}</p>
+                `;
+                momentumDiv.appendChild(item);
+            });
+            
+            // Populate consensus forming
+            const consensusDiv = document.getElementById('consensus-forming');
+            data.weeklyBrief.consensusForming.forEach(item => {
+                const consensusItem = document.createElement('div');
+                consensusItem.className = 'consensus-item';
+                consensusItem.innerHTML = `
+                    <div class="consensus-content">
+                        <div class="consensus-marker"></div>
+                        <div class="consensus-details">
+                            <h4>${item.title}</h4>
+                            <p class="consensus-sources">${item.sources}</p>
+                            <p class="consensus-insight">${item.insight}</p>
+                        </div>
+                    </div>
+                `;
+                consensusDiv.appendChild(consensusItem);
+            });
+            
+            // Populate contrarian signals
+            const contrarianDiv = document.getElementById('contrarian-signals');
+            data.weeklyBrief.contrarian.forEach((item, index) => {
+                const alertItem = document.createElement('div');
+                alertItem.className = 'alert-item';
+                if (index > 0) alertItem.style = 'padding-top: 12px; border-top: 1px solid #FCD34D;';
+                alertItem.innerHTML = `
+                    <div class="alert-header">
+                        <svg class="alert-icon" fill="#D97706" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <h4 class="alert-title">${item.title}</h4>
+                    </div>
+                    <p class="alert-description">${item.description}</p>
+                    <p class="alert-context">${item.context}</p>
+                `;
+                contrarianDiv.appendChild(alertItem);
+            });
+            
+            // Populate blindspots
+            const blindspotsDiv = document.getElementById('blindspots');
+            data.weeklyBrief.blindspots.forEach((item, index) => {
+                const alertItem = document.createElement('div');
+                alertItem.className = 'alert-item';
+                if (index > 0) alertItem.style = 'padding-top: 12px; border-top: 1px solid #FCA5A5;';
+                alertItem.innerHTML = `
+                    <div class="alert-header">
+                        <svg class="alert-icon" fill="#DC2626" viewBox="0 0 20 20">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <h4 class="alert-title">${item.title}</h4>
+                    </div>
+                    <p class="alert-description">${item.description}</p>
+                    <p class="alert-context">${item.context}</p>
+                `;
+                blindspotsDiv.appendChild(alertItem);
+            });
+            
+            // Populate action items
+            const thisWeekDiv = document.getElementById('actions-this-week');
+            data.weeklyBrief.actionItems.thisWeek.forEach(action => {
+                const item = document.createElement('div');
+                item.className = 'action-item';
+                item.innerHTML = `
+                    <svg width="16" height="16" fill="#34D399" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>${action}</span>
+                `;
+                thisWeekDiv.appendChild(item);
+            });
+            
+            const monitorDiv = document.getElementById('actions-monitor');
+            data.weeklyBrief.actionItems.monitor.forEach(action => {
+                const item = document.createElement('div');
+                item.className = 'action-item';
+                item.innerHTML = `
+                    <svg width="16" height="16" fill="#FCD34D" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>${action}</span>
+                `;
+                monitorDiv.appendChild(item);
+            });
+        }
+        
+        // Helper function to get topic color from unified data
+        function getTopicColor(topicName) {
+            const topics = window.unifiedData.narrativePulse.topics;
+            for (const [key, topic] of Object.entries(topics)) {
+                if (key === topicName) {
+                    return topic.color;
+                }
+            }
+            // Default color if not found
+            return '#6B7280';
+        }
+        
+        // Animate progress bars on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                animateProgressBars();
+            }, 100);
+        });
+        
+        // Function to animate progress bars
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            progressBars.forEach((bar, index) => {
+                const targetWidth = bar.getAttribute('data-width');
+                
+                // Stagger the animations slightly for visual effect
+                setTimeout(() => {
+                    bar.classList.add('animate');
+                    bar.style.width = targetWidth + '%';
+                }, index * 100); // 100ms delay between each bar
+            });
+        }
+        
+        // Optional: Re-animate when the page becomes visible (e.g., switching tabs)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                // Reset and re-animate
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach(bar => {
+                    bar.style.transition = 'none';
+                    bar.style.width = '0';
+                    bar.classList.remove('animate');
+                });
+                
+                // Force reflow
+                void document.body.offsetHeight;
+                
+                // Re-enable transitions and animate
+                progressBars.forEach(bar => {
+                    bar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+                });
+                
+                setTimeout(() => {
+                    animateProgressBars();
+                }, 50);
+            }
+        });
+    </script>
 </body>
 </html>

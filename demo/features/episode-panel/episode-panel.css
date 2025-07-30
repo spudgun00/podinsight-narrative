@@ -37,13 +37,13 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(26, 26, 46, 0.4); /* Slightly darker for better contrast */
-    backdrop-filter: blur(8px); /* Increased blur for better effect */
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.3); /* Black 30% for consistency */
+    backdrop-filter: blur(4px); /* 4px blur for Episode panel */
+    -webkit-backdrop-filter: blur(4px);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 9998; /* High z-index to ensure it's above all content */
     will-change: opacity; /* Optimize for animation */
 }

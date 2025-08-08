@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Detail Backdrop Test</title>
+    <style>
+        :root {
+            --deep-ink: #1a1a2e;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #6b7280;
+            --sage: #4a7c59;
+            --light-sage: #e8f0ea;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, system-ui, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .test-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+        }
+
+        button:hover {
+            background: #3a6c49;
+        }
+
+        .color-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        /* Episode Detail Backdrop - Testing visibility */
+        .episode-detail-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 26, 46, 0.1);  /* 10% opacity of deep-ink color */
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            display: none;
+        }
+
+        .episode-detail-backdrop.active {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Test with more visible backdrop */
+        .episode-detail-backdrop.test-visible {
+            background: rgba(26, 26, 46, 0.4);  /* 40% opacity for testing */
+        }
+
+        /* Episode Detail Panel */
+        .episode-detail-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            height: 100vh;
+            width: 420px;
+            background: white;
+            box-shadow: 
+                -1px 0 3px rgba(0, 0, 0, 0.04),
+                -4px 0 16px rgba(0, 0, 0, 0.08),
+                -12px 0 32px rgba(0, 0, 0, 0.06);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+        }
+
+        .episode-detail-panel[data-state="open"] {
+            right: 0;
+        }
+
+        .detail-panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .detail-close-btn:hover {
+            background: #e8f0ea;
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+
+        .detail-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-content">
+        <h1>Episode Detail Backdrop Test</h1>
+        <p>Click the buttons below to test the Episode Detail Panel backdrop with different opacity levels:</p>
+        
+        <button onclick="openPanel(false)">Open Panel (10% opacity - Production)</button>
+        <button onclick="openPanel(true)">Open Panel (40% opacity - Test)</button>
+        
+        <div class="color-info">
+            <strong>Expected backdrop color:</strong><br>
+            rgba(26, 26, 46, 0.1) - 10% opacity of deep-ink (#1a1a2e)<br>
+            <br>
+            <strong>Visual comparison:</strong><br>
+            Portfolio Panel: rgba(0, 0, 0, 0.08) - 8% black<br>
+            Episode Detail: rgba(26, 26, 46, 0.1) - 10% deep-ink
+        </div>
+    </div>
+
+    <!-- Episode Detail Backdrop -->
+    <div class="episode-detail-backdrop" id="backdrop"></div>
+
+    <!-- Episode Detail Panel -->
+    <div class="episode-detail-panel" data-state="closed" id="panel">
+        <div class="detail-panel-header">
+            <h2>Episode Details</h2>
+            <button class="detail-close-btn" onclick="closePanel()">×</button>
+        </div>
+        <div class="detail-panel-body">
+            <h3>Power Law Changes: Why Funds Need New Math</h3>
+            <p>with Reid Hoffman, Elad Gil</p>
+            <p>This is a test panel to verify the backdrop color and transition effects are working correctly.</p>
+            <br>
+            <p><strong>Current backdrop:</strong> <span id="backdrop-info">rgba(26, 26, 46, 0.1)</span></p>
+        </div>
+    </div>
+
+    <script>
+        function openPanel(testMode) {
+            const backdrop = document.getElementById('backdrop');
+            const panel = document.getElementById('panel');
+            const info = document.getElementById('backdrop-info');
+            
+            // Show backdrop
+            backdrop.style.display = 'block';
+            
+            // Add test class if in test mode
+            if (testMode) {
+                backdrop.classList.add('test-visible');
+                info.textContent = 'rgba(26, 26, 46, 0.4) - Test Mode';
+            } else {
+                backdrop.classList.remove('test-visible');
+                info.textContent = 'rgba(26, 26, 46, 0.1) - Production';
+            }
+            
+            // Trigger reflow
+            backdrop.offsetHeight;
+            
+            // Add active class for fade in
+            backdrop.classList.add('active');
+            
+            // Open panel
+            panel.setAttribute('data-state', 'open');
+        }
+
+        function closePanel() {
+            const backdrop = document.getElementById('backdrop');
+            const panel = document.getElementById('panel');
+            
+            // Close panel
+            panel.setAttribute('data-state', 'closed');
+            
+            // Fade out backdrop
+            backdrop.classList.remove('active');
+            
+            // Hide backdrop after animation
+            setTimeout(() => {
+                backdrop.style.display = 'none';
+                backdrop.classList.remove('test-visible');
+            }, 300);
+        }
+
+        // Close on backdrop click
+        document.getElementById('backdrop').addEventListener('click', closePanel);
+    </script>
+</body>
+</html>

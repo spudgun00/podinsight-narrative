@@ -1,0 +1,970 @@
+// Episode Panel - Slide-out detail view for episodes
+const EpisodePanel = {
+    container: null,
+    backdrop: null,
+    isOpen: false,
+    
+    init: function() {
+        // Create panel HTML structure
+        this.createPanelStructure();
+        
+        // Attach event listeners
+        this.attachEventListeners();
+        
+        // Initialize close handlers
+        this.initCloseHandlers();
+    },
+    
+    createPanelStructure: function() {
+        // Create backdrop
+        this.backdrop = document.createElement('div');
+        this.backdrop.className = 'episode-panel-backdrop';
+        this.backdrop.style.display = 'none';
+        
+        // Create panel container
+        this.container = document.createElement('div');
+        this.container.className = 'episode-panel-container';
+        this.container.innerHTML = `
+            <!-- Panel Header -->
+            <div class="panel-header">
+                <div class="header-top">
+                    <div class="podcast-info">
+                        <div class="podcast-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12L12 8L16 12M8 16L12 12L16 16" stroke-width="2.5"/>
+                            </svg>
+                        </div>
+                        <div class="podcast-details">
+                            <h3>Loading...</h3>
+                            <div class="podcast-meta">
+                                <span class="panel-time-ago">--</span> • 
+                                <span class="panel-duration">--</span> • 
+                                <span class="influence-score">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-action-btn play-episode-btn" aria-label="Play episode" title="Play Episode">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M5 3v10l8-5z"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Read transcript" title="Read Transcript">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="2" width="10" height="12" rx="1"/>
+                                <path d="M5 5h6M5 7h6M5 9h4"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Download" title="Download">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M8 2v8m0 0l-3-3m3 3l3-3"/>
+                                <path d="M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Share" title="Share">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M6 9L2 5m0 0l4-4M2 5h9a3 3 0 013 3v6"/>
+                            </svg>
+                        </button>
+                        <button class="close-button header-action-btn" aria-label="Close panel">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 1L13 13M13 1L1 13"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <h1 class="episode-title">Loading...</h1>
+                <div class="episode-participants">
+                    <div class="participant">
+                        <span class="participant-label">HOST</span>
+                        <span class="participant-name host-name">Loading...</span>
+                        <span class="participant-separator"> | </span>
+                        <span class="participant-label">GUEST</span>
+                        <span class="participant-name guest-name">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Content -->
+            <div class="panel-content">
+                <div class="panel-main-column">
+                    <!-- The Conversation Section -->
+                    <div class="conversation-section intelligence-section">
+                        <h2 class="section-header">THE CONVERSATION</h2>
+                        <div class="conversation-content">
+                            <!-- Will be populated with conversationSummary or generated content -->
+                        </div>
+                    </div>
+
+                    <!-- Key Insights Section -->
+                    <div class="insights-section intelligence-section">
+                        <h2 class="section-header">KEY INSIGHTS</h2>
+                        <div class="insights-list">
+                            <!-- Will be populated with numbered insights -->
+                        </div>
+                    </div>
+
+                    <!-- Portfolio & Watchlist Mentions (moved to main column - stacked) -->
+                    <div class="portfolio-watchlist-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <div class="mentions-compact-block portfolio-block" style="display: none;">
+                            <div class="mentions-header">
+                                <span class="mentions-label">📁 PORTFOLIO</span>
+                                <span class="mentions-count">0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mentions-compact-block watchlist-block" style="display: none;">
+                            <div class="mentions-header">
+                                <span class="mentions-label">👁 WATCHLIST</span>
+                                <span class="mentions-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Market Signals (kept for backward compatibility) -->
+                    <div class="intelligence-section market-signals-section" style="display: none;">
+                        <h2 class="section-header">Market Signals</h2>
+                        <div class="market-signals-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Dynamic market signals -->
+                        </div>
+                    </div>
+
+                    <!-- Pattern Recognition (kept for backward compatibility) -->
+                    <div class="intelligence-section pattern-section" style="display: none;">
+                        <h2 class="section-header">Pattern Recognition</h2>
+                        <div class="pattern-grid">
+                            <!-- Dynamic pattern cards -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-sidebar">
+                    <!-- Essential Quote -->
+                    <div class="quote-section">
+                        <div class="quote-block">
+                            <h2 class="section-header" style="color: rgba(255, 255, 255, 0.8); border: none; padding-bottom: 0; margin-bottom: 1rem;">ESSENTIAL QUOTE</h2>
+                            <div class="quote-text">"Loading..."</div>
+                            <div class="quote-attribution">
+                                <span class="quote-author">— Loading</span>
+                                <div class="quote-timestamp"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notable Numbers -->
+                    <div class="numbers-section intelligence-section">
+                        <h2 class="section-header">NOTABLE NUMBERS</h2>
+                        <div class="numbers-list">
+                            <!-- Will be populated with notableNumbers -->
+                        </div>
+                    </div>
+
+                    <!-- Related Topics -->
+                    <div class="topics-section intelligence-section">
+                        <div class="topics-container">
+                            <h2 class="section-header">RELATED TOPICS</h2>
+                            <div class="topics-list">
+                                <!-- Will be populated with hashtag pills -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Episodes (kept for compatibility) -->
+                    <div class="intelligence-section related-section" style="display: none;">
+                        <h2 class="section-header">Related Episodes</h2>
+                        <div class="related-episodes">
+                            <!-- Dynamic related episodes -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        `;
+        
+        // Append to body
+        document.body.appendChild(this.backdrop);
+        document.body.appendChild(this.container);
+    },
+    
+    attachEventListeners: function() {
+        // Listen for clicks on entire episode cards or "View Full Brief" buttons
+        document.addEventListener('click', (e) => {
+            // Check if click is on episode card or any of its children
+            const episodeCard = e.target.closest('.episode-card');
+            if (!episodeCard) return;
+            
+            // Check if this card is in Priority Briefings section
+            const priorityBriefings = episodeCard.closest('.priority-briefings-container');
+            if (!priorityBriefings) return;
+            
+            // Prevent opening panel twice if clicking on links within the card
+            const clickedLink = e.target.closest('a');
+            if (clickedLink && !clickedLink.classList.contains('episode-action')) {
+                // Allow other links to work normally
+                return;
+            }
+            
+            e.preventDefault();
+            this.openPanel(episodeCard);
+        });
+    },
+    
+    initCloseHandlers: function() {
+        // Close button
+        const closeBtn = this.container.querySelector('.close-button');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closePanel());
+        }
+        
+        // Play episode button
+        const playBtn = this.container.querySelector('.play-episode-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => this.handlePlayEpisode());
+        }
+        
+        // Backdrop click
+        this.backdrop.addEventListener('click', () => this.closePanel());
+        
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.closePanel();
+            }
+        });
+    },
+    
+    openPanel: function(episodeCard) {
+        // Try to get expandedView data first
+        const briefingId = episodeCard.getAttribute('data-id');
+        let data = null;
+        
+        if (briefingId && window.unifiedData?.priorityBriefings?.items) {
+            const briefing = window.unifiedData.priorityBriefings.items
+                .find(item => item.id === briefingId);
+            if (briefing?.expandedView) {
+                // Use expandedView data if available
+                data = this.formatExpandedData(briefing.expandedView, briefing.cardView, episodeCard);
+            }
+        }
+        
+        // Fall back to extracting from card if no expandedView
+        if (!data) {
+            data = this.extractEpisodeData(episodeCard);
+        }
+        
+        // Populate panel content
+        this.populatePanel(data);
+        
+        // Show backdrop
+        this.backdrop.style.display = 'block';
+        requestAnimationFrame(() => {
+            this.backdrop.classList.add('active');
+        });
+        
+        // Show and animate panel
+        this.container.classList.add('active');
+        
+        // Add class to body for any necessary styling
+        document.body.classList.add('panel-open');
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+        
+        // Set focus to close button for accessibility
+        const closeBtn = this.container.querySelector('.close-button');
+        if (closeBtn) closeBtn.focus();
+        
+        this.isOpen = true;
+    },
+    
+    closePanel: function() {
+        // Hide panel with animation
+        this.container.classList.remove('active');
+        this.backdrop.classList.remove('active');
+        
+        // Remove class from body to restore normal layout
+        document.body.classList.remove('panel-open');
+        
+        // Wait for animation to complete
+        setTimeout(() => {
+            this.backdrop.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 300);
+        
+        this.isOpen = false;
+    },
+    
+    handlePlayEpisode: function() {
+        // Get the play button
+        const playBtn = this.container.querySelector('.play-episode-btn');
+        const isPlaying = playBtn.classList.contains('playing');
+        
+        if (isPlaying) {
+            // Stop playing
+            playBtn.classList.remove('playing');
+            playBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M5 3v10l8-5z"/>
+                </svg>
+            `;
+            playBtn.setAttribute('aria-label', 'Play episode');
+            
+            // Show notification
+            this.showPlaybackNotification('Playback stopped');
+        } else {
+            // Start playing
+            playBtn.classList.add('playing');
+            playBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <rect x="5" y="3" width="2" height="10"/>
+                    <rect x="9" y="3" width="2" height="10"/>
+                </svg>
+            `;
+            playBtn.setAttribute('aria-label', 'Pause episode');
+            
+            // Get episode details for notification
+            const podcastName = this.container.querySelector('.podcast-details h3').textContent;
+            const episodeTitle = this.container.querySelector('.episode-title').textContent;
+            
+            // Show notification
+            this.showPlaybackNotification(`Playing: ${episodeTitle}`);
+        }
+    },
+    
+    showPlaybackNotification: function(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'playback-notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--sage, #4a7c59);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Fade in
+        requestAnimationFrame(() => {
+            notification.style.opacity = '1';
+        });
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    },
+    
+    extractEpisodeData: function(card) {
+        // Extract data from the episode card HTML
+        const podcastName = card.querySelector('.podcast-name')?.textContent || 'Unknown Podcast';
+        const episodeTime = card.querySelector('.episode-time')?.textContent || '';
+        const episodeTitle = card.querySelector('.episode-title')?.textContent || 'Unknown Episode';
+        const episodeGuest = card.querySelector('.episode-guest')?.textContent || '';
+        const insights = Array.from(card.querySelectorAll('.insight-list li')).map(li => li.textContent);
+        const signals = Array.from(card.querySelectorAll('.signal-tag')).map(tag => tag.textContent);
+        const priorityType = card.classList.contains('priority-critical') ? 'critical' : 
+                           card.classList.contains('priority-opportunity') ? 'opportunity' : 'elevated';
+        
+        return {
+            podcastName,
+            episodeTime,
+            episodeTitle,
+            episodeGuest,
+            insights,
+            signals,
+            priorityType
+        };
+    },
+    
+    formatExpandedData: function(expandedView, cardView, card) {
+        // Format expandedView data for the panel
+        const podcastName = cardView?.podcast || card.querySelector('.podcast-name')?.textContent || 'Unknown Podcast';
+        const episodeTime = cardView?.time || card.querySelector('.time-ago')?.textContent || '';
+        const duration = cardView?.duration || '';
+        const score = cardView?.score || '';
+        const episodeTitle = cardView?.title || card.querySelector('.episode-title')?.textContent || 'Unknown Episode';
+        const episodeGuest = cardView?.guests || card.querySelector('.episode-guest-line')?.textContent || '';
+        
+        // Extract priority type from card classes
+        const priorityType = card.classList.contains('priority-critical') ? 'critical' : 
+                           card.classList.contains('priority-opportunity') ? 'opportunity' : 'elevated';
+        
+        return {
+            // Basic info from cardView
+            podcastName,
+            episodeTime: `${episodeTime} • ${duration} • Score: ${score}`,
+            episodeTitle,
+            episodeGuest,
+            priorityType,
+            
+            // Rich data from expandedView
+            conversationSummary: expandedView.conversationSummary,
+            keyInsights: expandedView.keyInsights,
+            essentialQuote: expandedView.essentialQuote,
+            notableNumbers: expandedView.notableNumbers,
+            portfolioMentions: expandedView.portfolioMentions || [],
+            watchlistMentions: expandedView.watchlistMentions || [],
+            relatedTopics: expandedView.relatedTopics || [],
+            
+            // For backward compatibility with existing panel logic
+            insights: expandedView.keyInsights || [],
+            signals: cardView?.hashtags || []
+        };
+    },
+    
+    populatePanel: function(data) {
+        // Populate header
+        this.container.querySelector('.podcast-details h3').textContent = data.podcastName;
+        this.container.querySelector('.episode-title').textContent = data.episodeTitle;
+        
+        // Parse and populate host/guest information
+        const hostName = this.container.querySelector('.host-name');
+        const guestName = this.container.querySelector('.guest-name');
+        
+        // Extract host and guest from the data
+        if (data.episodeGuest) {
+            // Try to parse guest info - format might be "Guest: Name (Company)" or similar
+            const guestText = data.episodeGuest.replace(/^Guest:\s*/i, '');
+            if (guestText.includes('+')) {
+                // Format like "Bill Gurley (GP, Benchmark) + Harry Stebbings"
+                const parts = guestText.split('+').map(s => s.trim());
+                if (parts.length >= 2) {
+                    guestName.textContent = parts[0];
+                    hostName.textContent = parts[1].includes('Harry Stebbings') ? 'Harry Stebbings (20VC)' : parts[1];
+                } else {
+                    guestName.textContent = guestText;
+                    hostName.textContent = 'Harry Stebbings (20VC)'; // Default host
+                }
+            } else {
+                guestName.textContent = guestText;
+                hostName.textContent = 'Harry Stebbings (20VC)'; // Default host
+            }
+        } else {
+            hostName.textContent = 'Harry Stebbings (20VC)';
+            guestName.textContent = 'Guest';
+        }
+        
+        // Update podcast logo with actual image
+        const podcastLogo = this.container.querySelector('.podcast-logo');
+        const podcastImages = {
+            '20VC with Harry Stebbings': 'images/20vc.jpeg',
+            '20VC': 'images/20vc.jpeg',
+            'All-In': 'images/allin.png',
+            'The Information\'s 411': 'images/theinformation.png',
+            'Invest Like the Best': 'images/investlikethebest.jpeg',
+            'Acquired': 'images/acquired.jpeg',
+            'This Week in Startups': 'images/theweekinstartups.jpeg',
+            'Indie Hackers': 'images/indiehackers.png',
+            'The Tim Ferriss Show': 'images/timf.jpeg',
+            'Stratechery': 'images/stratechery.jpeg',
+            'The Knowledge Project': 'images/knowledgeproject.webp',
+            'BG2': 'images/bg2.png'
+        };
+        
+        const imagePath = podcastImages[data.podcastName];
+        if (imagePath) {
+            podcastLogo.innerHTML = `<img src="${imagePath}" alt="${data.podcastName} logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+        }
+        
+        // Parse episode time
+        const timeParts = data.episodeTime.split('•').map(s => s.trim());
+        if (timeParts[0]) this.container.querySelector('.panel-time-ago').textContent = timeParts[0];
+        if (timeParts[1]) this.container.querySelector('.panel-duration').textContent = timeParts[1];
+        if (timeParts[2]) this.container.querySelector('.influence-score').textContent = timeParts[2];
+        
+        // Check if we have expandedView data
+        if (data.conversationSummary) {
+            // Use the rich expandedView data
+            this.populateExpandedView(data);
+        } else {
+            // Fall back to generating content from card data
+            this.generateDynamicContent(data);
+        }
+    },
+    
+    populateExpandedView: function(data) {
+        // Populate THE CONVERSATION section
+        const conversationContent = this.container.querySelector('.conversation-content');
+        if (conversationContent && data.conversationSummary) {
+            conversationContent.innerHTML = `<p style="font-size: 15px; line-height: 1.7; color: #334155;">${data.conversationSummary}</p>`;
+        }
+        
+        // Populate KEY INSIGHTS section
+        const insightsList = this.container.querySelector('.insights-list');
+        if (insightsList && data.keyInsights) {
+            insightsList.innerHTML = data.keyInsights.map((insight, index) => `
+                <div class="insight-item" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="insight-number" style="width: 32px; height: 32px; background: var(--sage); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                        ${index + 1}
+                    </div>
+                    <div style="font-size: 15px; line-height: 1.6; color: var(--deep-ink);">
+                        ${insight.replace(/^[•·]\s*/, '')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Populate ESSENTIAL QUOTE
+        if (data.essentialQuote) {
+            const quoteText = this.container.querySelector('.quote-text');
+            const quoteAuthor = this.container.querySelector('.quote-author');
+            const quoteTimestamp = this.container.querySelector('.quote-timestamp');
+            
+            if (quoteText) quoteText.textContent = `"${data.essentialQuote.text}"`;
+            if (quoteAuthor) {
+                const authorText = data.essentialQuote.author;
+                const timeText = data.essentialQuote.time ? ` at ${data.essentialQuote.time}` : '';
+                quoteAuthor.textContent = `— ${authorText}${timeText}`;
+            }
+            if (quoteTimestamp) {
+                quoteTimestamp.style.display = 'none'; // Hide separate timestamp element
+            }
+        }
+        
+        // Populate NOTABLE NUMBERS
+        const numbersList = this.container.querySelector('.numbers-list');
+        if (numbersList && data.notableNumbers) {
+            numbersList.innerHTML = Object.entries(data.notableNumbers).map(([label, value], index, array) => `
+                <div class="number-item">
+                    <span class="number-label">${label}</span>
+                    <span class="number-value">${value}</span>
+                </div>
+                ${index < array.length - 1 ? '<div class="number-divider"></div>' : ''}
+            `).join('');
+        }
+        
+        // Populate MENTIONS section
+        this.populateMentions(data);
+        
+        // Populate RELATED TOPICS
+        const topicsList = this.container.querySelector('.topics-list');
+        if (topicsList && data.relatedTopics) {
+            topicsList.innerHTML = data.relatedTopics.map(topic => {
+                // Add hashtag if not already present
+                const tagText = topic.startsWith('#') ? topic : `#${topic}`;
+                return `<a href="#" class="topic-tag">${tagText}</a>`;
+            }).join('');
+        }
+        
+        // Hide old sections
+        const marketSignals = this.container.querySelector('.market-signals-section');
+        const patternSection = this.container.querySelector('.pattern-section');
+        const relatedSection = this.container.querySelector('.related-section');
+        if (marketSignals) marketSignals.style.display = 'none';
+        if (patternSection) patternSection.style.display = 'none';
+        if (relatedSection) relatedSection.style.display = 'none';
+    },
+    
+    populateMentions: function(data) {
+        const portfolioBlock = this.container.querySelector('.portfolio-block');
+        const watchlistBlock = this.container.querySelector('.watchlist-block');
+        
+        const hasPortfolio = data.portfolioMentions && data.portfolioMentions.length > 0;
+        const hasWatchlist = data.watchlistMentions && data.watchlistMentions.length > 0;
+        
+        // Update portfolio block
+        if (portfolioBlock) {
+            if (hasPortfolio) {
+                portfolioBlock.style.display = 'block';
+                const count = portfolioBlock.querySelector('.mentions-count');
+                if (count) {
+                    count.textContent = data.portfolioMentions.length;
+                }
+            } else {
+                portfolioBlock.style.display = 'none';
+            }
+        }
+        
+        // Update watchlist block
+        if (watchlistBlock) {
+            if (hasWatchlist) {
+                watchlistBlock.style.display = 'block';
+                const count = watchlistBlock.querySelector('.mentions-count');
+                if (count) {
+                    count.textContent = data.watchlistMentions.length;
+                }
+            } else {
+                watchlistBlock.style.display = 'none';
+            }
+        }
+    },
+    
+    generateDynamicContent: function(data) {
+        // For backward compatibility, populate conversation and insights with generated content
+        const conversationContent = this.container.querySelector('.conversation-content');
+        if (conversationContent) {
+            const context = this.generateContext(data);
+            conversationContent.innerHTML = `<p style="font-size: 15px; line-height: 1.7; color: #334155;">${context.join(' ')}</p>`;
+        }
+        
+        // Generate insights for KEY INSIGHTS section
+        const insightsList = this.container.querySelector('.insights-list');
+        if (insightsList && data.insights) {
+            const facts = this.generateFacts(data);
+            insightsList.innerHTML = facts.map((fact, index) => `
+                <div class="insight-item" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="insight-number" style="width: 32px; height: 32px; background: var(--sage); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                        ${index + 1}
+                    </div>
+                    <div style="font-size: 15px; line-height: 1.6; color: var(--deep-ink);">
+                        ${fact.replace(/^[•·]\s*/, '')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show old sections for backward compatibility
+        const marketSignals = this.container.querySelector('.market-signals-section');
+        const patternSection = this.container.querySelector('.pattern-section');
+        const relatedSection = this.container.querySelector('.related-section');
+        
+        if (marketSignals) {
+            marketSignals.style.display = 'block';
+            const signalsContainer = this.container.querySelector('.market-signals-container');
+            const signals = this.generateMarketSignals(data);
+            signalsContainer.innerHTML = signals.map(signal => `
+                <div style="padding: 1rem; background: ${signal.background}; border-left: 3px solid ${signal.borderColor}; border-radius: 6px;">
+                    <h4 style="font-size: 0.875rem; font-weight: 600; color: ${signal.titleColor}; margin-bottom: 0.5rem;">${signal.icon} ${signal.title}</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem; color: var(--deep-ink);">
+                        ${signal.items.map(item => `<li style="margin-bottom: 0.25rem;">• ${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        }
+        
+        if (patternSection) {
+            patternSection.style.display = 'block';
+            const patterns = this.generatePatterns(data);
+            const patternGrid = this.container.querySelector('.pattern-grid');
+            patternGrid.innerHTML = patterns.map(p => `
+                <div class="pattern-card">
+                    <div class="pattern-number">${p.number}</div>
+                    <div class="pattern-label">${p.label}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Generate quote
+        const quote = this.generateQuote(data);
+        this.container.querySelector('.quote-text').textContent = `"${quote.text}"`;
+        this.container.querySelector('.quote-author').textContent = `— ${quote.author}`; // Keep full author with timestamp
+        
+        if (relatedSection) {
+            relatedSection.style.display = 'block';
+            const related = this.generateRelatedEpisodes(data);
+            const relatedContainer = this.container.querySelector('.related-episodes');
+            relatedContainer.innerHTML = related.map(r => `
+                <div class="related-episode">
+                    <div class="related-title">${r.title}</div>
+                    <div class="related-note">${r.note}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Hide new sections that won't have data
+        const numbersSection = this.container.querySelector('.numbers-section');
+        const topicsSection = this.container.querySelector('.topics-section');
+        if (numbersSection) numbersSection.style.display = 'none';
+        if (topicsSection) topicsSection.style.display = 'none';
+    },
+    
+    generateFacts: function(data) {
+        // Convert insights to objective facts
+        return data.insights.map(insight => {
+            // Remove prescriptive language and make more factual
+            return insight
+                .replace(/should|must|need to/gi, '')
+                .replace(/^\s*/, '');
+        });
+    },
+    
+    generateContext: function(data) {
+        // Generate market context based on episode content
+        const hasAI = data.episodeTitle.toLowerCase().includes('ai') || 
+                     data.insights.some(i => i.toLowerCase().includes('ai'));
+        const hasValuation = data.insights.some(i => i.toLowerCase().includes('valuation'));
+        
+        const context = [];
+        if (hasAI) {
+            context.push('AI investment thesis shifting from horizontal platforms to vertical applications');
+            context.push('Proprietary data becoming primary differentiator in AI deals');
+        }
+        if (hasValuation) {
+            context.push('Valuation metrics normalizing after 18-month correction cycle');
+            context.push('Market establishing new baseline multiples across all stages');
+        }
+        context.push('Multiple sources confirming similar market observations this week');
+        context.push('Pattern consistent with broader industry consolidation trends');
+        
+        return context;
+    },
+    
+    generateMarketSignals: function(data) {
+        // Generate market signals based on episode theme
+        const signals = [
+            {
+                title: 'MOMENTUM',
+                icon: '📈',
+                background: 'var(--light-sage)',
+                borderColor: 'var(--sage)',
+                titleColor: 'var(--sage)',
+                items: [
+                    'Vertical AI applications with domain expertise',
+                    'Capital efficiency metrics over growth at all costs',
+                    'Structured liquidation preferences in hot deals'
+                ]
+            },
+            {
+                title: 'EMERGING',
+                icon: '⚡',
+                background: '#fef3e2',
+                borderColor: 'var(--amber-glow)',
+                titleColor: '#d97706',
+                items: [
+                    'AI infrastructure consolidation plays',
+                    'Retention-based valuation models',
+                    'Cross-border AI regulatory arbitrage'
+                ]
+            },
+            {
+                title: 'DECLINING',
+                icon: '📉',
+                background: 'var(--light-rose)',
+                borderColor: 'var(--dusty-rose)',
+                titleColor: '#b91c1c',
+                items: [
+                    'Horizontal AI platforms without differentiation',
+                    'Growth-at-all-costs narratives',
+                    'Clean term sheets at premium valuations'
+                ]
+            }
+        ];
+        
+        return signals;
+    },
+    
+    generatePatterns: function(data) {
+        // Generate pattern recognition based on episode type
+        const patterns = [];
+        if (data.priorityType === 'critical') {
+            patterns.push(
+                { number: '4th', label: 'Major investor this week with similar thesis' },
+                { number: '87%', label: 'Of discussions now include this theme' }
+            );
+        } else {
+            patterns.push(
+                { number: '12+', label: 'Sources confirming this market trend' },
+                { number: '3x', label: 'Increase in related deal activity' }
+            );
+        }
+        patterns.push(
+            { number: '15', label: 'Portfolio companies potentially impacted' },
+            { number: '2nd', label: 'Time this guest has discussed this topic' }
+        );
+        return patterns;
+    },
+    
+    
+    generateQuote: function(data) {
+        // Generate a contextual quote based on episode theme
+        const guestName = data.episodeGuest.replace('Guest: ', '').split('(')[0].trim();
+        const quotes = {
+            ai: {
+                text: "Vertical AI with proprietary data is the biggest market that doesn't exist yet.",
+                author: `${guestName} at 24:31`
+            },
+            saas: {
+                text: "The old playbook is dead.",
+                author: `${guestName} at 18:45`
+            },
+            default: {
+                text: "Pattern recognition beats prediction every time.",
+                author: `${guestName} at 32:10`
+            }
+        };
+        
+        if (data.episodeTitle.toLowerCase().includes('ai')) return quotes.ai;
+        if (data.episodeTitle.toLowerCase().includes('saas')) return quotes.saas;
+        return quotes.default;
+    },
+    
+    generateRelatedEpisodes: function(data) {
+        // Generate contextually relevant related episodes
+        return [
+            {
+                title: 'Stratechery: The State of SaaS',
+                note: 'Relevant: Confirms 2-3x retention metrics across 15 SaaS companies'
+            },
+            {
+                title: 'All-In: Market Dynamics Shifting',
+                note: 'Relevant: Opposing thesis - different take on same data'
+            },
+            {
+                title: 'Acquired: Deep Dive on Valuations',
+                note: 'Relevant: Historical precedent for current 20-30x multiples'
+            }
+        ];
+    },
+    
+    copyQuote: function() {
+        const quoteText = this.container.querySelector('.quote-text').textContent;
+        const quoteAuthor = this.container.querySelector('.quote-author').textContent;
+        const fullQuote = `${quoteText}\n${quoteAuthor}`;
+        
+        navigator.clipboard.writeText(fullQuote).then(() => {
+            // Visual feedback
+            const copyBtn = this.container.querySelector('.quote-action');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6l2 2 4-4"/></svg> Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        });
+    },
+    
+    // Audio playback state
+    currentPlaybackTimer: null,
+    progressInterval: null,
+    
+    toggleAudioPlayback: function(button) {
+        const isPlaying = button.classList.contains('playing');
+        const progressContainer = button.closest('.quote-section').querySelector('.audio-progress-container');
+        const progressBar = progressContainer.querySelector('.audio-progress-bar');
+        const progressFill = progressContainer.querySelector('.audio-progress-fill');
+        const audioText = button.querySelector('.audio-text');
+        
+        if (isPlaying) {
+            // Stop playback
+            this.stopPlayback(button, progressContainer, progressFill, audioText);
+        } else {
+            // Start playback
+            this.startPlayback(button, progressContainer, progressBar, progressFill, audioText);
+        }
+    },
+
+    startPlayback: function(button, progressContainer, progressBar, progressFill, audioText) {
+        // Clear any existing timers
+        if (this.currentPlaybackTimer) clearTimeout(this.currentPlaybackTimer);
+        if (this.progressInterval) clearInterval(this.progressInterval);
+        
+        // Update UI
+        button.classList.add('playing');
+        progressContainer.style.display = 'block';
+        audioText.textContent = 'Pause';
+        
+        // Reset progress
+        progressFill.style.width = '0%';
+        progressBar.setAttribute('aria-valuenow', '0');
+        
+        // Animate progress over 18 seconds
+        const duration = 18000; // 18 seconds
+        const updateInterval = 100; // Update every 100ms
+        let elapsed = 0;
+        
+        this.progressInterval = setInterval(() => {
+            elapsed += updateInterval;
+            const progress = Math.min((elapsed / duration) * 100, 100);
+            const seconds = Math.min(elapsed / 1000, 18);
+            
+            progressFill.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', Math.round(seconds));
+            
+            if (elapsed >= duration) {
+                this.stopPlayback(button, progressContainer, progressFill, audioText);
+            }
+        }, updateInterval);
+        
+        // Set timeout as backup to stop after 18 seconds
+        this.currentPlaybackTimer = setTimeout(() => {
+            this.stopPlayback(button, progressContainer, progressFill, audioText);
+        }, duration);
+    },
+
+    stopPlayback: function(button, progressContainer, progressFill, audioText) {
+        // Clear timers
+        if (this.currentPlaybackTimer) {
+            clearTimeout(this.currentPlaybackTimer);
+            this.currentPlaybackTimer = null;
+        }
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+        
+        // Update UI
+        button.classList.remove('playing');
+        audioText.textContent = 'Play clip (0:18)';
+        
+        // Reset progress after a small delay
+        setTimeout(() => {
+            progressContainer.style.display = 'none';
+            progressFill.style.width = '0%';
+            progressContainer.querySelector('.audio-progress-bar').setAttribute('aria-valuenow', '0');
+        }, 300);
+    },
+    
+    // Public API method to open panel by briefing ID
+    openPanelById: function(briefingId) {
+        if (!briefingId) {
+            console.error('EpisodePanel.openPanelById: No briefing ID provided');
+            return;
+        }
+        
+        // Find the briefing data first
+        const briefing = window.unifiedData?.priorityBriefings?.items?.find(item => item.id === briefingId);
+        if (!briefing) {
+            console.error('EpisodePanel.openPanelById: Briefing not found:', briefingId);
+            return;
+        }
+        
+        // Create a minimal element that mimics what openPanel expects
+        const fakeCard = document.createElement('div');
+        fakeCard.setAttribute('data-id', briefingId);
+        fakeCard.className = 'episode-card';
+        
+        // Add priority class based on briefing priority
+        if (briefing.priority) {
+            fakeCard.classList.add(`priority-${briefing.priority}`);
+        }
+        
+        // Populate the fake card with data so formatExpandedData doesn't fail
+        // This ensures the fallback card.querySelector() calls have data to work with
+        const cardView = briefing.cardView || briefing;
+        fakeCard.innerHTML = `
+            <div class="podcast-name">${cardView.podcast || briefing.podcast || 'Unknown Podcast'}</div>
+            <div class="time-ago">${cardView.time || ''}</div>
+            <div class="episode-duration">${cardView.duration || ''}</div>
+            <div class="episode-score">${cardView.score || ''}</div>
+            <div class="episode-title">${cardView.title || briefing.title || 'Unknown Episode'}</div>
+            <div class="episode-guest-line">${cardView.guests || briefing.guest || ''}</div>
+        `;
+        
+        // Call the existing openPanel method
+        this.openPanel(fakeCard);
+    }
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => EpisodePanel.init());
+} else {
+    EpisodePanel.init();
+}
+
+window.EpisodePanel = EpisodePanel;

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Library Cards View - Final Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+        h1 { color: #1a1a2e; }
+        .instructions {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .code {
+            background: #1e293b;
+            color: #22d3ee;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .button {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #365a42;
+        }
+        .fix-summary {
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+            margin: 20px 0;
+        }
+        .debug-output {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        ol li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Episode Library Cards View - Final Test</h1>
+        
+        <div class="fix-summary">
+            <h3>✅ Applied Fixes:</h3>
+            <ul>
+                <li>Added cache-busting parameters to script tags</li>
+                <li>Removed data conversion function that was corrupting data</li>
+                <li>Episode Library now uses shared renderer directly</li>
+                <li>Added debugging logs throughout the code</li>
+            </ul>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Test Instructions:</h3>
+            <ol>
+                <li>
+                    <strong>Clear Browser Cache:</strong>
+                    <div class="code">Cmd + Shift + R (Mac) or Ctrl + Shift + R (Windows)</div>
+                </li>
+                
+                <li>
+                    <strong>Open the Demo:</strong>
+                    <a href="demo.html" target="_blank" class="button">Open Demo</a>
+                </li>
+                
+                <li>
+                    <strong>Open Developer Console:</strong>
+                    <div class="code">F12 or Cmd + Option + I</div>
+                </li>
+                
+                <li>
+                    <strong>Click "Episode Library" button in header</strong>
+                    <p>You should see console logs about the library opening</p>
+                </li>
+                
+                <li>
+                    <strong>Click "Cards" button in the Episode Library</strong>
+                    <p>Watch the console for these logs:</p>
+                    <div class="code">[Episode Library] View toggle button clicked: Cards
+[Episode Library] Is table view? false -> Setting mode to: cards
+[Episode Library] Setting view mode to: cards
+[Episode Library] Updating content, view mode: cards
+[Episode Library] Episodes to render: [number]
+[Episode Library] renderCardView called with [number] episodes
+[Episode Library] Cards HTML generated, length: [number]</div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="debug-output">
+            <h3>🐛 Debug Commands to Run in Console:</h3>
+            <div class="code">// Check if shared renderer is loaded
+console.log('Shared renderer exists?', typeof window.renderBriefingCards);
+
+// Check Episode Library state
+console.log('Current view mode:', window.EpisodeLibrary.state.viewMode);
+
+// Check if cards grid exists
+document.querySelector('.episode-library-cards-grid');
+
+// Manually trigger card view
+window.EpisodeLibrary.setViewMode('cards');
+
+// Check for briefing cards
+document.querySelectorAll('.briefing-card').length;</div>
+        </div>
+
+        <div class="instructions">
+            <h3>✅ Expected Result:</h3>
+            <p>When you click "Cards" button, you should see:</p>
+            <ul>
+                <li>Episode cards in a 3-column grid layout</li>
+                <li>Each card showing: podcast badge, host, guest, priority tag, score, hashtags</li>
+                <li>Cards identical to Priority Briefings but in 3 columns instead of 2</li>
+                <li>No "KEY INSIGHTS" sections or colored backgrounds</li>
+            </ul>
+        </div>
+
+        <div class="fix-summary">
+            <h3>⚠️ If Cards Still Don't Show:</h3>
+            <ol>
+                <li>Hard refresh again (Cmd+Shift+R)</li>
+                <li>Check console for any error messages</li>
+                <li>Run the debug commands above</li>
+                <li>Check Network tab to ensure briefing-card-renderer.js is loaded</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

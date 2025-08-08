@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Panel Integration Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-button {
+            padding: 10px 20px;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #3a6c49;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Episode Panel Integration Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Direct API Call</h2>
+        <p>Test the Episode Panel API directly without going through Priority Briefings</p>
+        <button class="test-button" onclick="testDirectAPI()">Test openPanelById('briefing-1')</button>
+        <div id="test1-status" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Simulated Priority Briefing Button</h2>
+        <p>Test a button that mimics the Priority Briefings structure</p>
+        <button class="view-brief-btn test-button" data-briefing-id="briefing-2">
+            View Full Brief → (Simulated)
+        </button>
+        <div id="test2-status" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Component Status</h2>
+        <button class="test-button" onclick="checkComponents()">Check Component Status</button>
+        <div id="test3-status" class="status"></div>
+    </div>
+
+    <!-- Load all required scripts -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/episode-panel/episode-panel.js"></script>
+    
+    <script>
+        // Test Direct API
+        function testDirectAPI() {
+            const status = document.getElementById('test1-status');
+            try {
+                if (window.EpisodePanel && window.EpisodePanel.openPanelById) {
+                    window.EpisodePanel.openPanelById('briefing-1');
+                    status.innerHTML = '<span class="success">✓ Successfully called openPanelById</span>';
+                } else {
+                    status.innerHTML = '<span class="error">✗ EpisodePanel API not available</span>';
+                }
+            } catch (error) {
+                status.innerHTML = '<span class="error">✗ Error: ' + error.message + '</span>';
+            }
+        }
+
+        // Check Components
+        function checkComponents() {
+            const status = document.getElementById('test3-status');
+            const checks = [
+                { name: 'window.EpisodePanel', exists: !!window.EpisodePanel },
+                { name: 'EpisodePanel.openPanelById', exists: !!(window.EpisodePanel && window.EpisodePanel.openPanelById) },
+                { name: 'window.unifiedData', exists: !!window.unifiedData },
+                { name: 'Priority Briefings Data', exists: !!(window.unifiedData && window.unifiedData.priorityBriefings) },
+            ];
+            
+            let html = '<h4>Component Status:</h4>';
+            checks.forEach(check => {
+                const icon = check.exists ? '✓' : '✗';
+                const className = check.exists ? 'success' : 'error';
+                html += `<div class="${className}">${icon} ${check.name}: ${check.exists ? 'Available' : 'Not Found'}</div>`;
+            });
+            
+            status.innerHTML = html;
+        }
+
+        // Add mediator for simulated button
+        document.body.addEventListener('click', function(event) {
+            const viewButton = event.target.closest('.view-brief-btn');
+            
+            if (viewButton) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const briefingId = viewButton.getAttribute('data-briefing-id');
+                const status = document.getElementById('test2-status');
+                
+                try {
+                    if (briefingId && window.EpisodePanel && window.EpisodePanel.openPanelById) {
+                        window.EpisodePanel.openPanelById(briefingId);
+                        status.innerHTML = '<span class="success">✓ Mediator successfully intercepted and opened panel for: ' + briefingId + '</span>';
+                    } else {
+                        status.innerHTML = '<span class="error">✗ Failed to open panel</span>';
+                    }
+                } catch (error) {
+                    status.innerHTML = '<span class="error">✗ Error: ' + error.message + '</span>';
+                }
+            }
+        }, true);
+        
+        // Auto-check components on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkComponents, 500);
+        });
+    </script>
+</body>
+</html>

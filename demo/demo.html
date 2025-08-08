@@ -40,22 +40,32 @@
     <link rel="stylesheet" href="styles/components.css">
     <link rel="stylesheet" href="styles/utilities.css">
     
-    <!-- Episode Panel Styles -->
-    <link rel="stylesheet" href="features/episode-panel/episode-panel.css">
-    <link rel="stylesheet" href="episode-panel-clean-fix.css">
+    <!-- Episode Panel v2.0 Styles - Clean architecture without !important -->
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css">
+    <!-- Episode Panel v2.0 Override - Ensures header displays correctly -->
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2-override.css">
     
     <!-- Portfolio Panel Styles -->
     <link rel="stylesheet" href="styles/portfolio.css">
     
+    <!-- Briefing Card Clickable -->
+    <link rel="stylesheet" href="briefing-card-clickable.css">
+    
     <!-- Search Styles -->
     <link rel="stylesheet" href="styles/search.css">
+    
+    <!-- Episode Library Styles -->
+    <link rel="stylesheet" href="features/episode-library/episode-library.css">
+    
+    <!-- Priority Briefings Compact Styles -->
+    <link rel="stylesheet" href="styles/priority-briefings-compact.css">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="header-main">
             <div class="logo-container">
-                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai Logo">
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai (Working Title) Logo">
                     <defs>
                         <clipPath id="sage-circle1">
                             <circle r="13" cx="14" cy="16"></circle>
@@ -93,6 +103,7 @@
                 <div class="logo-text">
                     <div class="logo">synthea.ai</div>
                     <div class="tagline">synthesized intelligence</div>
+                    <span class="working-title-badge" aria-hidden="true">working title</span>
                 </div>
             </div>
             
@@ -230,6 +241,8 @@
     <script src="data/unified-data.js" defer></script>
     <script src="data/data-adapter.js" defer></script>
     <script src="data/data-validator.js" defer></script>
+    <!-- Backup data for clean guest information -->
+    <script src="data/priorityBriefings_backup_20250805_213425.js" defer></script>
     
     <!-- Component Scripts -->
     <script src="features/narrative-pulse/unified-data-adapter.js" defer></script>
@@ -246,18 +259,29 @@
     <script src="features/notable-signals/notable-signals.js" defer></script>
     <script src="features/notable-signals/init.js" defer></script>
     
-    <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script>
-    <script src="features/priority-briefings/init.js" defer></script>
+    <!-- Shared Briefing Card Renderer - Used by Priority Briefings and Episode Library -->
+    <script src="shared/briefing-card-renderer.js?v=20250108" defer></script>
+    
+    <!-- Priority Briefings Compact Implementation -->
+    <script src="features/priority-briefings/priority-briefings-compact.js" defer></script>
+    <!-- Commenting out old Priority Briefings scripts -->
+    <!-- <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script> -->
+    <!-- <script src="features/priority-briefings/priority-briefings-expanded.js" defer></script> -->
+    <!-- <script src="features/priority-briefings/init.js" defer></script> -->
     
     <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
     <script src="features/intelligence-brief/init.js" defer></script>
-    <script src="features/intelligence-brief/velocity-tracking.js" defer></script>
+    <!-- Removed velocity-tracking.js - now using unified data source in intelligence-brief.js -->
     
-    <!-- Episode Panel -->
-    <script src="features/episode-panel/episode-panel.js" defer></script>
+    <!-- Episode Panel v2.0 - Enhanced with interactive badges -->
+    <script src="features/episode-panel/episode-panel-v2.js?v=20250107" defer></script>
     
     <!-- Search -->
     <script src="search.js" defer></script>
+    
+    <!-- Episode Library -->
+    <script src="features/episode-library/episode-library.js?v=20250108" defer></script>
+    <script src="features/episode-library/init.js" defer></script>
     
     <!-- Main Application Orchestrator -->
     <script src="main.js" defer></script>
@@ -300,136 +324,103 @@
 
         <!-- Content -->
         <div class="panel-content">
-            <!-- Stats Summary -->
-            <div class="stats-summary">
-                <div class="stat-item">
-                    <span class="stat-value">4</span>
-                    <span class="stat-label">Total Companies</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">19</span>
-                    <span class="stat-label">Mentions This Week</span>
-                </div>
-                <div class="stat-item trending-positive">
-                    <span class="stat-value">+73%</span>
-                    <span class="stat-label">Positive Sentiment</span>
-                </div>
+            <!-- Unified Metrics Header -->
+            <div class="unified-metrics-header" id="portfolio-metrics">
+                <span class="metrics-text">Tracking <span id="companyCount">3</span> companies • <span id="mentionCount">26</span> mentions this week • <span id="sentimentPercent">46%</span> positive sentiment</span>
             </div>
 
             <!-- Portfolio Section -->
-            <div class="quick-add-section">
+            <div class="company-section portfolio-section">
                 <h3 class="section-label">PORTFOLIO COMPANIES</h3>
-                <form class="add-company-form" data-list="portfolio">
-                    <input type="text" class="company-input" placeholder="Enter company name" />
-                    <button type="submit" class="add-button">+ Add</button>
-                </form>
                 
-                <!-- Import Section (only for portfolio) -->
-                <div class="import-section">
-                    <p>Or import your portfolio:</p>
-                    <div class="import-buttons">
-                        <button class="import-button">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 1V7H15M9 1L15 7M11 9V13H5V3H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Upload CSV
-                        </button>
-                        <button class="import-button">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 9C6 9 6 11 3 11C0 11 0 9 0 9C0 9 0 7 3 7C4.5 7 5.5 7.5 6 8.5L10 6.5C10 6.5 10 4.5 13 4.5C16 4.5 16 6.5 16 6.5C16 6.5 16 8.5 13 8.5C11.5 8.5 10.5 8 10 7L6 9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Connect CRM
-                        </button>
+                <!-- Add Company Input -->
+                <div class="add-company-wrapper">
+                    <input 
+                        type="text" 
+                        class="company-input" 
+                        placeholder="Add portfolio company"
+                        data-list="portfolio"
+                    >
+                    <button class="add-button primary-btn" data-list="portfolio">Add</button>
+                </div>
+                
+
+                <!-- Portfolio List -->
+                <div class="list-header">
+                    <h3>PORTFOLIO <span class="company-count portfolio-count">(2)</span></h3>
+                </div>
+                <div class="portfolio-companies" data-list="portfolio">
+                    <!-- Existing portfolio cards stay here -->
+                    <div class="company-card positive" data-company="anthropic" data-list="portfolio">
+                        <div class="company-content">
+                            <div class="company-header">
+                                <span class="company-name">Anthropic</span>
+                                <button class="remove-btn" aria-label="Remove Anthropic">×</button>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="mention-trend">↑</span>
+                                <span class="mention-count">7 mentions</span>
+                                <span class="sentiment-dots">
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                </span>
+                            </div>
+                            <div class="company-insight">
+                                Strong AI safety narrative aligning with thesis
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="company-card negative" data-company="openai" data-list="portfolio">
+                        <div class="company-content">
+                            <div class="company-header">
+                                <span class="company-name">OpenAI</span>
+                                <button class="remove-btn" aria-label="Remove OpenAI">×</button>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="mention-trend">↑</span>
+                                <span class="mention-count">12 mentions</span>
+                                <span class="sentiment-dots">
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                </span>
+                            </div>
+                            <div class="company-insight">
+                                Competitive landscape intensifying, monitor closely
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Watchlist Section -->
-            <div class="quick-add-section watchlist-section">
+            <div class="company-section watchlist-section">
                 <h3 class="section-label">WATCHLIST COMPANIES</h3>
-                <form class="add-company-form" data-list="watchlist">
-                    <input type="text" class="company-input" placeholder="Enter company name" />
-                    <button type="submit" class="add-button">+ Add</button>
-                </form>
-            </div>
-
-            <!-- Portfolio List -->
-            <div class="company-list-section">
-                <div class="list-header">
-                    <h3>
-                        <span class="section-icon">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2 13V7M6 13V3M10 13V9M14 13V5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                        YOUR PORTFOLIO
-                    </h3>
-                    <span class="company-count portfolio-count">(2)</span>
+                
+                <!-- Add Company Input -->
+                <div class="add-company-wrapper">
+                    <input 
+                        type="text" 
+                        class="company-input" 
+                        placeholder="Add company to monitor"
+                        data-list="watchlist"
+                    >
+                    <button class="add-button primary-btn" data-list="watchlist">Add</button>
                 </div>
-                <div class="portfolio-companies" data-list="portfolio">
-                    <!-- Existing portfolio cards stay here -->
-                    <div class="company-card validated" data-company="anthropic" data-list="portfolio">
-                        <button class="delete-button" aria-label="Remove Anthropic">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M4 3.5L10 10.5M10 3.5L4 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                        <div class="company-header">
-                            <span class="company-name">Anthropic</span>
-                        </div>
-                        <div class="company-mention">
-                            <span class="mention-badge positive">
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                7 mentions
-                            </span>
-                        </div>
-                        <div class="company-details">
-                            5 positive, 2 neutral
-                            <span class="validated-label">Thesis validated</span>
-                        </div>
-                    </div>
-                    
-                    <div class="company-card threat" data-company="openai" data-list="portfolio">
-                        <button class="delete-button" aria-label="Remove OpenAI">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M4 3.5L10 10.5M10 3.5L4 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                        <div class="company-header">
-                            <span class="company-name">OpenAI</span>
-                        </div>
-                        <div class="company-mention">
-                            <span class="mention-badge threat">
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 2L11 10H1L6 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                                    <path d="M6 4.5V7.5M6 8.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                </svg>
-                                12 mentions
-                            </span>
-                        </div>
-                        <div class="company-details">
-                            Competitive landscape intensifying
-                            <span class="threat-label">Competitive threat</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Watchlist List -->
-            <div class="company-list-section" style="margin-top: 32px;">
+                <!-- Watchlist List -->
                 <div class="list-header">
-                    <h3>
-                        <span class="section-icon">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                        YOUR WATCHLIST
-                    </h3>
-                    <span class="company-count watchlist-count">(0)</span>
+                    <h3>WATCHLIST <span class="company-count watchlist-count">(1)</span></h3>
                 </div>
                 <div class="watchlist-companies" data-list="watchlist">
                     <div class="empty-state">
@@ -447,7 +438,7 @@
 
         <!-- Footer -->
         <div class="panel-footer">
-            Import formats: CSV, Affinity, Airtable, PitchBook
+            <a href="#" class="import-link" id="import-companies">Import companies from CSV or CRM</a>
         </div>
     </div>
 
@@ -481,5 +472,6 @@
             <button class="primary-button" data-action="applyTopics" disabled>Apply Changes</button>
         </div>
     </div>
+
 </body>
 </html>

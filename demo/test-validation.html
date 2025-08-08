@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Validation Test</title>
+</head>
+<body>
+    <h1>Data Validation Test</h1>
+    <div id="results"></div>
+    
+    <script src="data/unified-data.js"></script>
+    <script src="data/data-validator.js"></script>
+    <script>
+        // Run validation
+        const results = window.dataValidator.validate();
+        const resultsDiv = document.getElementById('results');
+        
+        if (results.valid) {
+            resultsDiv.innerHTML = '<h2 style="color: green;">✅ Validation PASSED!</h2>';
+        } else {
+            resultsDiv.innerHTML = '<h2 style="color: red;">❌ Validation FAILED</h2>';
+            resultsDiv.innerHTML += '<h3>Errors:</h3>';
+            resultsDiv.innerHTML += '<pre>' + JSON.stringify(results.errors, null, 2) + '</pre>';
+        }
+        
+        if (results.warnings.length > 0) {
+            resultsDiv.innerHTML += '<h3>Warnings:</h3>';
+            resultsDiv.innerHTML += '<pre>' + JSON.stringify(results.warnings, null, 2) + '</pre>';
+        }
+        
+        console.log('Validation results:', results);
+    </script>
+</body>
+</html>

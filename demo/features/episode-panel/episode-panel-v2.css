@@ -1,0 +1,835 @@
+/* Episode Panel v2.0 - Clean CSS Architecture */
+/* No !important declarations - proper specificity management */
+
+/* CSS Custom Properties for theming and responsive sizing - MAGAZINE STYLE */
+.epb-panel-v2 {
+    --epb-width: min(850px, 62vw);
+    --epb-max-width: 900px;
+    --epb-header-height: 155px; /* Expanded header with host/guest info */
+    --epb-padding-xs: 8px;
+    --epb-padding-sm: 12px;
+    --epb-padding-md: 16px;
+    --epb-padding-lg: 20px;
+    --epb-padding-xl: 24px; /* New for section spacing */
+    --epb-font-xs: 11px;
+    --epb-font-sm: 12px;
+    --epb-font-md: 13px;
+    --epb-font-lg: 14px;
+    --epb-font-xl: 16px;
+    --epb-font-xxl: 18px; /* New for prominent elements */
+    --epb-line-height: 1.6; /* Better readability */
+    --epb-sage: #4a7c59;
+    --epb-sage-light: #e8f0ea;
+    --epb-sage-ultra-light: #f0f7ff;
+    --epb-rose: #c77d7d;
+    --epb-amber: #f4a261;
+    --epb-gray-100: #f8fafc;
+    --epb-gray-200: #e2e8f0;
+    --epb-gray-400: #94a3b8;
+    --epb-gray-600: #64748b;
+    --epb-gray-800: #1e293b;
+    --epb-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+    --epb-transition: 0.3s ease-out;
+}
+
+/* Backdrop overlay */
+.epb-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--epb-transition);
+}
+
+.epb-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Main Panel Container */
+.epb-panel-v2 .epb-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: var(--epb-width);
+    max-width: var(--epb-max-width);
+    height: 100vh;
+    background: white;
+    box-shadow: var(--epb-shadow);
+    transform: translateX(100%);
+    transition: transform var(--epb-transition);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.epb-panel-v2 .epb-panel.active {
+    transform: translateX(0);
+}
+
+/* Header Section - EXPANDED MAGAZINE STYLE 140px - WITH HOST/GUEST */
+.epb-panel-v2 .epb-header {
+    background: linear-gradient(135deg, #3a4556 0%, #2c3745 100%);
+    padding: var(--epb-padding-xl);
+    color: white;
+    flex-shrink: 0;
+    min-height: var(--epb-header-height);
+    height: var(--epb-header-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+/* Header Top Row - Logo, Podcast Info, and Actions */
+.epb-panel-v2 .epb-header-top {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: auto;
+}
+
+/* Left Section - Logo + Podcast + Meta */
+.epb-panel-v2 .epb-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--epb-padding-md);
+}
+
+.epb-panel-v2 .epb-logo {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #2c3745;
+    font-size: var(--epb-font-lg);
+    flex-shrink: 0;
+}
+
+.epb-panel-v2 .epb-podcast-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.epb-panel-v2 .epb-podcast-name {
+    font-weight: 500;
+    font-size: var(--epb-font-lg);
+    opacity: 1;
+    color: white;
+}
+
+.epb-panel-v2 .epb-meta {
+    opacity: 0.7;
+    font-size: var(--epb-font-sm);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Header Middle - Title */
+.epb-panel-v2 .epb-header-middle {
+    margin: var(--epb-padding-md) 0;
+}
+
+/* Header Bottom - Host and Guest */
+.epb-panel-v2 .epb-header-bottom {
+    display: flex;
+    gap: var(--epb-padding-xl);
+}
+
+.epb-panel-v2 .epb-header-person {
+    display: flex;
+    align-items: baseline;
+    gap: var(--epb-padding-sm);
+}
+
+.epb-panel-v2 .epb-header-label {
+    font-size: var(--epb-font-xs);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.epb-panel-v2 .epb-header-name {
+    font-size: var(--epb-font-xs);
+    font-weight: 500;
+    color: white;
+}
+
+/* Unused old styles */
+.epb-panel-v2 .epb-header-center {
+    display: none;
+}
+
+/* Reset conflicting old styles */
+.epb-panel-v2 .epb-podcast-details {
+    display: none;
+}
+
+/* Action Buttons - MAGAZINE STYLE */
+.epb-panel-v2 .epb-actions {
+    display: flex;
+    gap: var(--epb-padding-xs);
+    flex-shrink: 0;
+}
+
+.epb-panel-v2 .epb-btn {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--epb-font-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.epb-panel-v2 .epb-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.epb-panel-v2 .epb-btn.epb-close:hover {
+    background: rgba(220, 38, 38, 0.5);
+}
+
+/* Play button playing state */
+.epb-panel-v2 .epb-play.playing {
+    background: var(--epb-sage);
+    border-color: var(--epb-sage);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.epb-panel-v2 .epb-play.playing::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: var(--epb-sage);
+    opacity: 0.6;
+    animation: ripple-square 1.5s ease-out infinite;
+}
+
+@keyframes ripple-square {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* Title - PROMINENT MAGAZINE STYLE */
+.epb-panel-v2 .epb-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+    color: white;
+    letter-spacing: -0.5px;
+}
+
+/* Old participants styles - REMOVED */
+.epb-panel-v2 .epb-participants {
+    display: none;
+}
+
+.epb-panel-v2 .epb-label {
+    font-size: 9px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-right: 2px;
+}
+
+/* Content Area - Two Column Layout */
+.epb-panel-v2 .epb-content {
+    display: grid;
+    grid-template-columns: 1fr minmax(250px, 35%);
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - var(--epb-header-height));
+}
+
+/* Main Column - MAGAZINE STYLE WITH BREATHING ROOM */
+.epb-panel-v2 .epb-main {
+    padding: 24px; /* Reduced from 28px for tighter, more balanced layout */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.epb-panel-v2 .epb-section {
+    margin-bottom: 24px; /* Reduced from 28px for better visual rhythm */
+}
+
+.epb-panel-v2 .epb-section:last-child {
+    margin-bottom: 0;
+}
+
+.epb-panel-v2 .epb-section-title {
+    font-size: var(--epb-font-sm);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--epb-gray-600);
+    margin-bottom: 12px;
+    margin-top: 8px;
+}
+
+/* Conversation Summary Box - MAGAZINE STYLE */
+.epb-panel-v2 .epb-conversation {
+    background: var(--epb-gray-100);
+    padding: var(--epb-padding-md);
+    border-radius: 8px;
+    font-size: var(--epb-font-md);
+    line-height: var(--epb-line-height);
+    color: var(--epb-gray-800);
+    border: 1px solid var(--epb-gray-200);
+}
+
+/* Key Insights - REFERENCE DESIGN WITH LIGHT BLUE BACKGROUND */
+.epb-panel-v2 .epb-insights {
+    background: #f0f7ff;
+    padding: var(--epb-padding-md); /* Reduced from 20px to 16px for consistency with conversation section */
+    border-radius: 8px;
+    border-left: 3px solid var(--epb-sage);
+}
+
+.epb-panel-v2 .epb-insight {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--epb-padding-sm);
+    padding-left: 0;
+}
+
+.epb-panel-v2 .epb-insight:last-child {
+    margin-bottom: 0;
+}
+
+/* Convert number to bullet point */
+.epb-panel-v2 .epb-insight-num {
+    position: relative;
+    width: 20px;
+    flex-shrink: 0;
+    font-size: 0;
+    color: transparent;
+}
+
+.epb-panel-v2 .epb-insight-num::before {
+    content: "•";
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--epb-gray-600);
+    font-size: 16px;
+    line-height: 1;
+}
+
+.epb-panel-v2 .epb-insight-text {
+    flex: 1;
+    font-size: var(--epb-font-md);
+    line-height: 1.6;
+    color: var(--epb-gray-800);
+    padding-left: 4px;
+}
+
+/* Interactive Portfolio/Watchlist Badges - MAGAZINE STYLE PILLS */
+.epb-panel-v2 .epb-badges {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+
+.epb-panel-v2 .epb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: white;
+    border: 1.5px solid var(--epb-gray-200);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    font-size: var(--epb-font-sm);
+    transform: scale(1);
+}
+
+.epb-panel-v2 .epb-badge:hover {
+    border-color: var(--epb-sage);
+    box-shadow: 0 2px 6px rgba(74, 124, 89, 0.2);
+    transform: scale(1.02);
+}
+
+.epb-panel-v2 .epb-badge:active {
+    transform: scale(0.98);
+    transition-duration: 0.1s;
+}
+
+.epb-panel-v2 .epb-badge.active {
+    background: var(--epb-sage);
+    border-color: var(--epb-sage);
+    color: white;
+    transform: scale(1);
+    box-shadow: 0 3px 8px rgba(74, 124, 89, 0.25);
+}
+
+.epb-panel-v2 .epb-badge.active .epb-badge-label {
+    color: white;
+}
+
+.epb-panel-v2 .epb-badge.active .epb-badge-count {
+    background: white;
+    color: var(--epb-sage);
+}
+
+/* Badge header removed - now inline */
+.epb-panel-v2 .epb-badge-header {
+    display: none;
+}
+
+.epb-panel-v2 .epb-badge-label {
+    font-size: var(--epb-font-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--epb-gray-600);
+    letter-spacing: 0.5px;
+}
+
+.epb-panel-v2 .epb-badge-count {
+    background: var(--epb-sage);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.epb-panel-v2 .epb-badge-count.zero {
+    background: var(--epb-gray-400);
+}
+
+/* Badge expanded content */
+.epb-panel-v2 .epb-badge-content {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--epb-gray-100);
+    border-radius: 6px;
+    border-left: 3px solid var(--epb-sage);
+    display: none;
+}
+
+.epb-panel-v2 .epb-badge-content.show {
+    display: block;
+}
+
+.epb-panel-v2 .epb-badge-list {
+    display: none;
+}
+
+.epb-panel-v2 .epb-badge-item {
+    padding: 10px 0;
+    font-size: var(--epb-font-sm);
+    color: var(--epb-gray-800);
+    border-bottom: 1px solid var(--epb-gray-200);
+}
+
+.epb-panel-v2 .epb-badge-item:last-child {
+    border-bottom: none;
+}
+
+.epb-panel-v2 .epb-badge-item-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.epb-panel-v2 .epb-badge-item .epb-quote-text {
+    font-size: var(--epb-font-sm);
+    line-height: 1.5;
+    color: var(--epb-gray-600);
+    font-style: italic;
+    padding-left: 26px;
+    margin-top: 4px;
+}
+
+/* Badge Content Expanded Styles */
+.epb-panel-v2 .epb-badge-header-expanded {
+    font-size: var(--epb-font-xs);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--epb-gray-600);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.epb-panel-v2 .epb-count-label {
+    font-size: 9px;
+    color: var(--epb-gray-400);
+    font-weight: 400;
+}
+
+.epb-panel-v2 .epb-play-inline {
+    width: 18px;
+    height: 18px;
+    background: var(--epb-sage);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 8px;
+    position: relative;
+}
+
+.epb-panel-v2 .epb-play-inline:hover {
+    background: #5a8c69;
+    transform: scale(1.1);
+}
+
+/* Playing state animation */
+.epb-panel-v2 .epb-play-inline.playing {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.epb-panel-v2 .epb-play-inline.playing::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--epb-sage);
+    opacity: 0.6;
+    animation: ripple 1.5s ease-out infinite;
+}
+
+.epb-panel-v2 .epb-play-inline.playing::after {
+    content: '||';
+    position: absolute;
+    font-size: 7px;
+    font-weight: bold;
+    color: white;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+    }
+}
+
+.epb-panel-v2 .epb-company-name {
+    font-weight: 600;
+    color: var(--epb-gray-800);
+    flex: 1;
+}
+
+.epb-panel-v2 .epb-mention-time {
+    font-size: var(--epb-font-xs);
+    color: var(--epb-gray-400);
+    margin-left: auto;
+}
+
+.epb-panel-v2 .epb-empty-state {
+    text-align: center;
+    padding: var(--epb-padding-lg);
+    color: var(--epb-gray-400);
+}
+
+.epb-panel-v2 .epb-empty-state div {
+    font-size: 20px;
+    margin-bottom: 6px;
+    opacity: 0.5;
+}
+
+.epb-panel-v2 .epb-empty-state p {
+    font-size: var(--epb-font-sm);
+    margin: 0;
+}
+
+/* Sidebar - MAGAZINE STYLE */
+.epb-panel-v2 .epb-sidebar {
+    background: var(--epb-gray-100);
+    padding: 24px 20px; /* Reduced from 28px to match main column */
+    border-left: 1px solid var(--epb-gray-200);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Reduced from 24px for consistency */
+}
+
+/* Essential Quote Block - PROMINENT MAGAZINE STYLE */
+.epb-panel-v2 .epb-quote {
+    background: linear-gradient(135deg, var(--epb-amber) 0%, #e57c3c 100%);
+    padding: 18px 20px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(244, 162, 97, 0.2);
+}
+
+.epb-panel-v2 .epb-quote .epb-section-title {
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 10px;
+    margin-top: 0;
+    font-size: var(--epb-font-xs);
+    letter-spacing: 1px;
+}
+
+.epb-panel-v2 .epb-quote-text {
+    font-size: var(--epb-font-lg);
+    line-height: var(--epb-line-height);
+    color: white;
+    font-style: italic;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.epb-panel-v2 .epb-quote-author {
+    font-size: var(--epb-font-sm);
+    color: rgba(255, 255, 255, 0.95);
+    text-align: right;
+    font-weight: 600;
+}
+
+/* Notable Numbers - LIST STYLE LAYOUT */
+.epb-panel-v2 .epb-numbers {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0;
+    margin-top: var(--epb-padding-sm);
+}
+
+.epb-panel-v2 .epb-number {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    transition: none;
+}
+
+.epb-panel-v2 .epb-number:hover {
+    transform: none;
+    border: none;
+    box-shadow: none;
+}
+
+.epb-panel-v2 .epb-number-label {
+    font-size: var(--epb-font-md);
+    color: var(--epb-gray-600);
+    line-height: 1.4;
+    text-transform: none;
+    letter-spacing: normal;
+    order: 1;
+}
+
+.epb-panel-v2 .epb-number-val {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--epb-gray-800);
+    line-height: 1;
+    margin: 0;
+    order: 2;
+}
+
+/* Related Topics - MAGAZINE STYLE */
+
+.epb-panel-v2 .epb-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--epb-padding-xs);
+    margin-top: var(--epb-padding-sm);
+}
+
+.epb-panel-v2 .epb-tag {
+    padding: 6px var(--epb-padding-md);
+    background: var(--epb-sage-light);
+    color: var(--epb-sage);
+    border-radius: 16px;
+    font-size: var(--epb-font-sm);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.epb-panel-v2 .epb-tag:hover {
+    background: var(--epb-sage);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Custom Scrollbar */
+.epb-panel-v2 .epb-main::-webkit-scrollbar,
+.epb-panel-v2 .epb-sidebar::-webkit-scrollbar,
+.epb-panel-v2 .epb-badge-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.epb-panel-v2 .epb-main::-webkit-scrollbar-thumb,
+.epb-panel-v2 .epb-sidebar::-webkit-scrollbar-thumb,
+.epb-panel-v2 .epb-badge-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.epb-panel-v2 .epb-main::-webkit-scrollbar-track,
+.epb-panel-v2 .epb-sidebar::-webkit-scrollbar-track,
+.epb-panel-v2 .epb-badge-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Responsive Adjustments */
+
+/* For laptop screens with limited height */
+@media (max-height: 768px) {
+    .epb-panel-v2 {
+        --epb-header-height: 55px;
+        --epb-padding-md: 10px;
+        --epb-font-xl: 15px;
+    }
+    
+    .epb-panel-v2 .epb-insight {
+        padding: 6px;
+    }
+    
+    .epb-panel-v2 .epb-section {
+        margin-bottom: 10px;
+    }
+    
+    .epb-panel-v2 .epb-conversation {
+        padding: 6px 8px;
+    }
+}
+
+/* For standard laptop width */
+@media (max-width: 1366px) {
+    .epb-panel-v2 {
+        --epb-width: 65vw;
+    }
+    
+    .epb-panel-v2 .epb-content {
+        grid-template-columns: 1fr 280px;
+    }
+}
+
+/* For smaller screens */
+@media (max-width: 1024px) {
+    .epb-panel-v2 {
+        --epb-width: 75vw;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+    .epb-panel-v2 {
+        --epb-width: 90vw;
+    }
+    
+    .epb-panel-v2 .epb-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .epb-panel-v2 .epb-sidebar {
+        display: none;
+    }
+}
+
+/* Animation Classes */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Utility Classes */
+.epb-panel-v2 .hidden {
+    display: none;
+}
+
+.epb-panel-v2 .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Print Styles */
+@media print {
+    .epb-backdrop,
+    .epb-panel-v2 .epb-actions {
+        display: none;
+    }
+    
+    .epb-panel-v2 .epb-panel {
+        position: static;
+        width: 100%;
+        max-width: none;
+        box-shadow: none;
+        transform: none;
+    }
+}

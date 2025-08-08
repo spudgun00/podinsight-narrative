@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Unified Panel - Priority Briefings vs Episode Library</title>
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    
+    <!-- Feature Styles - Consolidated episode panel CSS -->
+    <link rel="stylesheet" href="features/episode-panel/episode-panel.css?v=20250807">
+    <link rel="stylesheet" href="features/episode-library/episode-library.css">
+    
+    <style>
+        body {
+            padding: 40px;
+            background: var(--warm-paper);
+        }
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: var(--deep-ink);
+        }
+        .test-button {
+            padding: 12px 24px;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .test-button:hover {
+            background: #3a6149;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            border-radius: 4px;
+        }
+        .log-output {
+            margin-top: 10px;
+            padding: 10px;
+            background: #1e293b;
+            color: #10b981;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unified Panel Test - Checking Both Components Use Same Styling</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Priority Briefings Panel</h2>
+        <button class="test-button" onclick="testPriorityBriefings()">
+            Open Priority Briefings Panel
+        </button>
+        <div class="status">
+            Click the button to test if Priority Briefings still works with the original styling.
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Episode Library Panel</h2>
+        <button class="test-button" onclick="testEpisodeLibrary()">
+            Open Episode Library Panel
+        </button>
+        <div class="status">
+            Click the button to test if Episode Library now uses the shared EpisodePanel with correct styling.
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div class="log-output" id="logOutput">
+            Console logs will appear here...
+        </div>
+    </div>
+    
+    <!-- Load the data -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load Episode Panel first -->
+    <script src="features/episode-panel/episode-panel.js"></script>
+    
+    <!-- Load Episode Library -->
+    <script src="features/episode-library/episode-library.js"></script>
+    
+    <script>
+        // Capture console logs
+        const logOutput = document.getElementById('logOutput');
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logOutput.innerHTML += '<div style="color: #10b981;">LOG: ' + args.join(' ') + '</div>';
+            logOutput.scrollTop = logOutput.scrollHeight;
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logOutput.innerHTML += '<div style="color: #ef4444;">ERROR: ' + args.join(' ') + '</div>';
+            logOutput.scrollTop = logOutput.scrollHeight;
+        };
+        
+        // Initialize components
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initialize Episode Panel
+            if (window.EpisodePanel) {
+                window.EpisodePanel.init();
+                console.log('EpisodePanel initialized successfully');
+            } else {
+                console.error('EpisodePanel not found!');
+            }
+            
+            // Initialize Episode Library - Commented out as it's already initialized in init.js
+            // if (window.EpisodeLibrary) {
+            //     window.EpisodeLibrary.init();
+            //     console.log('EpisodeLibrary initialized successfully');
+            // } else {
+            //     console.error('EpisodeLibrary not found!');
+            // }
+        });
+        
+        function testPriorityBriefings() {
+            console.log('Testing Priority Briefings panel...');
+            const episodeId = 'briefing-1'; // Correct ID from unified-data.js
+            
+            if (window.EpisodePanel && window.EpisodePanel.openPanelById) {
+                console.log('Opening panel with ID:', episodeId);
+                window.EpisodePanel.openPanelById(episodeId);
+            } else {
+                console.error('EpisodePanel.openPanelById not available');
+            }
+        }
+        
+        function testEpisodeLibrary() {
+            console.log('Testing Episode Library panel...');
+            const episodeId = 'briefing-1'; // Same episode for comparison
+            
+            if (window.EpisodeLibrary && window.EpisodeLibrary.showEpisodeDetail) {
+                console.log('Opening Episode Library detail for ID:', episodeId);
+                window.EpisodeLibrary.showEpisodeDetail(episodeId);
+            } else {
+                console.error('EpisodeLibrary.showEpisodeDetail not available');
+            }
+        }
+    </script>
+</body>
+</html>

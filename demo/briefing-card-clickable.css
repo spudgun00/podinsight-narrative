@@ -1,0 +1,24 @@
+/* Make briefing cards appear clickable */
+
+/* Add cursor pointer to entire card */
+.briefing-card {
+    cursor: pointer !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+/* Enhance hover effect for entire card */
+.briefing-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure buttons and tags maintain their own cursor styles */
+.briefing-card .view-brief-btn,
+.briefing-card .tag {
+    cursor: pointer !important;
+}
+
+/* Visual feedback on card active/click */
+.briefing-card:active {
+    transform: translateY(0) !important;
+}

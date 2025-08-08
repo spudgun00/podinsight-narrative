@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Priority Briefings Update</title>
+</head>
+<body>
+    <h1>Testing Priority Briefings Update</h1>
+    <div id="test-results"></div>
+    
+    <script src="data/unified-data.js"></script>
+    <script>
+        const results = document.getElementById('test-results');
+        
+        function log(message, isError = false) {
+            const p = document.createElement('p');
+            p.textContent = message;
+            p.style.color = isError ? 'red' : 'green';
+            results.appendChild(p);
+        }
+        
+        // Test 1: Check if data loads
+        if (window.unifiedData) {
+            log('✓ Unified data loaded successfully');
+        } else {
+            log('✗ Failed to load unified data', true);
+        }
+        
+        // Test 2: Check priorityBriefings structure
+        if (window.unifiedData?.priorityBriefings?.items) {
+            log(`✓ Priority briefings found: ${window.unifiedData.priorityBriefings.items.length} items`);
+        } else {
+            log('✗ Priority briefings not found', true);
+        }
+        
+        // Test 3: Check new structure
+        const firstItem = window.unifiedData?.priorityBriefings?.items?.[0];
+        if (firstItem) {
+            if (firstItem.cardView) {
+                log('✓ First item has cardView');
+                log(`  - Title: ${firstItem.cardView.title}`);
+                log(`  - Score: ${firstItem.cardView.score}`);
+                log(`  - Priority Tag: ${firstItem.cardView.priorityTag}`);
+            } else {
+                log('✗ First item missing cardView', true);
+            }
+            
+            if (firstItem.expandedView) {
+                log('✓ First item has expandedView');
+                log(`  - Has conversationSummary: ${!!firstItem.expandedView.conversationSummary}`);
+                log(`  - Has keyInsights: ${!!firstItem.expandedView.keyInsights}`);
+                log(`  - Has essentialQuote: ${!!firstItem.expandedView.essentialQuote}`);
+            } else {
+                log('✗ First item missing expandedView', true);
+            }
+        }
+        
+        // Test 4: Check all 9 episodes
+        const items = window.unifiedData?.priorityBriefings?.items || [];
+        log(`\nChecking all ${items.length} episodes:`);
+        
+        items.forEach((item, index) => {
+            const hasCardView = !!item.cardView;
+            const hasExpandedView = !!item.expandedView;
+            const status = hasCardView && hasExpandedView ? '✓' : '✗';
+            const color = hasCardView && hasExpandedView ? 'green' : 'red';
+            
+            const p = document.createElement('p');
+            p.innerHTML = `${status} Episode ${index + 1}: ${item.cardView?.title || 'NO TITLE'}<br>
+                          &nbsp;&nbsp;CardView: ${hasCardView ? 'Yes' : 'No'}, 
+                          ExpandedView: ${hasExpandedView ? 'Yes' : 'No'}`;
+            p.style.color = color;
+            results.appendChild(p);
+        });
+    </script>
+</body>
+</html>

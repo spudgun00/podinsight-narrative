@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Panel Changes</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .status { 
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .found { background: #d4edda; color: #155724; }
+        .not-found { background: #f8d7da; color: #721c24; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Episode Panel Changes Verification</h1>
+    
+    <div class="test-section">
+        <h2>JavaScript Changes</h2>
+        <div id="js-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>CSS Changes</h2>
+        <div id="css-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Panel</h2>
+        <button onclick="testPanel()">Open Test Panel</button>
+    </div>
+
+    <script>
+        // Load the episode panel files
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'features/episode-panel/episode-panel.css?' + Date.now();
+        document.head.appendChild(link);
+        
+        const script = document.createElement('script');
+        script.src = 'features/episode-panel/episode-panel.js?' + Date.now();
+        document.head.appendChild(script);
+        
+        // Test JavaScript changes
+        script.onload = function() {
+            const jsTests = document.getElementById('js-tests');
+            
+            // Check if EpisodePanel exists
+            if (window.EpisodePanel) {
+                jsTests.innerHTML += '<p>✅ EpisodePanel loaded</p>';
+                
+                // Initialize it
+                if (!EpisodePanel.container) {
+                    EpisodePanel.init();
+                }
+                
+                // Check for action bar
+                setTimeout(() => {
+                    const actionBar = document.querySelector('.action-bar');
+                    if (actionBar) {
+                        jsTests.innerHTML += '<p><span class="status not-found">❌</span> Action bar still exists (should be removed)</p>';
+                    } else {
+                        jsTests.innerHTML += '<p><span class="status found">✅</span> Action bar removed successfully</p>';
+                    }
+                    
+                    // Check for two-column container
+                    const twoColumn = document.querySelector('.two-column-container');
+                    if (twoColumn) {
+                        jsTests.innerHTML += '<p><span class="status not-found">❌</span> Two-column container still exists</p>';
+                    } else {
+                        jsTests.innerHTML += '<p><span class="status found">✅</span> Two-column layout removed</p>';
+                    }
+                    
+                    // Check for notable numbers grid
+                    const notableGrid = document.querySelector('.notable-numbers-grid');
+                    if (notableGrid) {
+                        jsTests.innerHTML += '<p><span class="status found">✅</span> Notable numbers grid added</p>';
+                    } else {
+                        jsTests.innerHTML += '<p><span class="status not-found">❌</span> Notable numbers grid not found</p>';
+                    }
+                    
+                    // Check for episode hosts div
+                    const hostsDiv = document.querySelector('.episode-hosts');
+                    if (hostsDiv) {
+                        jsTests.innerHTML += '<p><span class="status found">✅</span> Episode hosts section added</p>';
+                    } else {
+                        jsTests.innerHTML += '<p><span class="status not-found">❌</span> Episode hosts section not found</p>';
+                    }
+                }, 100);
+            } else {
+                jsTests.innerHTML = '<p><span class="status not-found">❌</span> EpisodePanel not loaded</p>';
+            }
+        };
+        
+        // Test CSS changes
+        link.onload = function() {
+            const cssTests = document.getElementById('css-tests');
+            
+            // Check if CSS is loaded
+            const testDiv = document.createElement('div');
+            testDiv.className = 'episode-panel-container';
+            document.body.appendChild(testDiv);
+            
+            const styles = window.getComputedStyle(testDiv);
+            
+            if (styles.position === 'fixed') {
+                cssTests.innerHTML += '<p><span class="status found">✅</span> Episode panel CSS loaded</p>';
+            } else {
+                cssTests.innerHTML += '<p><span class="status not-found">❌</span> Episode panel CSS not loaded properly</p>';
+            }
+            
+            document.body.removeChild(testDiv);
+            
+            // Check for notable number card styles
+            const testCard = document.createElement('div');
+            testCard.className = 'notable-number-card';
+            document.body.appendChild(testCard);
+            
+            const cardStyles = window.getComputedStyle(testCard);
+            if (cardStyles.padding !== '0px') {
+                cssTests.innerHTML += '<p><span class="status found">✅</span> Notable number card styles applied</p>';
+            } else {
+                cssTests.innerHTML += '<p><span class="status not-found">❌</span> Notable number card styles not found</p>';
+            }
+            
+            document.body.removeChild(testCard);
+        };
+        
+        function testPanel() {
+            // Create a mock episode card to test
+            const mockCard = document.createElement('div');
+            mockCard.className = 'episode-card';
+            mockCard.dataset.id = 'test-1';
+            mockCard.innerHTML = `
+                <div class="podcast-name">Test Podcast</div>
+                <div class="time-ago">1 hour ago</div>
+                <div class="duration">45 min</div>
+                <div class="score-label"><strong>92</strong></div>
+                <div class="episode-title">"Test Episode Title"</div>
+            `;
+            
+            // Mock data
+            window.unifiedData = {
+                priorityBriefings: {
+                    items: [{
+                        id: 'test-1',
+                        cardView: {
+                            title: 'Test Episode Title',
+                            guests: 'John Host (CEO, TestCo) + Jane Guest (CTO, TechCo)'
+                        },
+                        expandedView: {
+                            keyInsights: ['Insight 1', 'Insight 2', 'Insight 3'],
+                            notableNumbers: {
+                                '$2.5B': 'Total funding raised',
+                                '85%': 'YoY growth rate',
+                                '3x': 'Revenue multiple'
+                            },
+                            essentialQuote: {
+                                text: 'This is a test quote',
+                                author: 'John Host',
+                                time: '15:30'
+                            },
+                            relatedTopics: ['AI', 'SaaS', 'Growth']
+                        }
+                    }]
+                }
+            };
+            
+            if (window.EpisodePanel && window.EpisodePanel.openPanel) {
+                window.EpisodePanel.openPanel(mockCard);
+                
+                // Check the panel after it opens
+                setTimeout(() => {
+                    const panel = document.querySelector('.episode-panel-container');
+                    if (panel && panel.classList.contains('active')) {
+                        console.log('Panel opened successfully');
+                        
+                        // Check for specific elements
+                        const actionBar = panel.querySelector('.action-bar');
+                        const notableGrid = panel.querySelector('.notable-numbers-grid');
+                        const hostInfo = panel.querySelector('.episode-host');
+                        
+                        console.log('Action bar found:', !!actionBar);
+                        console.log('Notable grid found:', !!notableGrid);
+                        console.log('Host info found:', !!hostInfo);
+                        
+                        if (notableGrid) {
+                            console.log('Notable grid HTML:', notableGrid.innerHTML);
+                        }
+                        if (hostInfo) {
+                            console.log('Host info text:', hostInfo.textContent);
+                        }
+                    }
+                }, 500);
+            } else {
+                alert('EpisodePanel not properly initialized');
+            }
+        }
+    </script>
+</body>
+</html>

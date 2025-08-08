@@ -1,0 +1,103 @@
+/* Episode Panel v2 Override - Ensures Header Displays Correctly */
+
+/* Force panel width to 75% */
+.epb-panel-v2 {
+    --epb-width: 75vw !important;
+    --epb-max-width: 1200px !important;
+}
+
+.epb-panel-v2 .epb-panel {
+    width: 75vw !important;
+    max-width: 1200px !important;
+}
+
+/* Force expanded header height */
+.epb-panel-v2 .epb-header {
+    min-height: 155px !important;
+    height: 155px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 20px 24px !important;
+    background: linear-gradient(135deg, #3a4556 0%, #2c3745 100%) !important;
+}
+
+/* Ensure all header sections are visible */
+.epb-panel-v2 .epb-header-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.epb-panel-v2 .epb-header-middle {
+    display: block !important;
+    margin: 12px 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.epb-panel-v2 .epb-header-bottom {
+    display: flex !important;
+    gap: 40px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Title styling */
+.epb-panel-v2 .epb-title {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: white !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+}
+
+/* Host/Guest labels and names */
+.epb-panel-v2 .epb-header-person {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 12px !important;
+}
+
+.epb-panel-v2 .epb-header-label {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    opacity: 0.6 !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.epb-panel-v2 .epb-header-name {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    color: white !important;
+}
+
+/* Logo and podcast info */
+.epb-panel-v2 .epb-logo {
+    width: 48px !important;
+    height: 48px !important;
+    background: white !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #2c3745 !important;
+}
+
+.epb-panel-v2 .epb-podcast-name {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: white !important;
+}
+
+.epb-panel-v2 .epb-meta {
+    font-size: 12px !important;
+    opacity: 0.7 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Ensure content area adjusts */
+.epb-panel-v2 .epb-content {
+    height: calc(100vh - 155px) !important;
+}

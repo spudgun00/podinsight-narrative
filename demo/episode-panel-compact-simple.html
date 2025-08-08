@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Episode Panel - Simple Solution</title>
+</head>
+<body>
+
+<!-- PASTE THIS ENTIRE BLOCK INTO YOUR PAGE -->
+<!-- ========================================= -->
+
+<style>
+/* COMPACT EPISODE PANEL STYLES - All with !important */
+
+.epb-panel-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.3) !important;
+    z-index: 9998 !important;
+}
+
+.epb-panel-container {
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 65% !important;
+    max-width: 900px !important;
+    height: 100vh !important;
+    background: #2c3e50 !important;
+    color: white !important;
+    z-index: 9999 !important;
+    overflow-y: auto !important;
+    box-shadow: -4px 0 12px rgba(0,0,0,0.2) !important;
+}
+
+/* Header - 80px total */
+.epb-panel-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    padding: 10px 16px !important;
+    height: 80px !important;
+    max-height: 80px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.epb-header-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 6px !important;
+}
+
+.epb-podcast-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.epb-podcast-logo {
+    width: 28px !important;
+    height: 28px !important;
+    background: white !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    color: #2c3e50 !important;
+}
+
+.epb-podcast-details h3 {
+    font-size: 12px !important;
+    margin: 0 !important;
+    font-weight: 600 !important;
+}
+
+.epb-podcast-meta {
+    font-size: 9px !important;
+    opacity: 0.8 !important;
+}
+
+.epb-close-button {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    color: white !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+}
+
+/* Title - 18px */
+.epb-episode-title {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* HOST/GUEST on same line */
+.epb-participants {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px !important;
+    font-size: 11px !important;
+}
+
+.epb-participant {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: baseline !important;
+}
+
+.epb-participant-label {
+    font-size: 9px !important;
+    text-transform: uppercase !important;
+    opacity: 0.7 !important;
+    font-weight: 600 !important;
+}
+
+.epb-participant-name {
+    font-size: 11px !important;
+}
+
+/* Content area */
+.epb-panel-content {
+    padding: 16px !important;
+}
+
+/* Section headers - 9px */
+.epb-section-header {
+    font-size: 9px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    opacity: 0.7 !important;
+    margin-bottom: 8px !important;
+}
+
+/* Conversation - 12px body text */
+.epb-conversation-section {
+    background: rgba(255,255,255,0.05) !important;
+    padding: 10px !important;
+    border-radius: 6px !important;
+    margin-bottom: 16px !important;
+}
+
+.epb-conversation-content {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    opacity: 0.9 !important;
+}
+
+/* Quote block */
+.epb-quote-block {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%) !important;
+    padding: 10px 12px !important;
+    border-radius: 6px !important;
+    margin-bottom: 16px !important;
+}
+
+.epb-quote-text {
+    font-size: 13px !important;
+    font-style: italic !important;
+    margin-bottom: 6px !important;
+    line-height: 1.4 !important;
+}
+
+.epb-quote-author {
+    font-size: 10px !important;
+    text-align: right !important;
+    opacity: 0.9 !important;
+}
+
+/* Insights */
+.epb-insights-section {
+    margin-bottom: 16px !important;
+}
+
+.epb-insight-item {
+    display: flex !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+    background: rgba(255,255,255,0.05) !important;
+    padding: 8px !important;
+    border-radius: 4px !important;
+}
+
+.epb-insight-number {
+    width: 18px !important;
+    height: 18px !important;
+    background: #4a7c59 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    flex-shrink: 0 !important;
+}
+
+.epb-insight-text {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+}
+
+/* Numbers - HORIZONTAL GRID */
+.epb-numbers-section {
+    margin-bottom: 16px !important;
+}
+
+.epb-numbers-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+}
+
+.epb-number-item {
+    text-align: center !important;
+    background: rgba(255,255,255,0.05) !important;
+    padding: 8px !important;
+    border-radius: 4px !important;
+}
+
+.epb-number-value {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #10b981 !important;
+    display: block !important;
+    margin-bottom: 2px !important;
+}
+
+.epb-number-label {
+    font-size: 9px !important;
+    opacity: 0.8 !important;
+    line-height: 1.2 !important;
+}
+
+/* Portfolio/Watchlist - SIDE BY SIDE */
+.epb-mentions-section {
+    display: flex !important;
+    gap: 10px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.epb-mention-block {
+    flex: 1 !important;
+    background: rgba(255,255,255,0.05) !important;
+    padding: 8px !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.epb-mention-label {
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+}
+
+.epb-mention-count {
+    background: #4a7c59 !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+}
+
+/* Thin scrollbar - 5px */
+.epb-panel-container::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+.epb-panel-container::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.epb-panel-container::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2) !important;
+    border-radius: 3px !important;
+}
+
+.epb-panel-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.3) !important;
+}
+</style>
+
+<div class="epb-panel-backdrop"></div>
+
+<div class="epb-panel-container">
+    <!-- Header - 80px total -->
+    <div class="epb-panel-header">
+        <div class="epb-header-top">
+            <div class="epb-podcast-info">
+                <div class="epb-podcast-logo">20VC</div>
+                <div class="epb-podcast-details">
+                    <h3>20VC</h3>
+                    <div class="epb-podcast-meta">8h ago • 52 min • Score: 92</div>
+                </div>
+            </div>
+            <button class="epb-close-button">✕</button>
+        </div>
+        <h2 class="epb-episode-title">The Series A Apocalypse: Why $5M ARR Is The New $1M</h2>
+        <!-- HOST/GUEST on same line -->
+        <div class="epb-participants">
+            <div class="epb-participant">
+                <span class="epb-participant-label">HOST</span>
+                <span class="epb-participant-name">Harry Stebbings (20VC)</span>
+            </div>
+            <div class="epb-participant">
+                <span class="epb-participant-label">GUEST</span>
+                <span class="epb-participant-name">Bill Gurley (GP, Benchmark)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="epb-panel-content">
+        <!-- Conversation -->
+        <div class="epb-conversation-section">
+            <div class="epb-section-header">THE CONVERSATION</div>
+            <div class="epb-conversation-content">
+                Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' Harry probes on specific metrics, and Bill reveals Benchmark's new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won't hit these numbers. He advocates for 30-month runways, calling the standard 18-month advice 'criminally negligent.'
+            </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="epb-quote-block">
+            <div class="epb-section-header">ESSENTIAL QUOTE</div>
+            <div class="epb-quote-text">
+                "Founders building with 18-month runways are playing Russian roulette. The Series A that should take 12 months will take 24."
+            </div>
+            <div class="epb-quote-author">— Bill Gurley at 28:44</div>
+        </div>
+
+        <!-- Insights -->
+        <div class="epb-insights-section">
+            <div class="epb-section-header">KEY INSIGHTS</div>
+            <div class="epb-insight-item">
+                <div class="epb-insight-number">1</div>
+                <div class="epb-insight-text">Series A bar: $5M ARR for AI applications, $3M for traditional SaaS</div>
+            </div>
+            <div class="epb-insight-item">
+                <div class="epb-insight-number">2</div>
+                <div class="epb-insight-text">40% of 2023 vintage seeds won't qualify for Series A at current burn rates</div>
+            </div>
+            <div class="epb-insight-item">
+                <div class="epb-insight-number">3</div>
+                <div class="epb-insight-text">Infrastructure plays are the only exception - they have different unit economics</div>
+            </div>
+        </div>
+
+        <!-- Numbers - HORIZONTAL -->
+        <div class="epb-numbers-section">
+            <div class="epb-section-header">NOTABLE NUMBERS</div>
+            <div class="epb-numbers-grid">
+                <div class="epb-number-item">
+                    <span class="epb-number-value">30</span>
+                    <span class="epb-number-label">Months of runway now required</span>
+                </div>
+                <div class="epb-number-item">
+                    <span class="epb-number-value">$5M</span>
+                    <span class="epb-number-label">New Series A ARR bar for AI</span>
+                </div>
+                <div class="epb-number-item">
+                    <span class="epb-number-value">40%</span>
+                    <span class="epb-number-label">2023 seeds missing metrics</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio/Watchlist - SIDE BY SIDE -->
+        <div class="epb-mentions-section">
+            <div class="epb-mention-block">
+                <span class="epb-mention-label">📂 Portfolio</span>
+                <span class="epb-mention-count">1</span>
+            </div>
+            <div class="epb-mention-block">
+                <span class="epb-mention-label">👁 Watchlist</span>
+                <span class="epb-mention-count">1</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================= -->
+<!-- END OF BLOCK TO PASTE -->
+
+<script>
+// Optional: Add close functionality
+document.querySelector('.epb-close-button')?.addEventListener('click', function() {
+    document.querySelector('.epb-panel-container').style.display = 'none';
+    document.querySelector('.epb-panel-backdrop').style.display = 'none';
+});
+
+document.querySelector('.epb-panel-backdrop')?.addEventListener('click', function() {
+    document.querySelector('.epb-panel-container').style.display = 'none';
+    document.querySelector('.epb-panel-backdrop').style.display = 'none';
+});
+</script>
+
+</body>
+</html>

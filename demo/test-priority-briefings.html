@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Priority Briefings</title>
+    <!-- Load CSS -->
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/priority-briefings.css">
+    <style>
+        body {
+            padding: 20px;
+            background: var(--warm-paper);
+        }
+        .test-info {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-info h2 {
+            margin-bottom: 10px;
+        }
+        .test-info pre {
+            background: #f5f5f5;
+            padding: 10px;
+            overflow: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h2>Priority Briefings Test - Conversation Summaries</h2>
+        <p>This page tests if conversation summaries are displaying correctly in Priority Briefings.</p>
+        <div id="data-check"></div>
+    </div>
+    
+    <!-- Priority Briefings Container -->
+    <div id="priority-briefings-container"></div>
+
+    <!-- Load scripts -->
+    <script src="data/unified-data.js"></script>
+    <script src="features/priority-briefings/priority-briefings-dynamic.js"></script>
+    <script>
+        // Check data and initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            const dataCheck = document.getElementById('data-check');
+            let checkHTML = '<h3>Data Check:</h3><pre>';
+            
+            // Check if data is loaded
+            if (window.unifiedData) {
+                checkHTML += '✓ unifiedData loaded\n';
+                
+                if (window.unifiedData.priorityBriefings) {
+                    checkHTML += '✓ priorityBriefings exists\n';
+                    
+                    if (window.unifiedData.priorityBriefings.items && window.unifiedData.priorityBriefings.items.length > 0) {
+                        checkHTML += `✓ ${window.unifiedData.priorityBriefings.items.length} briefings found\n\n`;
+                        
+                        // Check first briefing for conversationSummary
+                        const firstBriefing = window.unifiedData.priorityBriefings.items[0];
+                        checkHTML += 'First briefing:\n';
+                        checkHTML += `  Title: ${firstBriefing.title}\n`;
+                        checkHTML += `  Guest: ${firstBriefing.guest}\n`;
+                        checkHTML += `  Has conversationSummary: ${firstBriefing.conversationSummary ? 'YES' : 'NO'}\n`;
+                        
+                        if (firstBriefing.conversationSummary) {
+                            checkHTML += `  Summary length: ${firstBriefing.conversationSummary.length} chars\n`;
+                            checkHTML += `  First 100 chars: "${firstBriefing.conversationSummary.substring(0, 100)}..."\n`;
+                        }
+                    }
+                }
+            } else {
+                checkHTML += '✗ unifiedData NOT loaded\n';
+            }
+            
+            checkHTML += '</pre>';
+            dataCheck.innerHTML = checkHTML;
+            
+            // Initialize Priority Briefings
+            const container = document.getElementById('priority-briefings-container');
+            if (window.PriorityBriefings) {
+                window.PriorityBriefings.init(container);
+                
+                // After a short delay, check if summaries are in the DOM
+                setTimeout(() => {
+                    const summaries = container.querySelectorAll('.episode-conversation-summary');
+                    dataCheck.innerHTML += `<p style="margin-top: 10px;"><strong>DOM Check:</strong> Found ${summaries.length} conversation summary elements in the DOM.</p>`;
+                    
+                    if (summaries.length > 0) {
+                        dataCheck.innerHTML += '<p>First summary content: "' + summaries[0].textContent.substring(0, 100) + '..."</p>';
+                    }
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

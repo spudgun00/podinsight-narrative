@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Cards View Fix</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1a1a2e; margin-bottom: 20px; }
+        .success {
+            background: #c8e6c9;
+            color: #1b5e20;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        .error {
+            background: #ffcdd2;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        .info {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .button {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #365a42;
+        }
+        .code {
+            background: #263238;
+            color: #aed581;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Cards View Error Fixed!</h1>
+        
+        <div class="success">
+            <strong>TypeError Fixed:</strong> The parseTimeAgo error has been resolved!
+        </div>
+        
+        <div class="info">
+            <h3>What was fixed:</h3>
+            <ul>
+                <li>✅ Added null/undefined checks in parseTimeAgo function</li>
+                <li>✅ Updated sorting to handle cardView data structure</li>
+                <li>✅ Added fallback values for time and duration fields</li>
+                <li>✅ Fixed data access patterns for nested cardView properties</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>Test Instructions:</h3>
+            <ol>
+                <li>Clear browser cache: <strong>Cmd + Shift + R</strong></li>
+                <li>Click the button below to open the demo</li>
+                <li>Click "Episode Library" in the header</li>
+                <li>Click "Cards" button in the Episode Library</li>
+                <li>Cards should now display without errors!</li>
+            </ol>
+        </div>
+
+        <button class="button" onclick="window.open('demo.html', '_blank')">
+            Open Demo & Test
+        </button>
+
+        <div class="info">
+            <h3>What you should see:</h3>
+            <ul>
+                <li>Episode cards in a 3-column grid</li>
+                <li>Each card with podcast badge, host, guest info</li>
+                <li>Priority tags, scores, and hashtags</li>
+                <li>Cards identical to Priority Briefings component</li>
+                <li>No console errors!</li>
+            </ul>
+        </div>
+
+        <div class="code">
+// Quick console test (run in demo page):
+window.EpisodeLibrary.setViewMode('cards');
+console.log('Cards visible:', document.querySelectorAll('.briefing-card').length);
+        </div>
+    </div>
+</body>
+</html>

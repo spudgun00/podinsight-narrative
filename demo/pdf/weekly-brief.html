@@ -674,6 +674,222 @@
             color: #374151;
         }
         
+        /* Portfolio Impact Styles */
+        .portfolio-impact-section {
+            margin-bottom: 32px;
+        }
+
+        .portfolio-company-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .company-card {
+            background: #FAFAF9;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .company-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .mention-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: #F3F4F6;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .trend-arrow {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .trend-arrow.up {
+            color: #16A34A;
+        }
+
+        .trend-arrow.down {
+            color: #DC2626;
+        }
+
+        .trend-arrow.stable {
+            color: #6B7280;
+        }
+
+        .sentiment-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sentiment-indicator.positive {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .sentiment-indicator.mixed {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .sentiment-indicator.building {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .sentiment-indicator.negative {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .sentiment-score {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .company-insights {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .insight-bullet {
+            color: #9CA3AF;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .insight-text {
+            flex: 1;
+        }
+
+        .action-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        .action-tag.action {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .action-tag.signal {
+            background: #DCFCE7;
+            color: #16A34A;
+        }
+
+        .action-tag.monitor {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .portfolio-empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            background: #F9FAFB;
+            border: 2px dashed #E5E7EB;
+            border-radius: 12px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: #6B7280;
+            line-height: 1.6;
+        }
+
+        .section-divider {
+            margin: 24px 0;
+            padding: 0;
+            border: none;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .subsection-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .company-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .company-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
         /* Print styles */
         @media print {
             body {
@@ -692,6 +908,10 @@
             
             .alert-grid,
             .metrics-grid {
+                break-inside: avoid;
+            }
+
+            .company-card {
                 break-inside: avoid;
             }
         }
@@ -776,6 +996,17 @@
                 </div>
             </div>
 
+            <!-- Portfolio Impact -->
+            <div class="card portfolio-impact-section">
+                <div class="card-header">
+                    <h3 class="card-title">Portfolio Impact</h3>
+                    <span class="card-meta">Personalized insights for your companies</span>
+                </div>
+                <div id="portfolio-impact-content">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
             <!-- Consensus Forming -->
             <div style="margin-bottom: 24px;">
                 <h3 style="font-weight: 600; color: #111827; margin-bottom: 12px;">Consensus Forming</h3>
@@ -807,7 +1038,7 @@
                     <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd"/>
                     </svg>
-                    <h3 class="action-title">Recommended Actions</h3>
+                    <h3 class="action-title">Strategic Considerations</h3>
                 </div>
                 
                 <div class="action-grid">
@@ -914,6 +1145,92 @@
                 `;
                 momentumDiv.appendChild(item);
             });
+            
+            // Populate portfolio impact
+            const portfolioDiv = document.getElementById('portfolio-impact-content');
+            if (data.weeklyBrief.portfolioImpact) {
+                const hasPortfolio = data.weeklyBrief.portfolioImpact.portfolio && data.weeklyBrief.portfolioImpact.portfolio.length > 0;
+                const hasWatchlist = data.weeklyBrief.portfolioImpact.watchlist && data.weeklyBrief.portfolioImpact.watchlist.length > 0;
+                
+                if (!hasPortfolio && !hasWatchlist) {
+                    // Empty state
+                    portfolioDiv.innerHTML = `
+                        <div class="portfolio-empty-state">
+                            <div class="empty-state-icon">📊</div>
+                            <h4 class="empty-state-title">No Companies Tracked Yet</h4>
+                            <p class="empty-state-text">
+                                Add companies to your portfolio or watchlist to see personalized insights<br>
+                                about how market narratives impact your investments.
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    let html = '';
+                    
+                    // Portfolio companies
+                    if (hasPortfolio) {
+                        html += '<div class="portfolio-company-list">';
+                        data.weeklyBrief.portfolioImpact.portfolio.forEach(company => {
+                            html += renderCompanyCard(company);
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Watchlist companies
+                    if (hasWatchlist) {
+                        if (hasPortfolio) {
+                            html += '<hr class="section-divider">';
+                        }
+                        html += '<h4 class="subsection-title">Watchlist Companies</h4>';
+                        html += '<div class="portfolio-company-list">';
+                        data.weeklyBrief.portfolioImpact.watchlist.forEach(company => {
+                            html += renderCompanyCard(company);
+                        });
+                        html += '</div>';
+                    }
+                    
+                    portfolioDiv.innerHTML = html;
+                }
+            }
+            
+            // Helper function to render company card
+            function renderCompanyCard(company) {
+                const trendArrow = company.trend === 'up' ? '↑' : company.trend === 'down' ? '↓' : '→';
+                const trendClass = company.trend === 'up' ? 'up' : company.trend === 'down' ? 'down' : 'stable';
+                const sentimentClass = company.sentiment.label.toLowerCase().replace(' ', '-');
+                
+                let insightsHtml = '';
+                company.insights.forEach(insight => {
+                    const tagHtml = insight.tag ? `<span class="action-tag ${insight.tag.toLowerCase()}">${insight.tag}</span>` : '';
+                    insightsHtml += `
+                        <div class="insight-item">
+                            <span class="insight-bullet">•</span>
+                            <span class="insight-text">${insight.text}${tagHtml}</span>
+                        </div>
+                    `;
+                });
+                
+                return `
+                    <div class="company-card">
+                        <div class="company-header">
+                            <div class="company-info">
+                                <span class="company-name">${company.company}</span>
+                                <span class="mention-badge">
+                                    ${company.mentions} mentions
+                                    <span class="trend-arrow ${trendClass}">${trendArrow}</span>
+                                </span>
+                            </div>
+                            <div class="sentiment-indicator ${sentimentClass}">
+                                ${company.sentiment.label}
+                                <span class="sentiment-score">(${company.sentiment.score})</span>
+                            </div>
+                        </div>
+                        <div class="company-insights">
+                            ${insightsHtml}
+                        </div>
+                    </div>
+                `;
+            }
             
             // Populate consensus forming
             const consensusDiv = document.getElementById('consensus-forming');

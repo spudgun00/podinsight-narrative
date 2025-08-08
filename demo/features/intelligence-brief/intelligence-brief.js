@@ -17,8 +17,16 @@ const IntelligenceBrief = {
     },
     
     populateBriefContent: function(data) {
+        // Defensive check for data object
+        if (!data) {
+            console.warn('IntelligenceBrief: No data provided to populateBriefContent');
+            return;
+        }
+        
         // Update header meta information
-        this.updateBriefMeta(data.meta);
+        if (data.meta) {
+            this.updateBriefMeta(data.meta);
+        }
         
         // Update brief summary content
         if (data.intelligenceBrief && data.intelligenceBrief.summary) {
@@ -53,16 +61,16 @@ const IntelligenceBrief = {
         
         // Count key trends (consensus + contrarian + blindspots)
         let trendCount = 0;
-        if (data.intelligenceBrief && data.intelligenceBrief.summary && data.intelligenceBrief.summary.expanded) {
+        if (data && data.intelligenceBrief && data.intelligenceBrief.summary && data.intelligenceBrief.summary.expanded) {
             const expanded = data.intelligenceBrief.summary.expanded;
             trendCount = (expanded.consensus || []).length + 
                         (expanded.contrarian || []).length + 
                         (expanded.blindspots || []).length;
         }
         
-        // Count action items
+        // Count action items with defensive check
         let actionCount = 0;
-        if (data.weeklyBrief && data.weeklyBrief.actionItems) {
+        if (data && data.weeklyBrief && data.weeklyBrief.actionItems) {
             actionCount = (data.weeklyBrief.actionItems.thisWeek || []).length + 
                          (data.weeklyBrief.actionItems.monitor || []).length;
         }
@@ -195,8 +203,14 @@ const IntelligenceBrief = {
         
         // Main Download button
         const downloadBtn = this.container.querySelector('[data-action="downloadBrief"]');
+        console.log('Download button found:', downloadBtn);
         if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => this.downloadPDF());
+            downloadBtn.addEventListener('click', (e) => {
+                console.log('Download button clicked');
+                e.preventDefault();
+                e.stopPropagation();
+                this.downloadPDF();
+            });
         }
         
         // Slack button
@@ -232,8 +246,11 @@ const IntelligenceBrief = {
     },
     
     downloadPDF: function() {
+        console.log('downloadPDF called');
         // Open the weekly brief HTML in a new tab
-        window.open('pdf/weekly-brief.html', '_blank');
+        const url = 'pdf/weekly-brief.html';
+        console.log('Opening URL:', url);
+        window.open(url, '_blank');
     },
     
     emailBrief: function() {
@@ -245,10 +262,10 @@ const IntelligenceBrief = {
         const month = monthNames[today.getMonth()];
         const year = today.getFullYear();
         
-        // Get data from unified data source
-        const data = window.unifiedData;
-        const brief = data.intelligenceBrief;
-        const meta = data.meta;
+        // Get data from unified data source with defensive checks
+        const data = window.unifiedData || {};
+        const brief = data.intelligenceBrief || {};
+        const meta = data.meta || { analysis: { hoursAnalyzed: 0, podcastsTracked: 0 } };
         
         // Email parameters
         const subject = `Synthea.ai Weekly Intelligence Brief - Week ${weekNum}, ${month} ${year}`;
@@ -293,9 +310,9 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
                           "July", "August", "September", "October", "November", "December"];
         const month = monthNames[today.getMonth()];
         
-        // Get data from unified data source
-        const data = window.unifiedData;
-        const brief = data.intelligenceBrief;
+        // Get data from unified data source with defensive checks
+        const data = window.unifiedData || {};
+        const brief = data.intelligenceBrief || {};
         
         // Create Slack message with dynamic data
         let message = `📊 *Synthea.ai Weekly Intelligence Brief - Week ${weekNum}, ${month}*\n\n` +
@@ -440,9 +457,9 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
                          aria-valuemin="0" 
                          aria-valuemax="100" 
                          style="width: 0%;">
+                        <span class="consensus-tooltip">${this.getQualitativeLabel(item.percentage)}</span>
                     </div>
                 </div>
-                <span class="influence-score">${item.percentage}%</span>
             `;
             
             consensusContainer.appendChild(consensusItem);
@@ -530,6 +547,15 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
         return labelMap[topic] || topic;
     },
     
+    getQualitativeLabel: function(percentage) {
+        // Map percentage ranges to qualitative consensus descriptions
+        if (percentage >= 80) return 'Strong consensus';
+        if (percentage >= 60) return 'Building consensus';
+        if (percentage >= 40) return 'Mixed signals';
+        if (percentage >= 20) return 'Limited consensus';
+        return 'Weak signals';
+    },
+    
     getTopicSparklineData: function(themeName) {
         // Try to get real 7-day momentum data from Narrative Pulse
         if (!window.unifiedData || !window.unifiedData.narrativePulse || !window.unifiedData.narrativePulse.topics) {
@@ -610,7 +636,7 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
     },
 
     updateVelocityTracking: function() {
-        if (!window.unifiedData) {
+        if (!window.unifiedData || !window.unifiedData.narrativePulse) {
             return;
         }
         
@@ -619,43 +645,48 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
             return;
         }
         
-        // Check if we have the static velocity tracking data
-        if (window.unifiedData.intelligenceBrief && 
-            window.unifiedData.intelligenceBrief.metrics && 
-            window.unifiedData.intelligenceBrief.metrics.velocityTracking) {
+        // Get topics from narrativePulse and sort by momentum
+        const topics = window.unifiedData.narrativePulse.topics;
+        const sortedTopics = Object.entries(topics)
+            .sort((a, b) => {
+                // Parse momentum percentages for sorting
+                const momentumA = parseInt(a[1].momentum.replace('%', '').replace('+', '')) || 0;
+                const momentumB = parseInt(b[1].momentum.replace('%', '').replace('+', '')) || 0;
+                // Sort by absolute value of momentum (highest first)
+                return Math.abs(momentumB) - Math.abs(momentumA);
+            })
+            .slice(0, 7); // Show top 7 topics
+        
+        // Generate HTML for velocity items
+        const velocityHTML = sortedTopics.map(([topicName, topicData]) => {
+            const momentum = topicData.momentum;
+            const isPositive = !momentum.startsWith('-');
+            const changeClass = isPositive ? 'positive' : 'negative';
+            const changeSymbol = isPositive ? '↑' : '↓';
+            const colorClass = isPositive ? 'trend-up' : 'trend-down';
             
-            const velocityItems = window.unifiedData.intelligenceBrief.metrics.velocityTracking;
+            // Get real sparkline data
+            const sparklineData = this.getTopicSparklineData(topicName);
+            let sparklineSVG = '';
             
-            // Generate HTML for velocity items using influence-item structure
-            const velocityHTML = velocityItems.map(item => {
-                const changeClass = item.direction === 'positive' ? 'positive' : 'negative';
-                const changeSymbol = item.direction === 'positive' ? '↑' : '↓';
-                const colorClass = item.direction === 'positive' ? 'trend-up' : 'trend-down';
-                
-                // Get real sparkline data from Narrative Pulse or fall back to empty
-                const sparklineData = this.getTopicSparklineData(item.theme);
-                let sparklineSVG = '';
-                
-                if (sparklineData && sparklineData.length > 0) {
-                    sparklineSVG = this.renderSparkline(sparklineData, item.direction === 'positive');
-                } else {
-                    // If no real data available, show a placeholder or skip
-                    sparklineSVG = '<span class="sparkline-placeholder" style="display: inline-block; width: 45px;"></span>';
-                }
-                
-                return `
-                    <div class="influence-item velocity-item">
-                        <span class="influence-name">${item.theme}</span>
-                        ${sparklineSVG}
-                        <span class="velocity-change ${colorClass}" style="font-weight: 600; color: ${item.direction === 'positive' ? 'var(--sage)' : 'var(--dusty-rose)'};">
-                            ${changeSymbol} ${item.change}
-                        </span>
-                    </div>
-                `;
-            }).join('');
+            if (sparklineData && sparklineData.length > 0) {
+                sparklineSVG = this.renderSparkline(sparklineData, isPositive);
+            } else {
+                sparklineSVG = '<span class="sparkline-placeholder" style="display: inline-block; width: 45px;"></span>';
+            }
             
-            velocityContainer.innerHTML = velocityHTML;
-        }
+            return `
+                <div class="influence-item velocity-item">
+                    <span class="influence-name">${topicName}</span>
+                    ${sparklineSVG}
+                    <span class="velocity-change ${colorClass}" style="font-weight: 600; color: ${isPositive ? 'var(--sage)' : 'var(--dusty-rose)'};">
+                        ${changeSymbol} ${momentum}
+                    </span>
+                </div>
+            `;
+        }).join('');
+        
+        velocityContainer.innerHTML = velocityHTML;
     },
     
     updateInfluenceMetrics: function() {

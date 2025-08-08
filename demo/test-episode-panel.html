@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Episode Panel</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel.css">
+    <style>
+        body {
+            padding: 40px;
+            background: #fafaf9;
+        }
+        .test-card {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .episode-card {
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .episode-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .episode-action {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .episode-action:hover {
+            background: #3d6449;
+        }
+        .podcast-name { font-weight: 600; }
+        .time-ago, .duration { color: #6b7280; font-size: 14px; }
+        .score-label { font-size: 14px; }
+        .episode-signal { 
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1>Episode Panel Test</h1>
+        <p>Click the button below to test if the episode panel opens correctly:</p>
+        
+        <!-- Test Priority Briefings Container -->
+        <div class="priority-briefings-container">
+            <div class="episode-card priority-critical" data-id="test-episode-1">
+                <div class="episode-header">
+                    <div class="podcast-info">
+                        <span class="podcast-name">All-In Podcast</span>
+                        <span class="time-ago">2 hours ago</span>
+                        <span class="duration">45 min</span>
+                        <span class="score-label">Score: <strong>92</strong></span>
+                    </div>
+                </div>
+                <div class="episode-signal priority-red">Consensus Forming</div>
+                <h3 class="episode-title">"AI Agents Will Replace 70% of Knowledge Work"</h3>
+                <div class="episode-footer">
+                    <button class="episode-action" type="button">View Full Brief →</button>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+        
+        <div id="console-output" style="background: #f3f4f6; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;">
+            <strong>Console Output:</strong><br>
+        </div>
+    </div>
+
+    <!-- Load unified data -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load Episode Panel -->
+    <script src="features/episode-panel/episode-panel.js"></script>
+    
+    <script>
+        // Capture console logs
+        const consoleOutput = document.getElementById('console-output');
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleOutput.innerHTML += message + '<br>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        // Test that episode panel initializes
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, checking EpisodePanel...');
+            console.log('EpisodePanel available?', typeof window.EpisodePanel !== 'undefined');
+            
+            // Manually click the button after a delay to test
+            setTimeout(() => {
+                const button = document.querySelector('.episode-action');
+                if (button) {
+                    console.log('Found button, simulating click...');
+                    button.click();
+                } else {
+                    console.log('Button not found!');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

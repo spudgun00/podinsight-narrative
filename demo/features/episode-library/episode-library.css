@@ -1,0 +1,1344 @@
+/* Episode Library Styles - Compact Design */
+
+/* Overlay Container */
+.episode-library-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--warm-paper);
+    z-index: 1000;
+    display: none;
+    overflow: hidden; /* Changed from auto to prevent scroll */
+    animation: fadeIn 0.2s ease-out;
+}
+
+.episode-library-overlay.active {
+    display: block;
+}
+
+/* Backdrop - Matching Notable Signals subtle overlay */
+.episode-library-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.08);  /* Very subtle overlay like Notable Signals */
+    backdrop-filter: blur(2px);  /* Soft blur effect */
+    -webkit-backdrop-filter: blur(2px);  /* Safari support */
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.episode-library-backdrop.active {
+    display: block;
+}
+
+/* Main Container - Optimized for single screen */
+.episode-library-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px; /* Reduced from 24px */
+    height: 100vh; /* Changed from min-height to fixed height */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box; /* Include padding in height calculation */
+}
+
+/* Header Section - Compact */
+.episode-library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px; /* Reduced from 24px */
+    padding-bottom: 12px; /* Reduced from 20px */
+    border-bottom: 1px solid var(--gray-200);
+    flex-shrink: 0; /* Don't shrink - maintain consistent size */
+}
+
+.library-header-left h1 {
+    font-size: 22px; /* Reduced from 28px */
+    font-weight: 600;
+    color: var(--deep-ink);
+    margin-bottom: 2px;
+}
+
+.library-stats {
+    font-size: 12px; /* Reduced from 14px */
+    color: var(--gray-600);
+}
+
+.library-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Close button */
+.library-close-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-200);
+    background: white;
+    color: var(--gray-600);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.library-close-btn:hover {
+    background: var(--light-sage);
+    border-color: var(--sage);
+    color: var(--sage);
+}
+
+/* Export button */
+.btn-export {
+    background: white;
+    border: 1px solid var(--gray-200);
+    color: var(--deep-ink);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export:hover {
+    background: var(--light-sage);
+    border-color: var(--sage);
+}
+
+/* View toggle */
+.library-view-toggle {
+    display: flex;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.library-view-toggle button {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    color: var(--gray-600);
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.library-view-toggle button.active {
+    background: var(--sage);
+    color: white;
+}
+
+/* Search and Filters Bar - Compact */
+.library-filters-bar {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px; /* Reduced from 12px */
+    padding: 10px; /* Reduced from 16px */
+    margin-bottom: 12px; /* Reduced from 20px */
+    display: flex;
+    gap: 8px; /* Reduced from 12px */
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    flex-shrink: 0; /* Don't shrink - maintain consistent size */
+}
+
+.library-search-box {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+}
+
+.library-search-input {
+    width: 100%;
+    background: var(--warm-paper);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 10px 12px 10px 36px;
+    color: var(--deep-ink);
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.library-search-input:focus {
+    outline: none;
+    border-color: var(--sage);
+    background: white;
+}
+
+.library-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    font-size: 16px;
+}
+
+.library-filter-dropdown {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--deep-ink);
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 140px;
+    transition: all 0.2s;
+}
+
+.library-filter-dropdown:hover {
+    border-color: var(--sage);
+}
+
+/* Multi-select dropdown */
+.library-multi-select-wrapper {
+    position: relative;
+    min-width: 140px;
+}
+
+.library-multi-select-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: var(--deep-ink);
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 140px;
+    transition: all 0.2s;
+}
+
+.library-multi-select-toggle:hover {
+    border-color: var(--sage);
+}
+
+.multi-select-arrow {
+    font-size: 10px;
+    color: var(--gray-400);
+    transition: transform 0.2s;
+}
+
+.library-multi-select-dropdown.active + .library-multi-select-toggle .multi-select-arrow {
+    transform: rotate(180deg);
+}
+
+.library-multi-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: none;
+}
+
+.library-multi-select-dropdown.active {
+    display: block;
+}
+
+.multi-select-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.multi-select-option:hover {
+    background: var(--light-sage);
+}
+
+.multi-select-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--sage);
+    cursor: pointer;
+}
+
+.multi-select-option label {
+    flex: 1;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--deep-ink);
+    user-select: none;
+}
+
+/* Active filters */
+.library-active-filters {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.library-filter-chip {
+    background: var(--light-sage);
+    border: 1px solid var(--sage);
+    color: var(--sage);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.library-filter-chip .remove {
+    cursor: pointer;
+    font-weight: 600;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.library-filter-chip .remove:hover {
+    opacity: 1;
+}
+
+/* Content Container - Handles scrolling */
+.library-content-container {
+    flex: 1;
+    min-height: 0; /* Critical for flex shrinking */
+    min-width: 0; /* Allow container to shrink properly */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Episode Grid Container - Card View */
+.library-content-container .episode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+    padding: 1rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    min-height: 0; /* Allow proper scrolling */
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    align-content: start; /* Prevent vertical stretching */
+}
+
+/* Episode Library Cards Grid - 3 columns */
+.episode-library-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px; /* Consistent padding on all sides */
+    overflow-y: auto;
+    /* Removed overflow-x: hidden - was clipping content */
+    flex: 1;
+    min-height: 0;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    align-content: start;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+/* Responsive breakpoints for Episode Library cards */
+@media (max-width: 1400px) {
+    .episode-library-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .episode-library-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   EPISODE LIBRARY CARDS
+   ============================================ */
+/* Episode Library cards use the exact same styles from priority-briefings-compact.css */
+/* No overrides - cards should be 100% identical to Priority Briefings */
+
+/* Ensure consistent card widths in the grid */
+.episode-library-cards-grid .briefing-card {
+    width: 100%;
+    min-width: 0; /* Prevent cards from overflowing their grid cells */
+    box-sizing: border-box;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 1200px) {
+    .library-content-container .episode-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .library-content-container .episode-grid {
+        grid-template-columns: 1fr;
+        padding: 0.75rem;
+        gap: 1rem;
+    }
+    
+    .library-content-container .briefing-card {
+        padding: 16px;
+    }
+    
+    .library-content-container .card-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .library-content-container .priority-tag {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+}
+
+/* Table Container - Optimized height */
+.library-table-container {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    min-height: 0; /* Important for flex shrinking */
+}
+
+/* Table */
+.library-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px; /* Reduce base font size */
+}
+
+.library-table-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    min-height: 0; /* Allow proper scrolling */
+}
+
+.library-data-table thead {
+    position: sticky;
+    top: 0;
+    background: var(--warm-paper);
+    z-index: 10;
+}
+
+.library-data-table th {
+    text-align: left;
+    padding: 10px 12px; /* Reduced padding */
+    font-weight: 600;
+    font-size: 11px; /* Reduced from 12px */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+    border-bottom: 2px solid var(--gray-200);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.library-data-table th:hover {
+    color: var(--deep-ink);
+}
+
+.sort-icon {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+.library-data-table th.sorted .sort-icon {
+    opacity: 1;
+    color: var(--sage);
+}
+
+.library-data-table td {
+    padding: 10px 12px; /* Reduced padding */
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--deep-ink);
+    font-size: 13px; /* Reduced from 14px */
+}
+
+.library-data-table tbody tr {
+    transition: background 0.2s;
+}
+
+.library-data-table tbody tr:hover {
+    background: var(--light-sage);
+}
+
+/* Checkbox styling - Removed for now */
+/* .library-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--sage);
+    cursor: pointer;
+} */
+
+/* Podcast Cell - Smaller */
+.library-podcast-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Reduced gap */
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.library-podcast-cell:hover {
+    opacity: 0.8;
+}
+
+.library-podcast-logo {
+    width: 28px; /* Reduced from 36px */
+    height: 28px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid var(--gray-200);
+}
+
+/* Fallback for missing images */
+.library-podcast-logo.library-podcast-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background: var(--slate-blue);
+    border: none;
+}
+
+/* Episode Title - Compact */
+.library-episode-title {
+    font-weight: 500;
+    color: var(--deep-ink);
+    margin-bottom: 1px;
+    line-height: 1.3; /* Tighter line height */
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 13px; /* Explicit size */
+}
+
+.library-episode-title:hover {
+    color: var(--sage);
+}
+
+.library-episode-subtitle {
+    cursor: pointer;
+}
+
+.library-episode-link {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.library-episode-link:hover {
+    color: var(--sage);
+    text-decoration: underline;
+}
+
+.library-episode-subtitle {
+    font-size: 11px; /* Reduced from 13px */
+    color: var(--gray-600);
+}
+
+/* Guest Pills */
+.library-guest-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.library-guest-pill {
+    background: var(--light-sage);
+    border: 1px solid var(--sage);
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 12px;
+    color: var(--sage);
+}
+
+/* Influence Score */
+.library-influence-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.influence-high {
+    background: var(--light-sage);
+    color: var(--sage);
+}
+
+.influence-medium {
+    background: rgba(244, 162, 97, 0.1);
+    color: var(--amber-glow);
+}
+
+/* Topics */
+.library-topic-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.library-topic-tag {
+    background: rgba(199, 125, 125, 0.1);
+    color: var(--dusty-rose);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.library-topic-more {
+    cursor: pointer;
+    background: rgba(74, 124, 89, 0.1);
+    color: var(--sage);
+    font-weight: 600;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.library-topic-more:hover {
+    background: var(--light-sage);
+    transform: scale(1.05);
+}
+
+.library-topic-more[data-expanded="true"] {
+    background: var(--sage);
+    color: white;
+    padding: 4px 10px;
+}
+
+/* Actions Menu Button */
+.library-actions-btn {
+    background: transparent;
+    border: none;
+    color: var(--gray-400);
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.library-actions-btn:hover {
+    background: var(--light-sage);
+    color: var(--sage);
+}
+
+/* Actions Dropdown */
+.library-actions-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 4px;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    display: none;
+}
+
+.library-actions-dropdown.active {
+    display: block;
+}
+
+.library-action-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--deep-ink);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.library-action-item:hover {
+    background: var(--light-sage);
+}
+
+.library-action-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 4px 0;
+}
+
+/* Pagination - Compact */
+.library-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px; /* Reduced padding */
+    border-top: 1px solid var(--gray-200);
+    background: var(--warm-paper);
+}
+
+.library-pagination-info {
+    color: var(--gray-600);
+    font-size: 12px; /* Reduced from 14px */
+}
+
+.library-pagination-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.library-page-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-200);
+    background: white;
+    color: var(--deep-ink);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    min-width: 36px;
+    transition: all 0.2s;
+}
+
+.library-page-btn:hover:not(:disabled) {
+    background: var(--light-sage);
+    border-color: var(--sage);
+}
+
+.library-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.library-page-btn.active {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Episode Detail Backdrop - Separate element like Portfolio Panel */
+.episode-detail-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 46, 0.1);  /* 10% opacity of deep-ink color */
+    backdrop-filter: blur(1px);         /* Subtle blur effect */
+    -webkit-backdrop-filter: blur(1px); /* Safari support */
+    z-index: 1100;  /* Higher than Episode Library overlay (1000) */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.episode-detail-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Episode Detail Panel - Optimized for single screen - v2 */
+.episode-detail-panel {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 70vw; /* Increased to 70vw for more space */
+    max-width: 1000px; /* Increased to 1000px */
+    min-width: 700px; /* Increased to 700px */
+    background: white;
+    /* Match Portfolio Panel shadows */
+    box-shadow: 
+        -1px 0 3px rgba(0, 0, 0, 0.04),
+        -4px 0 16px rgba(0, 0, 0, 0.08),
+        -12px 0 32px rgba(0, 0, 0, 0.06);
+    z-index: 1101;  /* Higher than Episode Detail backdrop (1100) */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Changed from auto to prevent scroll */
+    
+    /* Position off-screen to the right */
+    right: -70vw;
+    transition: right 0.3s ease;
+}
+
+.episode-detail-panel[data-state="open"] {
+    /* Slide in from right */
+    right: 0;
+    animation: episodeDetailSlideIn 0.3s ease;
+}
+
+@keyframes episodeDetailSlideIn {
+    from {
+        right: -70vw;
+        opacity: 0.95;
+    }
+    to {
+        right: 0;
+        opacity: 1;
+    }
+}
+
+/* Remove detail-panel-content as it's no longer needed */
+/* Panel structure is now simplified to match Portfolio Panel */
+
+.detail-panel-header {
+    padding: 16px 20px; /* Reduced padding */
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: white;
+    flex-shrink: 0; /* Prevent shrinking */
+    z-index: 10;
+}
+
+.detail-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--gray-200);
+    background: white;
+    color: var(--gray-600);
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.detail-close-btn:hover {
+    background: var(--light-sage);
+    border-color: var(--sage);
+    color: var(--sage);
+}
+
+.detail-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0; /* Remove padding, will be applied to inner content */
+    min-height: 0; /* Important for proper scrolling */
+    display: flex;
+    flex-direction: column;
+}
+
+/* New Episode Detail Layout */
+.episode-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 340px; /* Main content + slightly wider sidebar */
+    height: 100%;
+    background: #f8f8f8;
+    gap: 0; /* No gap between columns */
+}
+
+.episode-detail-main {
+    padding: 16px 20px; /* Reduced padding */
+    background: white;
+    overflow-y: auto;
+    border-right: 1px solid var(--gray-200);
+}
+
+.episode-detail-sidebar {
+    padding: 16px; /* Reduced padding */
+    background: #f8fafc;
+    overflow-y: auto;
+}
+
+/* Episode Header with Dark Background */
+.episode-detail-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    padding: 16px; /* Reduced padding */
+    margin: -16px -20px 12px -20px; /* Adjusted for new padding */
+    border-radius: 0;
+}
+
+.detail-podcast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.detail-podcast-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.detail-podcast-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid var(--gray-200);
+}
+
+.detail-podcast-logo.detail-podcast-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: var(--slate-blue);
+    border: none;
+}
+
+.detail-podcast-name {
+    font-weight: 600;
+    color: var(--deep-ink);
+    margin-bottom: 4px;
+}
+
+.detail-episode-time {
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.detail-priority-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-priority-badge.critical {
+    background: var(--light-rose);
+    color: var(--dusty-rose);
+}
+
+.detail-priority-badge.opportunity {
+    background: var(--light-sage);
+    color: var(--sage);
+}
+
+.detail-priority-badge.elevated {
+    background: rgba(244, 162, 97, 0.1);
+    color: var(--amber-glow);
+}
+
+.detail-episode-title {
+    font-size: 18px; /* Further reduced */
+    font-weight: 600;
+    color: white; /* White on dark background */
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.detail-guest-info {
+    font-size: 12px; /* Further reduced */
+    color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+/* Conversation Summary Section */
+.detail-conversation-section {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 12px; /* Reduced padding */
+    margin-bottom: 12px; /* Reduced margin */
+}
+
+.detail-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 12px;
+    display: block; /* Ensure it's a block element */
+}
+
+.detail-conversation-text {
+    font-size: 12px; /* Reduced from 14px */
+    line-height: 1.4; /* Tighter line height */
+    color: #334155;
+}
+
+/* Key Insights with Numbered Circles */
+.detail-key-insights {
+    margin-bottom: 12px; /* Reduced margin */
+}
+
+.detail-key-insights h3 {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.detail-insights-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.detail-insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px; /* Reduced gap */
+    padding: 8px; /* Reduced padding */
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px; /* Smaller radius */
+    margin-bottom: 8px; /* Reduced margin */
+    transition: all 0.2s;
+}
+
+.detail-insight-item:hover {
+    border-color: var(--sage);
+    box-shadow: 0 2px 8px rgba(74, 124, 89, 0.1);
+}
+
+.detail-insight-number {
+    width: 24px; /* Smaller circle */
+    height: 24px;
+    background: var(--sage);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px; /* Smaller number */
+    flex-shrink: 0;
+}
+
+.detail-insight-text {
+    font-size: 12px; /* Reduced from 14px */
+    line-height: 1.3; /* Tighter line height */
+    color: var(--deep-ink);
+    flex: 1;
+}
+
+.detail-signals {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.detail-signal-tag {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.detail-signal-tag.portfolio {
+    background: var(--light-sage);
+    color: var(--sage);
+}
+
+.detail-signal-tag.thesis {
+    background: rgba(90, 108, 140, 0.1);
+    color: var(--slate-blue);
+}
+
+.detail-signal-tag.market {
+    background: rgba(244, 162, 97, 0.1);
+    color: var(--amber-glow);
+}
+
+/* Sidebar Sections */
+
+/* Essential Quote Block */
+.detail-quote-block {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    padding: 12px; /* Reduced padding */
+    border-radius: 6px;
+    margin-bottom: 12px; /* Reduced margin */
+}
+
+.detail-quote-block .detail-section-label {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 12px;
+}
+
+.detail-quote-text {
+    font-size: 13px; /* Reduced from 15px */
+    line-height: 1.4;
+    font-style: italic;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.detail-quote-author {
+    text-align: right;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Notable Numbers Block - Completely Fixed */
+.detail-numbers-block {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.detail-numbers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-number-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-number-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.detail-number-label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 400;
+    display: inline-block;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.detail-number-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    display: inline-block;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* Portfolio/Watchlist Mentions */
+.detail-mentions-block {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-mentions-block:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.detail-mentions-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-mentions-count {
+    background: var(--sage);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Related Topics */
+.detail-related-topics {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.detail-topic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.detail-topic-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #ecfdf5;
+    color: var(--sage);
+    border-radius: 16px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.detail-topic-tag:hover {
+    background: var(--sage);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Actions - Removed as not in reference design */
+.detail-actions {
+    display: none;
+}
+
+/* Episode Card Footer */
+.episode-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.signal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;  /* Align signal tags to the left */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .episode-library-container {
+        padding: 16px;
+    }
+    
+    .library-filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .library-search-box {
+        min-width: 100%;
+    }
+    
+    .library-filter-dropdown {
+        width: 100%;
+    }
+    
+    /* Episode Detail Panel responsive */
+    .episode-detail-panel {
+        width: 80vw;
+        max-width: none;
+        right: -80vw;
+    }
+    
+    .episode-detail-panel[data-state="open"] {
+        right: 0;
+    }
+    
+    @keyframes episodeDetailSlideIn {
+        from {
+            right: -80vw;
+        }
+        to {
+            right: 0;
+        }
+    }
+    
+    .episode-detail-backdrop {
+        background: rgba(26, 26, 46, 0.12);  /* Slightly darker on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .episode-detail-panel {
+        width: 100vw;
+        right: -100vw;
+    }
+    
+    .episode-detail-panel[data-state="open"] {
+        right: 0;
+    }
+    
+    @keyframes episodeDetailSlideIn {
+        from {
+            right: -100vw;
+        }
+        to {
+            right: 0;
+        }
+    }
+}
+
+/* ============================================= */
+/* EPISODE PANEL STYLES REMOVED                 */
+/* All panel styles now use shared              */
+/* episode-panel.css for consistency            */
+/* ============================================= */

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Mentions Display</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1e293b;
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+        
+        .demo-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .panel-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* KEY INSIGHTS - Existing Style */
+        .insights-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-header {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        
+        .insights-list {
+            background: #f0f7ff;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border-left: 3px solid #4a7c59;
+        }
+        
+        .insight-item {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            line-height: 1.35;
+            color: #1e293b;
+        }
+        
+        .insight-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .insight-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4a7c59;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* PORTFOLIO & WATCHLIST BADGES */
+        .badges-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px 6px 10px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        
+        .badge:hover {
+            border-color: #4a7c59;
+            box-shadow: 0 2px 6px rgba(74, 124, 89, 0.15);
+        }
+        
+        /* ACTIVE STATE - Button stays highlighted */
+        .badge.active {
+            background: #4a7c59;
+            border-color: #4a7c59;
+            color: white;
+        }
+        
+        .badge.active .badge-label {
+            color: white;
+        }
+        
+        .badge.active .badge-count {
+            background: white;
+            color: #4a7c59;
+        }
+        
+        .badge-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-count {
+            background: #4a7c59;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+        .badge-count.zero {
+            background: #94a3b8;
+        }
+        
+        /* MENTIONS DISPLAY - Appears directly below badges */
+        .mentions-display {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 3px solid #4a7c59;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .mentions-display.show {
+            display: block;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Display header - Shows which view is active */
+        .mentions-display-header {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mentions-count-label {
+            font-size: 9px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        
+        /* Each mention item - matching insight item style */
+        .mention-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+        
+        .mention-item:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mention-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Play button inline */
+        .play-inline {
+            width: 20px;
+            height: 20px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .play-inline:hover {
+            background: #5a8c69;
+            transform: scale(1.1);
+        }
+        
+        .mention-content {
+            flex: 1;
+        }
+        
+        /* Company name with timestamp */
+        .mention-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .mention-company {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .mention-time {
+            font-size: 10px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* Quote text - matching conversation style */
+        .mention-quote {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+        
+        .empty-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            opacity: 0.4;
+        }
+        
+        .empty-text {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+        
+        .browse-btn {
+            padding: 5px 12px;
+            font-size: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        
+        .browse-btn:hover {
+            background: white;
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+        
+        /* Related topics for context */
+        .topics-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .topic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .topic-tag {
+            padding: 3px 10px;
+            background: #ecfdf5;
+            color: #4a7c59;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="demo-title">Clean Inline Display - Portfolio & Watchlist</h1>
+        
+        <div class="instructions">
+            👆 Click badges to toggle content. Active badge stays highlighted. Content appears in same location.
+        </div>
+        
+        <div class="panel-section">
+            <!-- Key Insights Section -->
+            <div class="insights-section">
+                <h2 class="section-header">KEY INSIGHTS</h2>
+                <div class="insights-list">
+                    <div class="insight-item">70% of Q2 AI funding now flowing to infrastructure, complete reversal from 2023</div>
+                    <div class="insight-item">Application layer margins compressing to 20% while infrastructure holds 70%+</div>
+                    <div class="insight-item">Defense tech reclassified as 'infrastructure' - opening floodgates for VC investment</div>
+                </div>
+            </div>
+            
+            <!-- Portfolio & Watchlist Badges -->
+            <div class="badges-container">
+                <div class="badge" id="portfolio-badge">
+                    <span class="badge-label">📁 PORTFOLIO</span>
+                    <span class="badge-count zero">0</span>
+                </div>
+                
+                <div class="badge" id="watchlist-badge">
+                    <span class="badge-label">👁 WATCHLIST</span>
+                    <span class="badge-count">2</span>
+                </div>
+            </div>
+            
+            <!-- Single Display Area - Always appears here -->
+            <div class="mentions-display" id="mentions-display">
+                <!-- Dynamic content inserted here -->
+            </div>
+            
+            <!-- Related Topics -->
+            <div class="topics-section">
+                <h2 class="section-header">RELATED TOPICS</h2>
+                <div class="topic-tags">
+                    <span class="topic-tag">#InfrastructureArbitrage</span>
+                    <span class="topic-tag">#UnitEconomics</span>
+                    <span class="topic-tag">#DefenseTech</span>
+                    <span class="topic-tag">#AIMonetization</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const portfolioBadge = document.getElementById('portfolio-badge');
+        const watchlistBadge = document.getElementById('watchlist-badge');
+        const mentionsDisplay = document.getElementById('mentions-display');
+        
+        let currentView = null;
+        
+        // Portfolio content (empty)
+        const portfolioContent = `
+            <div class="mentions-display-header">
+                PORTFOLIO MENTIONS
+                <span class="mentions-count-label">No companies mentioned</span>
+            </div>
+            <div class="empty-state">
+                <div class="empty-icon">📁</div>
+                <div class="empty-text">No portfolio companies mentioned in this episode</div>
+                <button class="browse-btn">Browse Your Portfolio →</button>
+            </div>
+        `;
+        
+        // Watchlist content (with mentions)
+        const watchlistContent = `
+            <div class="mentions-display-header">
+                WATCHLIST MENTIONS
+                <span class="mentions-count-label">2 companies</span>
+            </div>
+            
+            <div class="mention-item">
+                <div class="play-inline" title="Play quote">▶</div>
+                <div class="mention-content">
+                    <div class="mention-header">
+                        <span class="mention-company">Anthropic</span>
+                        <span class="mention-time">⏱ 15:31</span>
+                    </div>
+                    <div class="mention-quote">
+                        "Infrastructure costs at Anthropic are rumored to be approaching $1B annually for compute. They're essentially building their own cloud within clouds..."
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mention-item">
+                <div class="play-inline" title="Play quote">▶</div>
+                <div class="mention-content">
+                    <div class="mention-header">
+                        <span class="mention-company">Perplexity</span>
+                        <span class="mention-time">⏱ 24:18</span>
+                    </div>
+                    <div class="mention-quote">
+                        "Perplexity's infrastructure arbitrage strategy is fascinating - they're using 5 different cloud providers to optimize costs..."
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Portfolio badge click
+        portfolioBadge.addEventListener('click', () => {
+            if (currentView === 'portfolio') {
+                // Hide if clicking same badge
+                currentView = null;
+                portfolioBadge.classList.remove('active');
+                mentionsDisplay.classList.remove('show');
+            } else {
+                // Show portfolio content
+                currentView = 'portfolio';
+                portfolioBadge.classList.add('active');
+                watchlistBadge.classList.remove('active');
+                mentionsDisplay.innerHTML = portfolioContent;
+                mentionsDisplay.classList.add('show');
+            }
+        });
+        
+        // Watchlist badge click
+        watchlistBadge.addEventListener('click', () => {
+            if (currentView === 'watchlist') {
+                // Hide if clicking same badge
+                currentView = null;
+                watchlistBadge.classList.remove('active');
+                mentionsDisplay.classList.remove('show');
+            } else {
+                // Show watchlist content
+                currentView = 'watchlist';
+                watchlistBadge.classList.add('active');
+                portfolioBadge.classList.remove('active');
+                mentionsDisplay.innerHTML = watchlistContent;
+                mentionsDisplay.classList.add('show');
+            }
+        });
+        
+        // Play button functionality (delegate event)
+        mentionsDisplay.addEventListener('click', (e) => {
+            if (e.target.classList.contains('play-inline')) {
+                // Simple feedback for demo
+                const originalText = e.target.textContent;
+                e.target.textContent = '⏸';
+                e.target.style.background = '#dc2626';
+                
+                setTimeout(() => {
+                    e.target.textContent = originalText;
+                    e.target.style.background = '#4a7c59';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

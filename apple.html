@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Panel v2.0 - Test Page</title>
+    <style>
+        /* Global Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafaf9;
+            padding: 40px;
+        }
+        
+        /* Test Controls */
+        .test-controls {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-controls h1 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+        
+        .test-controls .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .test-controls button {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .test-controls button:hover {
+            background: #3a6249;
+        }
+        
+        /* Episode Panel v2.0 - Isolated Namespace */
+        .epb-panel-v2 {
+            --epb-width: min(850px, 62vw);
+            --epb-header-height: 60px;
+            --epb-padding-xs: 4px;
+            --epb-padding-sm: 8px;
+            --epb-padding-md: 12px;
+            --epb-padding-lg: 16px;
+            --epb-font-xs: 10px;
+            --epb-font-sm: 11px;
+            --epb-font-md: 12px;
+            --epb-font-lg: 14px;
+            --epb-font-xl: 16px;
+            --epb-sage: #4a7c59;
+            --epb-sage-light: #e8f0ea;
+            --epb-rose: #c77d7d;
+            --epb-amber: #f4a261;
+            --epb-gray-100: #f8fafc;
+            --epb-gray-200: #e2e8f0;
+            --epb-gray-400: #94a3b8;
+            --epb-gray-600: #64748b;
+            --epb-gray-800: #1e293b;
+        }
+        
+        /* Backdrop */
+        .epb-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .epb-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Main Panel Container */
+        .epb-panel-v2 .epb-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: var(--epb-width);
+            max-width: 900px;
+            height: 100vh;
+            background: white;
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .epb-panel-v2 .epb-panel.active {
+            transform: translateX(0);
+        }
+        
+        /* Header Section - Compact 60px */
+        .epb-panel-v2 .epb-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: var(--epb-padding-sm) var(--epb-padding-md);
+            color: white;
+            flex-shrink: 0;
+            height: var(--epb-header-height);
+        }
+        
+        .epb-panel-v2 .epb-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 24px;
+        }
+        
+        .epb-panel-v2 .epb-podcast-info {
+            display: flex;
+            align-items: center;
+            gap: var(--epb-padding-sm);
+        }
+        
+        .epb-panel-v2 .epb-logo {
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--epb-gray-800);
+            font-size: var(--epb-font-xs);
+        }
+        
+        .epb-panel-v2 .epb-podcast-name {
+            font-size: var(--epb-font-sm);
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .epb-panel-v2 .epb-meta {
+            font-size: var(--epb-font-xs);
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+        
+        /* Action Buttons */
+        .epb-panel-v2 .epb-actions {
+            display: flex;
+            gap: var(--epb-padding-xs);
+        }
+        
+        .epb-panel-v2 .epb-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--epb-font-sm);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .epb-panel-v2 .epb-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Title and Participants */
+        .epb-panel-v2 .epb-title {
+            font-size: var(--epb-font-xl);
+            font-weight: 600;
+            line-height: 1.2;
+            margin: 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .epb-panel-v2 .epb-participants {
+            font-size: var(--epb-font-sm);
+            opacity: 0.9;
+            display: flex;
+            gap: var(--epb-padding-lg);
+        }
+        
+        .epb-panel-v2 .epb-label {
+            font-size: var(--epb-font-xs);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+        }
+        
+        /* Content Area - Two Column Layout */
+        .epb-panel-v2 .epb-content {
+            display: grid;
+            grid-template-columns: 1fr minmax(250px, 35%);
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - var(--epb-header-height));
+        }
+        
+        /* Main Column */
+        .epb-panel-v2 .epb-main {
+            padding: var(--epb-padding-md);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .epb-panel-v2 .epb-section {
+            margin-bottom: var(--epb-padding-md);
+        }
+        
+        .epb-panel-v2 .epb-section-title {
+            font-size: var(--epb-font-xs);
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--epb-gray-600);
+            margin-bottom: 6px;
+        }
+        
+        /* Conversation Summary */
+        .epb-panel-v2 .epb-conversation {
+            background: var(--epb-gray-100);
+            padding: var(--epb-padding-sm);
+            border-radius: 6px;
+            font-size: var(--epb-font-md);
+            line-height: 1.5;
+            color: var(--epb-gray-800);
+        }
+        
+        /* Key Insights */
+        .epb-panel-v2 .epb-insight {
+            display: flex;
+            gap: var(--epb-padding-sm);
+            padding: var(--epb-padding-sm);
+            background: white;
+            border: 1px solid var(--epb-gray-200);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .epb-panel-v2 .epb-insight-num {
+            width: 20px;
+            height: 20px;
+            background: var(--epb-sage);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--epb-font-xs);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .epb-panel-v2 .epb-insight-text {
+            font-size: var(--epb-font-sm);
+            line-height: 1.4;
+            color: var(--epb-gray-800);
+        }
+        
+        /* Portfolio/Watchlist Interactive Badges */
+        .epb-panel-v2 .epb-badges {
+            display: flex;
+            gap: var(--epb-padding-sm);
+            margin-bottom: var(--epb-padding-sm);
+        }
+        
+        .epb-panel-v2 .epb-badge {
+            flex: 1;
+            background: white;
+            border: 1px solid var(--epb-gray-200);
+            border-radius: 6px;
+            padding: var(--epb-padding-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .epb-panel-v2 .epb-badge:hover {
+            border-color: var(--epb-sage);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .epb-panel-v2 .epb-badge.active {
+            background: var(--epb-sage-light);
+            border-color: var(--epb-sage);
+        }
+        
+        .epb-panel-v2 .epb-badge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .epb-panel-v2 .epb-badge-label {
+            font-size: var(--epb-font-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--epb-gray-600);
+        }
+        
+        .epb-panel-v2 .epb-badge-count {
+            background: var(--epb-sage);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: var(--epb-font-xs);
+            font-weight: 600;
+        }
+        
+        .epb-panel-v2 .epb-badge-list {
+            margin-top: var(--epb-padding-sm);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .epb-panel-v2 .epb-badge.active .epb-badge-list {
+            max-height: 200px;
+        }
+        
+        .epb-panel-v2 .epb-badge-item {
+            padding: 4px 0;
+            font-size: var(--epb-font-sm);
+            color: var(--epb-gray-800);
+            border-bottom: 1px solid var(--epb-gray-100);
+        }
+        
+        .epb-panel-v2 .epb-badge-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Sidebar */
+        .epb-panel-v2 .epb-sidebar {
+            background: var(--epb-gray-100);
+            padding: var(--epb-padding-md);
+            border-left: 1px solid var(--epb-gray-200);
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: var(--epb-padding-md);
+        }
+        
+        /* Quote Block */
+        .epb-panel-v2 .epb-quote {
+            background: linear-gradient(135deg, var(--epb-amber) 0%, var(--epb-rose) 100%);
+            padding: var(--epb-padding-sm);
+            border-radius: 6px;
+        }
+        
+        .epb-panel-v2 .epb-quote .epb-section-title {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 4px;
+        }
+        
+        .epb-panel-v2 .epb-quote-text {
+            font-size: var(--epb-font-sm);
+            line-height: 1.3;
+            color: white;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+        
+        .epb-panel-v2 .epb-quote-author {
+            font-size: var(--epb-font-xs);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: right;
+        }
+        
+        /* Notable Numbers - Horizontal Layout */
+        .epb-panel-v2 .epb-numbers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        
+        .epb-panel-v2 .epb-number {
+            background: white;
+            padding: var(--epb-padding-sm) 4px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .epb-panel-v2 .epb-number-val {
+            font-size: var(--epb-font-lg);
+            font-weight: 700;
+            color: var(--epb-gray-800);
+            display: block;
+        }
+        
+        .epb-panel-v2 .epb-number-label {
+            font-size: 9px;
+            color: var(--epb-gray-600);
+            margin-top: 2px;
+        }
+        
+        /* Related Topics */
+        .epb-panel-v2 .epb-topics {
+            background: white;
+            padding: var(--epb-padding-sm);
+            border-radius: 5px;
+        }
+        
+        .epb-panel-v2 .epb-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        
+        .epb-panel-v2 .epb-tag {
+            padding: 3px var(--epb-padding-sm);
+            background: var(--epb-sage-light);
+            color: var(--epb-sage);
+            border-radius: 10px;
+            font-size: var(--epb-font-xs);
+            font-weight: 500;
+        }
+        
+        /* Scrollbar Styling */
+        .epb-panel-v2 .epb-main::-webkit-scrollbar,
+        .epb-panel-v2 .epb-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .epb-panel-v2 .epb-main::-webkit-scrollbar-thumb,
+        .epb-panel-v2 .epb-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+        }
+        
+        /* Responsive for smaller laptops */
+        @media (max-height: 768px) {
+            .epb-panel-v2 {
+                --epb-header-height: 55px;
+                --epb-padding-md: 10px;
+                --epb-font-xl: 15px;
+            }
+            
+            .epb-panel-v2 .epb-insight {
+                padding: 6px;
+            }
+        }
+        
+        @media (max-width: 1366px) {
+            .epb-panel-v2 {
+                --epb-width: 65vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h1>Episode Panel v2.0 - Test Page</h1>
+        <div class="info">
+            <p><strong>Screen Resolution:</strong> <span id="resolution"></span></p>
+            <p><strong>Panel Requirements:</strong> 60-70% width, no scrolling on 1366x768</p>
+            <p><strong>Features:</strong> Interactive badges, single-line host/guest, all action buttons</p>
+        </div>
+        
+        <button onclick="openPanel('episode1')">Open Episode 1 (High Portfolio)</button>
+        <button onclick="openPanel('episode2')">Open Episode 2 (Market Analysis)</button>
+        <button onclick="openPanel('episode3')">Open Episode 3 (Minimal Data)</button>
+        <button onclick="closePanel()">Close Panel</button>
+    </div>
+    
+    <!-- Episode Panel Structure -->
+    <div class="epb-backdrop" id="backdrop" onclick="closePanel()"></div>
+    
+    <div class="epb-panel-v2">
+        <div class="epb-panel" id="episodePanel">
+            <!-- Header -->
+            <div class="epb-header">
+                <div class="epb-header-top">
+                    <div class="epb-podcast-info">
+                        <div class="epb-logo" id="logo">20VC</div>
+                        <div>
+                            <span class="epb-podcast-name" id="podcastName">The Twenty Minute VC</span>
+                            <span class="epb-meta">
+                                <span id="time">3h ago</span> " <span id="duration">94 min</span> " Score: <span id="score">92</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="epb-actions">
+                        <div class="epb-btn" title="Read Transcript">=Ä</div>
+                        <div class="epb-btn" title="Download"></div>
+                        <div class="epb-btn" title="Share">—</div>
+                        <div class="epb-btn" onclick="closePanel()" title="Close"></div>
+                    </div>
+                </div>
+                <h1 class="epb-title" id="title">Loading...</h1>
+                <div class="epb-participants">
+                    <span><span class="epb-label">HOST:</span> <span id="host">Loading...</span></span>
+                    <span><span class="epb-label">GUEST:</span> <span id="guest">Loading...</span></span>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="epb-content">
+                <!-- Main Column -->
+                <div class="epb-main">
+                    <div class="epb-section">
+                        <div class="epb-section-title">THE CONVERSATION</div>
+                        <div class="epb-conversation" id="conversation">Loading...</div>
+                    </div>
+                    
+                    <div class="epb-section">
+                        <div class="epb-section-title">KEY INSIGHTS</div>
+                        <div id="insights"></div>
+                    </div>
+                    
+                    <!-- Interactive Badges -->
+                    <div class="epb-section">
+                        <div class="epb-section-title">COMPANY MENTIONS</div>
+                        <div class="epb-badges">
+                            <div class="epb-badge" id="portfolioBadge" onclick="toggleBadge('portfolio')">
+                                <div class="epb-badge-header">
+                                    <span class="epb-badge-label">=Á PORTFOLIO</span>
+                                    <span class="epb-badge-count" id="portfolioCount">0</span>
+                                </div>
+                                <div class="epb-badge-list" id="portfolioList"></div>
+                            </div>
+                            <div class="epb-badge" id="watchlistBadge" onclick="toggleBadge('watchlist')">
+                                <div class="epb-badge-header">
+                                    <span class="epb-badge-label">=A WATCHLIST</span>
+                                    <span class="epb-badge-count" id="watchlistCount">0</span>
+                                </div>
+                                <div class="epb-badge-list" id="watchlistList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="epb-sidebar">
+                    <div class="epb-quote">
+                        <div class="epb-section-title">ESSENTIAL QUOTE</div>
+                        <div class="epb-quote-text" id="quoteText">"Loading..."</div>
+                        <div class="epb-quote-author" id="quoteAuthor"> Loading</div>
+                    </div>
+                    
+                    <div>
+                        <div class="epb-section-title">NOTABLE NUMBERS</div>
+                        <div class="epb-numbers" id="numbers"></div>
+                    </div>
+                    
+                    <div class="epb-topics">
+                        <div class="epb-section-title">RELATED TOPICS</div>
+                        <div class="epb-tags" id="topics"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mock Episode Data
+        const episodes = {
+            episode1: {
+                podcast: "20VC",
+                podcastName: "The Twenty Minute VC",
+                time: "3h ago",
+                duration: "94 min",
+                score: 92,
+                title: "The Future of AI Agents in Enterprise Software with Reid Hoffman",
+                host: "Harry Stebbings (20VC)",
+                guest: "Reid Hoffman (Greylock Partners)",
+                conversation: "Reid Hoffman discusses the transformative potential of AI agents in enterprise software, arguing that we're at an inflection point similar to the early days of the internet. He emphasizes that the winners will be companies that embrace AI as a core capability rather than a feature add-on.",
+                insights: [
+                    "AI agents will replace 60% of repetitive enterprise workflows within 3 years",
+                    "Companies not adopting AI-first strategies risk 40% productivity disadvantage",
+                    "The $500B enterprise software market faces complete disruption by 2027"
+                ],
+                quote: {
+                    text: "We're not just automating tasks, we're fundamentally reimagining how work gets done. The companies that understand this will define the next decade.",
+                    author: "Reid Hoffman",
+                    time: "23:45"
+                },
+                numbers: {
+                    "$2.3T": "AI Market 2030",
+                    "60%": "Workflow Auto",
+                    "3.5x": "Productivity"
+                },
+                portfolio: ["OpenAI", "Anthropic", "Cohere", "Inflection"],
+                watchlist: ["Mistral", "Adept", "Character.AI"],
+                topics: ["#AIAgents", "#EnterpriseSoftware", "#Automation", "#FutureOfWork", "#Productivity"]
+            },
+            episode2: {
+                podcast: "All-In",
+                podcastName: "All-In Podcast",
+                time: "1d ago",
+                duration: "127 min",
+                score: 88,
+                title: "Market Correction Incoming? Plus: Defense Tech Boom & Climate Investing Reality Check",
+                host: "Jason Calacanis (Launch Fund)",
+                guest: "Chamath, Sacks, Friedberg",
+                conversation: "The All-In hosts debate whether current market valuations signal an imminent correction. They analyze defense tech opportunities following recent geopolitical events and discuss why climate tech investments have underperformed expectations.",
+                insights: [
+                    "Defense tech seeing 10x valuation increases post-Ukraine conflict",
+                    "Climate tech IRR averaging -12% over past 5 years despite $2T invested",
+                    "Market correction of 30-40% expected in overvalued growth stocks"
+                ],
+                quote: {
+                    text: "Everyone's a genius in a bull market. The real test comes when the tide goes out and we see who's been swimming naked.",
+                    author: "David Sacks",
+                    time: "45:12"
+                },
+                numbers: {
+                    "47%": "Overvalued",
+                    "$180B": "Defense Budget",
+                    "-12%": "Climate IRR"
+                },
+                portfolio: ["Anduril", "Shield AI"],
+                watchlist: ["Rebellion Defense", "Vannevar Labs", "Epirus"],
+                topics: ["#MarketCorrection", "#DefenseTech", "#ClimateTech", "#Valuations"]
+            },
+            episode3: {
+                podcast: "BG2",
+                podcastName: "BG2 Pod",
+                time: "5h ago",
+                duration: "68 min",
+                score: 95,
+                title: "Inside Stripe's Path to $100B: Patrick Collison on Building in Hard Mode",
+                host: "Bill Gurley & Brad Gerstner",
+                guest: "Patrick Collison (Stripe)",
+                conversation: "Patrick Collison shares insights from building Stripe into a $100B company, emphasizing the importance of tackling hard problems that competitors avoid.",
+                insights: [
+                    "Focus on problems others consider 'too hard' or 'too boring'",
+                    "Infrastructure investments take 5+ years to pay off but create moats",
+                    "Best talent attracted by technical difficulty, not perks"
+                ],
+                quote: {
+                    text: "We spent three years building infrastructure that generated zero revenue. Everyone thought we were insane. That's exactly why it worked.",
+                    author: "Patrick Collison",
+                    time: "31:20"
+                },
+                numbers: {
+                    "$100B": "Valuation",
+                    "15M": "Businesses",
+                    "$1T": "Processed"
+                },
+                portfolio: ["Stripe"],
+                watchlist: ["Plaid", "Modern Treasury"],
+                topics: ["#Fintech", "#Infrastructure", "#Payments", "#Scaling"]
+            }
+        };
+        
+        // Display current resolution
+        function updateResolution() {
+            document.getElementById('resolution').textContent = `${window.innerWidth} x ${window.innerHeight}`;
+        }
+        updateResolution();
+        window.addEventListener('resize', updateResolution);
+        
+        // Open panel with episode data
+        function openPanel(episodeId) {
+            const data = episodes[episodeId];
+            if (!data) return;
+            
+            // Update all content
+            document.getElementById('logo').textContent = data.podcast;
+            document.getElementById('podcastName').textContent = data.podcastName;
+            document.getElementById('time').textContent = data.time;
+            document.getElementById('duration').textContent = data.duration;
+            document.getElementById('score').textContent = data.score;
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('host').textContent = data.host;
+            document.getElementById('guest').textContent = data.guest;
+            document.getElementById('conversation').textContent = data.conversation;
+            
+            // Insights
+            const insightsEl = document.getElementById('insights');
+            insightsEl.innerHTML = '';
+            data.insights.forEach((insight, i) => {
+                insightsEl.innerHTML += `
+                    <div class="epb-insight">
+                        <div class="epb-insight-num">${i + 1}</div>
+                        <div class="epb-insight-text">${insight}</div>
+                    </div>
+                `;
+            });
+            
+            // Quote
+            document.getElementById('quoteText').textContent = `"${data.quote.text}"`;
+            document.getElementById('quoteAuthor').textContent = ` ${data.quote.author} at ${data.quote.time}`;
+            
+            // Numbers
+            const numbersEl = document.getElementById('numbers');
+            numbersEl.innerHTML = '';
+            Object.entries(data.numbers).forEach(([val, label]) => {
+                numbersEl.innerHTML += `
+                    <div class="epb-number">
+                        <span class="epb-number-val">${val}</span>
+                        <div class="epb-number-label">${label}</div>
+                    </div>
+                `;
+            });
+            
+            // Portfolio & Watchlist
+            document.getElementById('portfolioCount').textContent = data.portfolio.length;
+            const portfolioList = document.getElementById('portfolioList');
+            portfolioList.innerHTML = data.portfolio.map(company => 
+                `<div class="epb-badge-item">${company}</div>`
+            ).join('');
+            
+            document.getElementById('watchlistCount').textContent = data.watchlist.length;
+            const watchlistList = document.getElementById('watchlistList');
+            watchlistList.innerHTML = data.watchlist.map(company => 
+                `<div class="epb-badge-item">${company}</div>`
+            ).join('');
+            
+            // Topics
+            const topicsEl = document.getElementById('topics');
+            topicsEl.innerHTML = data.topics.map(topic => 
+                `<span class="epb-tag">${topic}</span>`
+            ).join('');
+            
+            // Show panel and backdrop
+            document.getElementById('backdrop').classList.add('active');
+            document.getElementById('episodePanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close panel
+        function closePanel() {
+            document.getElementById('backdrop').classList.remove('active');
+            document.getElementById('episodePanel').classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Reset badge states
+            document.getElementById('portfolioBadge').classList.remove('active');
+            document.getElementById('watchlistBadge').classList.remove('active');
+        }
+        
+        // Toggle badge expansion
+        function toggleBadge(type) {
+            const badge = document.getElementById(type + 'Badge');
+            badge.classList.toggle('active');
+            
+            // Close other badge
+            const otherType = type === 'portfolio' ? 'watchlist' : 'portfolio';
+            document.getElementById(otherType + 'Badge').classList.remove('active');
+        }
+        
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePanel();
+            }
+        });
+    </script>
+</body>
+</html>

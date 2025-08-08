@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Priority Briefings Images</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial;
+        }
+        .test-grid {
+            display: grid;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .podcast-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        .podcast-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Testing Podcast Image Paths</h1>
+    <div class="test-grid">
+        <div class="test-card">
+            <h3>All-In</h3>
+            <div class="podcast-avatar">
+                <img src="/images/allin.png" alt="All-In" onload="this.parentElement.nextElementSibling.textContent='✓ Loaded'" onerror="this.parentElement.nextElementSibling.textContent='✗ Failed to load'">
+            </div>
+            <div class="status">Loading...</div>
+            <code>/images/allin.png</code>
+        </div>
+        
+        <div class="test-card">
+            <h3>The Twenty Minute VC</h3>
+            <div class="podcast-avatar">
+                <img src="/images/20vc.jpeg" alt="20VC" onload="this.parentElement.nextElementSibling.textContent='✓ Loaded'" onerror="this.parentElement.nextElementSibling.textContent='✗ Failed to load'">
+            </div>
+            <div class="status">Loading...</div>
+            <code>/images/20vc.jpeg</code>
+        </div>
+        
+        <div class="test-card">
+            <h3>Capital Allocators</h3>
+            <div class="podcast-avatar">
+                <img src="/images/capital%20allocators.webp" alt="Capital Allocators" onload="this.parentElement.nextElementSibling.textContent='✓ Loaded'" onerror="this.parentElement.nextElementSibling.textContent='✗ Failed to load'">
+            </div>
+            <div class="status">Loading...</div>
+            <code>/images/capital%20allocators.webp</code>
+        </div>
+        
+        <div class="test-card">
+            <h3>Try with relative path</h3>
+            <div class="podcast-avatar">
+                <img src="images/allin.png" alt="All-In" onload="this.parentElement.nextElementSibling.textContent='✓ Loaded'" onerror="this.parentElement.nextElementSibling.textContent='✗ Failed to load'">
+            </div>
+            <div class="status">Loading...</div>
+            <code>images/allin.png</code>
+        </div>
+        
+        <div class="test-card">
+            <h3>Directory listing</h3>
+            <pre id="file-list">Checking files...</pre>
+        </div>
+    </div>
+    
+    <script>
+        // List files in images directory
+        fetch('images/')
+            .then(response => response.text())
+            .then(html => {
+                const fileList = document.getElementById('file-list');
+                fileList.textContent = 'Files found in /images/:\n' + html.match(/href="([^"]+\.(png|jpeg|jpg|webp))"/g)?.join('\n') || 'No image files found';
+            })
+            .catch(err => {
+                document.getElementById('file-list').textContent = 'Error listing files: ' + err.message;
+            });
+    </script>
+</body>
+</html>

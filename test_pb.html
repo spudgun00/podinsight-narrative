@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Briefings - Layout Comparison</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f1f5f9;
+            padding: 40px 20px;
+        }
+        
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .comparison-header h1 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .comparison-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .option-label {
+            background: #4a7c59;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+        
+        .dashboard-simulation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 16px;
+            min-height: 800px;
+        }
+        
+        /* OPTION 1: With Container Wrapper */
+        .feature-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .feature-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+        
+        .feature-subtitle {
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .all-briefings-link {
+            color: #4a7c59;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .all-briefings-link:hover {
+            text-decoration: underline;
+        }
+        
+        .cards-grid-contained {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .card-contained {
+            background: #fafbfc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .card-contained:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+        
+        /* OPTION 2: Cards as Containers */
+        .section-header-standalone {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+        
+        .cards-grid-standalone {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .card-standalone {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .card-standalone:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Shared Card Content Styles */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .podcast-badge {
+            background: #1e293b;
+            color: white;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        
+        .episode-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: #64748b;
+        }
+        
+        .priority-tag {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-left: auto;
+        }
+        
+        .priority-tag.new-data {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        
+        .guest-info {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .card-summary {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+        
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            font-size: 10px;
+            color: #4a7c59;
+            text-decoration: none;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .mentions {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .view-brief-btn {
+            background: #4a7c59;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .view-brief-btn:hover {
+            background: #365a42;
+        }
+        
+        /* Other Dashboard Elements for Context */
+        .other-feature {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .placeholder-content {
+            height: 120px;
+            background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        
+        .pros-cons {
+            margin-top: 20px;
+            padding: 16px;
+            background: #fffbeb;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+        }
+        
+        .pros-cons h3 {
+            font-size: 14px;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .pros-cons ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .pros-cons li {
+            font-size: 12px;
+            color: #78350f;
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 4px;
+        }
+        
+        .pros-cons li:before {
+            content: '→';
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-header">
+        <h1>Priority Briefings Layout Comparison</h1>
+        <p>Comparing container approaches for the dashboard integration</p>
+    </div>
+    
+    <div class="comparison-container">
+        <!-- OPTION 1: With Container Wrapper -->
+        <div>
+            <span class="option-label">OPTION 1: WITH CONTAINER (RECOMMENDED)</span>
+            
+            <div class="dashboard-simulation">
+                <!-- Other dashboard feature for context -->
+                <div class="other-feature">
+                    <div class="feature-header">
+                        <div class="feature-title">NARRATIVE PULSE</div>
+                    </div>
+                    <div class="placeholder-content">Chart Area</div>
+                </div>
+                
+                <!-- Priority Briefings with Container -->
+                <div class="feature-container">
+                    <div class="feature-header">
+                        <div class="feature-title-group">
+                            <div class="feature-title">PRIORITY BRIEFINGS</div>
+                            <div class="feature-subtitle">WHAT REQUIRES YOUR ATTENTION TODAY</div>
+                        </div>
+                        <a href="#" class="all-briefings-link">ALL BRIEFINGS →</a>
+                    </div>
+                    
+                    <div class="cards-grid-contained">
+                        <!-- Card 1 -->
+                        <div class="card-contained">
+                            <div class="card-header">
+                                <span class="podcast-badge">All-In</span>
+                                <div class="episode-info">
+                                    <span>3h ago</span>
+                                    <span>•</span>
+                                    <span>94 min</span>
+                                </div>
+                                <span class="priority-tag">CONSENSUS</span>
+                            </div>
+                            <div class="guest-info">Chamath, Sacks, Friedberg & Calacanis</div>
+                            <div class="card-title">AI Infrastructure vs Apps: The $70B Shift</div>
+                            <div class="card-summary">Three major funds announced infrastructure pivots this week - tier-1s aligning.</div>
+                            <div class="card-tags">
+                                <a href="#" class="tag">#Infrastructure</a>
+                                <a href="#" class="tag">#AIFunding</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="mentions">
+                                    <span>📁 Scale AI (1)</span>
+                                    <span>👁 Anthropic (2)</span>
+                                </div>
+                                <button class="view-brief-btn">View Brief →</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="card-contained">
+                            <div class="card-header">
+                                <span class="podcast-badge">20VC</span>
+                                <div class="episode-info">
+                                    <span>8h ago</span>
+                                    <span>•</span>
+                                    <span>82 min</span>
+                                </div>
+                                <span class="priority-tag new-data">NEW DATA</span>
+                            </div>
+                            <div class="guest-info">Bill Gurley (GP, Benchmark)</div>
+                            <div class="card-title">Series A: Why $5M ARR Is The New $1M</div>
+                            <div class="card-summary">Benchmark officially raising Series A bar to $5M ARR for AI companies.</div>
+                            <div class="card-tags">
+                                <a href="#" class="tag">#SeriesA</a>
+                                <a href="#" class="tag">#FundingBar</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="mentions">
+                                    <span>📁 Scale AI (1)</span>
+                                    <span>👁 OpenAI (2)</span>
+                                </div>
+                                <button class="view-brief-btn">View Brief →</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 3 -->
+                        <div class="card-contained">
+                            <div class="card-header">
+                                <span class="podcast-badge">20VC</span>
+                                <div class="episode-info">
+                                    <span>2d ago</span>
+                                    <span>•</span>
+                                    <span>60 min</span>
+                                </div>
+                                <span class="priority-tag">LP INTEL</span>
+                            </div>
+                            <div class="guest-info">Miles Grimshaw, CMU ($4B AUM)</div>
+                            <div class="card-title">90% of LPs Shouldn't Be in Venture</div>
+                            <div class="card-summary">Top quartile returns only 1.8x DPI over 15 years. The math doesn't work.</div>
+                            <div class="card-tags">
+                                <a href="#" class="tag">#VentureReturns</a>
+                                <a href="#" class="tag">#LPStrategy</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="mentions">
+                                    <span>📈 Stripe (2)</span>
+                                    <span>📍 OpenAI (3)</span>
+                                </div>
+                                <button class="view-brief-btn">View Brief →</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 4 -->
+                        <div class="card-contained">
+                            <div class="card-header">
+                                <span class="podcast-badge">Acquired</span>
+                                <div class="episode-info">
+                                    <span>1d ago</span>
+                                    <span>•</span>
+                                    <span>142 min</span>
+                                </div>
+                                <span class="priority-tag new-data">NEW DATA</span>
+                            </div>
+                            <div class="guest-info">Dylan Field (CEO, Figma)</div>
+                            <div class="card-title">The Great Cloud Reversal</div>
+                            <div class="card-summary">Figma saved $50M annually by leaving AWS - triggering mass repatriation.</div>
+                            <div class="card-tags">
+                                <a href="#" class="tag">#CloudCosts</a>
+                                <a href="#" class="tag">#Infrastructure</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="mentions">
+                                    <span>📁 Scale AI (2)</span>
+                                </div>
+                                <button class="view-brief-btn">View Brief →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pros-cons">
+                    <h3>✓ Advantages of Container Approach</h3>
+                    <ul>
+                        <li>Maintains consistency with other dashboard features</li>
+                        <li>Clear feature boundaries and hierarchy</li>
+                        <li>Cards with gray backgrounds create depth layers</li>
+                        <li>Familiar pattern - matches Narrative Feed structure</li>
+                        <li>Compact and space-efficient</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

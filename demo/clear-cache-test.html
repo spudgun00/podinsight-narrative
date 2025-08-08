@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Cache Test</title>
+    <script>
+        // Force cache clear by adding timestamp to all CSS
+        const timestamp = Date.now();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add cache-busting CSS link
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = `features/episode-panel/episode-panel.css?v=${timestamp}`;
+            document.head.appendChild(link);
+            
+            // Show current timestamp for debugging
+            document.getElementById('timestamp').textContent = timestamp;
+            
+            setTimeout(() => {
+                window.location.href = `demo.html?v=${timestamp}`;
+            }, 2000);
+        });
+    </script>
+</head>
+<body>
+    <h2>Clearing cache and reloading...</h2>
+    <p>Timestamp: <span id="timestamp"></span></p>
+    <p>Will redirect to demo.html in 2 seconds with fresh cache...</p>
+</body>
+</html>

@@ -1,0 +1,605 @@
+/* Priority Briefings Compact Cards - Based on Reference Design */
+
+/* ============================================
+   CONTAINER STRUCTURE
+   ============================================ */
+
+/* Main dashboard section */
+.dashboard-section {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Main white container wrapper */
+.priority-briefings-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 2rem;
+}
+
+/* Section header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    margin: 0;
+    display: inline;
+}
+
+.section-subtitle {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline;
+}
+
+.view-all-link {
+    color: #4a7c59;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.view-all-link:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   GRID LAYOUT
+   ============================================ */
+
+/* Compact Card Grid */
+.briefings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 768px) {
+    .briefings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .priority-briefings-container {
+        padding: 20px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .view-all-link {
+        text-align: right;
+    }
+}
+
+/* ============================================
+   CARD STRUCTURE
+   ============================================ */
+
+/* Compact Card Styles */
+.briefing-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.briefing-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* Podcast Badge */
+.podcast-badge {
+    background: #1e293b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Episode Info */
+.episode-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #64748b;
+    flex: 1;
+}
+
+.episode-info .separator {
+    color: #cbd5e1;
+}
+
+/* Priority Tags */
+.priority-tag {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 2px 5px;  /* Increased by 10% from 1.5px 4px */
+    border-radius: 2.5px;  /* Increased by 10% from 2px */
+    font-size: 9px;  /* Increased by 10% from 8px */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;  /* Increased by 10% from 0.25px */
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.priority-tag.new-data {
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.priority-tag.consensus {
+    background: #f3e8ff;
+    color: #6b21a8;
+}
+
+.priority-tag.lp-intel {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.priority-tag.contrarian {
+    background: #fce7f3;
+    color: #a21caf;
+}
+
+.priority-tag.portfolio {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* Guest Info */
+.guest-info {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+/* Card Title */
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    margin-top: 0;
+}
+
+/* Card Summary */
+.card-summary {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #475569;
+    margin-bottom: 12px;
+    margin-top: 0;
+}
+
+/* Card Tags */
+.card-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 11px;
+    color: #4a7c59;
+    text-decoration: none;
+}
+
+.tag:hover {
+    text-decoration: underline;
+}
+
+/* Card Footer */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Mentions */
+.mentions {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #64748b;
+    align-items: center;
+}
+
+/* .mention-item no longer needed - removed from HTML */
+
+.mentions > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mention-count {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* View Brief Button */
+.view-brief-btn {
+    background: #4a7c59;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-brief-btn:hover {
+    background: #365a42;
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   SHOW MORE BUTTON
+   ============================================ */
+
+.show-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.show-more-btn {
+    background: transparent;
+    color: var(--sage);
+    border: 1px solid var(--sage);
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.show-more-btn:hover {
+    background: rgba(74, 124, 89, 0.08);
+}
+
+.btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.btn-icon.rotated {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   MODAL OVERLAY (for expanded view)
+   ============================================ */
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Expanded Card (Magazine Layout) */
+.expanded-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    animation: slideIn 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.expanded-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    padding: 32px 40px;
+    color: white;
+}
+
+.expanded-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.expanded-podcast-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.expanded-podcast-logo {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.expanded-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.expanded-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 16px;
+}
+
+.expanded-participants {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.participant {
+    font-size: 15px;
+}
+
+.participant-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    display: inline-block;
+    width: 60px;
+}
+
+.expanded-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.main-content {
+    padding: 40px;
+}
+
+.conversation-block {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+}
+
+.block-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 16px;
+}
+
+.insight-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.insight-number {
+    width: 32px;
+    height: 32px;
+    background: #4a7c59;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.sidebar {
+    background: transparent; /* Remove gray background to let individual cards show */
+    padding: 0; /* No padding - let cards fill the full width */
+    /* No border or padding - cards handle their own styling */
+}
+
+.quote-block {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    color: white;
+}
+
+.related-topics-block {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.topic-tags-expanded {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.topic-tag-expanded {
+    padding: 6px 12px;
+    background: #ecfdf5;
+    color: #4a7c59;
+    border-radius: 20px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.topic-tag-expanded:hover {
+    background: #4a7c59;
+    color: white;
+}
+
+/* ============================================
+   LOADING & EMPTY STATES
+   ============================================ */
+
+.cards-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.no-results-message {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   ANIMATION STATES
+   ============================================ */
+
+.briefing-card-compact.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hidden state for progressive disclosure */
+.briefing-card-compact.hidden {
+    display: none;
+}
+
+/* Filter transition */
+.briefing-card-compact.filtering {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ============================================
+   SOCIAL PROOF INDICATOR
+   ============================================ */
+
+.social-proof {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--amber-glow);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.625rem;
+    font-weight: 600;
+}

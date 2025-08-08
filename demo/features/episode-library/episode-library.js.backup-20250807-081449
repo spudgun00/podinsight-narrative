@@ -1,0 +1,2353 @@
+// Episode Library Component
+
+// Helper functions to handle both old string format and new number format
+const INFLUENCE_THRESHOLDS = {
+    HIGH: 90,  // Matching your existing logic
+    MEDIUM: 70
+};
+
+// Extract numeric score from either format
+function extractInfluenceScore(influence) {
+    console.log('[Episode Library] Extracting score from:', influence, 'type:', typeof influence);
+    
+    if (typeof influence === 'number') {
+        console.log('[Episode Library] Direct number:', influence);
+        return influence;
+    }
+    
+    if (typeof influence === 'string') {
+        const match = influence.match(/\d+/);
+        const score = match ? parseInt(match[0]) : 0;
+        console.log('[Episode Library] Extracted from string:', score);
+        return score;
+    }
+    
+    console.warn('[Episode Library] Unable to extract score from:', influence);
+    return 0;
+}
+
+const EpisodeLibrary = {
+    state: {
+        isOpen: false,
+        searchQuery: '',
+        activeFilters: {
+            podcast: 'all',
+            dateRange: 'all',
+            topics: ['all']
+        },
+        sortBy: 'date',
+        sortOrder: 'desc',
+        selectedEpisodes: new Set(),
+        viewMode: 'table', // 'table' or 'cards'
+        guestLookup: {} // Map of episode ID to clean guest name
+    },
+
+    podcastImages: {
+        'All-In': 'images/allin.png',
+        'The Twenty Minute VC': 'images/20vc.jpeg',
+        '20VC': 'images/20vc.jpeg',
+        'Capital Allocators': 'images/capital allocators.webp',
+        'BG2Pod': 'images/bg2.png',
+        'This Week in Startups': 'images/theweekinstartups.jpeg',
+        'Invest Like the Best': 'images/investlikethebest.jpeg',
+        'Acquired': 'images/acquired.jpeg',
+        'The Tim Ferriss Show': 'images/timf.jpeg',
+        'The Knowledge Project': 'images/knowledgeproject.webp',
+        'Stratechery': 'images/stratechery.jpeg',
+        'Changelog': 'images/changelog.png',
+        'Indie Hackers': 'images/indiehackers.png'
+    },
+
+    init() {
+        this.createOverlay();
+        this.attachEventListeners();
+        
+        // Try to initialize guest lookup immediately
+        this.initializeGuestLookup();
+        
+        // Also set up a retry in case backup data loads later
+        setTimeout(() => {
+            if (Object.keys(this.state.guestLookup).length === 0) {
+                console.log('[Episode Library] Retrying guest lookup initialization...');
+                this.initializeGuestLookup();
+            }
+        }, 1000);
+        
+        console.log('[Episode Library] Initialized with data source:', 
+            window.unifiedData ? 'unified-data.js' : 'unknown');
+        console.log('Episode Library initialized');
+    },
+
+    initializeGuestLookup() {
+        // Create guest lookup from backup data if available
+        if (window.backupData && window.backupData.priorityBriefings && window.backupData.priorityBriefings.items) {
+            console.log('[Episode Library] Building guest lookup from backup data');
+            window.backupData.priorityBriefings.items.forEach(item => {
+                if (item.id && item.guest) {
+                    this.state.guestLookup[item.id] = item.guest;
+                }
+            });
+            console.log('[Episode Library] Guest lookup built with', Object.keys(this.state.guestLookup).length, 'entries');
+            console.log('[Episode Library] Sample guest mappings:', Object.entries(this.state.guestLookup).slice(0, 3));
+        } else {
+            console.log('[Episode Library] No backup data available for guest lookup');
+            console.log('[Episode Library] window.backupData:', window.backupData);
+        }
+    },
+
+    createOverlay() {
+        // Create backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'episode-library-backdrop';
+        document.body.appendChild(backdrop);
+
+        // Create main overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'episode-library-overlay';
+        overlay.innerHTML = this.getOverlayHTML();
+        document.body.appendChild(overlay);
+
+        this.overlay = overlay;
+        this.backdrop = backdrop;
+    },
+
+    getOverlayHTML() {
+        const episodes = window.unifiedData?.priorityBriefings?.items || [];
+        const totalEpisodes = window.unifiedData?.meta?.analysis?.episodesAnalyzed || 1547;
+        const totalHours = window.unifiedData?.meta?.analysis?.hoursAnalyzed || 1426;
+        const lastUpdated = window.unifiedData?.meta?.analysis?.lastAnalysis || '38 mins ago';
+
+        return `
+            <div class="episode-library-container">
+                <!-- Header -->
+                <div class="episode-library-header">
+                    <div class="library-header-left">
+                        <h1>Podcast Intelligence Repository</h1>
+                        <div class="library-stats">${totalEpisodes.toLocaleString()} episodes • ${totalHours.toLocaleString()} hours analyzed • Updated ${lastUpdated}</div>
+                    </div>
+                    <div class="library-header-actions">
+                        <button class="btn-export">
+                            <span>↓</span> Export Results
+                        </button>
+                        <div class="library-view-toggle">
+                            <button class="active">Table</button>
+                            <button>Cards</button>
+                        </div>
+                        <button class="library-close-btn" aria-label="Close Episode Library">×</button>
+                    </div>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="library-filters-bar">
+                    <div class="library-search-box">
+                        <span class="library-search-icon">🔍</span>
+                        <input type="text" class="library-search-input" placeholder="Search episodes, topics, guests, or quotes...">
+                    </div>
+                    <select class="library-filter-dropdown" data-filter="podcast">
+                        <option value="all">All Podcasts</option>
+                        <option value="all-in">All-In</option>
+                        <option value="20vc">20VC</option>
+                        <option value="invest-like-best">Invest Like the Best</option>
+                        <option value="bg2pod">BG2Pod</option>
+                        <option value="this-week-startups">This Week in Startups</option>
+                        <option value="capital-allocators">Capital Allocators</option>
+                        <option value="acquired">Acquired</option>
+                        <option value="tim-ferriss">The Tim Ferriss Show</option>
+                    </select>
+                    <select class="library-filter-dropdown" data-filter="dateRange">
+                        <option value="all">All Time</option>
+                        <option value="7days">Last 7 Days</option>
+                        <option value="30days">Last 30 Days</option>
+                        <option value="3months">Last 3 Months</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                    <div class="library-multi-select-wrapper" data-filter="topics">
+                        <button class="library-multi-select-toggle">
+                            <span class="multi-select-label">All Topics</span>
+                            <span class="multi-select-arrow">▼</span>
+                        </button>
+                        <div class="library-multi-select-dropdown">
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-all" value="all" checked>
+                                <label for="topic-all">All Topics</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-ai-infrastructure" value="ai-infrastructure">
+                                <label for="topic-ai-infrastructure">AI Infrastructure</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-ai-agents" value="ai-agents">
+                                <label for="topic-ai-agents">AI Agents</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-developer-tools" value="developer-tools">
+                                <label for="topic-developer-tools">Developer Tools</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-defense-tech" value="defense-tech">
+                                <label for="topic-defense-tech">Defense Tech</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-series-a" value="series-a">
+                                <label for="topic-series-a">Series A</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-ma" value="ma">
+                                <label for="topic-ma">M&A</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-vertical-ai" value="vertical-ai">
+                                <label for="topic-vertical-ai">Vertical AI</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-enterprise-software" value="enterprise-software">
+                                <label for="topic-enterprise-software">Enterprise Software</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-fundraising" value="fundraising">
+                                <label for="topic-fundraising">Fundraising</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-lp-strategy" value="lp-strategy">
+                                <label for="topic-lp-strategy">LP Strategy</label>
+                            </div>
+                            <div class="multi-select-option">
+                                <input type="checkbox" id="topic-market-analysis" value="market-analysis">
+                                <label for="topic-market-analysis">Market Analysis</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="library-active-filters" id="activeFilters"></div>
+                </div>
+
+                <!-- Content Container -->
+                <div class="library-content-container" id="libraryContent">
+                    ${this.state.viewMode === 'table' ? this.renderTableView(episodes) : this.renderCardView(episodes)}
+                </div>
+            </div>
+        `;
+    },
+
+    renderTableView(episodes) {
+        return `
+            <div class="library-table-container">
+                <div class="library-table-wrapper">
+                    <table class="library-data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">
+                                    <input type="checkbox" class="library-checkbox" id="selectAll">
+                                </th>
+                                <th style="width: 180px;" data-sort="podcast">
+                                    Podcast <span class="sort-icon">↕</span>
+                                </th>
+                                <th style="width: 60px;" data-sort="episode-number">
+                                    # <span class="sort-icon">↕</span>
+                                </th>
+                                <th style="width: 300px;" data-sort="title">
+                                    Episode <span class="sort-icon">↕</span>
+                                </th>
+                                <th style="width: 100px;" class="sorted" data-sort="date">
+                                    Date <span class="sort-icon">↓</span>
+                                </th>
+                                <th style="width: 80px;" data-sort="duration">
+                                    Length <span class="sort-icon">↕</span>
+                                </th>
+                                <th style="width: 200px;">
+                                    Guests
+                                </th>
+                                <th style="width: 100px;" data-sort="influence">
+                                    Influence <span class="sort-icon">↕</span>
+                                </th>
+                                <th style="width: 200px;">
+                                    Topics
+                                </th>
+                                <th style="width: 60px;">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="episodeTableBody">
+                            ${this.renderTableRows(episodes)}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="library-pagination">
+                    <div class="library-pagination-info">
+                        Showing 1-9 of 9 episodes
+                    </div>
+                    <div class="library-pagination-controls">
+                        <select class="library-filter-dropdown" style="width: auto;">
+                            <option>50 per page</option>
+                            <option>100 per page</option>
+                            <option>200 per page</option>
+                        </select>
+                        <button class="library-page-btn" disabled>←</button>
+                        <button class="library-page-btn active">1</button>
+                        <button class="library-page-btn">→</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    renderCardView(episodes) {
+        return `
+            <div class="episode-grid">
+                ${episodes.map(episode => {
+                    const card = episode.cardView || episode;
+                    const topics = this.extractTopics(episode);
+                    const influenceScore = parseInt(card.influence?.match(/\d+/)?.[0]) || 0;
+                    
+                    // Map priority to Priority Briefings tag style
+                    const priorityTag = this.getPriorityTag(card.priority || episode.priority);
+                    const priorityClass = this.getPriorityClass(priorityTag);
+                    
+                    // Get summary from first insight or conversation summary
+                    const summary = card.summary || 
+                                  (episode.keyInsights && episode.keyInsights[0]) || 
+                                  (episode.conversationSummary ? this.truncateSummary(episode.conversationSummary) : 
+                                   'Key insights from the latest episode with industry leaders');
+                    
+                    // Format guest info - use clean guest data from backup if available
+                    const guestInfo = this.getCleanGuestData(episode) || 'Industry Expert';
+                    
+                    // Generate hashtags from signals or topics
+                    const hashtags = episode.signals ? 
+                        episode.signals.slice(0, 3).map(s => `#${s.text.replace(/\s+/g, '')}`) :
+                        topics.slice(0, 3).map(t => `#${t.replace(/\s+/g, '')}`);
+                    
+                    // Get mentions (portfolio/watchlist companies)
+                    const mentions = this.getCompanyMentions(episode);
+                    
+                    return `
+                        <div class="briefing-card" data-episode-id="${episode.id}" data-briefing-id="${episode.id}" style="cursor: pointer; position: relative;">
+                            <input type="checkbox" class="library-checkbox" data-id="${episode.id}" onclick="event.stopPropagation();">
+                            
+                            <div class="card-header">
+                                <span class="podcast-badge">${card.podcast}</span>
+                                <div class="episode-info">
+                                    <span>${card.time}</span>
+                                    <span class="separator">•</span>
+                                    <span>${card.duration}</span>
+                                    <span class="separator">•</span>
+                                    <span>Score: ${influenceScore}</span>
+                                </div>
+                                <span class="priority-tag ${priorityClass}">${priorityTag}</span>
+                            </div>
+                            
+                            <div class="guest-info">${guestInfo}</div>
+                            
+                            <h3 class="card-title">${card.title}</h3>
+                            
+                            <p class="card-summary">${summary}</p>
+                            
+                            <div class="card-tags">
+                                ${hashtags.map(tag => `<a href="#" class="tag">${tag}</a>`).join('')}
+                            </div>
+                            
+                            <div class="card-footer">
+                                <div class="mentions">
+                                    ${mentions}
+                                </div>
+                                <button class="view-brief-btn" data-briefing-id="${episode.id}" onclick="event.stopPropagation();">
+                                    View Full Brief →
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    },
+
+    renderTableRows(episodes) {
+        return episodes.map((episode, index) => {
+            // Safely access cardView properties with fallback to direct properties for backward compatibility
+            const card = episode.cardView || episode;
+            
+            const topics = this.extractTopics(card);
+            console.log('[Episode Library] Card data:', card.podcast, 'score:', card.score, 'influence:', card.influence);
+            const influenceClass = this.getInfluenceClass(card.score || card.influence);
+            const podcastImage = this.podcastImages[card.podcast];
+            
+            return `
+                <tr data-episode-id="${episode.id}" class="library-episode-row">
+                    <td><input type="checkbox" class="library-checkbox" data-id="${episode.id}" onclick="event.stopPropagation();"></td>
+                    <td>
+                        <div class="library-podcast-cell">
+                            ${podcastImage ? 
+                                `<img src="${podcastImage}" alt="${card.podcast}" class="library-podcast-logo">` :
+                                `<div class="library-podcast-logo library-podcast-fallback">${this.getPodcastInitials(card.podcast)}</div>`
+                            }
+                            <span>${card.podcast || ''}</span>
+                        </div>
+                    </td>
+                    <td class="episode-number-cell">
+                        ${this.extractEpisodeNumber(card)}
+                    </td>
+                    <td>
+                        <div class="library-episode-title">${card.title || 'No title'}</div>
+                        <div class="library-episode-subtitle">${this.getHostInfo(card)}</div>
+                    </td>
+                    <td>${card.time || ''}</td>
+                    <td>${card.duration || ''}</td>
+                    <td>
+                        <div class="library-guest-pills">
+                            ${this.renderGuestPills(this.getCleanGuestData(episode))}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="library-influence-score ${influenceClass}">
+                            ${this.getInfluenceIcon(card.score || card.influence)} ${this.getInfluenceValue(card.score || card.influence)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="library-topic-tags" data-episode-id="${episode.id}">
+                            ${this.renderTopicTags(topics, episode.id)}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="position: relative;">
+                            <button class="library-actions-btn" data-episode-id="${episode.id}">⋮</button>
+                            <div class="library-actions-dropdown" id="actions-${episode.id}">
+                                <div class="library-action-item">Play Episode</div>
+                                <div class="library-action-item">View Transcript</div>
+                                <div class="library-action-divider"></div>
+                                <div class="library-action-item">Download Audio</div>
+                                <div class="library-action-item">Download Transcript</div>
+                                <div class="library-action-divider"></div>
+                                <div class="library-action-item">Share</div>
+                                <div class="library-action-item">Add to Brief</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    },
+
+    renderTopicTags(topics, episodeId) {
+        const maxDisplay = 2;
+        
+        if (topics.length <= maxDisplay) {
+            return topics.map(topic => `<span class="library-topic-tag">${topic}</span>`).join('');
+        }
+        
+        // Show first 2 topics and a clickable +X tag
+        const visibleTopics = topics.slice(0, maxDisplay);
+        const hiddenTopics = topics.slice(maxDisplay);
+        const remainingCount = hiddenTopics.length;
+        
+        let html = visibleTopics.map(topic => `<span class="library-topic-tag">${topic}</span>`).join('');
+        html += `<span class="library-topic-tag library-topic-more" data-episode-id="${episodeId}" data-expanded="false">+${remainingCount}</span>`;
+        
+        // Add hidden topics that will be shown when expanded
+        html += hiddenTopics.map(topic => `<span class="library-topic-tag library-topic-hidden" style="display: none;">${topic}</span>`).join('');
+        
+        return html;
+    },
+
+    getCleanGuestData(episode) {
+        // First try to get clean guest data from backup lookup
+        if (this.state.guestLookup[episode.id]) {
+            const cleanGuest = this.state.guestLookup[episode.id];
+            console.log(`[Episode Library] Found clean guest for ${episode.id}: "${cleanGuest}"`);
+            return cleanGuest;
+        }
+        
+        // Fall back to the existing guest data if available
+        const card = episode.cardView || episode;
+        const guestString = card.guests || card.guest || '';
+        
+        console.log(`[Episode Library] No backup data for ${episode.id}, using fallback extraction from: "${guestString}"`);
+        
+        // If the guest string contains hosts (indicated by + or multiple parentheses), try to extract just guest
+        if (guestString.includes('+') || (guestString.match(/\(/g) || []).length > 1) {
+            // Extract the last person mentioned as they're usually the guest
+            const parts = guestString.split(/[+,]/);
+            if (parts.length > 0) {
+                const lastPart = parts[parts.length - 1].trim();
+                // Extract name from "Name (Title, Company)" format
+                const nameMatch = lastPart.match(/^([^(]+)/);
+                if (nameMatch) {
+                    const extracted = nameMatch[1].trim();
+                    console.log(`[Episode Library] Extracted guest: "${extracted}" from "${guestString}"`);
+                    return extracted;
+                }
+            }
+        }
+        
+        return guestString;
+    },
+
+    renderGuestPills(guestString) {
+        // Add defensive check to prevent crash when guestString is undefined
+        if (!guestString) {
+            return '<span class="library-guest-pill">No guests listed</span>';
+        }
+        
+        // If this is already a clean guest name (no +, no multiple parentheses), display it directly
+        if (!guestString.includes('+') && !guestString.includes(',') && (guestString.match(/\(/g) || []).length <= 1) {
+            // This is likely already a clean guest name
+            return `<span class="library-guest-pill">${guestString}</span>`;
+        }
+        
+        const guests = guestString.split(/[,+]/).map(g => g.trim());
+        const maxDisplay = 2;
+        
+        // Extract just names, removing titles and organizations
+        const cleanGuests = guests.map(guest => {
+            // Handle special cases first
+            if (guest.includes('Chamath') && guest.includes('Sacks')) {
+                return ['Chamath', 'Sacks', 'Friedberg', 'Marc Andreessen'];
+            }
+            
+            // For "Organization Title Name" pattern (e.g., "CalPERS CIO Nicole Musicco")
+            // Try to extract name at the end after titles
+            const orgTitleNamePattern = /^(?:[A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+)?(?:CEO|CTO|CFO|COO|CIO|CMO|President|VP|SVP|EVP|Founder|Co-founder|Partner|GP|LP|MD|Director|Head\s+of|Chief|General)\s+(.+)$/i;
+            const match = guest.match(orgTitleNamePattern);
+            if (match) {
+                return match[1].trim();
+            }
+            
+            // Remove titles at the beginning
+            let cleanName = guest
+                .replace(/^(CEO|CTO|CFO|COO|CIO|CMO|President|VP|SVP|EVP|Founder|Co-founder|Partner|GP|LP|MD|Director|Head of|Chief|General|Senior|Junior|Dr\.?|Prof\.?|Mr\.?|Mrs\.?|Ms\.?)\s+/i, '')
+                .replace(/\s+(at|@|of|from)\s+.*/i, '') // Remove "at Company", "of Company", etc.
+                .replace(/\s*\([^)]*\)/g, '') // Remove parenthetical content
+                .replace(/^(of|at|from)\s+/i, '') // Clean up if starts with preposition after removal
+                .trim();
+            
+            // If we stripped everything or got a single word that might be a company, return original
+            if (!cleanName || cleanName.split(' ').length < 2) {
+                // Last attempt: look for a name pattern at the end
+                const nameAtEnd = guest.match(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)$/);
+                if (nameAtEnd) {
+                    return nameAtEnd[1];
+                }
+            }
+            
+            return cleanName || guest;
+        }).flat();
+        
+        const displayGuests = cleanGuests.slice(0, maxDisplay);
+        const remaining = cleanGuests.length - maxDisplay;
+        
+        let pills = displayGuests.map(guest => 
+            `<span class="library-guest-pill">${guest}</span>`
+        ).join('');
+        
+        if (remaining > 0) {
+            pills += `<span class="library-guest-pill">+${remaining}</span>`;
+        }
+        
+        return pills;
+    },
+
+    extractTopics(episode) {
+        const topics = [];
+        
+        // Handle both cardView structure and direct properties
+        const podcast = episode.cardView?.podcast || episode.podcast;
+        const hashtags = episode.cardView?.hashtags || episode.hashtags || [];
+        
+        // Topic mapping based on podcast and content
+        const podcastTopics = {
+            'All-In': ['Market Analysis', 'Venture Capital', 'AI Infrastructure', 'Policy'],
+            'The Twenty Minute VC': ['Series A', 'Fundraising', 'Growth Metrics', 'Portfolio Strategy'],
+            '20VC': ['Series A', 'Fundraising', 'Growth Metrics', 'Portfolio Strategy'],
+            'Capital Allocators': ['LP Strategy', 'Fund Management', 'Asset Allocation', 'Risk Management'],
+            'BG2Pod': ['AI Agents', 'Enterprise Software', 'B2B SaaS', 'Market Dynamics'],
+            'This Week in Startups': ['Startups', 'Founder Stories', 'Product Strategy', 'Growth Hacking'],
+            'Invest Like the Best': ['Defense Tech', 'Deep Tech', 'Capital Efficiency', 'Emerging Markets'],
+            'Acquired': ['M&A', 'Company Strategy', 'Tech History', 'Business Models'],
+            'The Tim Ferriss Show': ['Productivity', 'Leadership', 'Mental Models', 'Performance'],
+            'Changelog': ['Developer Tools', 'Open Source', 'DevOps', 'Programming'],
+            'Stratechery': ['Platform Strategy', 'Tech Analysis', 'Business Strategy', 'Disruption'],
+            'The Knowledge Project': ['Decision Making', 'Mental Models', 'Learning', 'Psychology']
+        };
+        
+        // Extract from key insights
+        if (episode.keyInsights) {
+            episode.keyInsights.forEach(insight => {
+                const lowerInsight = insight.toLowerCase();
+                
+                // AI and Tech topics
+                if (lowerInsight.includes('infrastructure')) topics.push('AI Infrastructure');
+                if (lowerInsight.includes('agent')) topics.push('AI Agents');
+                if (lowerInsight.includes('vertical ai')) topics.push('Vertical AI');
+                if (lowerInsight.includes('gpu') || lowerInsight.includes('nvidia')) topics.push('Compute');
+                if (lowerInsight.includes('developer') || lowerInsight.includes('github')) topics.push('Developer Tools');
+                
+                // Investment topics
+                if (lowerInsight.includes('series a')) topics.push('Series A');
+                if (lowerInsight.includes('seed')) topics.push('Seed Funding');
+                if (lowerInsight.includes('ipo')) topics.push('IPO Market');
+                if (lowerInsight.includes('m&a') || lowerInsight.includes('acquisition')) topics.push('M&A');
+                if (lowerInsight.includes('valuation')) topics.push('Valuations');
+                
+                // Sector topics
+                if (lowerInsight.includes('defense')) topics.push('Defense Tech');
+                if (lowerInsight.includes('enterprise')) topics.push('Enterprise Software');
+                if (lowerInsight.includes('saas')) topics.push('B2B SaaS');
+                if (lowerInsight.includes('healthcare') || lowerInsight.includes('abridge')) topics.push('Healthcare');
+                if (lowerInsight.includes('legal') || lowerInsight.includes('harvey')) topics.push('Legal Tech');
+                if (lowerInsight.includes('fintech') || lowerInsight.includes('financial')) topics.push('Fintech');
+                
+                // Strategy topics
+                if (lowerInsight.includes('revenue') || lowerInsight.includes('arr')) topics.push('Revenue Growth');
+                if (lowerInsight.includes('efficiency')) topics.push('Capital Efficiency');
+                if (lowerInsight.includes('market') && lowerInsight.includes('shift')) topics.push('Market Shifts');
+            });
+        }
+        
+        // Add podcast-specific topics
+        const defaultTopics = podcastTopics[podcast] || ['Tech Trends', 'Innovation'];
+        
+        // Merge and deduplicate
+        const allTopics = [...new Set([...topics, ...defaultTopics])];
+        
+        // Return all unique topics
+        return allTopics.length > 0 ? allTopics : ['General'];
+    },
+
+    getInfluenceClass(influence) {
+        console.log('[Episode Library] getInfluenceClass input:', influence, 'type:', typeof influence);
+        
+        if (!influence) {
+            console.log('[Episode Library] No influence value, returning default: influence-medium');
+            return 'influence-medium';
+        }
+        
+        const score = extractInfluenceScore(influence);
+        const result = score >= 90 ? 'influence-high' : 'influence-medium';
+        console.log('[Episode Library] Score:', score, '→ Class:', result);
+        return result;
+    },
+    
+    // New helper methods for Priority Briefings style cards
+    getPriorityTag(priority) {
+        const tagMap = {
+            'critical': 'Consensus Forming',
+            'opportunity': 'New Data',
+            'elevated': 'LP Intel'
+        };
+        return tagMap[priority] || 'Contrarian View';
+    },
+    
+    getPriorityClass(tag) {
+        const classMap = {
+            'Consensus Forming': 'consensus',
+            'New Data': 'new-data',
+            'LP Intel': 'lp-intel',
+            'Contrarian View': 'contrarian',
+            'Portfolio Impact': 'portfolio'
+        };
+        return classMap[tag] || 'lp-intel';
+    },
+    
+    getCompanyMentions(episode) {
+        const mentions = [];
+        
+        // Check for portfolio companies
+        if (episode.portfolioCompanies && episode.portfolioCompanies.length > 0) {
+            const count = episode.portfolioCompanies.length;
+            const companies = episode.portfolioCompanies.slice(0, 2).join(', ');
+            const moreText = count > 2 ? `, +${count - 2}` : '';
+            mentions.push(`
+                <div class="mention-item">
+                    <span>📁</span>
+                    <span class="mention-count">${companies}${moreText}</span>
+                </div>
+            `);
+        }
+        
+        // Check for watchlist companies
+        if (episode.watchlistCompanies && episode.watchlistCompanies.length > 0) {
+            const count = episode.watchlistCompanies.length;
+            const companies = episode.watchlistCompanies.slice(0, 2).join(', ');
+            const moreText = count > 2 ? ` (+${count - 2})` : '';
+            mentions.push(`
+                <div class="mention-item">
+                    <span>👁</span>
+                    <span class="mention-count">${companies}${moreText}</span>
+                </div>
+            `);
+        }
+        
+        // If no mentions, show a placeholder
+        if (mentions.length === 0) {
+            return '<div class="mention-item"><span></span></div>';
+        }
+        
+        return mentions.join('');
+    },
+
+    getTopicValue(topicName) {
+        // Map topic display names to filter values
+        const topicMap = {
+            'AI Infrastructure': 'ai-infrastructure',
+            'AI Agents': 'ai-agents',
+            'Developer Tools': 'developer-tools',
+            'Defense Tech': 'defense-tech',
+            'Series A': 'series-a',
+            'M&A': 'ma',
+            'Vertical AI': 'vertical-ai',
+            'Enterprise Software': 'enterprise-software',
+            'Fundraising': 'fundraising',
+            'LP Strategy': 'lp-strategy',
+            'Market Analysis': 'market-analysis',
+            'Seed Funding': 'fundraising',
+            'IPO Market': 'market-analysis',
+            'Valuations': 'market-analysis',
+            'B2B SaaS': 'enterprise-software',
+            'Healthcare': 'vertical-ai',
+            'Legal Tech': 'vertical-ai',
+            'Fintech': 'vertical-ai',
+            'Revenue Growth': 'market-analysis',
+            'Capital Efficiency': 'market-analysis',
+            'Market Shifts': 'market-analysis'
+        };
+        
+        return topicMap[topicName] || topicName.toLowerCase().replace(/\s+/g, '-');
+    },
+
+    getInfluenceIcon(influence) {
+        console.log('[Episode Library] getInfluenceIcon input:', influence, 'type:', typeof influence);
+        
+        const score = extractInfluenceScore(influence);
+        let icon;
+        
+        if (score >= 90) icon = '↗';
+        else if (score >= 70) icon = '→';
+        else icon = '↓';
+        
+        console.log('[Episode Library] Score:', score, '→ Icon:', icon);
+        return icon;
+    },
+
+    getInfluenceValue(influence) {
+        console.log('[Episode Library] getInfluenceValue input:', influence, 'type:', typeof influence);
+        
+        const score = extractInfluenceScore(influence);
+        const value = score.toString();
+        
+        console.log('[Episode Library] Score:', score, '→ Value:', value);
+        return value;
+    },
+
+    getPodcastInitials(podcast) {
+        const initials = {
+            'All-In': 'AI',
+            'The Twenty Minute VC': '20',
+            '20VC': '20',
+            'Capital Allocators': 'CA',
+            'BG2Pod': 'BG',
+            'This Week in Startups': 'TW',
+            'Invest Like the Best': 'IL',
+            'Acquired': 'AQ',
+            'The Tim Ferriss Show': 'TF'
+        };
+        if (!podcast) return 'NA';
+        return initials[podcast] || podcast.substring(0, 2).toUpperCase();
+    },
+
+    getEpisodeSubtitle(episode) {
+        // Map of podcast to host names and typical episode numbers
+        const podcastHosts = {
+            'All-In': { host: 'Chamath, Sacks, Friedberg & Calacanis', prefix: 'E' },
+            'The Twenty Minute VC': { host: 'Harry Stebbings', prefix: '#' },
+            '20VC': { host: 'Harry Stebbings', prefix: '#' },
+            'Capital Allocators': { host: 'Ted Seides', prefix: 'EP' },
+            'BG2Pod': { host: 'Brad Gerstner & Bill Gurley', prefix: '#' },
+            'This Week in Startups': { host: 'Jason Calacanis', prefix: 'E' },
+            'Invest Like the Best': { host: 'Patrick O\'Shaughnessy', prefix: 'EP' },
+            'Acquired': { host: 'Ben Gilbert & David Rosenthal', prefix: 'S' },
+            'The Tim Ferriss Show': { host: 'Tim Ferriss', prefix: '#' }
+        };
+
+        // Generate episode numbers based on podcast and index
+        const episodeNumbers = {
+            'All-In': 'E147',
+            'The Twenty Minute VC': '#892',
+            'Capital Allocators': 'EP324',
+            'BG2Pod': '#12',
+            'This Week in Startups': 'E1892',
+            'Invest Like the Best': 'EP324',
+            'Acquired': 'S8E4',
+            'The Tim Ferriss Show': '#712'
+        };
+
+        const podcast = episode.cardView?.podcast || episode.podcast;
+        const hostInfo = podcastHosts[podcast] || { host: 'Host', prefix: '#' };
+        const episodeNum = episodeNumbers[podcast] || `${hostInfo.prefix}${Math.floor(Math.random() * 900) + 100}`;
+        
+        return `${episodeNum} • ${hostInfo.host}`;
+    },
+
+    truncateSummary(summary, targetSentences = 3) {
+        if (!summary) return summary;
+        
+        // Split by sentence endings (period followed by space or end of string)
+        const sentences = summary.match(/[^.!?]+[.!?]+/g) || [];
+        
+        if (sentences.length <= targetSentences) {
+            return summary;
+        }
+        
+        // Take first 3 sentences
+        let truncated = sentences.slice(0, targetSentences).join('').trim();
+        
+        // If result is too short (less than 100 chars), add one more sentence if available
+        if (truncated.length < 100 && sentences.length > targetSentences) {
+            truncated = sentences.slice(0, targetSentences + 1).join('').trim();
+        }
+        
+        // Add .. after the final punctuation if we truncated
+        if (truncated.endsWith('.')) {
+            return truncated.slice(0, -1) + '...';
+        } else if (truncated.endsWith('!') || truncated.endsWith('?')) {
+            return truncated + '..';
+        }
+        
+        return truncated;
+    },
+
+    extractEpisodeNumber(episode) {
+        // Handle both cardView structure and direct properties
+        const podcast = episode.cardView?.podcast || episode.podcast;
+        
+        // Get episode number from hardcoded data - using realistic numbers for each podcast
+        const episodeNumbers = {
+            'All-In': 147,
+            'The Twenty Minute VC': 892,
+            'Capital Allocators': 324,
+            'BG2Pod': 12,
+            'This Week in Startups': 1892,
+            'Invest Like the Best': 324,
+            'Acquired': 184,  // Season 8 Episode 4 converted to sequential number
+            'The Tim Ferriss Show': 712,
+            'Changelog': 568,  // Added realistic number
+            'The Knowledge Project': 772  // Added realistic number
+        };
+        
+        // Return the episode number or empty string if not found
+        return episodeNumbers[podcast]?.toString() || '';
+    },
+
+    getHostInfo(episode) {
+        // Handle both cardView structure and direct properties
+        const podcast = episode.cardView?.podcast || episode.podcast;
+        
+        // Map of podcast to host names
+        const podcastHosts = {
+            'All-In': 'Chamath, Sacks, Friedberg & Calacanis',
+            'The Twenty Minute VC': 'Harry Stebbings',
+            '20VC': 'Harry Stebbings',
+            'Capital Allocators': 'Ted Seides',
+            'BG2Pod': 'Brad Gerstner & Bill Gurley',
+            'This Week in Startups': 'Jason Calacanis',
+            'Invest Like the Best': 'Patrick O\'Shaughnessy',
+            'Acquired': 'Ben Gilbert & David Rosenthal',
+            'The Tim Ferriss Show': 'Tim Ferriss'
+        };
+        
+        const host = podcastHosts[podcast] || 'Host';
+        return `Host: ${host}`;
+    },
+
+    attachEventListeners() {
+        // Close button
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('library-close-btn')) {
+                this.close();
+            }
+            
+            // Actions dropdown
+            if (e.target.classList.contains('library-actions-btn')) {
+                this.toggleActionsDropdown(e.target);
+            }
+            
+            // Close dropdowns when clicking outside
+            if (!e.target.closest('.library-actions-btn') && !e.target.closest('.library-actions-dropdown')) {
+                this.closeAllDropdowns();
+            }
+            
+            // Topic expansion
+            if (e.target.classList.contains('library-topic-more')) {
+                this.toggleTopicExpansion(e.target);
+            }
+            
+            // Episode row click (table view)
+            if (e.target.closest('.library-episode-row')) {
+                const row = e.target.closest('.library-episode-row');
+                // Don't open if clicking on checkbox or actions
+                if (!e.target.closest('.library-checkbox') && !e.target.closest('.library-actions-btn')) {
+                    const episodeId = row.dataset.episodeId;
+                    if (episodeId) {
+                        this.showEpisodeDetail(episodeId);
+                    }
+                }
+            }
+            
+            // Episode card click (card view) - Updated for briefing-card
+            if ((e.target.closest('.episode-card') || e.target.closest('.briefing-card')) && e.target.closest('.episode-library-overlay')) {
+                const card = e.target.closest('.episode-card') || e.target.closest('.briefing-card');
+                // Don't open if clicking on checkbox or button
+                if (!e.target.closest('.library-checkbox') && !e.target.closest('.view-brief-btn') && !e.target.closest('.tag')) {
+                    const episodeId = card.dataset.episodeId || card.dataset.briefingId;
+                    if (episodeId) {
+                        this.showEpisodeDetail(episodeId);
+                    }
+                }
+            }
+            
+            // View Brief button click
+            if (e.target.closest('.view-brief-btn') && e.target.closest('.episode-library-overlay')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const btn = e.target.closest('.view-brief-btn');
+                const episodeId = btn.dataset.briefingId;
+                if (episodeId) {
+                    this.showEpisodeDetail(episodeId);
+                }
+            }
+            
+            // View toggle
+            if (e.target.closest('.library-view-toggle button')) {
+                const button = e.target.closest('.library-view-toggle button');
+                const isTableView = button.textContent.includes('Table');
+                this.setViewMode(isTableView ? 'table' : 'cards');
+            }
+        });
+
+        // Backdrop click
+        this.backdrop.addEventListener('click', () => this.close());
+
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.state.isOpen) {
+                this.close();
+            }
+        });
+
+        // Search input
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('library-search-input')) {
+                this.handleSearch(e.target.value);
+            }
+        });
+
+        // Multi-select toggle
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.library-multi-select-toggle')) {
+                e.preventDefault();
+                this.toggleMultiSelect(e.target.closest('.library-multi-select-wrapper'));
+            }
+            
+            // Close multi-select when clicking outside
+            if (!e.target.closest('.library-multi-select-wrapper')) {
+                document.querySelectorAll('.library-multi-select-dropdown.active').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+
+        // Filters
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('library-filter-dropdown')) {
+                this.handleFilterChange(e.target);
+            }
+            
+            // Topic checkboxes
+            if (e.target.closest('.library-multi-select-dropdown') && e.target.type === 'checkbox') {
+                this.handleTopicChange(e.target);
+            }
+            
+            // Checkboxes
+            if (e.target.classList.contains('library-checkbox')) {
+                this.handleCheckboxChange(e.target);
+            }
+        });
+
+        // Sort headers
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('th[data-sort]')) {
+                this.handleSort(e.target.closest('th[data-sort]'));
+            }
+        });
+    },
+
+    open() {
+        console.log('EpisodeLibrary.open() called!');
+        console.log('Current state:', this.state);
+        console.log('Overlay element:', this.overlay);
+        console.log('Backdrop element:', this.backdrop);
+        
+        if (!this.overlay) {
+            console.error('Episode Library: Overlay element not found!');
+            console.log('Attempting to re-initialize...');
+            this.init();
+            if (!this.overlay) {
+                console.error('Episode Library: Failed to create overlay even after re-init');
+                return;
+            }
+        }
+        
+        this.state.isOpen = true;
+        this.overlay.classList.add('active');
+        this.backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        console.log('Episode Library: Opened successfully');
+        console.log('Overlay classes:', this.overlay.className);
+        console.log('Backdrop classes:', this.backdrop.className);
+    },
+
+    close() {
+        this.state.isOpen = false;
+        this.overlay.classList.remove('active');
+        this.backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+        this.closeAllDropdowns();
+    },
+
+    toggleActionsDropdown(button) {
+        const episodeId = button.dataset.episodeId;
+        const dropdown = document.getElementById(`actions-${episodeId}`);
+        
+        // Close all other dropdowns
+        this.closeAllDropdowns();
+        
+        // Toggle this dropdown
+        dropdown.classList.toggle('active');
+    },
+
+    closeAllDropdowns() {
+        document.querySelectorAll('.library-actions-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('active');
+        });
+    },
+
+    toggleTopicExpansion(moreTag) {
+        const episodeId = moreTag.dataset.episodeId;
+        const isExpanded = moreTag.dataset.expanded === 'true';
+        const topicContainer = moreTag.closest('.library-topic-tags');
+        const hiddenTags = topicContainer.querySelectorAll('.library-topic-hidden');
+        
+        if (isExpanded) {
+            // Collapse
+            hiddenTags.forEach(tag => tag.style.display = 'none');
+            moreTag.dataset.expanded = 'false';
+            
+            // Update the count
+            const hiddenCount = hiddenTags.length;
+            moreTag.textContent = `+${hiddenCount}`;
+        } else {
+            // Expand
+            hiddenTags.forEach(tag => tag.style.display = 'inline-block');
+            moreTag.dataset.expanded = 'true';
+            moreTag.textContent = '−'; // Change to minus sign
+        }
+    },
+
+    handleSearch(query) {
+        this.state.searchQuery = query.toLowerCase();
+        this.updateTable();
+    },
+
+    handleFilterChange(select) {
+        const filterType = select.dataset.filter;
+        const value = select.value;
+        
+        this.state.activeFilters[filterType] = value;
+        this.updateTable();
+        this.updateActiveFilters();
+    },
+
+    toggleMultiSelect(wrapper) {
+        const dropdown = wrapper.querySelector('.library-multi-select-dropdown');
+        dropdown.classList.toggle('active');
+    },
+
+    handleTopicChange(checkbox) {
+        const allCheckbox = document.getElementById('topic-all');
+        const topicCheckboxes = document.querySelectorAll('.library-multi-select-dropdown input[type="checkbox"]:not(#topic-all)');
+        
+        if (checkbox.id === 'topic-all') {
+            // If "All Topics" is checked, uncheck all others
+            if (checkbox.checked) {
+                topicCheckboxes.forEach(cb => cb.checked = false);
+                this.state.activeFilters.topics = ['all'];
+            } else {
+                // Don't allow unchecking "All" if nothing else is selected
+                checkbox.checked = true;
+            }
+        } else {
+            // If any specific topic is checked, uncheck "All Topics"
+            if (checkbox.checked) {
+                allCheckbox.checked = false;
+                
+                // Collect all checked topics
+                const checkedTopics = [];
+                topicCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        checkedTopics.push(cb.value);
+                    }
+                });
+                
+                // If nothing is checked, revert to "All"
+                if (checkedTopics.length === 0) {
+                    allCheckbox.checked = true;
+                    this.state.activeFilters.topics = ['all'];
+                } else {
+                    this.state.activeFilters.topics = checkedTopics;
+                }
+            } else {
+                // Check if this was the last topic
+                const checkedCount = Array.from(topicCheckboxes).filter(cb => cb.checked).length;
+                if (checkedCount === 0) {
+                    allCheckbox.checked = true;
+                    this.state.activeFilters.topics = ['all'];
+                } else {
+                    // Update topics list
+                    this.state.activeFilters.topics = Array.from(topicCheckboxes)
+                        .filter(cb => cb.checked)
+                        .map(cb => cb.value);
+                }
+            }
+        }
+        
+        this.updateMultiSelectLabel();
+        this.updateTable();
+        this.updateActiveFilters();
+    },
+
+    updateMultiSelectLabel() {
+        const label = document.querySelector('.multi-select-label');
+        const topics = this.state.activeFilters.topics;
+        
+        if (topics.includes('all') || topics.length === 0) {
+            label.textContent = 'All Topics';
+        } else if (topics.length === 1) {
+            // Get the label text for the single topic
+            const topicLabels = {
+                'ai-infrastructure': 'AI Infrastructure',
+                'ai-agents': 'AI Agents',
+                'developer-tools': 'Developer Tools',
+                'defense-tech': 'Defense Tech',
+                'series-a': 'Series A',
+                'ma': 'M&A',
+                'vertical-ai': 'Vertical AI',
+                'enterprise-software': 'Enterprise Software',
+                'fundraising': 'Fundraising',
+                'lp-strategy': 'LP Strategy',
+                'market-analysis': 'Market Analysis'
+            };
+            label.textContent = topicLabels[topics[0]] || topics[0];
+        } else {
+            label.textContent = `${topics.length} topics selected`;
+        }
+    },
+
+    handleCheckboxChange(checkbox) {
+        if (checkbox.id === 'selectAll') {
+            const isChecked = checkbox.checked;
+            document.querySelectorAll('.library-checkbox:not(#selectAll)').forEach(cb => {
+                cb.checked = isChecked;
+                const id = cb.dataset.id;
+                if (id) {
+                    if (isChecked) {
+                        this.state.selectedEpisodes.add(id);
+                    } else {
+                        this.state.selectedEpisodes.delete(id);
+                    }
+                }
+            });
+        } else {
+            const id = checkbox.dataset.id;
+            if (checkbox.checked) {
+                this.state.selectedEpisodes.add(id);
+            } else {
+                this.state.selectedEpisodes.delete(id);
+            }
+        }
+    },
+
+    handleSort(th) {
+        const sortBy = th.dataset.sort;
+        
+        // Update sort state
+        if (this.state.sortBy === sortBy) {
+            this.state.sortOrder = this.state.sortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.state.sortBy = sortBy;
+            this.state.sortOrder = 'desc';
+        }
+        
+        // Update UI
+        document.querySelectorAll('.library-data-table th').forEach(header => {
+            header.classList.remove('sorted');
+        });
+        th.classList.add('sorted');
+        
+        const icon = th.querySelector('.sort-icon');
+        icon.textContent = this.state.sortOrder === 'asc' ? '↑' : '↓';
+        
+        this.updateTable();
+    },
+
+    setViewMode(mode) {
+        this.state.viewMode = mode;
+        
+        // Update toggle buttons
+        document.querySelectorAll('.library-view-toggle button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const activeBtn = mode === 'table' 
+            ? document.querySelector('.library-view-toggle button:first-child')
+            : document.querySelector('.library-view-toggle button:last-child');
+        if (activeBtn) activeBtn.classList.add('active');
+        
+        // Update content
+        this.updateContent();
+    },
+
+    convertEpisodesToLibraryFormat(rawEpisodes) {
+        // Convert new cardView format to old format expected by Episode Library
+        return rawEpisodes.map(ep => {
+            if (ep.cardView) {
+                // New format - convert it
+                return {
+                    id: ep.id,
+                    podcast: ep.cardView.podcast || 'Unknown',
+                    title: ep.cardView.title || 'Untitled',
+                    guest: ep.cardView.guests || 'Unknown Guest',
+                    time: ep.cardView.time || 'Recently',
+                    duration: ep.cardView.duration || '60 min',
+                    influence: `High (${ep.cardView.score || 85})`,
+                    priority: ep.cardView.priorityTag === 'Consensus Forming' ? 'critical' : 'opportunity',
+                    keyInsights: ep.expandedView?.keyInsights || [],
+                    signals: []
+                };
+            }
+            // Old format - return as is
+            return ep;
+        });
+    },
+
+    updateContent() {
+        // Get episodes from unified data and convert to expected format
+        const rawEpisodes = window.unifiedData?.priorityBriefings?.items || [];
+        const episodes = this.convertEpisodesToLibraryFormat(rawEpisodes);
+        const filtered = this.filterEpisodes(episodes);
+        const sorted = this.sortEpisodes(filtered);
+        
+        const container = document.getElementById('libraryContent');
+        if (container) {
+            container.innerHTML = this.state.viewMode === 'table' 
+                ? this.renderTableView(sorted)
+                : this.renderCardView(sorted);
+        }
+    },
+
+    updateTable() {
+        // Just call updateContent since it handles both views
+        this.updateContent();
+    },
+
+    filterEpisodes(episodes) {
+        return episodes.filter(episode => {
+            // Search filter
+            if (this.state.searchQuery) {
+                const card = episode.cardView || episode;
+                const searchableText = [
+                    card.title,
+                    card.podcast,
+                    card.guest || card.guests,
+                    ...(episode.keyInsights || []),
+                    ...(episode.signals?.map(s => s.text) || [])
+                ].join(' ').toLowerCase();
+                
+                if (!searchableText.includes(this.state.searchQuery)) {
+                    return false;
+                }
+            }
+            
+            // Podcast filter
+            if (this.state.activeFilters.podcast !== 'all') {
+                // Map filter values to actual podcast names
+                const podcastMap = {
+                    'all-in': 'All-In',
+                    '20vc': ['20VC', 'The Twenty Minute VC'],
+                    'invest-like-best': 'Invest Like the Best',
+                    'bg2pod': 'BG2Pod',
+                    'this-week-startups': 'This Week in Startups',
+                    'capital-allocators': 'Capital Allocators',
+                    'acquired': 'Acquired',
+                    'tim-ferriss': 'The Tim Ferriss Show'
+                };
+                
+                const filterValue = this.state.activeFilters.podcast;
+                const mappedValue = podcastMap[filterValue];
+                
+                if (mappedValue) {
+                    // Handle array of possible names (like 20VC)
+                    if (Array.isArray(mappedValue)) {
+                        const podcast = episode.cardView?.podcast || episode.podcast;
+                        if (!mappedValue.includes(podcast)) {
+                            return false;
+                        }
+                    } else {
+                        const podcast = episode.cardView?.podcast || episode.podcast;
+                        if (podcast !== mappedValue) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+            // Topics filter
+            if (!this.state.activeFilters.topics.includes('all') && this.state.activeFilters.topics.length > 0) {
+                // Extract topics from the episode
+                const episodeTopics = this.extractTopics(episode);
+                
+                // Check if any of the episode's topics match the selected filters
+                const hasMatchingTopic = episodeTopics.some(topic => {
+                    // Convert topic display name to filter value
+                    const topicValue = this.getTopicValue(topic);
+                    return this.state.activeFilters.topics.includes(topicValue);
+                });
+                
+                if (!hasMatchingTopic) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
+    },
+
+    sortEpisodes(episodes) {
+        const sorted = [...episodes];
+        
+        sorted.sort((a, b) => {
+            let aVal, bVal;
+            
+            switch(this.state.sortBy) {
+                case 'podcast':
+                    aVal = a.podcast;
+                    bVal = b.podcast;
+                    break;
+                case 'title':
+                    aVal = a.title;
+                    bVal = b.title;
+                    break;
+                case 'date':
+                    // Convert time strings to sortable values
+                    aVal = this.parseTimeAgo(a.time);
+                    bVal = this.parseTimeAgo(b.time);
+                    break;
+                case 'duration':
+                    aVal = parseInt(a.duration);
+                    bVal = parseInt(b.duration);
+                    break;
+                case 'episode-number':
+                    // Extract numeric values for sorting
+                    const aNum = this.extractEpisodeNumber(a);
+                    const bNum = this.extractEpisodeNumber(b);
+                    
+                    // Convert to integers for proper numerical sorting
+                    aVal = parseInt(aNum) || 0;
+                    bVal = parseInt(bNum) || 0;
+                    break;
+                default:
+                    return 0;
+            }
+            
+            if (this.state.sortOrder === 'asc') {
+                return aVal > bVal ? 1 : -1;
+            } else {
+                return aVal < bVal ? 1 : -1;
+            }
+        });
+        
+        return sorted;
+    },
+
+    parseTimeAgo(timeStr) {
+        // Convert "3h ago", "2d ago" etc to minutes for sorting
+        const match = timeStr.match(/(\d+)([hd])/);
+        if (!match) return 0;
+        
+        const value = parseInt(match[1]);
+        const unit = match[2];
+        
+        return unit === 'h' ? value * 60 : value * 24 * 60;
+    },
+
+    updateActiveFilters() {
+        const container = document.getElementById('activeFilters');
+        const filters = [];
+        
+        Object.entries(this.state.activeFilters).forEach(([key, value]) => {
+            if (key === 'topics') {
+                // Handle topics array
+                if (!value.includes('all') && value.length > 0) {
+                    value.forEach(topic => {
+                        filters.push({
+                            type: key,
+                            value: topic,
+                            label: this.getFilterLabel(key, topic)
+                        });
+                    });
+                }
+            } else {
+                // Handle other filters
+                if (value !== 'all') {
+                    filters.push({
+                        type: key,
+                        value: value,
+                        label: this.getFilterLabel(key, value)
+                    });
+                }
+            }
+        });
+        
+        container.innerHTML = filters.map(filter => `
+            <div class="library-filter-chip">
+                ${filter.label}
+                <span class="remove" data-filter="${filter.type}" data-value="${filter.value}">×</span>
+            </div>
+        `).join('');
+        
+        // Add remove handlers
+        container.querySelectorAll('.remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const filterType = e.target.dataset.filter;
+                const filterValue = e.target.dataset.value;
+                this.resetFilter(filterType, filterValue);
+            });
+        });
+    },
+
+    getFilterLabel(type, value) {
+        const labels = {
+            podcast: {
+                'all-in': 'All-In',
+                '20vc': '20VC',
+                'invest-like-best': 'Invest Like the Best'
+            },
+            dateRange: {
+                '7days': 'Last 7 Days',
+                '30days': 'Last 30 Days',
+                '3months': 'Last 3 Months',
+                'custom': 'Custom Range'
+            },
+            topics: {
+                'ai-infrastructure': 'AI Infrastructure',
+                'ai-agents': 'AI Agents',
+                'developer-tools': 'Developer Tools',
+                'defense-tech': 'Defense Tech',
+                'series-a': 'Series A',
+                'ma': 'M&A',
+                'vertical-ai': 'Vertical AI',
+                'enterprise-software': 'Enterprise Software',
+                'fundraising': 'Fundraising',
+                'lp-strategy': 'LP Strategy',
+                'market-analysis': 'Market Analysis'
+            }
+        };
+        
+        return labels[type]?.[value] || value;
+    },
+
+    getConversationPreview(episode) {
+        if (!episode.conversationSummary) {
+            // Fallback to original subtitle format if no summary
+            return this.getEpisodeSubtitle(episode);
+        }
+        // Truncate to 80 characters
+        const preview = episode.conversationSummary.substring(0, 80);
+        return preview + (episode.conversationSummary.length > 80 ? '...' : '');
+    },
+
+
+
+
+    showEpisodeDetail(episodeId) {
+        // Find the episode data
+        const rawEpisodes = window.unifiedData?.priorityBriefings?.items || [];
+        const episode = rawEpisodes.find(ep => ep.id === episodeId);
+        
+        if (!episode) {
+            console.error('Episode not found:', episodeId);
+            return;
+        }
+        
+        // Use the existing EpisodePanel component if available
+        if (window.EpisodePanel && window.EpisodePanel.openPanelById) {
+            // EpisodePanel exists and has the method we need
+            window.EpisodePanel.openPanelById(episodeId);
+        } else if (window.EpisodePanel && window.EpisodePanel.openPanel) {
+            // EpisodePanel exists but doesn't have openPanelById, create a fake card
+            const fakeCard = document.createElement('div');
+            fakeCard.setAttribute('data-id', episodeId);
+            fakeCard.className = 'episode-card';
+            
+            // Add minimal DOM structure that EpisodePanel.extractEpisodeData expects
+            const cardView = episode.cardView || episode;
+            fakeCard.innerHTML = `
+                <div class="podcast-name">${cardView.podcast || 'Unknown Podcast'}</div>
+                <div class="episode-time">${cardView.time || ''}</div>
+                <div class="episode-title">${cardView.title || 'Unknown Episode'}</div>
+                <div class="episode-guest">${cardView.guest || cardView.guests || ''}</div>
+            `;
+            
+            window.EpisodePanel.openPanel(fakeCard);
+        } else {
+            // Fallback to creating our own panel
+            this.createEpisodeDetailPanel(episode);
+        }
+    },
+    
+    createEpisodeDetailPanel(episodeData) {
+        // Remove existing panel if any
+        const existingPanel = document.querySelector('.episode-panel-container');
+        const existingBackdrop = document.querySelector('.episode-panel-backdrop');
+        if (existingPanel) existingPanel.remove();
+        if (existingBackdrop) existingBackdrop.remove();
+        
+        // Create the exact same structure as EpisodePanel
+        const backdrop = document.createElement('div');
+        backdrop.className = 'episode-panel-backdrop';
+        backdrop.style.display = 'none';
+        
+        const container = document.createElement('div');
+        container.className = 'episode-panel-container';
+        
+        // Use the exact HTML from EpisodePanel
+        container.innerHTML = this.getEpisodePanelHTML();
+        
+        // Append to body
+        document.body.appendChild(backdrop);
+        document.body.appendChild(container);
+        
+        // Populate with data
+        this.populatePanelData(container, episodeData);
+        
+        // Show backdrop and panel
+        backdrop.style.display = 'block';
+        requestAnimationFrame(() => {
+            backdrop.classList.add('active');
+            container.classList.add('active');
+        });
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+        
+        // Add event listeners
+        this.attachPanelListeners(container, backdrop);
+        
+        // Set focus to close button
+        const closeBtn = container.querySelector('.close-button');
+        if (closeBtn) closeBtn.focus();
+    },
+    
+    getEpisodePanelHTML() {
+        // Return the exact HTML structure used by EpisodePanel
+        return `
+            <!-- Panel Header -->
+            <div class="panel-header">
+                <div class="header-top">
+                    <div class="podcast-info">
+                        <div class="podcast-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M8 12L12 8L16 12M8 16L12 12L16 16" stroke-width="2.5"/>
+                            </svg>
+                        </div>
+                        <div class="podcast-details">
+                            <h3>Loading...</h3>
+                            <div class="podcast-meta">
+                                <span class="panel-time-ago">--</span> • 
+                                <span class="panel-duration">--</span> • 
+                                <span class="influence-score">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-action-btn play-episode-btn" aria-label="Play episode" title="Play Episode">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M5 3v10l8-5z"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Read transcript" title="Read Transcript">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="2" width="10" height="12" rx="1"/>
+                                <path d="M5 5h6M5 7h6M5 9h4"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Download" title="Download">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M8 2v8m0 0l-3-3m3 3l3-3"/>
+                                <path d="M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Share" title="Share">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M6 9L2 5m0 0l4-4M2 5h9a3 3 0 013 3v6"/>
+                            </svg>
+                        </button>
+                        <button class="close-button header-action-btn" aria-label="Close panel">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 1L13 13M13 1L1 13"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <h1 class="episode-title">Loading...</h1>
+                <div class="episode-participants">
+                    <div class="participant">
+                        <span class="participant-label">HOST</span>
+                        <span class="participant-name host-name">Loading...</span>
+                        <span class="participant-separator"> | </span>
+                        <span class="participant-label">GUEST</span>
+                        <span class="participant-name guest-name">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Content -->
+            <div class="panel-content">
+                <div class="panel-main-column">
+                    <!-- The Conversation Section -->
+                    <div class="conversation-section intelligence-section">
+                        <h2 class="section-header">THE CONVERSATION</h2>
+                        <div class="conversation-content">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Key Insights Section -->
+                    <div class="insights-section intelligence-section">
+                        <h2 class="section-header">KEY INSIGHTS</h2>
+                        <div class="insights-list">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Portfolio & Watchlist Mentions -->
+                    <div class="portfolio-watchlist-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <div class="mentions-compact-block portfolio-block" style="display: none;">
+                            <div class="mentions-header">
+                                <span class="mentions-label">📁 PORTFOLIO</span>
+                                <span class="mentions-count">0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mentions-compact-block watchlist-block" style="display: none;">
+                            <div class="mentions-header">
+                                <span class="mentions-label">👁 WATCHLIST</span>
+                                <span class="mentions-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-sidebar">
+                    <!-- Essential Quote -->
+                    <div class="quote-section">
+                        <div class="quote-block">
+                            <h2 class="section-header" style="color: rgba(255, 255, 255, 0.8); border: none; padding-bottom: 0; margin-bottom: 1rem;">ESSENTIAL QUOTE</h2>
+                            <div class="quote-text">"Loading..."</div>
+                            <div class="quote-attribution">
+                                <span class="quote-author">— Loading</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notable Numbers -->
+                    <div class="numbers-section intelligence-section">
+                        <h2 class="section-header">NOTABLE NUMBERS</h2>
+                        <div class="numbers-list">
+                            <!-- Will be populated -->
+                        </div>
+                    </div>
+
+                    <!-- Related Topics -->
+                    <div class="topics-section intelligence-section">
+                        <div class="topics-container">
+                            <h2 class="section-header">RELATED TOPICS</h2>
+                            <div class="topics-list">
+                                <!-- Will be populated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+    
+    populatePanelData(container, episodeData) {
+        // Get the card view for basic data
+        const cardView = episodeData.cardView || episodeData;
+        const expandedView = episodeData.expandedView || {};
+        
+        // Update podcast info
+        const podcastName = cardView.podcast;
+        container.querySelector('.podcast-details h3').textContent = podcastName;
+        container.querySelector('.panel-time-ago').textContent = cardView.time || '';
+        container.querySelector('.panel-duration').textContent = cardView.duration || '';
+        container.querySelector('.influence-score').textContent = `Score: ${this.getInfluenceValue(cardView.influence)}`;
+        
+        // Update episode title and participants
+        container.querySelector('.episode-title').textContent = cardView.title;
+        container.querySelector('.host-name').textContent = this.getHostName(podcastName);
+        container.querySelector('.guest-name').textContent = cardView.guest || cardView.guests || 'Guest';
+        
+        // Update podcast logo
+        const podcastLogo = container.querySelector('.podcast-logo');
+        const podcastImage = this.podcastImages[podcastName];
+        if (podcastImage) {
+            podcastLogo.innerHTML = `<img src="${podcastImage}" alt="${podcastName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+        }
+        
+        // Populate conversation
+        const conversationContent = container.querySelector('.conversation-content');
+        if (expandedView.conversationSummary) {
+            conversationContent.innerHTML = `<p style="font-size: 15px; line-height: 1.7; color: #334155;">${expandedView.conversationSummary}</p>`;
+        } else {
+            conversationContent.innerHTML = `<p style="font-size: 15px; line-height: 1.7; color: #334155;">${this.generateConversationSummary(episodeData)}</p>`;
+        }
+        
+        // Populate insights
+        const insightsList = container.querySelector('.insights-list');
+        const insights = expandedView.keyInsights || cardView.keyInsights || [];
+        if (insights.length > 0) {
+            insightsList.innerHTML = insights.map((insight, index) => `
+                <div class="insight-item" style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="insight-number" style="width: 32px; height: 32px; background: var(--sage); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+                        ${index + 1}
+                    </div>
+                    <div style="font-size: 15px; line-height: 1.6; color: var(--deep-ink);">
+                        ${insight}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Populate quote
+        if (expandedView.essentialQuote) {
+            const quoteText = container.querySelector('.quote-text');
+            const quoteAuthor = container.querySelector('.quote-author');
+            quoteText.textContent = `"${expandedView.essentialQuote.text}"`;
+            quoteAuthor.textContent = `— ${expandedView.essentialQuote.author} at ${expandedView.essentialQuote.time || '00:00'}`;
+        } else if (insights.length > 0) {
+            const quoteText = container.querySelector('.quote-text');
+            const quoteAuthor = container.querySelector('.quote-author');
+            quoteText.textContent = `"${insights[0]}"`;
+            quoteAuthor.textContent = `— ${cardView.guest || cardView.guests} at ${Math.floor(Math.random() * 40 + 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`;
+        }
+        
+        // Populate notable numbers
+        const numbersList = container.querySelector('.numbers-list');
+        if (expandedView.notableNumbers) {
+            numbersList.innerHTML = Object.entries(expandedView.notableNumbers).map(([label, value], index, array) => `
+                <div class="number-item">
+                    <span class="number-label">${value}</span>
+                    <span class="number-value">${label}</span>
+                </div>
+                ${index < array.length - 1 ? '<div class="number-divider"></div>' : ''}
+            `).join('');
+        } else {
+            // Use default numbers
+            numbersList.innerHTML = `
+                <div class="number-item">
+                    <span class="number-label">$5M</span>
+                    <span class="number-value">New ARR Bar</span>
+                </div>
+                <div class="number-divider"></div>
+                <div class="number-item">
+                    <span class="number-label">40%</span>
+                    <span class="number-value">Seeds Missing Target</span>
+                </div>
+                <div class="number-divider"></div>
+                <div class="number-item">
+                    <span class="number-label">30 months</span>
+                    <span class="number-value">Required Runway</span>
+                </div>
+            `;
+        }
+        
+        // Populate topics
+        const topicsList = container.querySelector('.topics-list');
+        const topics = expandedView.relatedTopics || this.extractTopics(episodeData);
+        if (topics && topics.length > 0) {
+            topicsList.innerHTML = topics.slice(0, 5).map(topic => {
+                const tagText = topic.startsWith('#') ? topic : `#${topic.replace(/\s+/g, '')}`;
+                return `<a href="#" class="topic-tag">${tagText}</a>`;
+            }).join('');
+        }
+        
+        // Show portfolio/watchlist if applicable
+        const portfolioBlock = container.querySelector('.portfolio-block');
+        const watchlistBlock = container.querySelector('.watchlist-block');
+        portfolioBlock.style.display = 'block';
+        watchlistBlock.style.display = 'block';
+        container.querySelector('.portfolio-block .mentions-count').textContent = '1';
+        container.querySelector('.watchlist-block .mentions-count').textContent = '2';
+    },
+    
+    attachPanelListeners(container, backdrop) {
+        // Close button
+        const closeBtn = container.querySelector('.close-button');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closePanelWithAnimation(container, backdrop);
+            });
+        }
+        
+        // Backdrop click
+        backdrop.addEventListener('click', () => {
+            this.closePanelWithAnimation(container, backdrop);
+        });
+        
+        // ESC key
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.closePanelWithAnimation(container, backdrop);
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    },
+    
+    closePanelWithAnimation(container, backdrop) {
+        // Hide panel with animation
+        container.classList.remove('active');
+        backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Remove after animation
+        setTimeout(() => {
+            container.remove();
+            backdrop.remove();
+        }, 300);
+    },
+    
+    createDetailPanel(episode) {
+        const panel = document.createElement('div');
+        panel.className = 'episode-panel-container';
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-labelledby', 'episode-panel-title');
+        
+        // Use the exact same HTML structure as EpisodePanel
+        panel.innerHTML = this.getEpisodePanelHTML(episode.id);
+        
+        return panel;
+    },
+    
+    createPanelHeader(episode) {
+        const card = episode.cardView || episode;
+        const podcastImage = this.podcastImages[card.podcast];
+        
+        return `
+            <!-- Dark gradient header section -->
+            <div class="panel-header-dark">
+                <div class="header-top">
+                    <div class="podcast-info">
+                        <div class="podcast-logo-wrapper">
+                            ${podcastImage ? 
+                                `<img src="${podcastImage}" alt="${card.podcast}" class="podcast-logo-img">` :
+                                `<div class="podcast-logo-fallback">${this.getPodcastInitials(card.podcast)}</div>`
+                            }
+                        </div>
+                        <div class="podcast-details">
+                            <h3>${card.podcast}</h3>
+                            <div class="podcast-meta">
+                                <span class="panel-time-ago">${card.time}</span> • 
+                                <span class="panel-duration">${card.duration}</span> • 
+                                <span class="influence-score">Score: ${this.getInfluenceValue(card.influence)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-action-btn play-episode-btn" aria-label="Play episode" title="Play Episode">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M5 3v10l8-5z"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Read transcript" title="Read Transcript">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="2" width="10" height="12" rx="1"/>
+                                <path d="M5 5h6M5 7h6M5 9h4"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Download" title="Download">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M8 2v8m0 0l-3-3m3 3l3-3"/>
+                                <path d="M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/>
+                            </svg>
+                        </button>
+                        <button class="header-action-btn" aria-label="Share" title="Share">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M6 9L2 5m0 0l4-4M2 5h9a3 3 0 013 3v6"/>
+                            </svg>
+                        </button>
+                        <button class="close-button header-action-btn" aria-label="Close panel">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 1L13 13M13 1L1 13"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <h1 class="episode-title" id="episode-panel-title">${card.title}</h1>
+                <div class="episode-participants">
+                    <div class="participant">
+                        <span class="participant-label">HOST</span>
+                        <span class="participant-name host-name">${this.getHostName(card.podcast)}</span>
+                        <span class="participant-separator"> | </span>
+                        <span class="participant-label">GUEST</span>
+                        <span class="participant-name guest-name">${card.guest || card.guests}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+    
+    createPanelMainColumn(episode) {
+        return `
+            <div class="panel-main-column">
+                <!-- The Conversation Section -->
+                <div class="conversation-section">
+                    <h2 class="section-header-main">THE CONVERSATION</h2>
+                    <div class="conversation-text">
+                        ${episode.conversationSummary || this.generateConversationSummary(episode)}
+                    </div>
+                </div>
+
+                <!-- Key Insights Section -->
+                <div class="insights-section">
+                    <h2 class="section-header-main">KEY INSIGHTS</h2>
+                    <div class="insights-list">
+                        ${episode.keyInsights.map((insight, index) => `
+                            <div class="insight-item">
+                                <div class="insight-number-circle">
+                                    ${index + 1}
+                                </div>
+                                <div class="insight-text">
+                                    • ${insight}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Portfolio & Watchlist Mentions -->
+                <div class="portfolio-mentions-row">
+                    <div class="portfolio-mention-item">
+                        <span class="mention-icon">📁</span>
+                        <span class="mention-label">PORTFOLIO</span>
+                        <span class="mention-count">1</span>
+                    </div>
+                    
+                    <div class="watchlist-mention-item">
+                        <span class="mention-icon">👁</span>
+                        <span class="mention-label">WATCHLIST</span>
+                        <span class="mention-count">2</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+    
+    createPanelSidebar(episode) {
+        const card = episode.cardView || episode;
+        const essentialQuote = episode.keyInsights && episode.keyInsights.length > 0 
+            ? episode.keyInsights[0] 
+            : "Key insights from this episode";
+        
+        return `
+            <div class="panel-sidebar">
+                <!-- Essential Quote with orange gradient -->
+                <div class="quote-section-gradient">
+                    <h2 class="quote-header">ESSENTIAL QUOTE</h2>
+                    <div class="quote-text">"${essentialQuote}"</div>
+                    <div class="quote-attribution">
+                        — ${card.guest || card.guests} at ${Math.floor(Math.random() * 40 + 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}
+                    </div>
+                </div>
+
+                <!-- Notable Numbers -->
+                <div class="notable-numbers-section">
+                    <h2 class="section-header-sidebar">NOTABLE NUMBERS</h2>
+                    <div class="notable-numbers-list">
+                        ${this.createNotableNumbers(episode)}
+                    </div>
+                </div>
+
+                <!-- Related Topics -->
+                <div class="related-topics-section">
+                    <h2 class="section-header-sidebar">RELATED TOPICS</h2>
+                    <div class="topics-tags-list">
+                        ${this.extractTopics(episode).slice(0, 5).map(topic => 
+                            `<span class="topic-tag-pill">#${topic.replace(/\s+/g, '')}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+    
+    createNotableNumbers(episode) {
+        // Create properly styled notable numbers
+        const numbers = [
+            { label: 'New ARR Bar', value: '$5M' },
+            { label: 'Seeds Missing Target', value: '40%' },
+            { label: 'Required Runway', value: '30 months' }
+        ];
+        
+        return numbers.map((item, index) => `
+            <div class="notable-number-row">
+                <span class="notable-number-label">${item.label}</span>
+                <span class="notable-number-value">${item.value}</span>
+            </div>
+            ${index < numbers.length - 1 ? '' : ''}
+        `).join('');
+    },
+    
+    getHostName(podcastName) {
+        const hostMap = {
+            'All-In': 'Jason Calacanis',
+            '20VC': 'Harry Stebbings',
+            'The Twenty Minute VC': 'Harry Stebbings',
+            'This Week in Startups': 'Jason Calacanis',
+            'BG2Pod': 'Brad Gerstner & Bill Gurley',
+            'Invest Like the Best': 'Patrick O\'Shaughnessy',
+            'Acquired': 'Ben Gilbert & David Rosenthal'
+        };
+        return hostMap[podcastName] || 'Host';
+    },
+    
+    renderEpisodeDetail(episode) {
+        const card = episode.cardView || episode;
+        const podcastImage = this.podcastImages[card.podcast];
+        
+        // Extract notable numbers from insights or use defaults
+        const numbers = this.extractNotableNumbers(episode);
+        
+        // Get essential quote (use first insight as quote if needed)
+        const essentialQuote = episode.keyInsights && episode.keyInsights.length > 0 
+            ? episode.keyInsights[0] 
+            : "Key insights from this episode";
+            
+        return `
+            <div class="detail-panel-header">
+                <button class="detail-close-btn" aria-label="Close">×</button>
+            </div>
+            
+            <div class="detail-panel-body">
+                <div class="episode-detail-content">
+                    <!-- Main Content Area -->
+                    <div class="episode-detail-main">
+                        <!-- Dark Header -->
+                        <div class="episode-detail-header">
+                            <div class="detail-podcast-header">
+                                <div class="detail-podcast-info">
+                                    ${podcastImage ? 
+                                        `<img src="${podcastImage}" alt="${card.podcast}" class="detail-podcast-logo">` :
+                                        `<div class="detail-podcast-logo detail-podcast-fallback">${this.getPodcastInitials(card.podcast)}</div>`
+                                    }
+                                    <div>
+                                        <div class="detail-podcast-name">${card.podcast}</div>
+                                        <div class="detail-episode-time">${card.time} • ${card.duration} • Score: ${this.getInfluenceValue(card.influence)}</div>
+                                    </div>
+                                </div>
+                                <span class="detail-priority-badge ${episode.priority}">
+                                    ${episode.priority === 'critical' ? 'CONSENSUS FORMING' : 
+                                      episode.priority === 'opportunity' ? 'OPPORTUNITY' : 'ELEVATED'}
+                                </span>
+                            </div>
+                            
+                            <h1 class="detail-episode-title">${card.title}</h1>
+                            <div class="detail-guest-info">GUEST: ${card.guest || card.guests}</div>
+                        </div>
+                        
+                        <!-- Conversation Summary -->
+                        ${episode.conversationSummary ? `
+                        <div class="detail-conversation-section">
+                            <div class="detail-section-label">THE CONVERSATION</div>
+                            <div class="detail-conversation-text">
+                                ${episode.conversationSummary || this.generateConversationSummary(episode)}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Key Insights -->
+                        <div class="detail-key-insights">
+                            <h3 class="detail-section-label">KEY INSIGHTS</h3>
+                            <div class="detail-insights-list">
+                                ${episode.keyInsights.map((insight, index) => `
+                                    <div class="detail-insight-item">
+                                        <div class="detail-insight-number">${index + 1}</div>
+                                        <div class="detail-insight-text">${insight}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    <div class="episode-detail-sidebar">
+                        <!-- Essential Quote -->
+                        <div class="detail-quote-block">
+                            <div class="detail-section-label">ESSENTIAL QUOTE</div>
+                            <div class="detail-quote-text">"${essentialQuote}"</div>
+                            <div class="detail-quote-author">— ${card.guest || card.guests} at ${Math.floor(Math.random() * 40 + 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}</div>
+                        </div>
+                        
+                        <!-- Notable Numbers - FIXED VERSION -->
+                        <div style="all: initial; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                            <div style="all: initial; font-family: inherit; display: block; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #64748b; margin-bottom: 16px;">NOTABLE NUMBERS</div>
+                            
+                            <div style="all: initial; font-family: inherit; display: block; width: 100%; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; margin-bottom: 12px;">
+                                <span style="all: initial; font-family: inherit; display: inline-block; color: #64748b; font-size: 14px; float: left;">New ARR Bar</span>
+                                <span style="all: initial; font-family: inherit; display: inline-block; font-weight: 600; font-size: 18px; color: #1e293b; float: right;">$5M</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                            
+                            <div style="all: initial; font-family: inherit; display: block; width: 100%; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; margin-bottom: 12px;">
+                                <span style="all: initial; font-family: inherit; display: inline-block; color: #64748b; font-size: 14px; float: left;">Seeds Missing Target</span>
+                                <span style="all: initial; font-family: inherit; display: inline-block; font-weight: 600; font-size: 18px; color: #1e293b; float: right;">40%</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                            
+                            <div style="all: initial; font-family: inherit; display: block; width: 100%;">
+                                <span style="all: initial; font-family: inherit; display: inline-block; color: #64748b; font-size: 14px; float: left;">Required Runway</span>
+                                <span style="all: initial; font-family: inherit; display: inline-block; font-weight: 600; font-size: 18px; color: #1e293b; float: right;">30 months</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio Mentions -->
+                        <div class="detail-mentions-block">
+                            <span class="detail-mentions-label">📁 PORTFOLIO</span>
+                            <span class="detail-mentions-count">1</span>
+                        </div>
+                        
+                        <!-- Watchlist Mentions -->
+                        <div class="detail-mentions-block">
+                            <span class="detail-mentions-label">👁 WATCHLIST</span>
+                            <span class="detail-mentions-count">2</span>
+                        </div>
+                        
+                        <!-- Related Topics -->
+                        <div class="detail-related-topics">
+                            <div class="detail-section-label">RELATED TOPICS</div>
+                            <div class="detail-topic-tags">
+                                ${this.extractTopics(episode).slice(0, 6).map(topic => 
+                                    `<span class="detail-topic-tag">#${topic.replace(/\s+/g, '')}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+    
+    extractNotableNumbers(episode) {
+        // Return consistent notable numbers matching the reference design
+        // Make sure labels and values are clean strings
+        const numbers = [
+            { label: 'New ARR Bar', value: '$5M' },
+            { label: 'Seeds Missing Target', value: '40%' },
+            { label: 'Required Runway', value: '30 months' }
+        ];
+        
+        return numbers;
+    },
+    
+    generateConversationSummary(episode) {
+        // Generate a default conversation summary based on episode data
+        const card = episode.cardView || episode;
+        const topics = this.extractTopics(episode);
+        return `In this episode of ${card.podcast}, ${card.guest || card.guests} discusses ${topics.slice(0, 3).join(', ')}. The conversation explores key themes around market dynamics and emerging opportunities in the current environment.`;
+    },
+    
+    attachDetailPanelListeners(panel, backdrop) {
+        // Close button with new class name
+        const closeBtn = panel.querySelector('.close-button');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeDetailPanel(panel, backdrop);
+            });
+        }
+        
+        // Backdrop click
+        backdrop.addEventListener('click', () => {
+            this.closeDetailPanel(panel, backdrop);
+        });
+        
+        // ESC key handler
+        const escHandler = (e) => {
+            if (e.key === 'Escape' && panel.classList.contains('active')) {
+                this.closeDetailPanel(panel, backdrop);
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+        
+        // Play button handler
+        const playBtn = panel.querySelector('.play-episode-btn');
+        if (playBtn) {
+            playBtn.addEventListener('click', () => {
+                this.handlePlayEpisode(playBtn);
+            });
+        }
+    },
+    
+    closeDetailPanel(panel, backdrop) {
+        // Hide panel with animation using classList
+        panel.classList.remove('active');
+        backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Wait for animation to complete before removing
+        setTimeout(() => {
+            panel.remove();
+            backdrop.remove();
+        }, 300);
+    },
+    
+    handlePlayEpisode(playBtn) {
+        const isPlaying = playBtn.classList.contains('playing');
+        
+        if (isPlaying) {
+            // Stop playing
+            playBtn.classList.remove('playing');
+            playBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M5 3v10l8-5z"/>
+                </svg>
+            `;
+            playBtn.setAttribute('aria-label', 'Play episode');
+            this.showPlaybackNotification('Playback stopped');
+        } else {
+            // Start playing
+            playBtn.classList.add('playing');
+            playBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <rect x="5" y="3" width="2" height="10"/>
+                    <rect x="9" y="3" width="2" height="10"/>
+                </svg>
+            `;
+            playBtn.setAttribute('aria-label', 'Pause episode');
+            
+            const episodeTitle = document.querySelector('.episode-title').textContent;
+            this.showPlaybackNotification(`Playing: ${episodeTitle}`);
+        }
+    },
+    
+    showPlaybackNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'playback-notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--sage, #4a7c59);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Fade in
+        requestAnimationFrame(() => {
+            notification.style.opacity = '1';
+        });
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    },
+    
+    // Deprecated - kept for backward compatibility
+    closeEpisodeDetail() {
+        const panel = document.querySelector('.episode-panel-container');
+        const backdrop = document.querySelector('.episode-panel-backdrop');
+        
+        if (panel && backdrop) {
+            this.closeDetailPanel(panel, backdrop);
+        }
+    },
+
+    resetFilter(filterType, filterValue = null) {
+        const defaults = {
+            podcast: 'all',
+            dateRange: 'all',
+            topics: ['all']
+        };
+        
+        if (filterType === 'topics' && filterValue) {
+            // Remove specific topic from array
+            const index = this.state.activeFilters.topics.indexOf(filterValue);
+            if (index > -1) {
+                this.state.activeFilters.topics.splice(index, 1);
+            }
+            
+            // If no topics left, revert to "all"
+            if (this.state.activeFilters.topics.length === 0) {
+                this.state.activeFilters.topics = ['all'];
+                document.getElementById('topic-all').checked = true;
+            }
+            
+            // Update checkbox state
+            const checkbox = document.querySelector(`#topic-${filterValue}`);
+            if (checkbox) checkbox.checked = false;
+        } else {
+            // Reset entire filter
+            this.state.activeFilters[filterType] = defaults[filterType];
+            
+            if (filterType === 'topics') {
+                // Reset all topic checkboxes
+                document.querySelectorAll('.library-multi-select-dropdown input[type="checkbox"]').forEach(cb => {
+                    cb.checked = cb.id === 'topic-all';
+                });
+            } else {
+                // Update dropdown
+                const select = document.querySelector(`[data-filter="${filterType}"]`);
+                if (select) {
+                    select.value = defaults[filterType];
+                }
+            }
+        }
+        
+        this.updateMultiSelectLabel();
+        this.updateTable();
+        this.updateActiveFilters();
+    }
+};
+
+// Export for use
+window.EpisodeLibrary = EpisodeLibrary;

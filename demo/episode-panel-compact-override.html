@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Episode Panel Override</title>
+    <style>
+        /* AGGRESSIVE CSS OVERRIDES - PART 1: Direct class overrides */
+        
+        /* Override existing panel container */
+        .episode-panel-container,
+        .epb-panel {
+            width: 65% !important;
+            max-width: 900px !important;
+            min-width: 600px !important;
+            right: -65% !important;
+        }
+        
+        .episode-panel-container.active,
+        .epb-panel.epb-active {
+            right: 0 !important;
+        }
+        
+        /* Override header with compact sizing */
+        .episode-panel-container .panel-header,
+        .epb-panel .epb-header {
+            padding: 20px 24px !important;
+            max-height: 155px !important;
+            min-height: 155px !important;
+            height: 155px !important;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        }
+        
+        /* Override header top section */
+        .episode-panel-container .header-top,
+        .epb-panel .epb-header-top {
+            margin-bottom: 8px !important;
+            gap: 8px !important;
+        }
+        
+        /* Compact podcast info */
+        .episode-panel-container .podcast-info,
+        .epb-panel .epb-podcast-info {
+            gap: 8px !important;
+        }
+        
+        .podcast-logo,
+        .epb-podcast-logo {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            min-height: 32px !important;
+        }
+        
+        /* Smaller title font */
+        .episode-panel-container .episode-title,
+        .epb-panel .epb-title {
+            font-size: 20px !important;
+            margin: 0 0 8px 0 !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* Override podcast details */
+        .episode-panel-container .panel-header .podcast-details h3,
+        .epb-panel .epb-podcast-name {
+            font-size: 13px !important;
+            margin: 0 0 2px 0 !important;
+        }
+        
+        .episode-panel-container .panel-header .podcast-meta,
+        .epb-panel .epb-podcast-meta {
+            font-size: 10px !important;
+        }
+        
+        /* CRITICAL: Combine HOST and GUEST on same line */
+        .episode-panel-container .episode-participants,
+        .epb-panel .epb-participants {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 24px !important;
+            margin-top: 0 !important;
+        }
+        
+        .episode-panel-container .participant,
+        .epb-panel .epb-participant {
+            display: flex !important;
+            align-items: baseline !important;
+            gap: 6px !important;
+            flex: 1 !important;
+        }
+        
+        .participant-label,
+        .epb-participant-label {
+            font-size: 9px !important;
+            min-width: 35px !important;
+            letter-spacing: 0.3px !important;
+        }
+        
+        .participant-name,
+        .epb-participant-name,
+        .epb-header-name {
+            font-size: 11px !important;
+        }
+        
+        /* Compact header action buttons */
+        .header-action-btn,
+        .epb-control-btn {
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+            min-height: 28px !important;
+            padding: 0 !important;
+        }
+        
+        .header-actions,
+        .epb-controls {
+            gap: 6px !important;
+        }
+        
+        /* Override panel content with reduced padding */
+        .panel-content,
+        .epb-content {
+            padding: 0 !important;
+            max-height: calc(100vh - 155px) !important;
+            height: calc(100vh - 155px) !important;
+            display: grid !important;
+            grid-template-columns: 1.8fr 1fr !important;
+        }
+        
+        .panel-main-column,
+        .epb-main-column {
+            padding: 16px 20px !important;
+        }
+        
+        .panel-sidebar,
+        .epb-sidebar {
+            padding: 16px !important;
+            background: #f8fafc !important;
+        }
+        
+        /* Compact section headers */
+        .section-header,
+        .epb-section-header {
+            font-size: 10px !important;
+            margin-bottom: 8px !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        /* Compact conversation section */
+        .conversation-section,
+        .epb-conversation {
+            padding: 12px 14px !important;
+            margin-bottom: 16px !important;
+            background: #f8fafc !important;
+            border-radius: 8px !important;
+        }
+        
+        .conversation-content,
+        .epb-conversation-text {
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Compact intelligence sections */
+        .intelligence-section,
+        .epb-section {
+            margin-bottom: 16px !important;
+        }
+        
+        /* Compact insights */
+        .insight-item,
+        .epb-insight-item {
+            padding: 10px 12px !important;
+            margin-bottom: 8px !important;
+            gap: 10px !important;
+        }
+        
+        .insight-number,
+        .epb-insight-number {
+            width: 20px !important;
+            height: 20px !important;
+            font-size: 10px !important;
+        }
+        
+        .insight-item div:last-child,
+        .epb-insight-text {
+            font-size: 12px !important;
+            line-height: 1.4 !important;
+        }
+        
+        /* CRITICAL: Compact quote block */
+        .quote-block,
+        .epb-quote {
+            padding: 10px 12px !important;
+            margin-bottom: 16px !important;
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%) !important;
+        }
+        
+        .quote-text,
+        .epb-quote-text {
+            font-size: 13px !important;
+            margin-bottom: 6px !important;
+            line-height: 1.4 !important;
+        }
+        
+        .quote-attribution,
+        .quote-author,
+        .epb-quote-author {
+            font-size: 11px !important;
+        }
+        
+        /* CRITICAL: Numbers in horizontal grid */
+        .numbers-section,
+        .epb-numbers {
+            margin-bottom: 16px !important;
+        }
+        
+        .numbers-list,
+        .epb-numbers-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+        }
+        
+        .number-item,
+        .epb-number-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            padding: 8px 4px !important;
+            background: white !important;
+            border-radius: 6px !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        
+        .number-value,
+        .epb-number-value {
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            color: #10b981 !important;
+            margin-bottom: 2px !important;
+            order: 1 !important;
+        }
+        
+        .number-label,
+        .epb-number-label {
+            font-size: 9px !important;
+            line-height: 1.2 !important;
+            color: #64748b !important;
+            order: 2 !important;
+        }
+        
+        /* Hide dividers in horizontal layout */
+        .number-divider {
+            display: none !important;
+        }
+        
+        /* CRITICAL: Portfolio/Watchlist side by side */
+        .mentions-section,
+        .epb-mentions {
+            display: flex !important;
+            gap: 10px !important;
+            margin-top: 16px !important;
+            padding-top: 16px !important;
+            border-top: 1px solid #e2e8f0 !important;
+        }
+        
+        .mentions-compact-block,
+        .epb-mention-block {
+            flex: 1 !important;
+            padding: 8px 10px !important;
+            background: white !important;
+            border-radius: 6px !important;
+            margin-bottom: 0 !important;
+        }
+        
+        .mentions-header,
+        .epb-mention-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .mentions-label,
+        .epb-mention-label {
+            font-size: 10px !important;
+        }
+        
+        .mentions-count,
+        .epb-mention-count {
+            width: 20px !important;
+            height: 20px !important;
+            padding: 0 !important;
+            font-size: 11px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: #4a7c59 !important;
+            color: white !important;
+            border-radius: 50% !important;
+        }
+        
+        /* Thin scrollbars - 5px */
+        .panel-content::-webkit-scrollbar,
+        .panel-main-column::-webkit-scrollbar,
+        .panel-sidebar::-webkit-scrollbar,
+        .epb-content::-webkit-scrollbar,
+        .epb-main-column::-webkit-scrollbar,
+        .epb-sidebar::-webkit-scrollbar {
+            width: 5px !important;
+        }
+        
+        .panel-content::-webkit-scrollbar-track,
+        .panel-main-column::-webkit-scrollbar-track,
+        .panel-sidebar::-webkit-scrollbar-track,
+        .epb-content::-webkit-scrollbar-track,
+        .epb-main-column::-webkit-scrollbar-track,
+        .epb-sidebar::-webkit-scrollbar-track {
+            background: transparent !important;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb,
+        .panel-main-column::-webkit-scrollbar-thumb,
+        .panel-sidebar::-webkit-scrollbar-thumb,
+        .epb-content::-webkit-scrollbar-thumb,
+        .epb-main-column::-webkit-scrollbar-thumb,
+        .epb-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3) !important;
+            border-radius: 3px !important;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb:hover,
+        .panel-main-column::-webkit-scrollbar-thumb:hover,
+        .panel-sidebar::-webkit-scrollbar-thumb:hover,
+        .epb-content::-webkit-scrollbar-thumb:hover,
+        .epb-main-column::-webkit-scrollbar-thumb:hover,
+        .epb-sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.5) !important;
+        }
+        
+        /* Firefox scrollbar support */
+        .panel-content,
+        .panel-main-column,
+        .panel-sidebar,
+        .epb-content,
+        .epb-main-column,
+        .epb-sidebar {
+            scrollbar-width: thin !important;
+            scrollbar-color: rgba(148, 163, 184, 0.3) transparent !important;
+        }
+        
+        /* Additional compact overrides */
+        .key-points li,
+        .implication-card,
+        .takeaway-list li {
+            font-size: 12px !important;
+            margin-bottom: 8px !important;
+            padding-left: 20px !important;
+        }
+        
+        .pattern-card {
+            padding: 10px !important;
+        }
+        
+        .pattern-number {
+            font-size: 20px !important;
+            margin-bottom: 4px !important;
+        }
+        
+        .pattern-label {
+            font-size: 11px !important;
+        }
+        
+        .related-episode {
+            padding: 8px 10px !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .related-title {
+            font-size: 13px !important;
+            margin-bottom: 2px !important;
+        }
+        
+        .related-note {
+            font-size: 11px !important;
+        }
+        
+        /* Topics section compact */
+        .topics-container {
+            padding: 10px 12px !important;
+        }
+        
+        .topic-tag {
+            padding: 3px 8px !important;
+            font-size: 10px !important;
+        }
+        
+        /* Remove excessive animations */
+        .episode-panel-container.active .intelligence-section {
+            animation: none !important;
+            opacity: 1 !important;
+        }
+        
+        /* Responsive adjustments for compact view */
+        @media (max-width: 1200px) {
+            .episode-panel-container,
+            .epb-panel {
+                width: 75% !important;
+            }
+            
+            .panel-content,
+            .epb-content {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .panel-sidebar,
+            .epb-sidebar {
+                border-left: none !important;
+                border-top: 1px solid #e2e8f0 !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .episode-panel-container,
+            .epb-panel {
+                width: 100% !important;
+                max-width: none !important;
+                min-width: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Episode Panel Compact Override CSS</h1>
+    <p>This CSS file contains aggressive overrides to make the episode panel more compact.</p>
+    
+    <h2>Key Changes Applied:</h2>
+    <ul>
+        <li>Panel width: 65% (max 900px) instead of 70vw/1100px</li>
+        <li>Header height: 155px with proper spacing</li>
+        <li>HOST and GUEST combined on single line</li>
+        <li>Font sizes: titles 20px, body 12-13px, labels 9-10px, host/guest names 11px</li>
+        <li>Quote section padding reduced to 10px</li>
+        <li>Numbers arranged in 3-column horizontal grid</li>
+        <li>Portfolio/Watchlist displayed side-by-side</li>
+        <li>All padding/margins reduced by 40-50%</li>
+        <li>Scrollbars reduced to 5px width</li>
+    </ul>
+    
+    <h2>Implementation Instructions:</h2>
+    <ol>
+        <li>Copy the CSS from the &lt;style&gt; tag above</li>
+        <li>Add it to your existing episode-panel.css file or create a new override file</li>
+        <li>Load it AFTER the existing episode-panel.css to ensure overrides work</li>
+        <li>Use the JavaScript below to restructure the DOM if needed</li>
+    </ol>
+    
+    <h2>JavaScript DOM Restructuring (Optional):</h2>
+    <pre><code>
+// JavaScript to restructure the DOM for compact layout
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to compact the episode panel
+    function compactEpisodePanel() {
+        // Find the panel
+        const panel = document.querySelector('.episode-panel-container');
+        if (!panel) return;
+        
+        // 1. Combine HOST and GUEST on same line
+        const participants = panel.querySelector('.episode-participants');
+        if (participants) {
+            participants.style.display = 'flex';
+            participants.style.flexDirection = 'row';
+            participants.style.gap = '24px';
+            
+            const participantDivs = participants.querySelectorAll('.participant');
+            participantDivs.forEach(div => {
+                div.style.flex = '1';
+                div.style.display = 'flex';
+                div.style.alignItems = 'baseline';
+                div.style.gap = '6px';
+            });
+        }
+        
+        // 2. Convert numbers to horizontal grid
+        const numbersList = panel.querySelector('.numbers-list');
+        if (numbersList) {
+            numbersList.style.display = 'grid';
+            numbersList.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            numbersList.style.gap = '12px';
+            
+            // Remove dividers
+            const dividers = numbersList.querySelectorAll('.number-divider');
+            dividers.forEach(div => div.style.display = 'none');
+            
+            // Style number items
+            const numberItems = numbersList.querySelectorAll('.number-item');
+            numberItems.forEach(item => {
+                item.style.display = 'flex';
+                item.style.flexDirection = 'column';
+                item.style.alignItems = 'center';
+                item.style.textAlign = 'center';
+                item.style.padding = '8px 4px';
+                item.style.background = 'white';
+                item.style.borderRadius = '6px';
+                item.style.border = '1px solid #e2e8f0';
+            });
+        }
+        
+        // 3. Make Portfolio/Watchlist side-by-side
+        const mentionsSection = panel.querySelector('.mentions-section');
+        if (mentionsSection) {
+            mentionsSection.style.display = 'flex';
+            mentionsSection.style.gap = '10px';
+            
+            const mentionBlocks = mentionsSection.querySelectorAll('.mentions-compact-block');
+            mentionBlocks.forEach(block => {
+                block.style.flex = '1';
+                block.style.marginBottom = '0';
+            });
+        }
+        
+        // 4. Apply compact padding throughout
+        const sections = panel.querySelectorAll('.intelligence-section');
+        sections.forEach(section => {
+            section.style.marginBottom = '16px';
+        });
+        
+        // 5. Compact the quote block
+        const quoteBlock = panel.querySelector('.quote-block');
+        if (quoteBlock) {
+            quoteBlock.style.padding = '10px 12px';
+            
+            const quoteText = quoteBlock.querySelector('.quote-text');
+            if (quoteText) {
+                quoteText.style.fontSize = '13px';
+                quoteText.style.lineHeight = '1.4';
+            }
+        }
+    }
+    
+    // Apply compacting when panel opens
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.classList && mutation.target.classList.contains('active')) {
+                setTimeout(compactEpisodePanel, 100);
+            }
+        });
+    });
+    
+    // Start observing
+    const panelContainer = document.querySelector('.episode-panel-container');
+    if (panelContainer) {
+        observer.observe(panelContainer, { attributes: true, attributeFilter: ['class'] });
+    }
+    
+    // Also compact on load if panel is already visible
+    if (panelContainer && panelContainer.classList.contains('active')) {
+        compactEpisodePanel();
+    }
+});
+    </code></pre>
+    
+    <h2>Testing:</h2>
+    <p>To test the compact layout:</p>
+    <ol>
+        <li>Open your existing episode panel</li>
+        <li>Verify the panel is now 65% width (max 900px)</li>
+        <li>Check that HOST and GUEST appear on the same line</li>
+        <li>Confirm numbers are in a 3-column horizontal grid</li>
+        <li>Ensure Portfolio/Watchlist are side-by-side</li>
+        <li>Verify the panel fits on 1080p screen without scrolling</li>
+    </ol>
+</body>
+</html>

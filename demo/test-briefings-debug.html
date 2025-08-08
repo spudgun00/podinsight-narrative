@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Priority Briefings</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/portfolio.css">
+    <link rel="stylesheet" href="episode-panel-clean-fix.css">
+    <style>
+        body {
+            padding: 20px;
+            background: var(--warm-paper);
+        }
+        .debug-info {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Debug Priority Briefings Component</h1>
+    
+    <div class="debug-info">
+        <h2>Component Status</h2>
+        <pre id="status">Loading...</pre>
+    </div>
+    
+    <div id="priority-briefings-container"></div>
+    
+    <div class="debug-info">
+        <h2>Generated HTML Structure</h2>
+        <pre id="html-structure">Waiting for component to load...</pre>
+    </div>
+    
+    <script src="data/unified-data.js"></script>
+    <script src="features/priority-briefings/priority-briefings-dynamic.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const status = document.getElementById('status');
+            const htmlStructure = document.getElementById('html-structure');
+            
+            // Check if components are loaded
+            status.textContent = 'Components loaded:\n';
+            status.textContent += 'PriorityBriefings: ' + (typeof PriorityBriefings !== 'undefined' ? 'YES' : 'NO') + '\n';
+            status.textContent += 'unifiedData: ' + (typeof window.unifiedData !== 'undefined' ? 'YES' : 'NO') + '\n';
+            
+            if (window.unifiedData && window.unifiedData.priorityBriefings) {
+                status.textContent += 'Briefings data: ' + window.unifiedData.priorityBriefings.items.length + ' items\n';
+            }
+            
+            // Initialize component
+            const container = document.getElementById('priority-briefings-container');
+            if (container && window.PriorityBriefings) {
+                window.PriorityBriefings.init(container);
+                
+                // After a short delay, show the generated HTML
+                setTimeout(() => {
+                    const firstCard = container.querySelector('.episode-card');
+                    if (firstCard) {
+                        const podcastSection = firstCard.querySelector('.podcast-info');
+                        htmlStructure.textContent = 'First card podcast section HTML:\n' + podcastSection.outerHTML;
+                        
+                        // Check what's actually rendered
+                        const avatarElement = podcastSection.querySelector('.podcast-avatar, .podcast-logo');
+                        if (avatarElement) {
+                            htmlStructure.textContent += '\n\nFound element with class: ' + avatarElement.className;
+                            htmlStructure.textContent += '\nInner HTML: ' + avatarElement.innerHTML;
+                        }
+                    } else {
+                        htmlStructure.textContent = 'No episode cards found!';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

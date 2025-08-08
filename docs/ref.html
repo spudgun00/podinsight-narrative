@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Panel Mockup - What You'll Get</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #2c3e50;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Dashboard Background (Blurred) */
+        .dashboard-bg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            opacity: 0.3;
+            filter: blur(2px);
+        }
+        
+        /* Screen Size Indicator */
+        .screen-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 10000;
+        }
+        
+        /* THE COMPACT PANEL */
+        .epb-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 65%;
+            max-width: 900px;
+            height: 100vh;
+            background: white;
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* COMPACT HEADER - 70px total */
+        .epb-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 12px 16px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .epb-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .epb-podcast-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .epb-logo {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 10px;
+        }
+        
+        .epb-podcast-name {
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .epb-meta {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        
+        .epb-actions {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .epb-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .epb-title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        
+        /* SINGLE LINE HOST/GUEST */
+        .epb-participants {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .epb-participants span {
+            margin-right: 12px;
+        }
+        
+        .epb-label {
+            font-size: 10px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* CONTENT AREA */
+        .epb-content {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* MAIN COLUMN */
+        .epb-main {
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .epb-section {
+            margin-bottom: 15px;
+        }
+        
+        .epb-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        
+        .epb-conversation {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #334155;
+        }
+        
+        .epb-insight {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .epb-insight-num {
+            width: 20px;
+            height: 20px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .epb-insight-text {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #1e293b;
+        }
+        
+        /* SIDEBAR */
+        .epb-sidebar {
+            background: #f8fafc;
+            padding: 15px 12px;
+            border-left: 1px solid #e2e8f0;
+            overflow-y: auto;
+        }
+        
+        /* QUOTE */
+        .epb-quote {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .epb-quote-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: white;
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+        
+        .epb-quote-author {
+            font-size: 10px;
+            color: rgba(255,255,255,0.9);
+            text-align: right;
+        }
+        
+        /* HORIZONTAL NUMBERS */
+        .epb-numbers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .epb-number {
+            background: white;
+            padding: 8px 4px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .epb-number-val {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+        
+        .epb-number-label {
+            font-size: 9px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        
+        /* SIDE BY SIDE BLOCKS */
+        .epb-blocks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .epb-block {
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .epb-block-label {
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+        
+        .epb-block-count {
+            background: #4a7c59;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        /* TOPICS */
+        .epb-topics {
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .epb-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        
+        .epb-tag {
+            padding: 3px 8px;
+            background: #ecfdf5;
+            color: #4a7c59;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        
+        /* Scrollbar */
+        .epb-main::-webkit-scrollbar,
+        .epb-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .epb-main::-webkit-scrollbar-thumb,
+        .epb-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1);
+            border-radius: 2px;
+        }
+        
+        /* Height indicator */
+        .height-marker {
+            position: absolute;
+            right: 65%;
+            top: 0;
+            width: 2px;
+            background: #10b981;
+            height: 100%;
+            margin-right: 10px;
+        }
+        
+        .height-label {
+            position: absolute;
+            right: calc(65% + 20px);
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-indicator">
+        📐 1080p Screen (1920 x 1080) - Everything fits! ✅
+    </div>
+    
+    <div class="dashboard-bg"></div>
+    
+    <div class="height-marker"></div>
+    <div class="height-label">Full Screen Height - No Scrolling!</div>
+    
+    <div class="epb-panel">
+        <!-- COMPACT HEADER: 70px total -->
+        <div class="epb-header">
+            <div class="epb-header-top">
+                <div class="epb-podcast-info">
+                    <div class="epb-logo">20VC</div>
+                    <div>
+                        <div class="epb-podcast-name">The Twenty Minute VC</div>
+                        <div class="epb-meta">8h ago • 82 min • Score: 92</div>
+                    </div>
+                </div>
+                <div class="epb-actions">
+                    <div class="epb-btn">📄</div>
+                    <div class="epb-btn">⬇</div>
+                    <div class="epb-btn">↗</div>
+                    <div class="epb-btn">✕</div>
+                </div>
+            </div>
+            <h1 class="epb-title">The Series A Apocalypse: Why $5M ARR Is The New $1M</h1>
+            <!-- SINGLE LINE HOST/GUEST -->
+            <div class="epb-participants">
+                <span><span class="epb-label">HOST:</span> Harry Stebbings (20VC)</span>
+                <span><span class="epb-label">GUEST:</span> Bill Gurley (GP, Benchmark)</span>
+            </div>
+        </div>
+        
+        <div class="epb-content">
+            <div class="epb-main">
+                <div class="epb-section">
+                    <div class="epb-section-title">THE CONVERSATION</div>
+                    <div class="epb-conversation">
+                        Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' Harry probes on specific metrics, and Bill reveals Benchmark's new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won't hit these numbers.
+                    </div>
+                </div>
+                
+                <div class="epb-section">
+                    <div class="epb-section-title">KEY INSIGHTS</div>
+                    <div class="epb-insight">
+                        <div class="epb-insight-num">1</div>
+                        <div class="epb-insight-text">Series A bar: $5M ARR for AI applications, $3M for traditional SaaS</div>
+                    </div>
+                    <div class="epb-insight">
+                        <div class="epb-insight-num">2</div>
+                        <div class="epb-insight-text">40% of 2023 vintage seeds won't qualify for Series A at current burn</div>
+                    </div>
+                    <div class="epb-insight">
+                        <div class="epb-insight-num">3</div>
+                        <div class="epb-insight-text">30-month runway now table stakes - 18 months is 'criminally negligent'</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="epb-sidebar">
+                <div class="epb-quote">
+                    <div class="epb-section-title" style="color: rgba(255,255,255,0.9); margin-bottom: 6px;">ESSENTIAL QUOTE</div>
+                    <div class="epb-quote-text">"Founders building with 18-month runways are playing Russian roulette. The Series A that should take 12 months will take 24."</div>
+                    <div class="epb-quote-author">— Bill Gurley at 28:44</div>
+                </div>
+                
+                <div class="epb-section">
+                    <div class="epb-section-title">NOTABLE NUMBERS</div>
+                    <!-- HORIZONTAL LAYOUT -->
+                    <div class="epb-numbers">
+                        <div class="epb-number">
+                            <span class="epb-number-val">30</span>
+                            <div class="epb-number-label">Months Runway</div>
+                        </div>
+                        <div class="epb-number">
+                            <span class="epb-number-val">$5M</span>
+                            <div class="epb-number-label">New ARR Bar</div>
+                        </div>
+                        <div class="epb-number">
+                            <span class="epb-number-val">40%</span>
+                            <div class="epb-number-label">Seeds Missing</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SIDE BY SIDE -->
+                <div class="epb-blocks">
+                    <div class="epb-block">
+                        <span class="epb-block-label">📁 PORTFOLIO</span>
+                        <span class="epb-block-count">1</span>
+                    </div>
+                    <div class="epb-block">
+                        <span class="epb-block-label">👁 WATCHLIST</span>
+                        <span class="epb-block-count">1</span>
+                    </div>
+                </div>
+                
+                <div class="epb-topics">
+                    <div class="epb-section-title">RELATED TOPICS</div>
+                    <div class="epb-tags">
+                        <span class="epb-tag">#BurnRate</span>
+                        <span class="epb-tag">#SeedExtensions</span>
+                        <span class="epb-tag">#DownRounds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

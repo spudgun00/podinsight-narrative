@@ -110,6 +110,69 @@ window.unifiedData = {
               }
           }
       },
+      // Chart-based insights for different timeframes
+      chartInsights: {
+          '7 days': [
+              {
+                  type: 'Breakout Narrative',
+                  title: 'Climate Tech Hits Escape Velocity',
+                  description: 'Climate Tech accelerating +113% with sharp growth in last 72 hours',
+                  relatedTopics: ['Climate Tech']
+              },
+              {
+                  type: 'Leadership Change',
+                  title: 'Vertical AI Edges Past Exit Strategies',
+                  description: 'Vertical AI overtook Exit Strategies on Jul 23, signaling builder focus',
+                  relatedTopics: ['Vertical AI', 'Exit Strategies']
+              },
+              {
+                  type: 'Trend Character',
+                  title: 'Vertical AI Shows Stable Growth Pattern',
+                  description: 'Unlike other fast movers, Vertical AI (+60%) shows low volatility',
+                  relatedTopics: ['Vertical AI']
+              }
+          ],
+          '30 days': [
+              {
+                  type: 'Breakout Narrative',
+                  title: 'Defense Tech Accelerating Fastest',
+                  description: 'Defense Tech momentum increased 75% in past 2 weeks vs first half',
+                  relatedTopics: ['Defense Tech']
+              },
+              {
+                  type: 'Leadership Change',
+                  title: 'Enterprise Agents Overtakes AI Infrastructure',
+                  description: 'Enterprise Agents crossed above AI Infrastructure on Jul 18',
+                  relatedTopics: ['Enterprise Agents', 'AI Infrastructure']
+              },
+              {
+                  type: 'Trend Character',
+                  title: 'Exit Strategies Shows Volatile Pattern',
+                  description: 'Exit discussion volatility 90% higher than stable Vertical AI growth',
+                  relatedTopics: ['Exit Strategies', 'Vertical AI']
+              }
+          ],
+          '90 days': [
+              {
+                  type: 'Leadership Change',
+                  title: 'AI Infrastructure Surpasses Traditional SaaS',
+                  description: 'Historic crossover in Week 7 (Jun 8) marks permanent market shift',
+                  relatedTopics: ['AI Infrastructure', 'Traditional SaaS']
+              },
+              {
+                  type: 'Trend Character',
+                  title: 'Defense Tech Volatile vs AI Steady',
+                  description: 'Defense Tech shows event-driven spikes while AI Infrastructure climbs steadily',
+                  relatedTopics: ['Defense Tech', 'AI Infrastructure']
+              },
+              {
+                  type: 'Breakout Narrative',
+                  title: 'Climate Tech: From Niche to Mainstream',
+                  description: 'Q2 saw Climate Tech accelerate from 35 to 89 mentions (+154%)',
+                  relatedTopics: ['Climate Tech']
+              }
+          ]
+      },
       topics: {
           'AI Infrastructure': {
               color: '#4a7c59',
@@ -926,481 +989,961 @@ window.unifiedData = {
   },
 
   // ============================================
-  // PRIORITY BRIEFINGS
-  // ============================================
-  priorityBriefings: {
-      items: [
-          {
-              id: 'briefing-1',
-              priority: 'critical',
-              priorityLabel: 'Market Alert',
+  // PRIORITY BRIEFINGS - Updated structure with cardView/expandedView split
+// ============================================
+// PRIORITY BRIEFINGS - NEW APPROACH
+// ============================================
+priorityBriefings: {
+  items: [
+      // CARD VERSION
+      {
+          id: 'briefing-1',
+          // Backward compatibility fields (mapped from cardView/expandedView)
+          priority: 'critical',
+          priorityLabel: 'Consensus Forming',
+          podcast: 'All-In',
+          title: "AI Infrastructure vs Apps: The $70B Capital Allocation Shift",
+          guest: 'Chamath Palihapitiya (Founder, Social Capital) + Jason Calacanis (Launch Fund)',
+          keyInsights: [
+              "• 70% of AI funding now flowing to infrastructure, complete reversal from 2023",
+              "• Application layer margins compressing to 20% while infrastructure holds 70%+",
+              "• Defense tech reclassified as 'infrastructure' - opening floodgates for VC investment"
+          ],
+          signals: [
+              { type: 'thesis', text: '✓ Infrastructure Thesis: Your focus on intelligence layer perfectly timed' },
+              { type: 'market', text: '⚠ Competitive Alert: Expect flood of infrastructure pivots next quarter' }
+          ],
+          conversationSummary: "Chamath opens with stark data - 70% of Q2 AI funding went to infrastructure versus 30% to applications, a complete reversal from 2023. Jason pushes back citing Jasper's decline, but Chamath counters that infrastructure enables entirely new categories. The debate heats up when Friedberg joins, revealing their portfolio's pivot after seeing application layer margins compress to 20% while infrastructure maintains 70%+. Sacks drops the bombshell that defense tech is now considered 'infrastructure' by most funds.",
+          patternRecognition: {
+              metric1: { value: '4th', label: 'Major fund confirming infrastructure > apps thesis' },
+              metric2: { value: '87%', label: 'Of this week\'s episodes mentioned infrastructure dominance' },
+              metric3: { value: '15', label: 'Portfolio companies pivoting from apps to infrastructure' },
+              metric4: { value: '2nd', label: 'Time Marc Andreessen has made this infrastructure argument' }
+          },
+          // Original nested structure preserved
+          cardView: {
               podcast: 'All-In',
               time: '3h ago',
               duration: '94 min',
-              influence: 'High (97)',
-              title: 'AI\'s Two-Speed Market: Infrastructure Soars While Apps Crash',
-              guest: 'Chamath, Sacks, Friedberg + Marc Andreessen',
-              keyInsights: [
-                  'Q2 data confirms: 70% of AI funding to infrastructure, only 30% to applications',
-                  'Application layer seeing rapid commoditization - margins compressing to sub-20%',
-                  'a16z announcing $20B AI fund focused exclusively on US infrastructure plays'
-              ],
-              signals: [
-                  { type: 'thesis', text: '✓ Infrastructure Thesis: Your focus on intelligence layer perfectly timed' },
-                  { type: 'market', text: '⚠ Competitive Alert: Expect flood of infrastructure pivots next quarter' }
-              ]
+              score: 97,
+              priorityTag: 'Consensus Forming',
+              hashtags: ['#Infrastructure', '#AIFunding', '#DefenseTech'],
+              guests: 'Chamath Palihapitiya (Founder, Social Capital) + Jason Calacanis (Launch Fund)',
+              title: "AI Infrastructure vs Apps: The $70B Capital Allocation Shift",
+              whyCare: "Three major funds announced infrastructure pivots this week - when tier-1s align, the market follows",
+              socialProof: "💬 Most shared quote this week",
+              watchlistMentions: { 'Anthropic': 2, 'Perplexity': 1 }
           },
-          {
-              id: 'briefing-2',
-              priority: 'opportunity',
-              priorityLabel: 'Funding Intel',
-              podcast: 'The Twenty Minute VC',
+          expandedView: {
+              conversationSummary: "Chamath opens with stark data - 70% of Q2 AI funding went to infrastructure versus 30% to applications, a complete reversal from 2023. Jason pushes back citing Jasper's decline, but Chamath counters that infrastructure enables entirely new categories. The debate heats up when Friedberg joins, revealing their portfolio's pivot after seeing application layer margins compress to 20% while infrastructure maintains 70%+. Sacks drops the bombshell that defense tech is now considered 'infrastructure' by most funds.",
+              keyInsights: [
+                  "• 70% of AI funding now flowing to infrastructure, complete reversal from 2023",
+                  "• Application layer margins compressing to 20% while infrastructure holds 70%+",
+                  "• Defense tech reclassified as 'infrastructure' - opening floodgates for VC investment"
+              ],
+              notableNumbers: {
+                  "$70B": "Q2 2025 infrastructure funding",
+                  "20%": "Current AI application gross margins",
+                  "3": "Months since the infrastructure thesis went mainstream"
+              },
+              watchlistMentions: [
+                  { company: "Anthropic", count: 2, quotes: [
+                      { text: "Anthropic's infrastructure costs hit $2B annually", time: "23:45" },
+                      { text: "Even Anthropic is building their own chips now", time: "41:12" }
+                  ]},
+                  { company: "Perplexity", count: 1, quotes: [
+                      { text: "Perplexity burning $50M monthly on compute alone", time: "31:22" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "Every successful AI company is becoming an infrastructure company. The ones that don't will be eaten by OpenAI or Google.",
+                  author: "Chamath Palihapitiya",
+                  time: "15:31"
+              },
+              relatedTopics: ['#GPUEconomics', '#DefenseTech', '#AIMonetization']
+          }
+      },
+      {
+          id: 'briefing-2',
+          // Backward compatibility fields
+          priority: 'opportunity',
+          priorityLabel: 'New Data',
+          podcast: '20VC',
+          title: "The Series A Apocalypse: Why $5M ARR Is The New $1M",
+          guest: 'Bill Gurley (GP, Benchmark) + Harry Stebbings (20VC)',
+          keyInsights: [
+              "• Series A bar: $5M ARR for AI applications, $3M for traditional SaaS",
+              "• 40% of 2023 vintage seeds won't qualify for Series A at current burn",
+              "• 30-month runway now table stakes - 18 months is 'criminally negligent'"
+          ],
+          signals: [
+              { type: 'market', text: '◆ Fundraising Window: Series A bar rising monthly - move fast' },
+              { type: 'strategic', text: '🎯 Revenue Target: Need $3M ARR by Q1 2026 for credible raise' }
+          ],
+          conversationSummary: "Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' Harry probes on specific metrics, and Bill reveals Benchmark's new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won't hit these numbers. He advocates for 30-month runways, calling the standard 18-month advice 'criminally negligent.' When Harry asks about exceptions, Bill is firm: 'Infrastructure plays only - they have different unit economics.'",
+          patternRecognition: {
+              metric1: { value: '12th', label: 'Fund confirming $3M ARR as new Series A minimum' },
+              metric2: { value: '40%', label: 'Of 2023 seeds still seeking Series A funding' },
+              metric3: { value: '24', label: 'Months runway now required vs 18 previously' },
+              metric4: { value: '5x', label: 'Revenue multiple compression from 2021 highs' }
+          },
+          cardView: {
+              podcast: '20VC',
               time: '8h ago',
               duration: '82 min',
-              influence: 'High (93)',
-              title: 'Inside the Series A Bloodbath: Why 40% Can\'t Raise',
-              guest: 'Benchmark GP Sarah Tavel',
-              keyInsights: [
-                  'New Series A bar: $3M ARR minimum, $5M for AI plays outside infrastructure',
-                  'Seed extensions now average 9 months - plan for 24-month runway minimum',
-                  'Quality flight: Top 20% of startups getting 80% of capital'
-              ],
-              signals: [
-                  { type: 'market', text: '◆ Fundraising Window: Series A bar rising monthly - move fast' },
-                  { type: 'strategic', text: '🎯 Revenue Target: Need $3M ARR by Q1 2026 for credible raise' }
-              ]
+              score: 92,
+              priorityTag: 'New Data',
+              hashtags: ['#SeriesA', '#FundingBar', '#RunwayPlanning'],
+              guests: 'Bill Gurley (GP, Benchmark) + Harry Stebbings (20VC)',
+              title: "The Series A Apocalypse: Why $5M ARR Is The New $1M",
+              whyCare: "Benchmark officially raising Series A bar to $5M ARR for AI companies - other tier-1s following",
+              socialProof: "🔥 Trending on VC Twitter",
+              portfolioMentions: { 'Scale AI': 1 },
+              watchlistMentions: { 'OpenAI': 2 }
           },
-          {
-              id: 'briefing-3',
-              priority: 'elevated',
-              priorityLabel: 'LP Movement',
-              podcast: 'Capital Allocators',
+          expandedView: {
+              conversationSummary: "Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' Harry probes on specific metrics, and Bill reveals Benchmark's new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won't hit these numbers. He advocates for 30-month runways, calling the standard 18-month advice 'criminally negligent.' When Harry asks about exceptions, Bill is firm: 'Infrastructure plays only - they have different unit economics.'",
+              keyInsights: [
+                  "• Series A bar: $5M ARR for AI applications, $3M for traditional SaaS",
+                  "• 40% of 2023 vintage seeds won't qualify for Series A at current burn",
+                  "• 30-month runway now table stakes - 18 months is 'criminally negligent'"
+              ],
+              notableNumbers: {
+                  "$5M": "New Series A ARR bar for AI companies",
+                  "40%": "2023 seeds that won't hit Series A metrics",
+                  "30": "Months of runway now required"
+              },
+              portfolioMentions: [
+                  { company: "Scale AI", count: 1, quotes: [
+                      { text: "Scale raised at $250K ARR - that's impossible today", time: "45:33" }
+                  ]}
+              ],
+              watchlistMentions: [
+                  { company: "OpenAI", count: 2, quotes: [
+                      { text: "OpenAI's dominance is crushing application layer economics", time: "12:45" },
+                      { text: "Every AI startup competing with OpenAI's next feature", time: "52:10" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "Founders building with 18-month runways are playing Russian roulette. The Series A that should take 12 months will take 24.",
+                  author: "Bill Gurley",
+                  time: "28:44"
+              },
+              relatedTopics: ['#BurnRate', '#SeedExtensions', '#DownRounds']
+          }
+      },
+      {
+          id: 'briefing-3',
+          // Backward compatibility fields
+          priority: 'elevated',
+          priorityLabel: 'LP Intel',
+          podcast: 'The Information\'s 411',
+          title: "The DPI Crisis: Why LPs Are Demanding Cash, Not Markups",
+          guest: 'Josh Wolfe (Co-founder, Lux Capital) + Jessica Lessin (The Information)',
+          keyInsights: [
+              "• LPs demanding concrete 'DPI roadmaps' - 5-year paths to distributions",
+              "• Secondaries becoming primary liquidity source - not a temporary fix",
+              "• Top funds now taking 20% off table at Series C as standard practice"
+          ],
+          signals: [
+              { type: 'lp', text: '◇ LP Opportunity: Institutional capital flooding in - good for ecosystem' },
+              { type: 'strategic', text: '💡 Positioning: Specialist angle (VC intelligence) attractive to LPs' }
+          ],
+          conversationSummary: "Josh Wolfe starts with a stark admission: 'The entire venture model is broken without exits.' Jessica presses on Lux's returns, and Josh reveals they've returned $2B in actual cash over 24 months through secondaries and one strategic exit. The conversation shifts when Josh explains how LPs are now demanding 'DPI roadmaps' - concrete plans for distributions within 5 years. He shares that MIT's endowment told him: 'Show us the path to cash or we're out.' The discussion gets tactical when Josh outlines their new strategy: taking 20% off the table at Series C for all investments.",
+          patternRecognition: {
+              metric1: { value: '6th', label: 'Major pension fund increasing venture allocation' },
+              metric2: { value: '$21B', label: 'CalPERS commitment driving LP confidence' },
+              metric3: { value: '10%', label: 'New allocation vs 1.4% historical average' },
+              metric4: { value: '3rd', label: 'Time Nicole Musicco discussed specialist funds preference' }
+          },
+          cardView: {
+              podcast: 'The Information\'s 411',
               time: '14h ago',
               duration: '71 min',
-              influence: 'High (89)',
-              title: 'CalPERS Goes All-In: The $21B Venture Bet',
-              guest: 'CalPERS CIO Nicole Musicco',
-              keyInsights: [
-                  'Largest pension fund moving from 1.4% to 10% venture allocation over 3 years',
-                  'Explicit preference for specialist funds over generalists - "depth beats breadth"',
-                  'New requirement: Clear path to DPI within 5-7 years, not just paper markups'
-              ],
-              signals: [
-                  { type: 'lp', text: '◇ LP Opportunity: Institutional capital flooding in - good for ecosystem' },
-                  { type: 'strategic', text: '💡 Positioning: Specialist angle (VC intelligence) attractive to LPs' }
-              ]
+              score: 89,
+              priorityTag: 'LP Intel',
+              hashtags: ['#LPAllocations', '#VentureReturns', '#DPI'],
+              guests: 'Josh Wolfe (Co-founder, Lux Capital) + Jessica Lessin (The Information)',
+              title: "The DPI Crisis: Why LPs Are Demanding Cash, Not Markups",
+              whyCare: "Major endowments requiring 'DPI roadmaps' for re-ups - paper gains no longer sufficient",
+              socialProof: "📊 Data-driven analysis",
+              watchlistMentions: { 'Perplexity': 1 }
           },
-          {
-              id: 'briefing-4',
-              priority: 'critical',
-              priorityLabel: 'Infrastructure Deep Dive',
+          expandedView: {
+              conversationSummary: "Josh Wolfe starts with a stark admission: 'The entire venture model is broken without exits.' Jessica presses on Lux's returns, and Josh reveals they've returned $2B in actual cash over 24 months through secondaries and one strategic exit. The conversation shifts when Josh explains how LPs are now demanding 'DPI roadmaps' - concrete plans for distributions within 5 years. He shares that MIT's endowment told him: 'Show us the path to cash or we're out.' The discussion gets tactical when Josh outlines their new strategy: taking 20% off the table at Series C for all investments.",
+              keyInsights: [
+                  "• LPs demanding concrete 'DPI roadmaps' - 5-year paths to distributions",
+                  "• Secondaries becoming primary liquidity source - not a temporary fix",
+                  "• Top funds now taking 20% off table at Series C as standard practice"
+              ],
+              notableNumbers: {
+                  "$2B": "Lux Capital's cash distributions in 24 months",
+                  "5": "Years LPs expect to see DPI",
+                  "20%": "Standard secondary take at Series C"
+              },
+              watchlistMentions: [
+                  { company: "Perplexity", count: 1, quotes: [
+                      { text: "Perplexity's $3B secondary gave us our first real DPI", time: "34:21" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "LPs don't eat IRR. They've been fed paper gains for five years while their portfolios are cash-negative. The patience is gone.",
+                  author: "Josh Wolfe",
+                  time: "19:55"
+              },
+              relatedTopics: ['#SecondaryMarkets', '#LPLiquidity', '#PortfolioConstruction']
+          }
+      },
+      {
+          id: 'briefing-4',
+          // Backward compatibility fields
+          priority: 'critical',
+          priorityLabel: 'Contrarian View',
+          podcast: 'Acquired',
+          title: "The Great Cloud Reversal: Why Companies Are Fleeing AWS",
+          guest: 'David Rosenthal + Ben Gilbert + Guest: Dylan Field (CEO, Figma)',
+          keyInsights: [
+              "• Cloud repatriation saving companies 50-70% on infrastructure costs",
+              "• 18-month payback period for on-premise infrastructure investment",
+              "• AI workloads pushing even mid-size companies to reconsider cloud"
+          ],
+          signals: [
+              { type: 'thesis', text: '✓ Thesis Match: Intelligence infrastructure critical for AI ecosystem' },
+              { type: 'market', text: '◆ Timing: Infrastructure gold rush just beginning' }
+          ],
+          conversationSummary: "Dylan Field drops a bombshell in the first ten minutes: 'We cut our infrastructure costs by 70% by leaving AWS.' Ben and David are stunned, pushing for details. Dylan explains how Figma built their own bare-metal infrastructure, saving $50M annually. The conversation explodes when Dylan suggests every company over $100M revenue should consider repatriation. David challenges the complexity, but Dylan counters with hard data - 18-month payback on their $30M infrastructure investment. The discussion pivots to AI workloads, where Dylan predicts 'on-prem is the only way to make unit economics work at scale.'",
+          patternRecognition: {
+              metric1: { value: '4x', label: 'Infrastructure spend per $1 of AI revenue' },
+              metric2: { value: '90%', label: 'GPU cost drop annually per Jensen\'s roadmap' },
+              metric3: { value: '$500B', label: 'Global infrastructure buildout next 18 months' },
+              metric4: { value: '2nd', label: 'Inning of 9-inning game per Jensen Huang' }
+          },
+          cardView: {
               podcast: 'Acquired',
               time: '1d ago',
               duration: '142 min',
-              influence: 'High (94)',
-              title: 'The NVIDIA Moment: Why Every AI Company Needs Infrastructure',
-              guest: 'Jensen Huang + Sequoia Partners',
-              keyInsights: [
-                  'GPU costs dropped 90% but demand growing 10x - infrastructure still bottleneck',
-                  'Every $1 in AI app revenue requires $4 in infrastructure investment',
-                  'Next 18 months will see $500B+ infrastructure buildout globally'
-              ],
-              signals: [
-                  { type: 'thesis', text: '✓ Thesis Match: Intelligence infrastructure critical for AI ecosystem' },
-                  { type: 'market', text: '◆ Timing: Infrastructure gold rush just beginning' }
-              ]
+              score: 94,
+              priorityTag: 'Contrarian View',
+              hashtags: ['#CloudRepatriation', '#AIEconomics', '#Hyperscalers'],
+              guests: 'David Rosenthal + Ben Gilbert + Guest: Dylan Field (CEO, Figma)',
+              title: "The Great Cloud Reversal: Why Companies Are Fleeing AWS",
+              whyCare: "Figma saved $50M annually by leaving AWS - triggering mass cloud repatriation movement",
+              socialProof: "🎧 #1 Tech podcast this week",
+              portfolioMentions: { 'Scale AI': 2 }
           },
-          {
-              id: 'briefing-5',
-              priority: 'opportunity',
-              priorityLabel: 'Defense Thesis',
-              podcast: 'The Tim Ferriss Show',
+          expandedView: {
+              conversationSummary: "Dylan Field drops a bombshell in the first ten minutes: 'We cut our infrastructure costs by 70% by leaving AWS.' Ben and David are stunned, pushing for details. Dylan explains how Figma built their own bare-metal infrastructure, saving $50M annually. The conversation explodes when Dylan suggests every company over $100M revenue should consider repatriation. David challenges the complexity, but Dylan counters with hard data - 18-month payback on their $30M infrastructure investment. The discussion pivots to AI workloads, where Dylan predicts 'on-prem is the only way to make unit economics work at scale.'",
+              keyInsights: [
+                  "• Cloud repatriation saving companies 50-70% on infrastructure costs",
+                  "• 18-month payback period for on-premise infrastructure investment",
+                  "• AI workloads pushing even mid-size companies to reconsider cloud"
+              ],
+              notableNumbers: {
+                  "$50M": "Figma's annual AWS savings",
+                  "70%": "Infrastructure cost reduction",
+                  "18": "Months to payback on-prem investment"
+              },
+              portfolioMentions: [
+                  { company: "Scale AI", count: 2, quotes: [
+                      { text: "Scale spends $100M+ on cloud - they're next to repatriate", time: "67:45" },
+                      { text: "Scale's margins would double with on-prem infrastructure", time: "89:33" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "The dirty secret of cloud computing is that it's a 70% margin business for Amazon. That margin is coming from somewhere - your pockets.",
+                  author: "Dylan Field",
+                  time: "24:18"
+              },
+              relatedTopics: ['#InfrastructureArbitrage', '#UnitEconomics', '#TechnicalDebt']
+          }
+      },
+      {
+          id: 'briefing-5',
+          // Backward compatibility fields
+          priority: 'opportunity',
+          priorityLabel: 'New Data',
+          podcast: 'Invest Like the Best',
+          title: "Agents Are Eating SaaS: The $400B Disruption Nobody Sees Coming",
+          guest: 'Patrick O\'Shaughnessy + Guest: Aaron Levie (CEO, Box)',
+          keyInsights: [
+              "• AI agents replacing entire SaaS categories - not just features",
+              "• 30% of Box's traditional usage already cannibalized by AI features",
+              "• $400B of SaaS market cap at risk of evaporation by 2027"
+          ],
+          signals: [
+              { type: 'market', text: '◆ Market Signal: Defense tech mainstream despite ESG concerns' },
+              { type: 'thesis', text: '✓ Dual-Use: Commercial AI tech finding defense applications' }
+          ],
+          conversationSummary: "Aaron Levie starts with a confession: 'I'm terrified and excited in equal measure.' Patrick asks why, and Aaron explains that AI agents will replace entire categories of SaaS. He shares Box's internal data - their AI features are cannibalizing 30% of traditional usage. The conversation intensifies when Aaron predicts 'vertical SaaS is dead' - agents will handle workflows end-to-end. Patrick challenges him on Box's survival, and Aaron reveals they're pivoting to become an 'agent orchestration platform.' The real bombshell: Aaron estimates $400B of current SaaS market cap will evaporate by 2027.",
+          patternRecognition: {
+              metric1: { value: '3', label: 'Defense tech deals in top 10 Q2 rounds' },
+              metric2: { value: '$14B', label: 'Anduril valuation proving sector viability' },
+              metric3: { value: '50%', label: 'Defense spending shifting to autonomous systems' },
+              metric4: { value: '5th', label: 'Major fund overcoming ESG concerns this quarter' }
+          },
+          cardView: {
+              podcast: 'Invest Like the Best',
               time: '1d ago',
               duration: '118 min',
-              influence: 'High (91)',
-              title: 'Palmer Luckey: Defense Tech\'s $1 Trillion Opportunity',
-              guest: 'Palmer Luckey, Founder of Anduril',
-              keyInsights: [
-                  'Anduril at $14B proves defense tech can achieve venture-scale returns',
-                  'US + allies spending $2T annually - software eating only 2% currently',
-                  'Autonomous systems replacing 50% of defense personnel within decade'
-              ],
-              signals: [
-                  { type: 'market', text: '◆ Market Signal: Defense tech mainstream despite ESG concerns' },
-                  { type: 'thesis', text: '✓ Dual-Use: Commercial AI tech finding defense applications' }
-              ]
+              score: 91,
+              priorityTag: 'New Data',
+              hashtags: ['#AgentEconomics', '#B2BSaaS', '#Productivity'],
+              guests: 'Patrick O\'Shaughnessy + Guest: Aaron Levie (CEO, Box)',
+              title: "Agents Are Eating SaaS: The $400B Disruption Nobody Sees Coming",
+              whyCare: "Box CEO predicts 50% of SaaS companies obsolete by 2027 due to AI agents",
+              socialProof: "🚨 Breaking perspective",
+              watchlistMentions: { 'Anthropic': 3, 'OpenAI': 2 }
           },
-          {
-              id: 'briefing-6',
-              priority: 'elevated',
-              priorityLabel: 'Developer Tools',
-              podcast: 'Changelog',
+          expandedView: {
+              conversationSummary: "Aaron Levie starts with a confession: 'I'm terrified and excited in equal measure.' Patrick asks why, and Aaron explains that AI agents will replace entire categories of SaaS. He shares Box's internal data - their AI features are cannibalizing 30% of traditional usage. The conversation intensifies when Aaron predicts 'vertical SaaS is dead' - agents will handle workflows end-to-end. Patrick challenges him on Box's survival, and Aaron reveals they're pivoting to become an 'agent orchestration platform.' The real bombshell: Aaron estimates $400B of current SaaS market cap will evaporate by 2027.",
+              keyInsights: [
+                  "• AI agents replacing entire SaaS categories - not just features",
+                  "• 30% of Box's traditional usage already cannibalized by AI features",
+                  "• $400B of SaaS market cap at risk of evaporation by 2027"
+              ],
+              notableNumbers: {
+                  "$400B": "SaaS market cap at risk",
+                  "50%": "SaaS companies facing obsolescence",
+                  "30%": "Box usage cannibalized by AI"
+              },
+              watchlistMentions: [
+                  { company: "Anthropic", count: 3, quotes: [
+                      { text: "Claude can already do what five SaaS tools did", time: "23:11" },
+                      { text: "Anthropic's agent framework makes Zapier look antiquated", time: "45:33" },
+                      { text: "Every SaaS company is one Anthropic update from irrelevance", time: "71:28" }
+                  ]},
+                  { company: "OpenAI", count: 2, quotes: [
+                      { text: "OpenAI's enterprise agents replacing entire departments", time: "34:55" },
+                      { text: "GPT-5 will be the SaaS extinction event", time: "88:42" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "We spent 20 years building software to help humans work better. AI agents don't need our help. They need infrastructure and data - everything else is obsolete.",
+                  author: "Aaron Levie",
+                  time: "56:33"
+              },
+              relatedTopics: ['#SaaSDisruption', '#AgentOrchestration', '#WorkflowAutomation']
+          }
+      },
+      {
+          id: 'briefing-6',
+          // Backward compatibility fields
+          priority: 'elevated',
+          priorityLabel: 'Portfolio Impact',
+          podcast: 'The Logan Bartlett Show',
+          title: "The M&A Playbook: Why Every Startup Needs Three Strategic Relationships",
+          guest: 'Logan Bartlett (Redpoint) + Guest: Emilie Choi (President, Coinbase)',
+          keyInsights: [
+              "• Strategic buyers tracking companies 3+ years before acquisition",
+              "• 2-3x last round premiums for truly strategic assets",
+              "• 60% of Coinbase's M&A targets aren't crypto companies"
+          ],
+          signals: [
+              { type: 'market', text: '◆ Dev Tools Explosion: Still early innings' },
+              { type: 'competitive', text: '⚡ Consolidation Coming: Major acquisitions expected Q4' }
+          ],
+          conversationSummary: "Emilie Choi starts with surprising transparency: 'We track 500+ companies for potential acquisition, and 60% aren't even crypto-native.' Logan digs into their M&A strategy, and Emilie reveals Coinbase has a dedicated team building relationships with Series A companies - three years before they'd consider buying. The conversation heats up when discussing valuations. Emilie admits they'll pay 2-3x the last private round for strategic assets. She shares their framework: every startup should maintain relationships with at least three potential acquirers from Series A onward. The kicker: 'The best acquisitions are never shopped - they're cultivated over years.'",
+          patternRecognition: {
+              metric1: { value: '55%', label: 'More code shipped by Copilot users' },
+              metric2: { value: '$500M', label: 'GitHub Copilot run rate milestone' },
+              metric3: { value: '200%', label: 'YoY enterprise spending on dev tools' },
+              metric4: { value: '2026', label: 'When every developer will have AI pair programmer' }
+          },
+          cardView: {
+              podcast: 'The Logan Bartlett Show',
               time: '2d ago',
               duration: '96 min',
-              influence: 'Medium (82)',
-              title: 'GitHub Copilot\'s $500M Run Rate Changes Everything',
-              guest: 'Thomas Dohmke, CEO of GitHub',
-              keyInsights: [
-                  'Every developer will have AI pair programmer by 2026 - market inevitability',
-                  'Cursor at $2.5B shows appetite for specialized dev tools beyond Copilot',
-                  'Enterprise spending on dev productivity tools growing 200% YoY'
-              ],
-              signals: [
-                  { type: 'market', text: '◆ Dev Tools Explosion: Still early innings' },
-                  { type: 'competitive', text: '⚡ Consolidation Coming: Major acquisitions expected Q4' }
-              ]
+              score: 86,
+              priorityTag: 'Portfolio Impact',
+              hashtags: ['#MAStrategy', '#ExitPlanning', '#StrategicBuyers'],
+              guests: 'Logan Bartlett (Redpoint) + Guest: Emilie Choi (President, Coinbase)',
+              title: "The M&A Playbook: Why Every Startup Needs Three Strategic Relationships",
+              whyCare: "Coinbase President reveals they track 500+ startups for acquisition - most aren't even in crypto",
+              socialProof: "💡 Actionable insights",
+              portfolioMentions: { 'Scale AI': 1 },
+              watchlistMentions: { 'Perplexity': 1 }
           },
-          {
-              id: 'briefing-7',
-              priority: 'elevated',
-              priorityLabel: 'Exit Analysis',
-              podcast: 'This Week in Startups',
+          expandedView: {
+              conversationSummary: "Emilie Choi starts with surprising transparency: 'We track 500+ companies for potential acquisition, and 60% aren't even crypto-native.' Logan digs into their M&A strategy, and Emilie reveals Coinbase has a dedicated team building relationships with Series A companies - three years before they'd consider buying. The conversation heats up when discussing valuations. Emilie admits they'll pay 2-3x the last private round for strategic assets. She shares their framework: every startup should maintain relationships with at least three potential acquirers from Series A onward. The kicker: 'The best acquisitions are never shopped - they're cultivated over years.'",
+              keyInsights: [
+                  "• Strategic buyers tracking companies 3+ years before acquisition",
+                  "• 2-3x last round premiums for truly strategic assets",
+                  "• 60% of Coinbase's M&A targets aren't crypto companies"
+              ],
+              notableNumbers: {
+                  "500+": "Companies on Coinbase M&A tracker",
+                  "3": "Years of relationship building before acquisition",
+                  "2-3x": "Premium over last private round"
+              },
+              portfolioMentions: [
+                  { company: "Scale AI", count: 1, quotes: [
+                      { text: "Scale's data labeling could transform our compliance", time: "45:22" }
+                  ]}
+              ],
+              watchlistMentions: [
+                  { company: "Perplexity", count: 1, quotes: [
+                      { text: "Perplexity's search could revolutionize crypto discovery", time: "67:18" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "The biggest mistake founders make is waiting until they need an exit to build acquirer relationships. By then, you have zero leverage.",
+                  author: "Emilie Choi",
+                  time: "31:44"
+              },
+              relatedTopics: ['#ExitStrategy', '#CorpDev', '#StrategicPartnerships']
+          }
+      },
+      {
+          id: 'briefing-7',
+          // Backward compatibility fields
+          priority: 'elevated',
+          priorityLabel: 'Consensus Forming',
+          podcast: 'Stratechery',
+          title: "Every Developer Will Have an AI Pair Programmer by 2026",
+          guest: 'Ben Thompson + Guest: Nat Friedman (Former GitHub CEO)',
+          keyInsights: [
+              "• 75% of Fortune 500 developers already using AI tools daily",
+              "• Developer productivity tools growing 200% YoY - fastest enterprise segment",
+              "• Next wave: AI handling entire development workflows, not just code completion"
+          ],
+          signals: [
+              { type: 'market', text: '◆ Exit Strategy: Build for strategic acquisition, not IPO' },
+              { type: 'lp', text: '◇ LP Intel: M&A providing liquidity lifeline' }
+          ],
+          conversationSummary: "Nat Friedman opens with a bold prediction: 'By 2026, coding without AI will be like coding without an IDE - technically possible but professionally negligent.' Ben pushes on adoption rates, and Nat shares exclusive data - 75% of Fortune 500 developers already use AI daily. The conversation pivots when discussing Cursor's $2.5B valuation. Nat sees it validating the market: 'There's room for 10 billion-dollar companies in AI dev tools.' He reveals the real opportunity isn't in coding assistance but in AI handling entire development workflows - from requirements to deployment.",
+          patternRecognition: {
+              metric1: { value: '27', label: 'IPOs in H1 2025 vs 183 in 2021' },
+              metric2: { value: '40-60%', label: 'M&A premiums over last private rounds' },
+              metric3: { value: '$100B', label: 'Google\'s acquisition war chest through 2026' },
+              metric4: { value: '3rd', label: 'Quarter of sustained IPO drought' }
+          },
+          cardView: {
+              podcast: 'Stratechery',
               time: '2d ago',
               duration: '103 min',
-              influence: 'High (86)',
-              title: 'M&A is Eating IPOs: The New Exit Playbook',
-              guest: 'Frank Slootman + Top Tech Bankers',
-              keyInsights: [
-                  'Only 27 IPOs in H1 2025 - lowest since 2009 financial crisis',
-                  'Strategic acquirers paying 40-60% premiums over last private rounds',
-                  'Every major tech co has $10B+ allocated for AI acquisitions'
-              ],
-              signals: [
-                  { type: 'market', text: '◆ Exit Strategy: Build for strategic acquisition, not IPO' },
-                  { type: 'lp', text: '◇ LP Intel: M&A providing liquidity lifeline' }
-              ]
+              score: 88,
+              priorityTag: 'Consensus Forming',
+              hashtags: ['#DeveloperTools', '#AIAdoption', '#Productivity'],
+              guests: 'Ben Thompson + Guest: Nat Friedman (Former GitHub CEO)',
+              title: "Every Developer Will Have an AI Pair Programmer by 2026",
+              whyCare: "GitHub Copilot hit $500M ARR in 18 months - fastest enterprise software growth ever",
+              socialProof: "📈 Must-listen for dev tools",
+              watchlistMentions: { 'Anthropic': 2 }
           },
-          {
-              id: 'briefing-8',
-              priority: 'opportunity',
-              priorityLabel: 'Vertical AI',
-              podcast: 'The Knowledge Project',
+          expandedView: {
+              conversationSummary: "Nat Friedman opens with a bold prediction: 'By 2026, coding without AI will be like coding without an IDE - technically possible but professionally negligent.' Ben pushes on adoption rates, and Nat shares exclusive data - 75% of Fortune 500 developers already use AI daily. The conversation pivots when discussing Cursor's $2.5B valuation. Nat sees it validating the market: 'There's room for 10 billion-dollar companies in AI dev tools.' He reveals the real opportunity isn't in coding assistance but in AI handling entire development workflows - from requirements to deployment.",
+              keyInsights: [
+                  "• 75% of Fortune 500 developers already using AI tools daily",
+                  "• Developer productivity tools growing 200% YoY - fastest enterprise segment",
+                  "• Next wave: AI handling entire development workflows, not just code completion"
+              ],
+              notableNumbers: {
+                  "$500M": "GitHub Copilot ARR in 18 months",
+                  "75%": "Fortune 500 developers using AI daily",
+                  "10": "Billion-dollar opportunities in AI dev tools"
+              },
+              watchlistMentions: [
+                  { company: "Anthropic", count: 2, quotes: [
+                      { text: "Claude's coding ability surpassed senior developers", time: "28:33" },
+                      { text: "Anthropic's artifacts changed how we think about AI coding", time: "54:27" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "We're not automating programmers - we're giving every business analyst the power to code. The demand for software will explode 100x.",
+                  author: "Nat Friedman",
+                  time: "41:55"
+              },
+              relatedTopics: ['#CodingAssistants', '#DeveloperProductivity', '#SoftwareDemand']
+          }
+      },
+      {
+          id: 'briefing-8',
+          // Backward compatibility fields
+          priority: 'opportunity',
+          priorityLabel: 'New Data',
+          podcast: 'Khosla Ventures Podcast',
+          title: "The Energy Crisis Nobody's Talking About: AI's 500 TWh Problem",
+          guest: 'Vinod Khosla + Guest: Sam Altman (CEO, OpenAI)',
+          keyInsights: [
+              "• AI will consume 500 TWh by 2030 - equivalent to Japan's total usage",
+              "• Energy, not compute, is the real bottleneck to AI progress",
+              "• OpenAI investing directly in fusion and geothermal projects"
+          ],
+          signals: [
+              { type: 'thesis', text: '✓ Vertical Opportunity: VC industry prime for AI transformation' },
+              { type: 'market', text: '◆ First-Mover: No dominant VC intelligence platform yet' }
+          ],
+          conversationSummary: "Vinod doesn't waste time: 'Forget chips - tell me about power.' Sam Altman's response is sobering: 'Energy is the real constraint to AGI, not compute.' He reveals OpenAI's models already consume as much power as small cities, and GPT-5 training will require dedicated power plants. The conversation turns to solutions when Sam discusses OpenAI's investments in fusion and advanced geothermal. Vinod pushes on timeline, and Sam admits: 'We need 500 TWh of new clean energy by 2030 or AI progress stops.' They agree the biggest opportunity isn't in AI models but in energy infrastructure for AI.",
+          patternRecognition: {
+              metric1: { value: '2', label: '$5B+ vertical AI winners (Harvey, Abridge)' },
+              metric2: { value: '20-30', label: 'Vertical AI champions predicted by Thrive' },
+              metric3: { value: '3-5x', label: 'Revenue multiple premium for vertical AI' },
+              metric4: { value: '4th', label: 'Major vertical reaching AI inflection point' }
+          },
+          cardView: {
+              podcast: 'Khosla Ventures Podcast',
               time: '3d ago',
               duration: '91 min',
-              influence: 'High (88)',
-              title: 'Why Every Industry Needs Its Own Harvey',
-              guest: 'Top Vertical AI Founders Panel',
-              keyInsights: [
-                  'Legal (Harvey $5B), Healthcare (Abridge $5.3B) proving vertical playbook',
-                  'Next winners: Financial services, real estate, logistics, education',
-                  'Vertical AI companies seeing 3-5x revenue multiples vs horizontal'
-              ],
-              signals: [
-                  { type: 'thesis', text: '✓ Vertical Opportunity: VC industry prime for AI transformation' },
-                  { type: 'market', text: '◆ First-Mover: No dominant VC intelligence platform yet' }
-              ]
+              score: 85,
+              priorityTag: 'New Data',
+              hashtags: ['#EnergyTech', '#DataCenters', '#Sustainability'],
+              guests: 'Vinod Khosla + Guest: Sam Altman (CEO, OpenAI)',
+              title: "The Energy Crisis Nobody's Talking About: AI's 500 TWh Problem",
+              whyCare: "OpenAI CEO admits energy is the real AI bottleneck - not compute or data",
+              socialProof: "⚡ Crucial infrastructure insight",
+              watchlistMentions: { 'OpenAI': 4 }
           },
-          {
-              id: 'briefing-9',
-              priority: 'opportunity',
-              priorityLabel: 'Fund Strategy',
-              podcast: 'BG2Pod',
+          expandedView: {
+              conversationSummary: "Vinod doesn't waste time: 'Forget chips - tell me about power.' Sam Altman's response is sobering: 'Energy is the real constraint to AGI, not compute.' He reveals OpenAI's models already consume as much power as small cities, and GPT-5 training will require dedicated power plants. The conversation turns to solutions when Sam discusses OpenAI's investments in fusion and advanced geothermal. Vinod pushes on timeline, and Sam admits: 'We need 500 TWh of new clean energy by 2030 or AI progress stops.' They agree the biggest opportunity isn't in AI models but in energy infrastructure for AI.",
+              keyInsights: [
+                  "• AI will consume 500 TWh by 2030 - equivalent to Japan's total usage",
+                  "• Energy, not compute, is the real bottleneck to AI progress",
+                  "• OpenAI investing directly in fusion and geothermal projects"
+              ],
+              notableNumbers: {
+                  "500 TWh": "AI energy needs by 2030",
+                  "10x": "Current data center capacity needed",
+                  "$1T": "Energy infrastructure investment required"
+              },
+              watchlistMentions: [
+                  { company: "OpenAI", count: 4, quotes: [
+                      { text: "Our energy costs exceed our compute costs already", time: "12:33" },
+                      { text: "GPT-5 training requires dedicated power infrastructure", time: "34:21" },
+                      { text: "We're funding three fusion startups directly", time: "56:44" },
+                      { text: "Without new energy sources, AI progress hits a wall", time: "78:55" }
+                  ]}
+              ],
+              essentialQuote: {
+                  text: "Everyone's worried about AI safety and jobs. They should be worried about having enough power to plug it in. Energy is the real AGI bottleneck.",
+                  author: "Sam Altman",
+                  time: "23:17"
+              },
+              relatedTopics: ['#EnergyInfrastructure', '#Sustainability', '#DataCenterScaling']
+          }
+      },
+      {
+          id: 'briefing-9',
+          // Backward compatibility fields
+          priority: 'opportunity',
+          priorityLabel: 'Contrarian View',
+          podcast: 'Indie Hackers',
+          title: "Why Indie Hackers Are Beating VC-Backed Startups at AI",
+          guest: 'Courtland Allen + Guest: Pieter Levels (Nomad List, PhotoAI)',
+          keyInsights: [
+              "• Solo founders reaching $5M ARR with AI products at 90%+ margins",
+              "• AI tools democratizing development - funding becoming a disadvantage",
+              "• Prediction: 90% of successful AI startups will be bootstrapped"
+          ],
+          signals: [
+              { type: 'lp', text: '◇ Fund Dynamics: Concentrated bets beating diversification' },
+              { type: 'market', text: '◆ Valuation Alert: Infrastructure premiums may compress' }
+          ],
+          conversationSummary: "Pieter Levels starts with characteristic bluntness: 'VCs are pouring millions into AI wrappers that I build in a weekend.' Courtland asks for specifics, and Pieter reveals PhotoAI hit $5M ARR with zero employees and $500 in monthly costs. The conversation gets spicy when discussing VC-backed competitors. Pieter shows how ventures burning $2M monthly are building the same features he ships solo. His thesis: AI democratizes building so much that funding becomes a disadvantage - it forces premature scaling. The discussion culminates with Pieter predicting 90% of AI startups will be profitable one-person companies.",
+          patternRecognition: {
+              metric1: { value: '1000x', label: 'New outcome ceiling vs traditional 10x' },
+              metric2: { value: '500x', label: 'Current paper returns on infrastructure bets' },
+              metric3: { value: '30-40', label: 'Bets still needed to find the outlier' },
+              metric4: { value: '2nd', label: 'Time Reid Hoffman warned about missing NVIDIA' }
+          },
+          cardView: {
+              podcast: 'Indie Hackers',
               time: '3d ago',
               duration: '124 min',
-              influence: 'High (90)',
-              title: 'Power Law Changes: Why Funds Need New Math',
-              guest: 'Brad Gerstner & Bill Gurley',
+              score: 82,
+              priorityTag: 'Contrarian View',
+              hashtags: ['#MicroSaaS', '#Bootstrapping', '#IndieSuccess'],
+              guests: 'Courtland Allen + Guest: Pieter Levels (Nomad List, PhotoAI)',
+              title: "Why Indie Hackers Are Beating VC-Backed Startups at AI",
+              whyCare: "Solo founder hitting $5M ARR with AI products - while VC-backed competitors burn millions",
+              socialProof: "🔨 Scrappy success story",
+              watchlistMentions: { 'OpenAI': 3, 'Anthropic': 1 }
+          },
+          expandedView: {
+              conversationSummary: "Pieter Levels starts with characteristic bluntness: 'VCs are pouring millions into AI wrappers that I build in a weekend.' Courtland asks for specifics, and Pieter reveals PhotoAI hit $5M ARR with zero employees and $500 in monthly costs. The conversation gets spicy when discussing VC-backed competitors. Pieter shows how ventures burning $2M monthly are building the same features he ships solo. His thesis: AI democratizes building so much that funding becomes a disadvantage - it forces premature scaling. The discussion culminates with Pieter predicting 90% of AI startups will be profitable one-person companies.",
               keyInsights: [
-                  'AI creating 100x outcomes where 10x was previous ceiling',
-                  'Seed funds seeing 500x returns on infrastructure plays',
-                  'Warning: Late-stage valuations disconnecting from fundamentals'
+                  "• Solo founders reaching $5M ARR with AI products at 90%+ margins",
+                  "• AI tools democratizing development - funding becoming a disadvantage",
+                  "• Prediction: 90% of successful AI startups will be bootstrapped"
               ],
-              signals: [
-                  { type: 'lp', text: '◇ Fund Dynamics: Concentrated bets beating diversification' },
-                  { type: 'market', text: '◆ Valuation Alert: Infrastructure premiums may compress' }
-              ]
-          }
-      ]
-  },
-
-  // ============================================
-  // INTELLIGENCE BRIEF (SIDEBAR)
-  // ============================================
-  intelligenceBrief: {
-      summary: {
-          hoursAnalyzed: 1426,
-          lastUpdated: '38 mins ago',
-          collapsed: 'AI infrastructure dominates with 70% of funding [8 sources]. Series A bar at $3M ARR [confirmed by Emergence, First Round, Bessemer]. Exit drought: 27 IPOs H1 vs 183 in 2021. Defense tech surging: 3 of top 10 Q2 deals. Blindspot: Europe deep tech arbitrage opportunity.',
-          expanded: {
-              consensus: [
-                  {
-                      title: 'Infrastructure beats applications 4:1',
-                      sources: 'All-In, BG2Pod, a16z podcast, Index Ventures aligned',
-                      detail: 'Scale AI ($14.3B), Anysphere ($2.5B) prove infrastructure premium sustainable'
-                  },
-                  {
-                      title: 'Enterprise agents hit production',
-                      sources: '42 mentions this week across enterprise pods',
-                      detail: '70% of Fortune 500s moved from pilots to production deployments'
-                  },
-                  {
-                      title: 'Series A requires $3M+ ARR',
-                      sources: 'Confirmed by 15+ funds including Benchmark, First Round',
-                      detail: 'Up from $1.5M in 2023. AI plays need $5M+ outside infrastructure'
-                  },
-                  {
-                      title: 'Defense tech goes mainstream',
-                      sources: 'Anduril $14B, significant Q2 deal flow',
-                      detail: 'Geopolitical tensions overriding ESG concerns for most funds'
-                  }
+              notableNumbers: {
+                  "$5M": "PhotoAI ARR with zero employees",
+                  "$500": "Monthly operating costs",
+                  "90%": "Net margins on AI products"
+              },
+              watchlistMentions: [
+                  { company: "OpenAI", count: 3, quotes: [
+                      { text: "GPT-4 costs me $300/month and replaces a dev team", time: "19:44" },
+                      { text: "OpenAI's API is the entire backend for three of my apps", time: "41:33" },
+                      { text: "When OpenAI raises prices, I just pass it to customers", time: "67:22" }
+                  ]},
+                  { company: "Anthropic", count: 1, quotes: [
+                      { text: "Claude handles all my customer support - better than humans", time: "55:18" }
+                  ]}
               ],
-              contrarian: [
-                  {
-                      title: 'Defense tech defying critics',
-                      sources: 'Anduril $14B valuation, Hadrian $260M Series C',
-                      detail: 'Geopolitical tensions overriding ESG concerns at major funds'
-                  },
-                  {
-                      title: 'M&A is the new IPO',
-                      sources: 'Google\'s $32B Wiz deal, only 27 H1 IPOs',
-                      detail: 'Strategic buyers paying 40% premiums over last private rounds'
-                  },
-                  {
-                      title: 'Vertical AI > Horizontal consensus building',
-                      sources: 'Harvey, Abridge valuations proving thesis',
-                      detail: 'Every vertical racing to find its $5B+ AI champion'
-                  }
-              ],
-              blindspots: [
-                  {
-                      title: 'Europe deep tech significantly undervalued',
-                      sources: 'Limited US coverage despite 44% of global deep tech funding',
-                      detail: 'Arbitrage opportunity in quantum, robotics, advanced materials'
-                  },
-                  {
-                      title: 'Developer tools consolidation wave',
-                      sources: 'GitHub Copilot dominance barely discussed',
-                      detail: 'Winner-take-all dynamics emerging, M&A wave incoming'
-                  },
-                  {
-                      title: 'Climate tech quiet resurgence',
-                      sources: 'Industrial applications gaining traction',
-                      detail: 'Moving from hype to profitability, limited coverage'
-                  }
-              ]
+              essentialQuote: {
+                  text: "VC funding in AI is like bringing a Formula 1 car to a go-kart race. You'll go fast but crash on the first turn. AI rewards staying small and nimble.",
+                  author: "Pieter Levels",
+                  time: "38:27"
+              },
+              relatedTopics: ['#BootstrappedAI', '#SoloFounders', '#MicroSaaS']
           }
-      },
-      metrics: {
-          velocityTracking: [
-              { theme: 'Enterprise Agents', change: '+25% w/w', direction: 'positive' },
-              { theme: 'Defense Tech', change: '+33% w/w', direction: 'positive' },
-              { theme: 'AI Infrastructure', change: '+17% w/w', direction: 'positive' },
-              { theme: 'Exit Strategies', change: '+50% w/w', direction: 'positive' },
-              { theme: 'Vertical AI', change: '+34% w/w', direction: 'positive' },
-              { theme: 'Climate Tech', change: '+113% w/w', direction: 'positive' },
-              { theme: 'Traditional SaaS', change: '-15% w/w', direction: 'negative' }
-          ],
-          influenceMetrics: [
-              { name: 'All-In Podcast', score: 'High (97)' },
-              { name: '20VC', score: 'High (93)' },
-              { name: 'BG2Pod', score: 'High (91)' },
-              { name: 'Invest Like Best', score: 'High (86)' },
-              { name: 'Acquired', score: 'High (94)' },
-              { name: 'Tim Ferriss', score: 'High (91)' },
-              { name: 'Knowledge Project', score: 'High (88)' }
-          ],
-          consensusMonitor: [
-              { topic: 'Infrastructure > Apps', level: 'Strong (>85% agreement)' },
-              { topic: 'Enterprise AI Adoption', level: 'Strong (>80% agreement)' },
-              { topic: 'Series A Bar Rising', level: 'Building (70% agreement)' },
-              { topic: 'Defense Tech Value', level: 'Mixed (55% agreement)' },
-              { topic: 'Vertical AI Premium', level: 'Building (70% agreement)' },
-              { topic: 'Exit Environment', level: 'Building (65% agreement)' },
-              { topic: 'Traditional SaaS', level: 'Weak (<25% agreement)' }
-          ],
-          topicCorrelations: [
-              { topics: 'AI + Infrastructure', percentage: 82 },
-              { topics: 'Enterprise + Production', percentage: 73 },
-              { topics: 'Exit Drought + M&A', percentage: 79 },
-              { topics: 'Vertical AI + Valuations', percentage: 68 },
-              { topics: 'Defense + Geopolitics', percentage: 71 },
-              { topics: 'Climate + Industrial', percentage: 58 }
-          ]
       }
-  },
+  ]
+},
 
-  // ============================================
-  // WEEKLY BRIEF CONTENT (FOR PDF GENERATION)
-  // ============================================
-  weeklyBrief: {
-      executive: {
-          summary: [
-              {
-                  type: 'consensus',
-                  text: 'AI infrastructure reaches 70% of funding',
-                  details: '[287 mentions across 46 episodes] with Scale AI at $14.3B proving "picks and shovels" thesis.'
-              },
-              {
-                  type: 'growth',
-                  text: 'Enterprise agents explode +107% w/w',
-                  details: '[234 mentions] as 70% of Fortune 500s move from pilots to production deployments.'
-              },
-              {
-                  type: 'contrarian',
-                  text: 'Defense tech defies critics',
-                  details: 'Anduril at $14B and 3 of top 10 Q2 deals validate sector despite ESG concerns.'
-              },
-              {
-                  type: 'warning',
-                  text: 'Exit drought deepens:',
-                  details: 'Only 27 IPOs in H1 2025. M&A becomes primary path with 40% premiums.'
-              }
-          ]
-      },
-      keyMetrics: [
-          {
-              label: 'Velocity Leader',
-              value: '+107%',
-              context: 'Enterprise Agents',
-              change: '↑ w/w',
-              changeType: 'up'
-          },
-          {
-              label: 'Peak Consensus',
-              value: '70%',
-              context: 'AI Infrastructure Funding',
-              change: '46 episodes',
-              changeType: 'neutral'
-          },
-          {
-              label: 'Exit Alert',
-              value: '27 IPOs',
-              context: 'H1 2025 Total',
-              change: '↓ 85% YoY',
-              changeType: 'down'
-          },
-          {
-              label: 'Series A Bar',
-              value: '$3M ARR',
-              context: 'New Minimum',
-              change: '↑ 75% vs 2021',
-              changeType: 'up'
-          }
-      ],
-      topicMomentum: [
-          {
-              topic: 'Enterprise Agents',
-              change: '+107% w/w',
-              momentum: 52,
-              mentions: 234,
-              context: 'production deployments accelerating',
-              direction: 'positive'
-          },
-          {
-              topic: 'Defense Tech',
-              change: '+111% w/w',
-              momentum: 41,
-              mentions: 178,
-              context: 'geopolitics driving mainstream adoption',
-              direction: 'positive'
-          },
-          {
-              topic: 'AI Infrastructure',
-              change: '+64% w/w',
-              momentum: 38,
-              mentions: 287,
-              context: 'capturing 70% of all AI funding',
-              direction: 'positive'
-          },
-          {
-              topic: 'Vertical AI',
-              change: '+60% w/w',
-              momentum: 31,
-              mentions: 167,
-              context: 'Harvey and Abridge prove $5B+ potential',
-              direction: 'positive'
-          },
-          {
-              topic: 'Exit Strategies',
-              change: '+50% w/w',
-              momentum: 29,
-              mentions: 156,
-              context: 'M&A replacing IPO as primary path',
-              direction: 'positive'
-          },
-          {
-              topic: 'Climate Tech',
-              change: '+113% w/w',
-              momentum: 26,
-              mentions: 89,
-              context: 'industrial applications drive profitability',
-              direction: 'positive'
-          },
-          {
-              topic: 'Traditional SaaS',
-              change: '-58% w/w',
-              momentum: 18,
-              mentions: 52,
-              context: 'AI-native solutions obsoleting legacy playbooks',
-              direction: 'negative'
-          }
-      ],
-      consensusForming: [
-          {
-              title: 'Infrastructure > Applications clear winner',
-              sources: '[8 tier-1 sources aligned: All-In, BG2Pod, Index, a16z]',
-              insight: '4x revenue multiples prove picks-and-shovels thesis'
-          },
-          {
-              title: 'Enterprise AI hits production inflection',
-              sources: '[42 mentions across CTO panels and enterprise pods]',
-              insight: 'Moving from pilots to real workflow automation at scale'
-          },
-          {
-              title: 'Series A bar permanently higher',
-              sources: '[15+ funds confirm: Benchmark, First Round, Emergence]',
-              insight: '$3M ARR minimum, no return to 2021 standards'
-          }
-      ],
-      contrarian: [
-          {
-              title: 'Traditional SaaS accelerating decline',
-              description: '-58% while all AI categories surge',
-              context: 'AI-native solutions making legacy obsolete'
-          },
-          {
-              title: 'Europe deep tech arbitrage ignored',
-              description: '44% of global deep tech funding',
-              context: 'US VCs missing significant opportunity'
-          }
-      ],
-      blindspots: [
-          {
-              title: 'Developer tools consolidation wave',
-              description: 'GitHub Copilot dominance underdiscussed',
-              context: 'M&A wave coming Q4 2025'
-          },
-          {
-              title: 'Climate tech profitability turn',
-              description: 'Industrial applications working quietly',
-              context: 'First profitable exits changing narrative'
-          }
-      ],
-      actionItems: {
-          thisWeek: [
-              'Position as AI infrastructure play for fundraising',
-              'Prepare for $3M ARR Series A requirement',
-              'Consider M&A as primary exit strategy'
-          ],
-          monitor: [
-              'CalPERS $21B allocation impact on ecosystem',
-              'Defense tech momentum for portfolio opportunities',
-              'Developer tools M&A activity Q4'
-          ]
-      }
-  },
+// ============================================
+// INTELLIGENCE BRIEF - SIDEBAR DATA
+// ============================================
+intelligenceBrief: {
+    summary: {
+        hoursAnalyzed: 1426,
+        lastUpdated: '38 mins ago',
+        collapsed: 'AI infrastructure dominates with 70% of funding [8 sources]. Series A bar at $3M ARR [confirmed by Emergence, First Round, Bessemer]. Exit drought: 27 IPOs H1 vs 183 in 2021. Defense tech surging: 3 of top 10 Q2 deals. Blindspot: Europe deep tech arbitrage opportunity.',
+        expanded: {
+            consensus: [
+                {
+                    title: 'Infrastructure beats applications 4:1',
+                    sources: 'All-In, BG2Pod, a16z podcast, Index Ventures aligned',
+                    detail: 'Scale AI ($14.3B), Anysphere ($2.5B) prove infrastructure premium sustainable'
+                },
+                {
+                    title: 'Enterprise agents hit production',
+                    sources: '42 mentions this week across enterprise pods',
+                    detail: '70% of Fortune 500s moved from pilots to production deployments'
+                },
+                {
+                    title: 'Series A requires $3M+ ARR',
+                    sources: 'Confirmed by 15+ funds including Benchmark, First Round',
+                    detail: 'Up from $1.5M in 2023. AI plays need $5M+ outside infrastructure'
+                },
+                {
+                    title: 'Defense tech goes mainstream',
+                    sources: 'Anduril $14B, significant Q2 deal flow',
+                    detail: 'Geopolitical tensions overriding ESG concerns for most funds'
+                }
+            ],
+            contrarian: [
+                {
+                    title: 'Defense tech defying critics',
+                    sources: 'Anduril $14B valuation, Hadrian $260M Series C',
+                    detail: 'Geopolitical tensions overriding ESG concerns at major funds'
+                },
+                {
+                    title: 'M&A is the new IPO',
+                    sources: 'Google\'s $32B Wiz deal, only 27 H1 IPOs',
+                    detail: 'Strategic buyers paying 40% premiums over last private rounds'
+                },
+                {
+                    title: 'Vertical AI > Horizontal consensus building',
+                    sources: 'Harvey, Abridge valuations proving thesis',
+                    detail: 'Every vertical racing to find its $5B+ AI champion'
+                }
+            ],
+            blindspots: [
+                {
+                    title: 'Europe deep tech significantly undervalued',
+                    sources: 'Limited US coverage despite 44% of global deep tech funding',
+                    detail: 'Arbitrage opportunity in quantum, robotics, advanced materials'
+                },
+                {
+                    title: 'Developer tools consolidation wave',
+                    sources: 'GitHub Copilot dominance barely discussed',
+                    detail: 'Winner-take-all dynamics emerging, M&A wave incoming'
+                },
+                {
+                    title: 'Climate tech quiet resurgence',
+                    sources: 'Industrial applications gaining traction',
+                    detail: 'Moving from hype to profitability, limited coverage'
+                }
+            ]
+        }
+    },
+    metrics: {
+        velocityTracking: [
+            { theme: 'Enterprise Agents', change: '+25%', direction: 'positive' },
+            { theme: 'Defense Tech', change: '+33%', direction: 'positive' },
+            { theme: 'AI Infrastructure', change: '+17%', direction: 'positive' },
+            { theme: 'Exit Strategies', change: '+50%', direction: 'positive' },
+            { theme: 'Vertical AI', change: '+34%', direction: 'positive' },
+            { theme: 'Climate Tech', change: '+113%', direction: 'positive' },
+            { theme: 'Traditional SaaS', change: '-15%', direction: 'negative' }
+        ],
+        influenceMetrics: [
+            { name: 'All-In Podcast', score: 'High (97)' },
+            { name: '20VC', score: 'High (93)' },
+            { name: 'BG2Pod', score: 'High (91)' },
+            { name: 'Invest Like Best', score: 'High (86)' },
+            { name: 'Acquired', score: 'High (94)' },
+            { name: 'Tim Ferriss', score: 'High (91)' },
+            { name: 'Knowledge Project', score: 'High (88)' }
+        ],
+        consensusMonitor: [
+            { topic: 'Infrastructure > Apps', level: 'Strong (>85% agreement)' },
+            { topic: 'Enterprise AI Adoption', level: 'Strong (>80% agreement)' },
+            { topic: 'Series A Bar Rising', level: 'Building (70% agreement)' },
+            { topic: 'Defense Tech Value', level: 'Mixed (55% agreement)' },
+            { topic: 'Vertical AI Premium', level: 'Building (70% agreement)' },
+            { topic: 'Exit Environment', level: 'Building (65% agreement)' },
+            { topic: 'Traditional SaaS', level: 'Weak (<25% agreement)' }
+        ],
+        topicCorrelations: [
+            { topics: 'AI + Infrastructure', percentage: 82 },
+            { topics: 'Enterprise + Production', percentage: 73 },
+            { topics: 'Exit Drought + M&A', percentage: 79 },
+            { topics: 'Vertical AI + Valuations', percentage: 68 },
+            { topics: 'Defense + Geopolitics', percentage: 71 },
+            { topics: 'Climate + Industrial', percentage: 58 }
+        ]
+    }
+},
 
-  // ============================================
-  // PORTFOLIO DATA (PLACEHOLDER)
-  // ============================================
-  portfolio: {
-      companies: [],
-      watchlist: [],
-      mentions: {
-          new: 5,
-          total: 31
-      }
-  }
+// ============================================
+// WEEKLY BRIEF - FOR PDF GENERATION
+// ============================================
+weeklyBrief: {
+    executive: {
+        summary: [
+            {
+                type: 'consensus',
+                text: 'AI infrastructure reaches 70% of funding',
+                details: '[287 mentions across 46 episodes] with Scale AI at $14.3B proving "picks and shovels" thesis.'
+            },
+            {
+                type: 'growth',
+                text: 'Enterprise agents explode +107% w/w',
+                details: '[234 mentions] as 70% of Fortune 500s move from pilots to production deployments.'
+            },
+            {
+                type: 'contrarian',
+                text: 'Defense tech defies critics',
+                details: 'Anduril at $14B and 3 of top 10 Q2 deals validate sector despite ESG concerns.'
+            },
+            {
+                type: 'warning',
+                text: 'Exit drought deepens:',
+                details: 'Only 27 IPOs in H1 2025. M&A becomes primary path with 40% premiums.'
+            }
+        ]
+    },
+    keyMetrics: [
+        {
+            label: 'Velocity Leader',
+            value: '+107%',
+            context: 'Enterprise Agents',
+            change: '↑ w/w',
+            changeType: 'up'
+        },
+        {
+            label: 'Peak Consensus',
+            value: 'Strong',
+            context: 'AI Infrastructure Funding',
+            change: '46 episodes',
+            changeType: 'neutral'
+        },
+        {
+            label: 'Exit Alert',
+            value: '27 IPOs',
+            context: 'H1 2025 Total',
+            change: '↓ 85% YoY',
+            changeType: 'down'
+        },
+        {
+            label: 'Series A Bar',
+            value: '$3M ARR',
+            context: 'New Minimum',
+            change: '↑ 75% vs 2021',
+            changeType: 'up'
+        }
+    ],
+    topicMomentum: [
+        {
+            topic: 'Enterprise Agents',
+            change: '+107% w/w',
+            momentum: 52,
+            mentions: 234,
+            context: 'production deployments accelerating',
+            direction: 'positive'
+        },
+        {
+            topic: 'Defense Tech',
+            change: '+111% w/w',
+            momentum: 41,
+            mentions: 178,
+            context: 'geopolitics driving mainstream adoption',
+            direction: 'positive'
+        },
+        {
+            topic: 'AI Infrastructure',
+            change: '+64% w/w',
+            momentum: 38,
+            mentions: 287,
+            context: 'capturing 70% of all AI funding',
+            direction: 'positive'
+        },
+        {
+            topic: 'Vertical AI',
+            change: '+60% w/w',
+            momentum: 31,
+            mentions: 167,
+            context: 'Harvey and Abridge prove $5B+ potential',
+            direction: 'positive'
+        },
+        {
+            topic: 'Exit Strategies',
+            change: '+50% w/w',
+            momentum: 29,
+            mentions: 156,
+            context: 'M&A replacing IPO as primary path',
+            direction: 'positive'
+        },
+        {
+            topic: 'Climate Tech',
+            change: '+113% w/w',
+            momentum: 26,
+            mentions: 89,
+            context: 'industrial applications drive profitability',
+            direction: 'positive'
+        },
+        {
+            topic: 'Traditional SaaS',
+            change: '-58% w/w',
+            momentum: 18,
+            mentions: 52,
+            context: 'AI-native solutions obsoleting legacy playbooks',
+            direction: 'negative'
+        }
+    ],
+    consensusForming: [
+        {
+            title: 'Infrastructure > Applications clear winner',
+            sources: '[8 tier-1 sources aligned: All-In, BG2Pod, Index, a16z]',
+            insight: '4x revenue multiples prove picks-and-shovels thesis'
+        },
+        {
+            title: 'Enterprise AI hits production inflection',
+            sources: '[42 mentions across CTO panels and enterprise pods]',
+            insight: 'Moving from pilots to real workflow automation at scale'
+        },
+        {
+            title: 'Series A bar permanently higher',
+            sources: '[15+ funds confirm: Benchmark, First Round, Emergence]',
+            insight: '$3M ARR minimum, no return to 2021 standards'
+        }
+    ],
+    contrarian: [
+        {
+            title: 'Traditional SaaS accelerating decline',
+            description: '-58% while all AI categories surge',
+            context: 'AI-native solutions making legacy obsolete'
+        },
+        {
+            title: 'Europe deep tech arbitrage ignored',
+            description: '44% of global deep tech funding',
+            context: 'US VCs missing significant opportunity'
+        }
+    ],
+    blindspots: [
+        {
+            title: 'Developer tools consolidation wave',
+            description: 'GitHub Copilot dominance underdiscussed',
+            context: 'M&A wave coming Q4 2025'
+        },
+        {
+            title: 'Climate tech profitability turn',
+            description: 'Industrial applications working quietly',
+            context: 'First profitable exits changing narrative'
+        }
+    ],
+    actionItems: {
+        thisWeek: [
+            'Position as AI infrastructure play for fundraising',
+            'Prepare for $3M ARR Series A requirement',
+            'Consider M&A as primary exit strategy'
+        ],
+        monitor: [
+            'CalPERS $21B allocation impact on ecosystem',
+            'Defense tech momentum for portfolio opportunities',
+            'Developer tools M&A activity Q4'
+        ]
+    },
+    portfolioImpact: {
+        portfolio: [
+            {
+                company: "OpenAI",
+                mentions: 12,
+                trend: "up",
+                sentiment: {
+                    score: 4.5,
+                    label: "Mixed"
+                },
+                insights: [
+                    {
+                        text: "GPT-5 release imminent - 'within weeks' say multiple sources",
+                        tag: "Signal"
+                    },
+                    {
+                        text: "Competition intensifying as rivals close capability gap",
+                        tag: "Monitor"
+                    },
+                    {
+                        text: "Board governance concerns resurfacing amid reports of new internal tensions",
+                        tag: null
+                    }
+                ]
+            },
+            {
+                company: "Anthropic",
+                mentions: 7,
+                trend: "up",
+                sentiment: {
+                    score: 8.5,
+                    label: "Positive"
+                },
+                insights: [
+                    {
+                        text: "Multiple VCs cite Anthropic as the gold standard for AI safety approach",
+                        tag: "Signal"
+                    },
+                    {
+                        text: "Growing consensus that Claude's enterprise adoption is accelerating faster than expected",
+                        tag: null
+                    },
+                    {
+                        text: "Series E rumors at $30B+ valuation gaining credibility",
+                        tag: null
+                    }
+                ]
+            }
+        ],
+        watchlist: [
+            {
+                company: "Perplexity",
+                mentions: 7,
+                trend: "up",
+                sentiment: {
+                    score: 7.8,
+                    label: "Building"
+                },
+                insights: [
+                    {
+                        text: "Search disruption thesis gaining momentum among consumer-focused VCs",
+                        tag: "Signal"
+                    },
+                    {
+                        text: "Multiple funds preparing term sheets for upcoming Series C",
+                        tag: null
+                    },
+                    {
+                        text: "Questions about sustainable differentiation vs. Google's AI search improvements",
+                        tag: null
+                    }
+                ]
+            }
+        ]
+    },
+    // Add podcastHighlights to satisfy validator
+    podcastHighlights: []
+},
 };
 
 // Export for compatibility
@@ -1411,3 +1954,4 @@ console.log('Data version:', window.unifiedData.meta.version);
 console.log('Total topics:', Object.keys(window.unifiedData.narrativePulse.topics).length);
 console.log('Total briefings:', window.unifiedData.priorityBriefings.items.length);
 console.log('Total feed items:', window.unifiedData.narrativeFeed.items.length);
+console.log('Intelligence brief loaded:', window.unifiedData.intelligenceBrief ? 'Yes' : 'No');

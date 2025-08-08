@@ -76,10 +76,12 @@ const NotableSignals = {
                     labelEl.textContent = counts.notableDeals.trending;
                     break;
                 case 'portfolio-mentions':
-                    insightEl.textContent = data.portfolio.companies.length > 0 ? 
+                    // Use backup data for portfolio if available
+                    const portfolioData = window.backupData?.portfolio || data.portfolio || { companies: [] };
+                    insightEl.textContent = portfolioData.companies?.length > 0 ? 
                         counts.portfolioMentions.count + ' mentions detected' : 
                         'No companies configured';
-                    labelEl.textContent = data.portfolio.companies.length > 0 ?
+                    labelEl.textContent = portfolioData.companies?.length > 0 ?
                         counts.portfolioMentions.trending :
                         'Add to track mentions';
                     break;

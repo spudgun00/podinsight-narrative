@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Briefings - Dashboard Integration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        /* Dashboard Container */
+        .dashboard-section {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+        
+        .section-subtitle {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .view-all-link {
+            color: #4a7c59;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        /* Compact Card Grid */
+        .briefings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Compact Card Styles */
+        .briefing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .briefing-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .podcast-badge {
+            background: #1e293b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .episode-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .episode-info .separator {
+            color: #cbd5e1;
+        }
+        
+        .priority-tag {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: auto;
+        }
+        
+        .priority-tag.new-data {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        
+        .priority-tag.consensus {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
+        
+        .guest-info {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .card-summary {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 12px;
+        }
+        
+        .card-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            font-size: 11px;
+            color: #4a7c59;
+            text-decoration: none;
+        }
+        
+        .tag:hover {
+            text-decoration: underline;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .mentions {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        .mention-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .mention-count {
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .view-brief-btn {
+            background: #4a7c59;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .view-brief-btn:hover {
+            background: #365a42;
+            transform: translateY(-1px);
+        }
+        
+        /* Expanded Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Expanded Card (Magazine Layout) */
+        .expanded-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .expanded-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 32px 40px;
+            color: white;
+        }
+        
+        .expanded-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .expanded-podcast-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .expanded-podcast-logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 14px;
+        }
+        
+        .expanded-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .expanded-title {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        
+        .expanded-participants {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .participant {
+            font-size: 15px;
+        }
+        
+        .participant-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            display: inline-block;
+            width: 60px;
+        }
+        
+        .expanded-content {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .conversation-block {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .block-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        
+        .insight-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .insight-number {
+            width: 32px;
+            height: 32px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .sidebar {
+            background: #f8fafc;
+            padding: 40px 32px;
+            border-left: 1px solid #e2e8f0;
+        }
+        
+        .quote-block {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            color: white;
+        }
+        
+        .related-topics-block {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .topic-tags-expanded {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .topic-tag-expanded {
+            padding: 6px 12px;
+            background: #ecfdf5;
+            color: #4a7c59;
+            border-radius: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .topic-tag-expanded:hover {
+            background: #4a7c59;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-section">
+        <div class="section-header">
+            <div>
+                <div class="section-title">PRIORITY BRIEFINGS</div>
+                <div class="section-subtitle">WHAT REQUIRES YOUR ATTENTION TODAY</div>
+            </div>
+            <a href="#" class="view-all-link">ALL BRIEFINGS →</a>
+        </div>
+        
+        <div class="briefings-grid">
+            <!-- Compact Card 1 -->
+            <div class="briefing-card" onclick="openExpandedView(this, 1)">
+                <div class="card-header">
+                    <span class="podcast-badge">20VC</span>
+                    <div class="episode-info">
+                        <span>#2451</span>
+                        <span class="separator">•</span>
+                        <span>2d ago</span>
+                        <span class="separator">•</span>
+                        <span>60 min</span>
+                    </div>
+                    <span class="priority-tag">LP INTEL</span>
+                </div>
+                <div class="guest-info">Miles Grimshaw, CMU ($4B AUM)</div>
+                <h3 class="card-title">90% of LPs Shouldn't Be in Venture</h3>
+                <p class="card-summary">Top quartile venture returns only 1.8x DPI over 15 years. Multi-stage funds need $840B in exits for 4x on $7B funds - entire 2021 exit value.</p>
+                <div class="card-tags">
+                    <a href="#" class="tag">#VentureReturns</a>
+                    <a href="#" class="tag">#FundSizing</a>
+                    <a href="#" class="tag">#LPStrategy</a>
+                </div>
+                <div class="card-footer">
+                    <div class="mentions">
+                        <div class="mention-item">
+                            <span>📈</span>
+                            <span class="mention-count">Stripe (2)</span>
+                        </div>
+                        <div class="mention-item">
+                            <span>📍</span>
+                            <span class="mention-count">OpenAI (3)</span>
+                        </div>
+                    </div>
+                    <button class="view-brief-btn">View Full Brief →</button>
+                </div>
+            </div>
+            
+            <!-- Compact Card 2 -->
+            <div class="briefing-card" onclick="openExpandedView(this, 2)">
+                <div class="card-header">
+                    <span class="podcast-badge">All-In</span>
+                    <div class="episode-info">
+                        <span>3h ago</span>
+                        <span class="separator">•</span>
+                        <span>94 min</span>
+                        <span class="separator">•</span>
+                        <span>Score: 97</span>
+                    </div>
+                    <span class="priority-tag consensus">CONSENSUS FORMING</span>
+                </div>
+                <div class="guest-info">Chamath, Sacks, Friedberg & Calacanis</div>
+                <h3 class="card-title">AI Infrastructure vs Apps: The $70B Capital Allocation Shift</h3>
+                <p class="card-summary">Three major funds announced infrastructure pivots this week - when tier-1s align, the market follows.</p>
+                <div class="card-tags">
+                    <a href="#" class="tag">#Infrastructure</a>
+                    <a href="#" class="tag">#AIFunding</a>
+                    <a href="#" class="tag">#DefenseTech</a>
+                </div>
+                <div class="card-footer">
+                    <div class="mentions">
+                        <div class="mention-item">
+                            <span>📁</span>
+                            <span class="mention-count">Scale AI (1)</span>
+                        </div>
+                        <div class="mention-item">
+                            <span>👁</span>
+                            <span class="mention-count">Anthropic (2)</span>
+                        </div>
+                    </div>
+                    <button class="view-brief-btn">View Full Brief →</button>
+                </div>
+            </div>
+            
+            <!-- Compact Card 3 -->
+            <div class="briefing-card" onclick="openExpandedView(this, 3)">
+                <div class="card-header">
+                    <span class="podcast-badge">20VC</span>
+                    <div class="episode-info">
+                        <span>8h ago</span>
+                        <span class="separator">•</span>
+                        <span>82 min</span>
+                        <span class="separator">•</span>
+                        <span>Score: 92</span>
+                    </div>
+                    <span class="priority-tag new-data">NEW DATA</span>
+                </div>
+                <div class="guest-info">Bill Gurley (GP, Benchmark) + Harry Stebbings</div>
+                <h3 class="card-title">The Series A Apocalypse: Why $5M ARR Is The New $1M</h3>
+                <p class="card-summary">Benchmark officially raising Series A bar to $5M ARR for AI companies - other tier-1s following.</p>
+                <div class="card-tags">
+                    <a href="#" class="tag">#SeriesA</a>
+                    <a href="#" class="tag">#FundingBar</a>
+                    <a href="#" class="tag">#RunwayPlanning</a>
+                </div>
+                <div class="card-footer">
+                    <div class="mentions">
+                        <div class="mention-item">
+                            <span>📁</span>
+                            <span class="mention-count">Scale AI (1)</span>
+                        </div>
+                        <div class="mention-item">
+                            <span>👁</span>
+                            <span class="mention-count">OpenAI (2)</span>
+                        </div>
+                    </div>
+                    <button class="view-brief-btn">View Full Brief →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeExpandedView(event)">
+        <div class="expanded-card" onclick="event.stopPropagation()">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <script>
+        // Mock data for expanded views
+        const expandedData = {
+            1: {
+                podcast: '20VC',
+                title: '90% of LPs Shouldn\'t Be in Venture',
+                host: 'Harry Stebbings (20VC)',
+                guest: 'Miles Grimshaw (CMU, $4B AUM)',
+                conversation: 'Miles doesn\'t pull punches - "The math simply doesn\'t work for 90% of LPs." Harry asks for specifics, and Miles reveals CMU\'s analysis: top quartile venture returns only 1.8x DPI over 15 years. The conversation heats up when discussing fund sizes. Miles calculates that multi-stage funds need $840B in exits to generate 4x on their $7B funds - that\'s the entire 2021 exit value.',
+                insights: [
+                    'Top quartile venture returns only 1.8x DPI over 15 years - barely beating inflation',
+                    'Multi-stage funds need $840B in exits for 4x returns - mathematically impossible',
+                    'Only 5-10 firms consistently generate 3x+ net returns across multiple funds'
+                ],
+                quote: 'If you\'re not in the top 10 funds globally, you\'re better off in public equities. The illiquidity premium has become an illiquidity penalty.',
+                relatedTopics: ['#VentureReturns', '#FundSizing', '#LPStrategy', '#DPICrisis']
+            },
+            2: {
+                podcast: 'All-In',
+                title: 'AI Infrastructure vs Apps: The $70B Capital Allocation Shift',
+                host: 'Jason Calacanis (Moderator)',
+                guest: 'Chamath Palihapitiya, David Sacks, David Friedberg',
+                conversation: 'Chamath opens with stark data - 70% of Q2 AI funding went to infrastructure versus 30% to applications. Jason pushes back citing Jasper\'s decline, but Chamath counters that infrastructure enables entirely new categories. The debate heats up when Friedberg reveals their portfolio\'s pivot after seeing application layer margins compress to 20%.',
+                insights: [
+                    '70% of AI funding now flowing to infrastructure, complete reversal from 2023',
+                    'Application layer margins compressing to 20% while infrastructure holds 70%+',
+                    'Defense tech reclassified as "infrastructure" - opening floodgates for VC investment'
+                ],
+                quote: 'Every successful AI company is becoming an infrastructure company. The ones that don\'t will be eaten by OpenAI or Google.',
+                relatedTopics: ['#Infrastructure', '#AIFunding', '#DefenseTech', '#GPUEconomics']
+            },
+            3: {
+                podcast: '20VC',
+                title: 'The Series A Apocalypse: Why $5M ARR Is The New $1M',
+                host: 'Harry Stebbings (20VC)',
+                guest: 'Bill Gurley (GP, Benchmark)',
+                conversation: 'Bill Gurley doesn\'t mince words - "This is the most challenging Series A environment since 2008." Harry probes on specific metrics, and Bill reveals Benchmark\'s new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won\'t hit these numbers.',
+                insights: [
+                    'Series A bar: $5M ARR for AI applications, $3M for traditional SaaS',
+                    '40% of 2023 vintage seeds won\'t qualify for Series A at current burn',
+                    '30-month runway now table stakes - 18 months is "criminally negligent"'
+                ],
+                quote: 'Founders building with 18-month runways are playing Russian roulette. The Series A that should take 12 months will take 24.',
+                relatedTopics: ['#BurnRate', '#SeedExtensions', '#DownRounds', '#RunwayPlanning']
+            }
+        };
+        
+        function openExpandedView(card, id) {
+            const data = expandedData[id];
+            const modal = document.getElementById('modalOverlay');
+            const expandedCard = modal.querySelector('.expanded-card');
+            
+            // Build expanded content
+            expandedCard.innerHTML = `
+                <div class="expanded-header">
+                    <div class="expanded-header-top">
+                        <div class="expanded-podcast-info">
+                            <div class="expanded-podcast-logo">${data.podcast}</div>
+                            <div>
+                                <div style="font-size: 14px; opacity: 0.9;">The Twenty Minute VC</div>
+                                <div style="font-size: 13px; opacity: 0.7;">8h ago • 82 min • Score: 92</div>
+                            </div>
+                        </div>
+                        <div class="expanded-actions">
+                            <div class="action-btn" title="Read Transcript">📄</div>
+                            <div class="action-btn" title="Download">⬇</div>
+                            <div class="action-btn" title="Share">↗</div>
+                            <div class="action-btn" onclick="closeExpandedView()" title="Close">✕</div>
+                        </div>
+                    </div>
+                    <h1 class="expanded-title">${data.title}</h1>
+                    <div class="expanded-participants">
+                        <div class="participant">
+                            <span class="participant-label">HOST</span>
+                            <span>${data.host}</span>
+                        </div>
+                        <div class="participant">
+                            <span class="participant-label">GUEST</span>
+                            <span>${data.guest}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="expanded-content">
+                    <div class="main-content">
+                        <div class="conversation-block">
+                            <div class="block-label">THE CONVERSATION</div>
+                            <p style="font-size: 15px; line-height: 1.7; color: #334155;">
+                                ${data.conversation}
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <div class="block-label">KEY INSIGHTS</div>
+                            ${data.insights.map((insight, i) => `
+                                <div class="insight-item">
+                                    <div class="insight-number">${i + 1}</div>
+                                    <div style="font-size: 15px; line-height: 1.6; color: #1e293b;">
+                                        ${insight}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar">
+                        <div class="quote-block">
+                            <div class="block-label" style="color: rgba(255, 255, 255, 0.8);">ESSENTIAL QUOTE</div>
+                            <div style="font-size: 17px; line-height: 1.6; font-style: italic; margin-bottom: 16px;">
+                                "${data.quote}"
+                            </div>
+                            <div style="text-align: right; font-size: 14px; opacity: 0.9;">
+                                — ${data.guest.split('(')[0].trim()}
+                            </div>
+                        </div>
+                        
+                        <div class="related-topics-block">
+                            <div class="block-label">RELATED TOPICS</div>
+                            <div class="topic-tags-expanded">
+                                ${data.relatedTopics.map(topic => `
+                                    <a href="#" class="topic-tag-expanded">${topic}</a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeExpandedView(event) {
+            if (!event || event.target.id === 'modalOverlay' || event.currentTarget.classList.contains('action-btn')) {
+                const modal = document.getElementById('modalOverlay');
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeExpandedView();
+            }
+        });
+    </script>
+</body>
+</html>

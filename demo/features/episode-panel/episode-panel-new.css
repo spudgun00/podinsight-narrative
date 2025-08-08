@@ -1,0 +1,381 @@
+/* Episode Panel - Compact Responsive Design */
+
+/* CSS Variables for consistent spacing */
+:root {
+    --epb-padding-xs: 4px;
+    --epb-padding-sm: 8px;
+    --epb-padding-md: 12px;
+    --epb-padding-lg: 15px;
+    --epb-font-xs: 9px;
+    --epb-font-sm: 10px;
+    --epb-font-md: 11px;
+    --epb-font-lg: 13px;
+    --epb-font-xl: 15px;
+    --epb-font-xxl: 18px;
+}
+
+/* Episode Panel - Side Panel Layout */
+.episode-panel {
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 65% !important;
+    max-width: 900px !important;
+    height: 100vh !important;
+    background: white !important;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    z-index: 9999 !important;
+}
+
+/* Compact Header - 70px total */
+.epb-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    padding: var(--epb-padding-md) var(--epb-padding-lg) !important;
+    color: white !important;
+    flex-shrink: 0 !important;
+}
+
+.epb-header-top {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: var(--epb-padding-sm) !important;
+}
+
+/* Podcast Info */
+.epb-podcast-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--epb-padding-sm) !important;
+}
+
+.epb-logo {
+    width: 28px !important;
+    height: 28px !important;
+    background: white !important;
+    border-radius: 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    font-size: var(--epb-font-sm) !important;
+}
+
+.epb-podcast-name {
+    font-size: var(--epb-font-md) !important;
+    font-weight: 500 !important;
+    opacity: 0.9 !important;
+}
+
+.epb-meta {
+    font-size: var(--epb-font-sm) !important;
+    opacity: 0.7 !important;
+}
+
+/* Action Buttons */
+.epb-actions {
+    display: flex !important;
+    gap: var(--epb-padding-xs) !important;
+}
+
+.epb-btn {
+    width: 24px !important;
+    height: 24px !important;
+    background: rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: var(--epb-font-sm) !important;
+    cursor: pointer !important;
+}
+
+.epb-btn:hover {
+    background: rgba(255,255,255,0.2) !important;
+}
+
+/* Title */
+.epb-title {
+    font-size: var(--epb-font-xxl) !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 6px !important;
+}
+
+/* Single Line Host/Guest */
+.epb-participants {
+    font-size: var(--epb-font-md) !important;
+    opacity: 0.9 !important;
+}
+
+.epb-participants span {
+    margin-right: var(--epb-padding-md) !important;
+}
+
+.epb-label {
+    font-size: var(--epb-font-xs) !important;
+    opacity: 0.7 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Content Area */
+.epb-content {
+    display: grid !important;
+    grid-template-columns: 1fr 280px !important;
+    flex: 1 !important;
+    overflow: hidden !important;
+}
+
+/* Main Column */
+.epb-main {
+    padding: var(--epb-padding-lg) !important;
+    overflow-y: auto !important;
+}
+
+.epb-section {
+    margin-bottom: var(--epb-padding-md) !important;
+}
+
+.epb-section-title {
+    font-size: var(--epb-font-xs) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+    margin-bottom: 6px !important;
+    padding: 0 !important;
+}
+
+/* Conversation Box */
+.epb-conversation {
+    background: #f8fafc !important;
+    padding: var(--epb-padding-md) !important;
+    border-radius: 6px !important;
+    font-size: var(--epb-font-lg) !important;
+    line-height: 1.5 !important;
+    color: #334155 !important;
+}
+
+/* Key Insights */
+.epb-insight {
+    display: flex !important;
+    gap: var(--epb-padding-sm) !important;
+    padding: var(--epb-padding-sm) !important;
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    margin-bottom: var(--epb-padding-sm) !important;
+}
+
+.epb-insight-num {
+    width: 20px !important;
+    height: 20px !important;
+    background: #4a7c59 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: var(--epb-font-sm) !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+}
+
+.epb-insight-text {
+    font-size: var(--epb-font-md) !important;
+    line-height: 1.4 !important;
+    color: #1e293b !important;
+}
+
+/* Sidebar */
+.epb-sidebar {
+    background: #f8fafc !important;
+    padding: var(--epb-padding-md) !important;
+    border-left: 1px solid #e2e8f0 !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--epb-padding-md) !important;
+}
+
+/* Quote Block */
+.epb-quote {
+    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%) !important;
+    padding: var(--epb-padding-sm) var(--epb-padding-md) !important;
+    border-radius: 6px !important;
+    flex-shrink: 0 !important;
+}
+
+.epb-quote-text {
+    font-size: var(--epb-font-md) !important;
+    line-height: 1.3 !important;
+    color: white !important;
+    font-style: italic !important;
+    margin-bottom: 4px !important;
+}
+
+.epb-quote-author {
+    font-size: var(--epb-font-sm) !important;
+    color: rgba(255,255,255,0.9) !important;
+    text-align: right !important;
+}
+
+/* Horizontal Numbers Layout */
+.epb-numbers {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+}
+
+.epb-number {
+    background: white !important;
+    padding: var(--epb-padding-sm) var(--epb-padding-xs) !important;
+    border-radius: 5px !important;
+    text-align: center !important;
+}
+
+.epb-number-val {
+    font-size: var(--epb-font-xl) !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    display: block !important;
+}
+
+.epb-number-label {
+    font-size: var(--epb-font-xs) !important;
+    color: #64748b !important;
+    margin-top: 2px !important;
+}
+
+/* Side by Side Blocks */
+.epb-blocks {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+}
+
+.epb-block {
+    background: white !important;
+    padding: var(--epb-padding-sm) !important;
+    border-radius: 5px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.epb-block-label {
+    font-size: var(--epb-font-xs) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    color: #64748b !important;
+}
+
+.epb-block-count {
+    background: #4a7c59 !important;
+    color: white !important;
+    padding: 2px 6px !important;
+    border-radius: 10px !important;
+    font-size: var(--epb-font-xs) !important;
+    font-weight: 600 !important;
+}
+
+/* Topics */
+.epb-topics {
+    background: white !important;
+    padding: var(--epb-padding-sm) !important;
+    border-radius: 5px !important;
+}
+
+.epb-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--epb-padding-xs) !important;
+    margin-top: 6px !important;
+}
+
+.epb-tag {
+    padding: 3px var(--epb-padding-sm) !important;
+    background: #ecfdf5 !important;
+    color: #4a7c59 !important;
+    border-radius: 10px !important;
+    font-size: var(--epb-font-sm) !important;
+    font-weight: 500 !important;
+}
+
+/* Scrollbar Styling */
+.epb-main::-webkit-scrollbar,
+.epb-sidebar::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+.epb-main::-webkit-scrollbar-thumb,
+.epb-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1) !important;
+    border-radius: 2px !important;
+}
+
+/* Responsive Adjustments */
+@media (max-height: 768px) {
+    .epb-header {
+        padding: var(--epb-padding-sm) var(--epb-padding-md) !important;
+    }
+    
+    .epb-title {
+        font-size: 16px !important;
+    }
+    
+    .epb-section {
+        margin-bottom: var(--epb-padding-sm) !important;
+    }
+    
+    .epb-conversation {
+        padding: var(--epb-padding-sm) !important;
+    }
+    
+    .epb-main {
+        padding: var(--epb-padding-md) !important;
+    }
+    
+    .epb-sidebar {
+        padding: var(--epb-padding-md) var(--epb-padding-sm) !important;
+    }
+}
+
+@media (max-width: 1440px) {
+    .episode-panel {
+        width: 70% !important;
+    }
+}
+
+@media (max-width: 1366px) {
+    .episode-panel {
+        width: 75% !important;
+    }
+}
+
+/* Override any conflicting styles from old CSS */
+.ep-header,
+.ep-content,
+.ep-main,
+.ep-sidebar {
+    display: none !important;
+}
+
+/* Ensure our new classes take precedence */
+.episode-panel .epb-header,
+.episode-panel .epb-content,
+.episode-panel .epb-main,
+.episode-panel .epb-sidebar {
+    display: flex !important;
+}
+
+.episode-panel .epb-content {
+    display: grid !important;
+}

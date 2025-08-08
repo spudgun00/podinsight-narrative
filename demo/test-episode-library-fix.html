@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Library Fix Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .test-info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .test-info h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .test-info ul {
+            margin: 10px 0;
+        }
+        .test-button {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #365a42;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+        .success {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        .error {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        .warning {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Episode Library Fix Verification</h1>
+        
+        <div class="test-info">
+            <h3>✅ Fixes Applied:</h3>
+            <ul>
+                <li>Cache-busting parameters added to script tags (?v=20250108)</li>
+                <li>Removed convertEpisodesToLibraryFormat function</li>
+                <li>Episode Library now uses raw episode data directly</li>
+                <li>Shared briefing-card-renderer.js handles both components</li>
+            </ul>
+        </div>
+
+        <div class="test-info">
+            <h3>🔍 What to Check:</h3>
+            <ul>
+                <li>Episode Library cards should look EXACTLY like Priority Briefings cards</li>
+                <li>Cards should show: podcast badge, host, guest speakers, priority tags, scores, hashtags</li>
+                <li>3 columns in Episode Library vs 2 columns in Priority Briefings</li>
+                <li>No "KEY INSIGHTS" sections or colored backgrounds</li>
+            </ul>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <button class="test-button" onclick="window.open('demo.html', '_blank')">
+                Open Main Demo
+            </button>
+            <button class="test-button" onclick="clearCache()">
+                Clear Browser Cache
+            </button>
+            <button class="test-button" onclick="checkScripts()">
+                Check Script Loading
+            </button>
+        </div>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        function clearCache() {
+            const status = document.getElementById('status');
+            status.className = 'status warning';
+            status.innerHTML = `
+                <h4>⚠️ Manual Cache Clear Required:</h4>
+                <ol>
+                    <li>Open Developer Tools (F12 or Cmd+Option+I)</li>
+                    <li>Right-click the Refresh button</li>
+                    <li>Select "Empty Cache and Hard Reload"</li>
+                    <li>OR: Go to Network tab → Check "Disable cache" → Refresh</li>
+                </ol>
+                <p><strong>Why?</strong> Browser may be serving old JavaScript files even with cache-busting parameters.</p>
+            `;
+        }
+
+        function checkScripts() {
+            fetch('demo.html')
+                .then(r => r.text())
+                .then(html => {
+                    const status = document.getElementById('status');
+                    
+                    // Check for cache-busting parameters
+                    const hasCacheBusting = html.includes('briefing-card-renderer.js?v=20250108') &&
+                                           html.includes('episode-library.js?v=20250108');
+                    
+                    // Check for shared renderer
+                    const hasSharedRenderer = html.includes('shared/briefing-card-renderer.js');
+                    
+                    if (hasCacheBusting && hasSharedRenderer) {
+                        status.className = 'status success';
+                        status.innerHTML = `
+                            <h4>✅ Scripts Configured Correctly:</h4>
+                            <ul>
+                                <li>Cache-busting parameters present</li>
+                                <li>Shared renderer script included</li>
+                                <li>Episode Library should now display cards correctly</li>
+                            </ul>
+                            <p><strong>Next:</strong> Clear cache and test Episode Library button in main demo.</p>
+                        `;
+                    } else {
+                        status.className = 'status error';
+                        status.innerHTML = `
+                            <h4>❌ Script Configuration Issue:</h4>
+                            <ul>
+                                <li>Cache-busting: ${hasCacheBusting ? '✓' : '✗'}</li>
+                                <li>Shared renderer: ${hasSharedRenderer ? '✓' : '✗'}</li>
+                            </ul>
+                        `;
+                    }
+                })
+                .catch(err => {
+                    const status = document.getElementById('status');
+                    status.className = 'status error';
+                    status.innerHTML = `<h4>Error checking scripts:</h4><p>${err.message}</p>`;
+                });
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            checkScripts();
+        });
+    </script>
+</body>
+</html>

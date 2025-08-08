@@ -294,6 +294,173 @@ const PriorityBriefings = {
                 applyFilter();
             }, 100);
         }
+        
+        // Badge click functionality
+        const badges = container.querySelectorAll('.badge');
+        badges.forEach(badge => {
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetId = badge.getAttribute('data-badge-target');
+                const card = badge.closest('.episode-card');
+                const contentArea = card.querySelector('.badge-content-area');
+                
+                // Toggle active state
+                const wasActive = badge.classList.contains('active');
+                
+                // Remove active from all badges in this card
+                card.querySelectorAll('.badge').forEach(b => b.classList.remove('active'));
+                
+                // Clear content
+                contentArea.innerHTML = '';
+                contentArea.classList.remove('show');
+                
+                if (!wasActive) {
+                    // Activate this badge
+                    badge.classList.add('active');
+                    
+                    // Show content based on badge type
+                    const isPortfolio = targetId.includes('portfolio');
+                    const badgeNumber = targetId.split('-')[1];
+                    const count = parseInt(badge.querySelector('.badge-count').textContent);
+                    
+                    if (count > 0) {
+                        // Show mentions
+                        const content = isPortfolio ? 
+                            getPortfolioContent(badgeNumber) : 
+                            getWatchlistContent(badgeNumber);
+                        contentArea.innerHTML = content;
+                    } else {
+                        // Show empty state
+                        contentArea.innerHTML = `
+                            <div class="mentions-display">
+                                <div class="mentions-display-header">
+                                    ${isPortfolio ? 'PORTFOLIO' : 'WATCHLIST'} MENTIONS
+                                    <span class="mentions-count-label">No companies mentioned</span>
+                                </div>
+                                <div class="empty-state">
+                                    <div class="empty-icon">${isPortfolio ? '📁' : '👁'}</div>
+                                    <div class="empty-text">No ${isPortfolio ? 'portfolio' : 'watchlist'} companies mentioned in this episode</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    contentArea.classList.add('show');
+                }
+            });
+        });
+        
+        // Helper functions for content
+        function getPortfolioContent(cardNumber) {
+            // Mock data - would be replaced with actual data
+            const portfolioData = {
+                '1': [
+                    { company: 'Perplexity', time: '15:31', quote: 'Brad mentioned Perplexity\'s unique funding structure with convertible notes at $8B valuation...' }
+                ],
+                '4': [
+                    { company: 'AMD', time: '42:18', quote: 'Jensen discussed AMD\'s competitive positioning in the datacenter GPU market...' }
+                ]
+            };
+            
+            const mentions = portfolioData[cardNumber] || [];
+            
+            if (mentions.length === 0) {
+                return `
+                    <div class="mentions-display">
+                        <div class="mentions-display-header">
+                            PORTFOLIO MENTIONS
+                            <span class="mentions-count-label">No companies mentioned</span>
+                        </div>
+                        <div class="empty-state">
+                            <div class="empty-icon">📁</div>
+                            <div class="empty-text">No portfolio companies mentioned in this episode</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let html = `
+                <div class="mentions-display">
+                    <div class="mentions-display-header">
+                        PORTFOLIO MENTIONS
+                        <span class="mentions-count-label">${mentions.length} ${mentions.length === 1 ? 'company' : 'companies'}</span>
+                    </div>
+            `;
+            
+            mentions.forEach(mention => {
+                html += `
+                    <div class="mention-item">
+                        <div class="play-inline" title="Play quote">▶</div>
+                        <div class="mention-content">
+                            <div class="mention-header">
+                                <span class="mention-company">${mention.company}</span>
+                                <span class="mention-time">⏱ ${mention.time}</span>
+                            </div>
+                            <div class="mention-quote">"${mention.quote}"</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function getWatchlistContent(cardNumber) {
+            // Mock data - would be replaced with actual data
+            const watchlistData = {
+                '2': [
+                    { company: 'Stripe', time: '12:45', quote: 'Discussion about Stripe\'s infrastructure arbitrage strategy and their move away from AWS...' },
+                    { company: 'Databricks', time: '28:30', quote: 'Databricks mentioned as a key player in the data infrastructure consolidation wave...' }
+                ],
+                '5': [
+                    { company: 'Anduril', time: '8:15', quote: 'Palmer discussed Anduril\'s latest $1.5B raise and their autonomous systems platform...' }
+                ]
+            };
+            
+            const mentions = watchlistData[cardNumber] || [];
+            
+            if (mentions.length === 0) {
+                return `
+                    <div class="mentions-display">
+                        <div class="mentions-display-header">
+                            WATCHLIST MENTIONS
+                            <span class="mentions-count-label">No companies mentioned</span>
+                        </div>
+                        <div class="empty-state">
+                            <div class="empty-icon">👁</div>
+                            <div class="empty-text">No watchlist companies mentioned in this episode</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let html = `
+                <div class="mentions-display">
+                    <div class="mentions-display-header">
+                        WATCHLIST MENTIONS
+                        <span class="mentions-count-label">${mentions.length} ${mentions.length === 1 ? 'company' : 'companies'}</span>
+                    </div>
+            `;
+            
+            mentions.forEach(mention => {
+                html += `
+                    <div class="mention-item">
+                        <div class="play-inline" title="Play quote">▶</div>
+                        <div class="mention-content">
+                            <div class="mention-header">
+                                <span class="mention-company">${mention.company}</span>
+                                <span class="mention-time">⏱ ${mention.time}</span>
+                            </div>
+                            <div class="mention-quote">"${mention.quote}"</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
     }
 };
 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Compact Episode Panel</title>
+    
+    <!-- Load existing styles first -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .instructions {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .button-group {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #3a6449;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h1>Episode Panel Compact Mode Tester</h1>
+        
+        <div class="status" id="status">
+            Compact mode injector loaded. Click buttons below to test.
+        </div>
+        
+        <div class="button-group">
+            <button onclick="openPanel()">Open Episode Panel</button>
+            <button onclick="applyCompactMode()">Apply Compact Mode</button>
+            <button onclick="togglePanel()">Toggle Panel</button>
+        </div>
+        
+        <h2>How This Works:</h2>
+        <ol>
+            <li>The compact injector script is loaded automatically</li>
+            <li>It watches for the episode panel to open</li>
+            <li>When detected, it applies both CSS overrides and inline styles</li>
+            <li>You can also manually trigger it with the button above</li>
+        </ol>
+        
+        <h2>Key Changes Applied:</h2>
+        <ul>
+            <li>Panel width: 65% (max 900px)</li>
+            <li>Header height: ~75px (reduced from ~120px)</li>
+            <li>Title font: 18px (reduced from 24px)</li>
+            <li>HOST and GUEST on same line</li>
+            <li>Numbers in 3-column horizontal grid</li>
+            <li>All padding reduced by 40-50%</li>
+            <li>Scrollbars reduced to 4px</li>
+        </ul>
+        
+        <h2>Integration Instructions:</h2>
+        <ol>
+            <li>Add this script tag to your main HTML file:</li>
+            <li><code>&lt;script src="episode-panel-compact-injector.js"&gt;&lt;/script&gt;</code></li>
+            <li>The script will automatically apply compact mode when the panel opens</li>
+            <li>Or call <code>window.makeEpisodePanelCompact()</code> manually</li>
+        </ol>
+    </div>
+    
+    <!-- Load Episode Panel JavaScript -->
+    <script src="features/episode-panel/episode-panel.js"></script>
+    
+    <!-- Load Compact Injector -->
+    <script src="episode-panel-compact-injector.js"></script>
+    
+    <script>
+        // Initialize episode panel if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof EpisodePanel !== 'undefined') {
+                EpisodePanel.init();
+            }
+        });
+        
+        function openPanel() {
+            // Open the episode panel
+            if (typeof EpisodePanel !== 'undefined') {
+                // Sample data for testing
+                const sampleEpisode = {
+                    id: 'test-001',
+                    title: 'The Series A Apocalypse: Why $5M ARR Is The New $1M',
+                    podcast: '20VC',
+                    host: 'Harry Stebbings (20VC)',
+                    guest: 'Bill Gurley (GP, Benchmark)',
+                    duration: '52 min',
+                    timeAgo: '8h ago',
+                    score: 92,
+                    conversationSummary: "Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' The conversation explores specific metrics and Benchmark's new internal bar.",
+                    insights: [
+                        "Series A bar: $5M ARR for AI applications, $3M for traditional SaaS",
+                        "40% of 2023 vintage seeds won't qualify for Series A at current burn rates",
+                        "Infrastructure plays are the only exception"
+                    ],
+                    quote: {
+                        text: "Founders building with 18-month runways are playing Russian roulette.",
+                        author: "Bill Gurley at 28:44"
+                    },
+                    numbers: [
+                        { value: '30', label: 'Months of runway required' },
+                        { value: '$5M', label: 'New Series A ARR bar' },
+                        { value: '40%', label: '2023 seeds missing metrics' }
+                    ]
+                };
+                
+                EpisodePanel.open(sampleEpisode);
+                document.getElementById('status').textContent = 'Panel opened. Compact mode should apply automatically.';
+            }
+        }
+        
+        function applyCompactMode() {
+            if (window.makeEpisodePanelCompact) {
+                window.makeEpisodePanelCompact();
+                document.getElementById('status').textContent = 'Compact mode applied manually!';
+            } else {
+                document.getElementById('status').textContent = 'Compact injector not loaded yet.';
+            }
+        }
+        
+        function togglePanel() {
+            const panel = document.querySelector('.episode-panel-container');
+            if (panel) {
+                panel.classList.toggle('active');
+                const backdrop = document.querySelector('.episode-panel-backdrop');
+                if (backdrop) {
+                    backdrop.classList.toggle('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

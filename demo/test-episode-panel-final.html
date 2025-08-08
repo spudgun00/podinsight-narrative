@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Panel Test - Final Version</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-new.css">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f7f8fa;
+            padding: 2rem;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-header {
+            margin-bottom: 2rem;
+        }
+        
+        .test-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-header p {
+            color: #6b7280;
+        }
+        
+        .test-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .briefing-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .briefing-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .briefing-card.critical {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .briefing-card.opportunity {
+            border-left: 4px solid #10b981;
+        }
+        
+        .briefing-card.elevated {
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .podcast-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #6b7280;
+        }
+        
+        .priority-badge {
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .priority-badge.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .priority-badge.opportunity {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .priority-badge.elevated {
+            background: #fed7aa;
+            color: #ea580c;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .card-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+        
+        .view-brief-btn {
+            padding: 0.5rem 1rem;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .view-brief-btn:hover {
+            background: #3d6548;
+        }
+        
+        .test-info {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+        }
+        
+        .test-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.875rem;
+            color: #92400e;
+        }
+        
+        .test-info ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            font-size: 0.875rem;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Episode Panel Test - Final Version</h1>
+            <p>Click on any card or "View Brief" button to open the episode panel</p>
+        </div>
+        
+        <div class="test-info">
+            <h3>Testing Instructions:</h3>
+            <ul>
+                <li>Click on any card to open the episode panel</li>
+                <li>Panel should appear from the right side (not as a modal)</li>
+                <li>Panel should be 70% width with dark header</li>
+                <li>Content should fit on standard laptop screens (768px height)</li>
+                <li>ESC key or X button should close the panel</li>
+            </ul>
+        </div>
+        
+        <div class="test-cards">
+            <!-- Critical Priority Card -->
+            <div class="briefing-card critical" data-briefing-id="briefing-1">
+                <div class="card-header">
+                    <span class="podcast-name">All-In</span>
+                    <span class="priority-badge critical">Critical</span>
+                </div>
+                <h3 class="card-title">AI Infrastructure vs Apps: The $70B Capital Allocation Shift</h3>
+                <p class="card-meta">Chamath Palihapitiya • 3h ago • 94 min</p>
+                <button class="view-brief-btn" data-briefing-id="briefing-1">View Brief</button>
+            </div>
+            
+            <!-- Opportunity Priority Card -->
+            <div class="briefing-card opportunity" data-briefing-id="briefing-2">
+                <div class="card-header">
+                    <span class="podcast-name">20VC</span>
+                    <span class="priority-badge opportunity">Opportunity</span>
+                </div>
+                <h3 class="card-title">Defense Tech Revaluation: Anduril's Path to $14B</h3>
+                <p class="card-meta">Palmer Luckey • 12h ago • 67 min</p>
+                <button class="view-brief-btn" data-briefing-id="briefing-2">View Brief</button>
+            </div>
+            
+            <!-- Elevated Priority Card -->
+            <div class="briefing-card elevated" data-briefing-id="briefing-3">
+                <div class="card-header">
+                    <span class="podcast-name">BG2</span>
+                    <span class="priority-badge elevated">Elevated</span>
+                </div>
+                <h3 class="card-title">The Great Unbundling: Vertical SaaS Takes 70% of Enterprise Value</h3>
+                <p class="card-meta">Brad Gerstner + Bill Gurley • 1d ago • 81 min</p>
+                <button class="view-brief-btn" data-briefing-id="briefing-3">View Brief</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding: 1rem; background: #e0e7ff; border-radius: 6px;">
+            <p style="margin: 0; font-size: 0.875rem; color: #3730a3;">
+                <strong>Console Output:</strong> Open browser console (F12) to see debug messages
+            </p>
+        </div>
+    </div>
+    
+    <!-- Load Data -->
+    <script src="data/unified-data.js"></script>
+    
+    <!-- Load Episode Panel -->
+    <script src="features/episode-panel/episode-panel.js"></script>
+    
+    <!-- Test Script -->
+    <script>
+        console.log('Test page loaded');
+        console.log('Unified data available:', !!window.unifiedData);
+        console.log('Episode panel available:', !!window.episodePanel);
+        
+        if (window.unifiedData && window.unifiedData.priorityBriefings) {
+            console.log('Priority briefings count:', window.unifiedData.priorityBriefings.items.length);
+            console.log('Available briefing IDs:', 
+                window.unifiedData.priorityBriefings.items.map(item => item.id)
+            );
+        }
+        
+        // Add console logging for clicks
+        document.addEventListener('click', (e) => {
+            const target = e.target;
+            console.log('Click detected on:', target.tagName, target.className);
+            
+            if (target.closest('.briefing-card') || target.closest('.view-brief-btn')) {
+                console.log('Briefing card/button clicked');
+            }
+        });
+    </script>
+</body>
+</html>

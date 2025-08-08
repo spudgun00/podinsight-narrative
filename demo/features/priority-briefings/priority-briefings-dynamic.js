@@ -13,6 +13,39 @@ const PriorityBriefings = {
         // Generate HTML from data
         this.generateHTML(briefingsData);
         
+        // Add click handler for "ALL BRIEFINGS" link
+        const viewAllLink = container.querySelector('#view-all-briefings');
+        
+        if (viewAllLink) {
+            viewAllLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Open Episode Library overlay
+                if (window.EpisodeLibrary && window.EpisodeLibrary.open) {
+                    try {
+                        window.EpisodeLibrary.open();
+                    } catch (error) {
+                        console.error('Priority Briefings: Error opening Episode Library:', error);
+                    }
+                } else {
+                    // Try again after a delay
+                    setTimeout(() => {
+                        if (window.EpisodeLibrary && window.EpisodeLibrary.open) {
+                            window.EpisodeLibrary.open();
+                        } else {
+                            alert('Episode Library is not yet loaded. Please try again in a moment.');
+                        }
+                    }, 500);
+                }
+            });
+            
+            viewAllLink.style.cursor = 'pointer';
+            viewAllLink.style.textDecoration = 'underline';
+        } else {
+            console.error('Priority Briefings: ALL BRIEFINGS link not found!');
+        }
+        
         // Initialize interactive elements
         let grid = container.querySelector('.briefings-list.episode-grid, .episode-grid, .briefings-list');
         const showMoreBtn = container.querySelector('.show-more-btn');
@@ -325,6 +358,7 @@ const PriorityBriefings = {
                             <h2 class="section-title">PRIORITY BRIEFINGS</h2>
                             <span class="section-subtitle">What requires your attention today</span>
                         </div>
+                        <a href="#" class="view-all-link" id="view-all-briefings">ALL BRIEFINGS →</a>
                     </div>
                     <!-- Filter dropdown -->
                     <div class="filter-dropdown-container">
@@ -361,66 +395,95 @@ const PriorityBriefings = {
         this.container.innerHTML = html;
     },
     
+    // HTML escaping helper function for security
+    escapeHTML: function(str) {
+        if (typeof str !== 'string') return '';
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag)
+        );
+    },
+
     // Generate individual briefing card
     generateBriefingCard: function(briefing) {
-        // Map priority levels to CSS classes
-        const priorityClass = briefing.priority === 'critical' ? 'priority-critical' : 
-                            briefing.priority === 'opportunity' ? 'priority-opportunity' : 
+        // Access cardView data
+        const card = briefing.cardView;
+        
+        // Map priorityTag to CSS classes
+        const priorityClass = card.priorityTag === 'Consensus Forming' ? 'priority-critical' :
+                            card.priorityTag === 'New Data' ? 'priority-opportunity' :
+                            card.priorityTag === 'Portfolio Impact' ? 'priority-elevated' :
+                            card.priorityTag === 'LP Intel' ? 'priority-elevated' :
+                            card.priorityTag === 'Contrarian View' ? 'priority-opportunity' :
                             'priority-elevated';
         
-        // Map podcast names to avatar images (you may need to adjust these)
+        // Map podcast names to avatar images
         const avatarMap = {
             'All-In': 'images/allin.png',
-            'All-In Emergency Pod': 'images/allin.png', // Legacy support
+            '20VC': 'images/20vc.jpeg',
             'The Twenty Minute VC': 'images/20vc.jpeg',
+            'The Information\'s 411': 'images/theinformation.png',
             'Capital Allocators': 'images/capital allocators.webp',
-            'Institutional Investor Allocator': 'images/capital allocators.webp', // Legacy support
             'Acquired': 'images/acquired.jpeg',
-            'The Tim Ferriss Show': 'images/timf.jpeg',
+            'Invest Like the Best': 'images/investlikethebest.jpeg',
+            'The Logan Bartlett Show': 'images/logan.jpeg',
+            'Stratechery': 'images/stratechery.jpeg',
+            'Khosla Ventures Podcast': 'images/khosla.png',
             'Indie Hackers': 'images/indiehackers.png',
+            'The Tim Ferriss Show': 'images/timf.jpeg',
             'This Week in Startups': 'images/theweekinstartups.jpeg',
             'The Knowledge Project': 'images/knowledgeproject.webp',
-            'BG2': 'images/bg2.png',
             'BG2Pod': 'images/bg2.png',
-            'Changelog': 'images/changelog.png',
-            'Invest Like the Best': 'images/investlikethebest.jpeg',
-            'Stratechery': 'images/stratechery.jpeg'
+            'Changelog': 'images/changelog.png'
         };
         
-        const avatarSrc = avatarMap[briefing.podcast] || 'images/default-podcast.jpeg';
+        const avatarSrc = avatarMap[card.podcast] || 'images/20vc.jpeg'; // Use 20vc as fallback
+        
+        // Build hashtags string
+        const hashtagsHtml = card.hashtags && card.hashtags.length > 0
+            ? card.hashtags.map(tag => `<span class="hashtag">${this.escapeHTML(tag)}</span>`).join(' ')
+            : '';
         
         return `
-            <div class="episode-card ${priorityClass}">
+            <div class="episode-card ${priorityClass}" data-id="${briefing.id}">
                 <div class="episode-header">
                     <div class="podcast-info">
                         <div class="podcast-avatar">
-                            <img src="${avatarSrc}" alt="${briefing.podcast}" />
+                            <img src="${avatarSrc}" alt="${this.escapeHTML(card.podcast)}" />
                         </div>
                         <div class="podcast-details">
-                            <div class="podcast-name">${briefing.podcast}</div>
-                            <div class="episode-time">${briefing.time} • ${briefing.duration} • <span style="color: var(--sage); font-weight: 600;">${briefing.influence}</span></div>
+                            <div class="podcast-meta-line">
+                                <span class="podcast-name">${this.escapeHTML(card.podcast)}</span>
+                                <span class="separator">•</span>
+                                <span class="time-ago">${this.escapeHTML(card.time)}</span>
+                                <span class="separator">•</span>
+                                <span class="duration">${this.escapeHTML(card.duration)}</span>
+                                <span class="separator">•</span>
+                                <span class="score-label">Score: <strong>${card.score}</strong></span>
+                            </div>
+                            <div class="priority-tag-line">
+                                <span class="episode-signal ${priorityClass.includes('critical') ? 'priority-red' : priorityClass.includes('opportunity') ? 'priority-green' : ''}">${this.escapeHTML(card.priorityTag)}</span>
+                                ${hashtagsHtml}
+                            </div>
                         </div>
                     </div>
-                    <div class="episode-signal ${briefing.priority === 'critical' ? 'priority-red' : briefing.priority === 'opportunity' ? 'priority-green' : ''}">${briefing.priorityLabel}</div>
                 </div>
-                <h3 class="episode-title">${briefing.title}</h3>
-                <p class="episode-guest">Guest: ${briefing.guest}</p>
-                <div class="key-insights">
-                    <div class="key-insights-label">Key Insights</div>
-                    <ul class="insight-list">
-                        ${briefing.keyInsights.map(insight => `<li>${insight}</li>`).join('')}
-                    </ul>
+                <div class="episode-guest-line">
+                    ${this.escapeHTML(card.guests)}
                 </div>
-                <div class="additional-signals">
-                    ${briefing.signals.map(signal => `<span class="signal-tag ${signal.type}">${signal.text}</span>`).join('')}
+                <h3 class="episode-title">"${this.escapeHTML(card.title)}"</h3>
+                <div class="episode-why-care">
+                    <strong>Why You Should Care:</strong> ${this.escapeHTML(card.whyCare)}
                 </div>
+                ${card.socialProof ? `<div class="episode-social-proof">${this.escapeHTML(card.socialProof)}</div>` : ''}
+                ${this.generateMentionsSection(card)}
                 <div class="episode-footer">
-                    <div class="episode-stats">
-                        <span>${briefing.time}</span>
-                        <span>•</span>
-                        <span>${briefing.duration}</span>
-                    </div>
-                    <a href="#" class="episode-action">View Full Brief →</a>
+                    <button class="episode-action" type="button">View Full Brief →</button>
                 </div>
             </div>
         `;
@@ -428,8 +491,8 @@ const PriorityBriefings = {
     
     // Populate filter dropdown with unique podcasts
     populateFilterOptions: function(briefings, filterSelect) {
-        // Get unique podcast names
-        const podcasts = [...new Set(briefings.map(b => b.podcast))];
+        // Get unique podcast names from cardView
+        const podcasts = [...new Set(briefings.map(b => b.cardView.podcast))];
         
         // Add podcast options after "All Episodes"
         podcasts.forEach(podcast => {
@@ -438,6 +501,124 @@ const PriorityBriefings = {
             option.textContent = podcast;
             filterSelect.appendChild(option);
         });
+    },
+    
+    // Get truncated summary based on screen size
+    getTruncatedSummary: function(summary) {
+        const isMobile = window.innerWidth <= 768;
+        const maxLength = isMobile ? 100 : 150;
+        
+        if (summary.length <= maxLength) {
+            return summary;
+        }
+        
+        return summary.substring(0, maxLength) + '...';
+    },
+    
+    // Generate mentions section for portfolio and watchlist
+    generateMentionsSection: function(card) {
+        const hasMentions = (card.portfolioMentions && Object.keys(card.portfolioMentions).length > 0) ||
+                          (card.watchlistMentions && Object.keys(card.watchlistMentions).length > 0);
+        
+        if (!hasMentions) return '';
+        
+        let html = '<div class="mentions-section">';
+        
+        // Portfolio mentions
+        if (card.portfolioMentions && Object.keys(card.portfolioMentions).length > 0) {
+            html += '<span class="mention-badge">📊 Portfolio: ';
+            const mentions = Object.entries(card.portfolioMentions)
+                .map(([company, count]) => `${this.escapeHTML(company)} (${count})`)
+                .join(', ');
+            html += mentions;
+            html += '</span>';
+        }
+        
+        // Watchlist mentions  
+        if (card.watchlistMentions && Object.keys(card.watchlistMentions).length > 0) {
+            if (card.portfolioMentions && Object.keys(card.portfolioMentions).length > 0) {
+                html += ' <span class="separator">|</span> ';
+            }
+            html += '<span class="mention-badge">📍 Watchlist: ';
+            const mentions = Object.entries(card.watchlistMentions)
+                .map(([company, count]) => `${this.escapeHTML(company)} (${count})`)
+                .join(', ');
+            html += mentions;
+            html += '</span>';
+        }
+        
+        html += '</div>';
+        return html;
+    },
+    
+    // Get episode info (episode number and host)
+    getEpisodeInfo: function(briefing) {
+        // Map of podcast to host names and episode numbers
+        const podcastInfo = {
+            'All-In': { host: 'Chamath, Sacks, Friedberg & Calacanis', episode: 'E147' },
+            'The Twenty Minute VC': { host: 'Harry Stebbings', episode: '#892' },
+            'Capital Allocators': { host: 'Ted Seides', episode: 'EP324' },
+            'BG2Pod': { host: 'Brad Gerstner & Bill Gurley', episode: '#12' },
+            'This Week in Startups': { host: 'Jason Calacanis', episode: 'E1892' },
+            'Invest Like the Best': { host: 'Patrick O\'Shaughnessy', episode: 'EP324' },
+            'Acquired': { host: 'Ben Gilbert & David Rosenthal', episode: 'S8E4' },
+            'The Tim Ferriss Show': { host: 'Tim Ferriss', episode: '#712' },
+            'Changelog': { host: 'Adam Stacoviak & Jerod Santo', episode: '#568' },
+            'The Knowledge Project': { host: 'Shane Parrish', episode: '#772' }
+        };
+        
+        const info = podcastInfo[briefing.podcast] || { host: 'Host', episode: '#001' };
+        return `${info.episode} • ${info.host}`;
+    },
+    
+    // Truncate summary to specific number of sentences
+    truncateSummary: function(summary, targetSentences = 3) {
+        if (!summary) return summary;
+        
+        // Split by sentence endings (period followed by space or end of string)
+        const sentences = summary.match(/[^.!?]+[.!?]+/g) || [];
+        
+        if (sentences.length <= targetSentences) {
+            return summary;
+        }
+        
+        // Take first N sentences
+        let truncated = sentences.slice(0, targetSentences).join('').trim();
+        
+        // If result is too short (less than 100 chars), add one more sentence if available
+        if (truncated.length < 100 && sentences.length > targetSentences) {
+            truncated = sentences.slice(0, targetSentences + 1).join('').trim();
+        }
+        
+        // Add .. after the final punctuation if we truncated
+        if (truncated.endsWith('.')) {
+            return truncated.slice(0, -1) + '...';
+        } else if (truncated.endsWith('!') || truncated.endsWith('?')) {
+            return truncated + '..';
+        }
+        
+        return truncated;
+    },
+    
+    // Helper to parse influence string like "High (97)" into label and score
+    parseInfluence: function(influenceStr) {
+        const match = influenceStr.match(/^(\w+)\s*\((\d+)\)$/);
+        if (match) {
+            return {
+                label: match[1],
+                score: match[2]
+            };
+        }
+        return {
+            label: influenceStr,
+            score: ''
+        };
+    },
+    
+    // Helper function to wrap numbers/percentages in spans for emphasis
+    wrapMetrics: function(text) {
+        // Matches: $20B, 70%, sub-20%, 30%, numbers with B/M/K suffix
+        return text.replace(/(\$?\d+(?:\.\d+)?[BMK]?%?|\d+%|sub-\d+%)/g, '<span class="insight-metric">$1</span>');
     }
 };
 

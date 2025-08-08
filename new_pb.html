@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority Briefing - Expanded View</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f1f5f9;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .expanded-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        /* Header Section */
+        .card-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 32px 40px;
+            color: white;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .podcast-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .podcast-logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 14px;
+        }
+        
+        .podcast-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .podcast-name {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .episode-meta {
+            font-size: 13px;
+            opacity: 0.7;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .episode-title {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        
+        .participants {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .participant {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        
+        .participant-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            width: 60px;
+        }
+        
+        /* Content Section */
+        .card-content {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .conversation-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        
+        .conversation-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #334155;
+        }
+        
+        .insights-section {
+            margin-bottom: 32px;
+        }
+        
+        .insight-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        
+        .insight-item:hover {
+            border-color: #4a7c59;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.1);
+        }
+        
+        .insight-number {
+            width: 32px;
+            height: 32px;
+            background: #4a7c59;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .insight-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: #f8fafc;
+            padding: 40px 32px;
+            border-left: 1px solid #e2e8f0;
+        }
+        
+        .quote-block {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+        
+        .quote-block .section-label {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+        }
+        
+        .quote-text {
+            font-size: 17px;
+            line-height: 1.6;
+            font-style: italic;
+            color: white;
+            margin-bottom: 16px;
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .numbers-block {
+            margin-bottom: 32px;
+        }
+        
+        .number-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .number-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .number-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .mentions-block {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mentions-block:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mentions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mentions-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+        
+        .mentions-count {
+            background: #4a7c59;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .related-topics {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .topic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .topic-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #ecfdf5;
+            color: #4a7c59;
+            border-radius: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .topic-tag:hover {
+            background: #4a7c59;
+            color: white;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="expanded-card">
+        <!-- Header -->
+        <div class="card-header">
+            <div class="header-top">
+                <div class="podcast-info">
+                    <div class="podcast-logo">20VC</div>
+                    <div class="podcast-details">
+                        <div class="podcast-name">The Twenty Minute VC</div>
+                        <div class="episode-meta">
+                            <span>8h ago</span>
+                            <span>•</span>
+                            <span>82 min</span>
+                            <span>•</span>
+                            <span>Score: 92</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="action-btn" title="Read Transcript">📄</div>
+                    <div class="action-btn" title="Download">⬇</div>
+                    <div class="action-btn" title="Share">↗</div>
+                    <div class="action-btn" title="Close">✕</div>
+                </div>
+            </div>
+            <h1 class="episode-title">The Series A Apocalypse: Why $5M ARR Is The New $1M</h1>
+            <div class="participants">
+                <div class="participant">
+                    <span class="participant-label">HOST</span>
+                    <span>Harry Stebbings (20VC)</span>
+                </div>
+                <div class="participant">
+                    <span class="participant-label">GUEST</span>
+                    <span>Bill Gurley (GP, Benchmark)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="card-content">
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="conversation-section">
+                    <div class="section-label">THE CONVERSATION</div>
+                    <div class="conversation-text">
+                        Bill Gurley doesn't mince words - 'This is the most challenging Series A environment since 2008.' Harry probes on specific metrics, and Bill reveals Benchmark's new internal bar: $5M ARR for AI companies, $3M for everything else. The conversation turns when Bill shares that 40% of their 2023 seed portfolio won't hit these numbers. He advocates for 30-month runways, calling the standard 18-month advice 'criminally negligent.' When Harry asks about exceptions, Bill is firm: 'Infrastructure plays only - they have different unit economics.'
+                    </div>
+                </div>
+                
+                <div class="insights-section">
+                    <div class="section-label">KEY INSIGHTS</div>
+                    <div class="insight-item">
+                        <div class="insight-number">1</div>
+                        <div class="insight-text">Series A bar: $5M ARR for AI applications, $3M for traditional SaaS - no exceptions unless you're infrastructure</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-number">2</div>
+                        <div class="insight-text">40% of 2023 vintage seeds won't qualify for Series A at current burn rates - extension rounds becoming the norm</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-number">3</div>
+                        <div class="insight-text">30-month runway now table stakes - 18 months is 'criminally negligent' in this environment</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="quote-block">
+                    <div class="section-label">ESSENTIAL QUOTE</div>
+                    <div class="quote-text">"Founders building with 18-month runways are playing Russian roulette. The Series A that should take 12 months will take 24."</div>
+                    <div class="quote-author">— Bill Gurley at 28:44</div>
+                </div>
+                
+                <div class="numbers-block">
+                    <div class="section-label">NOTABLE NUMBERS</div>
+                    <div class="number-item">
+                        <span class="number-label">New ARR Bar</span>
+                        <span class="number-value">$5M</span>
+                    </div>
+                    <div class="number-item">
+                        <span class="number-label">Seeds Missing Target</span>
+                        <span class="number-value">40%</span>
+                    </div>
+                    <div class="number-item">
+                        <span class="number-label">Required Runway</span>
+                        <span class="number-value">30 months</span>
+                    </div>
+                </div>
+                
+                <div class="mentions-block">
+                    <div class="mentions-header">
+                        <span class="mentions-label">📁 PORTFOLIO</span>
+                        <span class="mentions-count">1</span>
+                    </div>
+                </div>
+                
+                <div class="mentions-block">
+                    <div class="mentions-header">
+                        <span class="mentions-label">👁 WATCHLIST</span>
+                        <span class="mentions-count">2</span>
+                    </div>
+                </div>
+                
+                <div class="related-topics">
+                    <div class="section-label">RELATED TOPICS</div>
+                    <div class="topic-tags">
+                        <a href="#" class="topic-tag">#BurnRate</a>
+                        <a href="#" class="topic-tag">#SeedExtensions</a>
+                        <a href="#" class="topic-tag">#DownRounds</a>
+                        <a href="#" class="topic-tag">#RunwayPlanning</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

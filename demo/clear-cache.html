@@ -1,0 +1,27 @@
+<\!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Cache</title>
+    <script>
+        // Force reload all resources
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names)
+                    caches.delete(name);
+            });
+        }
+        
+        // Clear local storage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Redirect to demo with timestamp
+        setTimeout(() => {
+            window.location.href = '/demo.html?' + Date.now();
+        }, 100);
+    </script>
+</head>
+<body>
+    <h1>Clearing cache and reloading...</h1>
+</body>
+</html>

@@ -32,27 +32,35 @@
     
     <!-- Legend moved outside chart area -->
     <div class="pulse-legend">
-        <div class="legend-item" data-mentions="anthropic,openai">
-            <span class="legend-dot" style="background: var(--sage);"></span>
-            <span class="legend-label">AI Agents</span>
-            <span class="legend-value" style="color: var(--sage);">+85%</span>
+        <div class="legend-item" data-topic="ai-infrastructure">
+            <span class="legend-dot" style="background: #4a7c59;"></span>
+            <span class="legend-label">AI Infrastructure</span>
+            <span class="legend-value" style="color: #4a7c59;">+64%</span>
         </div>
-        <div class="legend-item">
-            <span class="legend-dot" style="background: var(--amber-glow);"></span>
-            <span class="legend-label">Capital Efficiency</span>
-            <span class="legend-value" style="color: var(--amber-glow);">+17%</span>
+        <div class="legend-item" data-topic="enterprise-agents">
+            <span class="legend-dot" style="background: #f4a261;"></span>
+            <span class="legend-label">Enterprise Agents</span>
+            <span class="legend-value" style="color: #f4a261;">+107%</span>
         </div>
-        <div class="legend-item">
-            <span class="legend-dot" style="background: var(--slate-blue);"></span>
-            <span class="legend-label">DePIN</span>
-            <span class="legend-value" style="color: var(--slate-blue);">+190%</span>
+        <div class="legend-item" data-topic="defense-tech">
+            <span class="legend-dot" style="background: #5a6c8c;"></span>
+            <span class="legend-label">Defense Tech</span>
+            <span class="legend-value" style="color: #5a6c8c;">+111%</span>
         </div>
-        <div class="legend-item">
-            <span class="legend-dot" style="background: var(--dusty-rose);"></span>
-            <span class="legend-label">B2B SaaS</span>
-            <span class="legend-value" style="color: var(--dusty-rose);">+3%</span>
+        <div class="legend-item" data-topic="exit-strategies">
+            <span class="legend-dot" style="background: #c77d7d;"></span>
+            <span class="legend-label">Exit Strategies</span>
+            <span class="legend-value" style="color: #c77d7d;">+50%</span>
+        </div>
+        <div class="legend-item" data-topic="vertical-ai">
+            <span class="legend-dot" style="background: #8a68a8;"></span>
+            <span class="legend-label">Vertical AI</span>
+            <span class="legend-value" style="color: #8a68a8;">+60%</span>
         </div>
     </div>
+    
+    <!-- Legend tooltip (hidden by default) -->
+    <div id="legendTooltip" class="legend-tooltip"></div>
 
     <div class="chart-wrapper">
         <!-- Filter indicator (hidden by default) -->

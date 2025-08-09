@@ -6,6 +6,7 @@ const NarrativePulse = {
     activeFilter: null,
     container: null,
     currentTimeRange: '7 days', // Track current time range
+    hasAnimatedOnLoad: false, // Track if initial animation has run
     
     // Chart configuration
     chartWidth: 800,
@@ -398,7 +399,25 @@ const NarrativePulse = {
         // Initialize interactions after a small delay to ensure DOM is ready
         setTimeout(() => {
             this.initMomentumView(); // Initialize interactions
-        }, 50);
+            // Only animate on very first load
+            if (!this.hasAnimatedOnLoad) {
+                // Set initial legend values to 0%
+                const legendItems = this.container.querySelectorAll('.legend-item');
+                legendItems.forEach(item => {
+                    const valueElement = item.querySelector('.legend-value');
+                    if (valueElement) {
+                        const finalValue = valueElement.textContent;
+                        const isPositive = finalValue.includes('+');
+                        valueElement.setAttribute('data-final', finalValue);
+                        valueElement.textContent = isPositive ? '+0%' : '0%';
+                    }
+                });
+                
+                // Run animation
+                this.animateChartOnLoad();
+                this.hasAnimatedOnLoad = true;
+            }
+        }, 100);
         
         this.addTouchSupport(); // Add touch event support
         
@@ -430,6 +449,13 @@ const NarrativePulse = {
         if (filterClearBtn) {
             filterClearBtn.addEventListener('click', this.clearTopicFilter.bind(this));
         }
+        
+        // Legend item hover handlers
+        const legendItems = container.querySelectorAll('.legend-item');
+        legendItems.forEach(item => {
+            item.addEventListener('mouseenter', this.showLegendTooltip.bind(this));
+            item.addEventListener('mouseleave', this.hideLegendTooltip.bind(this));
+        });
         
         // Topic customization button
         const customizeBtn = container.querySelector('[data-action="customizeTopics"]');
@@ -1432,9 +1458,20 @@ const NarrativePulse = {
                     }
                 }
                 
+                // Calculate animation delay based on topic index
+                const topicIndex = this.selectedTopics.indexOf(p.topic);
+                const animationDelay = topicIndex * 0.1; // 100ms stagger
+                
+                // Only hide initially if this is the first load
+                const initialStyle = !this.hasAnimatedOnLoad ? 
+                    `stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0;` : 
+                    '';
+                
                 return `<g class="topic-line chart-transition" data-topic="${p.topic}" data-momentum="${p.momentum}" data-color="${p.color}">
                     <path d="${pathData}" 
-                          fill="none" stroke="${p.color}" stroke-width="3" class="topic-path animate-path chart-transition"/>
+                          fill="none" stroke="${p.color}" stroke-width="3" 
+                          class="topic-path"
+                          style="${initialStyle}"/>
                     <!-- Static dots at data points -->
                     ${this.xPositions.map((x, i) => `
                         <circle cx="${x}" cy="${yPositions[i]}" r="3" fill="${p.color}" 
@@ -1860,6 +1897,129 @@ const NarrativePulse = {
         }, 300); // Increased delay for consensus view
     },
     
+    // Animate chart on page load
+    animateChartOnLoad: function() {
+        const paths = this.container.querySelectorAll('.topic-path');
+        const legendItems = this.container.querySelectorAll('.legend-item');
+        
+        // Map topic names to legend keys for matching
+        const topicToLegendKey = {
+            'AI Infrastructure': 'ai-infrastructure',
+            'Enterprise Agents': 'enterprise-agents', 
+            'Defense Tech': 'defense-tech',
+            'Exit Strategies': 'exit-strategies',
+            'Vertical AI': 'vertical-ai'
+        };
+        
+        // Simply animate in DOM order (left to right cascade)
+        paths.forEach((path, index) => {
+            const parentG = path.parentElement;
+            const topic = parentG.dataset.topic;
+            const length = path.getTotalLength();
+            
+            // Ensure proper initial state
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            path.style.opacity = '1'; // Make visible
+            
+            // Apply animation with stagger
+            setTimeout(() => {
+                path.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.42, 0, 0.58, 1)';
+                path.style.strokeDashoffset = '0';
+            }, index * 100);
+            
+            // Find corresponding legend item
+            const legendKey = topicToLegendKey[topic];
+            const legendItem = Array.from(legendItems).find(legendEl => 
+                legendEl.getAttribute('data-topic') === legendKey
+            );
+            
+            if (legendItem) {
+                const valueElement = legendItem.querySelector('.legend-value');
+                if (valueElement) {
+                    // Get final value from data attribute
+                    const finalValue = valueElement.getAttribute('data-final') || valueElement.textContent;
+                    const numericValue = parseInt(finalValue.replace(/[^0-9-]/g, ''));
+                    const isPositive = finalValue.includes('+');
+                    const finalText = finalValue;
+                    
+                    // Start counting animation when this line starts drawing
+                    setTimeout(() => {
+                        let currentValue = 0;
+                        const duration = 1000; // 1 second
+                        const frames = 30;
+                        const increment = numericValue / frames;
+                        const frameTime = duration / frames;
+                        
+                        const countInterval = setInterval(() => {
+                            currentValue += increment;
+                            if (currentValue >= numericValue) {
+                                currentValue = numericValue;
+                                valueElement.textContent = finalText; // Use exact final value
+                                clearInterval(countInterval);
+                            } else {
+                                valueElement.textContent = (isPositive ? '+' : '') + Math.round(currentValue) + '%';
+                            }
+                        }, frameTime);
+                    }, index * 100); // Same delay as line animation
+                }
+            }
+        });
+    },
+    
+    // Show legend tooltip with powerful quote
+    showLegendTooltip: function(event) {
+        const legendItem = event.currentTarget;
+        const topic = legendItem.dataset.topic;
+        const tooltip = document.getElementById('legendTooltip');
+        
+        if (!tooltip) return;
+        
+        // Define the most powerful quotes for each topic
+        const quotes = {
+            'ai-infrastructure': '"Infrastructure capturing 70% of AI dollars confirmed"',
+            'enterprise-agents': '"$2B invested in agent startups H1 2025 confirmed"',
+            'defense-tech': '"Bipartisan support creating 10-year visibility"',
+            'exit-strategies': '"VCs adjusting underwriting to M&A multiples"',
+            'vertical-ai': '"Every vertical racing for its champion"'
+        };
+        
+        const quote = quotes[topic];
+        if (!quote) return;
+        
+        // Set tooltip content
+        tooltip.innerHTML = `<div class="legend-tooltip-content">${quote}</div>`;
+        
+        // Position tooltip above the legend item
+        const rect = legendItem.getBoundingClientRect();
+        const tooltipWidth = 250; // Approximate width
+        const tooltipLeft = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+        
+        tooltip.style.left = Math.max(10, Math.min(tooltipLeft, window.innerWidth - tooltipWidth - 10)) + 'px';
+        tooltip.style.top = (rect.top - 45) + 'px';
+        tooltip.style.display = 'block';
+        
+        // Add visible class after a tiny delay for animation
+        setTimeout(() => {
+            tooltip.classList.add('visible');
+        }, 10);
+    },
+    
+    // Hide legend tooltip
+    hideLegendTooltip: function() {
+        const tooltip = document.getElementById('legendTooltip');
+        if (!tooltip) return;
+        
+        tooltip.classList.remove('visible');
+        
+        // Hide completely after transition
+        setTimeout(() => {
+            if (!tooltip.classList.contains('visible')) {
+                tooltip.style.display = 'none';
+            }
+        }, 200);
+    },
+    
     // Create loading skeleton
     createLoadingSkeleton: function() {
         const chartContent = this.container.querySelector('#chartContent');
@@ -2163,34 +2323,34 @@ const NarrativePulse = {
         const legend = this.container.querySelector('.pulse-legend');
         const currentData = this.getCurrentData();
         
-        // Get colors and calculate momentum dynamically
-        const topicColors = {};
-        const topicMomentum = {};
-        
-        Object.keys(currentData.topics).forEach(topic => {
-            const topicData = currentData.topics[topic];
-            topicColors[topic] = topicData.color;
-            
-            // The dataPoints array always contains the data for the current time range
-            // since getCurrentData() returns the data for this.currentTimeRange
-            const dataPoints = topicData.dataPoints;
-            
-            // Calculate momentum dynamically from the raw data
-            topicMomentum[topic] = this.calculateMomentum(dataPoints);
-        });
+        // Define our specific topics with their data-topic keys
+        const specificTopics = [
+            { name: 'AI Infrastructure', key: 'ai-infrastructure', color: '#4a7c59', momentum: '+64%' },
+            { name: 'Enterprise Agents', key: 'enterprise-agents', color: '#f4a261', momentum: '+107%' },
+            { name: 'Defense Tech', key: 'defense-tech', color: '#5a6c8c', momentum: '+111%' },
+            { name: 'Exit Strategies', key: 'exit-strategies', color: '#c77d7d', momentum: '+50%' },
+            { name: 'Vertical AI', key: 'vertical-ai', color: '#8a68a8', momentum: '+60%' }
+        ];
         
         legend.innerHTML = '';
-        this.selectedTopics.forEach(topic => {
-            const color = topicColors[topic] || '#6b7280';
-            const momentum = topicMomentum[topic] || '+0%';
-            
+        specificTopics.forEach(topic => {
             const item = document.createElement('div');
             item.className = 'legend-item';
+            item.setAttribute('data-topic', topic.key);
+            
+            // Always show final value after animation has run once
+            const displayValue = topic.momentum;
+            
             item.innerHTML = `
-                <span class="legend-dot" style="background: ${color};"></span>
-                <span class="legend-label">${topic}</span>
-                <span class="legend-value" style="color: ${color};">${momentum}</span>
+                <span class="legend-dot" style="background: ${topic.color};"></span>
+                <span class="legend-label">${topic.name}</span>
+                <span class="legend-value" style="color: ${topic.color};" data-final="${topic.momentum}">${displayValue}</span>
             `;
+            
+            // Add hover event listeners directly
+            item.addEventListener('mouseenter', this.showLegendTooltip.bind(this));
+            item.addEventListener('mouseleave', this.hideLegendTooltip.bind(this));
+            
             legend.appendChild(item);
         });
     },

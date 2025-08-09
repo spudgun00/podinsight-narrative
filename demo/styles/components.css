@@ -202,7 +202,7 @@
             right: 0;
             width: calc(100% + 16px);
             margin-left: -8px;
-            z-index: 1; /* Below tooltips which are z-index: 10 */
+            z-index: 0; /* Ensure badge sits below tooltips (z-index: 10) and other hover effects */
             
             /* Container styling */
             background: var(--warm-paper);
@@ -477,6 +477,44 @@
         
         .chart-tooltip.visible {
             opacity: 1;
+        }
+        
+        /* Legend Tooltip */
+        .legend-tooltip {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.98);
+            color: var(--deep-ink);
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 13px;
+            max-width: 250px;
+            opacity: 0;
+            transition: opacity 200ms ease;
+            display: none;
+        }
+        
+        .legend-tooltip.visible {
+            opacity: 1;
+        }
+        
+        .legend-tooltip-content {
+            font-style: italic;
+            line-height: 1.4;
+            color: var(--gray-600);
+        }
+        
+        /* Add hover effect to legend items */
+        .legend-item {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .legend-item:hover {
+            transform: translateY(-1px);
         }
         
         /* View-specific tooltip styles */
@@ -1878,15 +1916,94 @@
             text-align: right;
         }
         
-        /* Sparkline styles */
+        /* Sparkline styles with stagger animation */
         .velocity-item {
             align-items: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s cubic-bezier(0.42, 0, 0.58, 1), 
+                        transform 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        
+        .velocity-item.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .velocity-sparkline {
             margin: 0 8px;
             vertical-align: middle;
             opacity: 0.9;
+        }
+        
+        /* Sparkline path animation support */
+        .velocity-sparkline path {
+            will-change: stroke-dashoffset;
+        }
+        
+        /* Animation states for visibility-based triggers */
+        .synthesis-section {
+            will-change: transform;
+        }
+        
+        /* Influence bar animations */
+        .influence-bar {
+            transition: width 0.8s cubic-bezier(0.42, 0, 0.58, 1);
+            will-change: width;
+        }
+        
+        /* Influence metrics row stagger animation */
+        .influence-metric-item {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s cubic-bezier(0.42, 0, 0.58, 1), 
+                        transform 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        
+        .influence-metric-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Consensus bar animations */
+        .consensus-monitor-container .influence-bar {
+            transition: width 1s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        
+        /* Pie chart animations */
+        .mini-pie-chart {
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+            transition: opacity 0.4s cubic-bezier(0.42, 0, 0.58, 1), 
+                        transform 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        
+        .mini-pie-chart.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        
+        .mini-pie-chart .progress-circle {
+            transition: stroke-dasharray 1.2s cubic-bezier(0.42, 0, 0.58, 1);
+            will-change: stroke-dasharray;
+        }
+        
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            .velocity-sparkline path,
+            .influence-bar,
+            .mini-pie-chart .progress-circle {
+                transition: none !important;
+                animation: none !important;
+            }
+            
+            .velocity-sparkline path {
+                stroke-dashoffset: 0 !important;
+            }
+            
+            .influence-bar {
+                width: var(--bar-width, 0%) !important;
+            }
         }
         /* Consensus Monitor Progress Bars - Matching Influence Metrics */
         .consensus-monitor-container {

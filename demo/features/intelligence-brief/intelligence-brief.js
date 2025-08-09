@@ -1,19 +1,77 @@
 const IntelligenceBrief = {
     init: function(container) {
         this.container = container;
+        this.animatedSections = new Set(); // Track which sections have animated
         this.bindEvents();
         this.setupTimeRangeListener();
+        this.setupIntersectionObserver(); // Set up visibility-based animations
         
         // Populate content from unified data
         if (window.unifiedData) {
             this.populateBriefContent(window.unifiedData);
         }
         
-        // Initialize with 7 days data
-        this.updateConsensusMonitor('7 days');
-        this.updateVelocityTracking();
+        // Initialize data but don't animate yet
+        this.updateConsensusMonitor('7 days', false);
+        this.updateVelocityTracking(false);
         this.updateInfluenceMetrics();
-        this.updateTopicCorrelations();
+        this.updateTopicCorrelations(false);
+    },
+    
+    setupIntersectionObserver: function() {
+        // Create observer that triggers when sections become 20% visible
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% visible
+        };
+        
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !this.animatedSections.has(entry.target.id)) {
+                    // Mark as animated to prevent re-triggering
+                    this.animatedSections.add(entry.target.id);
+                    
+                    // Trigger appropriate animation based on section
+                    switch(entry.target.id) {
+                        case 'velocity-tracking-section':
+                            this.animateSparklines();
+                            break;
+                        case 'influence-metrics-section':
+                            this.animateInfluenceMetrics();
+                            break;
+                        case 'consensus-monitor-section':
+                            this.animateConsensusMonitor();
+                            break;
+                        case 'topic-correlations-section':
+                            this.animateTopicCorrelations();
+                            break;
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe each animated section
+        const sections = [
+            document.querySelector('.synthesis-section:has(#velocityTrackingList)'),
+            document.querySelector('.synthesis-section:has(#influence-metrics-list)'),
+            document.querySelector('.synthesis-section:has(.consensus-monitor-container)'),
+            document.querySelector('.synthesis-section:has(#topicCorrelationsContainer)')
+        ];
+        
+        // Add IDs for tracking and observe
+        sections.forEach((section, index) => {
+            if (section) {
+                const sectionIds = [
+                    'velocity-tracking-section',
+                    'influence-metrics-section', 
+                    'consensus-monitor-section',
+                    'topic-correlations-section'
+                ];
+                section.id = sectionIds[index];
+                this.observer.observe(section);
+            }
+        });
     },
     
     populateBriefContent: function(data) {
@@ -166,7 +224,7 @@ const IntelligenceBrief = {
         
         metrics.forEach((metric, index) => {
             const influenceItem = document.createElement('div');
-            influenceItem.className = 'influence-item';
+            influenceItem.className = 'influence-item influence-metric-item';
             
             // Extract percentage from score string (e.g., "High (97)" -> 97)
             let percentage = 0;
@@ -178,20 +236,58 @@ const IntelligenceBrief = {
             influenceItem.innerHTML = `
                 <span class="influence-name">${metric.name}</span>
                 <div class="influence-bar-container">
-                    <div class="influence-bar" style="width: 0%;"></div>
+                    <div class="influence-bar" data-percentage="${percentage}" style="width: 0%;"></div>
                 </div>
-                <span class="influence-score">${percentage}%</span>
+                <span class="influence-score" data-target="${percentage}">0%</span>
             `;
             
             listElement.appendChild(influenceItem);
+        });
+        
+        // Animation will be triggered by intersection observer
+    },
+    
+    animateInfluenceMetrics: function() {
+        const items = document.querySelectorAll('#influence-metrics-list .influence-item');
+        const ROW_STAGGER_MS = 100;
+        
+        items.forEach((item, index) => {
+            const bar = item.querySelector('.influence-bar');
+            const scoreSpan = item.querySelector('.influence-score');
+            const targetPercentage = parseInt(bar.dataset.percentage);
             
-            // Animate the bar after adding to DOM
-            const bar = influenceItem.querySelector('.influence-bar');
+            // Add visible class for row appearance
             setTimeout(() => {
+                item.classList.add('visible');
+                
+                // Animate bar width
                 requestAnimationFrame(() => {
-                    bar.style.width = `${percentage}%`;
+                    bar.style.width = `${targetPercentage}%`;
                 });
-            }, 50 + (index * 150));
+                
+                // Animate percentage counting
+                if (scoreSpan) {
+                    const duration = 800; // 0.8s for bar animation
+                    const startTime = performance.now();
+                    
+                    const animateCount = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Ease out cubic for smooth deceleration
+                        const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                        const currentValue = Math.round(targetPercentage * easeOutCubic);
+                        
+                        scoreSpan.textContent = currentValue + '%';
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateCount);
+                        }
+                    };
+                    
+                    requestAnimationFrame(animateCount);
+                }
+            }, 50 + (index * ROW_STAGGER_MS)); // Staggered animation
         });
     },
     
@@ -354,7 +450,7 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
         });
     },
     
-    updateConsensusMonitor: function(timeRange) {
+    updateConsensusMonitor: function(timeRange, animate = true) {
         if (!window.unifiedData) {
             return;
         }
@@ -464,12 +560,30 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
             
             consensusContainer.appendChild(consensusItem);
             
-            // Trigger animation after a frame
+            // Store percentage for animation
             const bar = consensusItem.querySelector('.influence-bar');
+            bar.dataset.percentage = item.percentage;
+            
+            // Animate immediately if requested (for time range changes)
+            if (animate && this.animatedSections.has('consensus-monitor-section')) {
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        bar.style.width = `${item.percentage}%`;
+                        bar.setAttribute('aria-valuenow', item.percentage);
+                    });
+                }, 50 + (index * 150));
+            }
+        });
+    },
+    
+    animateConsensusMonitor: function() {
+        const bars = document.querySelectorAll('.consensus-monitor-container .influence-bar');
+        bars.forEach((bar, index) => {
+            const percentage = bar.dataset.percentage;
             setTimeout(() => {
                 requestAnimationFrame(() => {
-                    bar.style.width = `${item.percentage}%`;
-                    bar.setAttribute('aria-valuenow', item.percentage);
+                    bar.style.width = `${percentage}%`;
+                    bar.setAttribute('aria-valuenow', percentage);
                 });
             }, 50 + (index * 150)); // Staggered animation
         });
@@ -624,6 +738,7 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
         path.setAttribute('stroke-width', '1.5');
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('class', 'sparkline-path');
         
         svg.appendChild(path);
         
@@ -635,7 +750,7 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
         return svg.outerHTML;
     },
 
-    updateVelocityTracking: function() {
+    updateVelocityTracking: function(animate = true) {
         if (!window.unifiedData || !window.unifiedData.narrativePulse) {
             return;
         }
@@ -675,18 +790,29 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
                 sparklineSVG = '<span class="sparkline-placeholder" style="display: inline-block; width: 45px;"></span>';
             }
             
+            // Extract numeric value for animation
+            const percentValue = parseInt(momentum.replace('%', '').replace('+', '').replace('-', ''));
+            
             return `
                 <div class="influence-item velocity-item">
                     <span class="influence-name">${topicName}</span>
                     ${sparklineSVG}
-                    <span class="velocity-change ${colorClass}" style="font-weight: 600; color: ${isPositive ? 'var(--sage)' : 'var(--dusty-rose)'};">
-                        ${changeSymbol} ${momentum}
+                    <span class="velocity-change ${colorClass}" 
+                          data-value="${percentValue}" 
+                          data-positive="${isPositive}" 
+                          style="font-weight: 600; color: ${isPositive ? 'var(--sage)' : 'var(--dusty-rose)'};">
+                        ${changeSymbol} <span class="velocity-percentage">0</span>%
                     </span>
                 </div>
             `;
         }).join('');
         
         velocityContainer.innerHTML = velocityHTML;
+        
+        // Only animate if section is already visible (for updates)
+        if (animate && this.animatedSections.has('velocity-tracking-section')) {
+            this.animateSparklines();
+        }
     },
     
     updateInfluenceMetrics: function() {
@@ -695,7 +821,83 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
         // No need to animate here as populateInfluenceMetrics handles it
     },
     
-    updateTopicCorrelations: function() {
+    animateSparklines: function() {
+        const velocityItems = document.querySelectorAll('.velocity-item');
+        const ROW_STAGGER_MS = 100; // Delay between each row appearing
+        const SPARKLINE_DELAY_MS = 200; // Delay before sparklines start drawing
+        
+        // First, animate rows appearing
+        velocityItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('visible');
+            }, index * ROW_STAGGER_MS);
+        });
+        
+        // Then animate sparklines
+        const sparklines = document.querySelectorAll('.velocity-sparkline path');
+        sparklines.forEach((path, index) => {
+            if (!path) return;
+            
+            // Calculate the total length of the path
+            const length = path.getTotalLength();
+            
+            // Set initial state - path is invisible
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            path.style.transition = 'none';
+            
+            // Force browser to recalculate styles
+            path.getBoundingClientRect();
+            
+            // Trigger animation after staggered delay
+            setTimeout(() => {
+                path.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(0.42, 0, 0.58, 1)';
+                path.style.strokeDashoffset = '0';
+            }, SPARKLINE_DELAY_MS + (index * ROW_STAGGER_MS));
+        });
+        
+        // Finally, animate percentages counting up
+        setTimeout(() => {
+            this.animateVelocityPercentages();
+        }, SPARKLINE_DELAY_MS);
+    },
+    
+    animateVelocityPercentages: function() {
+        const percentageElements = document.querySelectorAll('.velocity-change');
+        
+        percentageElements.forEach((element, index) => {
+            const targetValue = parseInt(element.dataset.value);
+            const isPositive = element.dataset.positive === 'true';
+            const percentSpan = element.querySelector('.velocity-percentage');
+            
+            if (!percentSpan) return;
+            
+            // Animate after row stagger
+            setTimeout(() => {
+                const duration = 1200; // 1.2s to match sparkline animation
+                const startTime = performance.now();
+                
+                const animateCount = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Ease out cubic for smooth deceleration
+                    const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                    const currentValue = Math.round(targetValue * easeOutCubic);
+                    
+                    percentSpan.textContent = (isPositive ? '+' : '-') + currentValue;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateCount);
+                    }
+                };
+                
+                requestAnimationFrame(animateCount);
+            }, index * 100); // Stagger by 100ms per item
+        });
+    },
+    
+    updateTopicCorrelations: function(animate = true) {
         const container = document.getElementById('topicCorrelationsContainer');
         if (!container) {
             return;
@@ -765,23 +967,82 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
                     <circle cx="50" cy="50" r="40" fill="none" stroke="${item.color}" stroke-width="20"
                             stroke-dasharray="0 ${circumference}" transform="rotate(-90 50 50)"
                             class="progress-circle"/>
-                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600">${item.percentage}%</text>
+                    <text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" font-weight="600" 
+                          class="pie-percentage" data-target="${item.percentage}">0%</text>
                 </svg>
                 <span class="pie-label">${formattedLabel}</span>
             `;
             
             container.appendChild(chartDiv);
             
-            // Trigger animation after DOM update
+            // Store animation data
+            const progressCircle = chartDiv.querySelector('.progress-circle');
+            if (progressCircle) {
+                progressCircle.dataset.filledLength = filledLength;
+                progressCircle.dataset.emptyLength = emptyLength;
+            }
+            
+            // Animate immediately if requested (for updates)
+            if (animate && this.animatedSections.has('topic-correlations-section')) {
+                setTimeout(() => {
+                    if (progressCircle) {
+                        requestAnimationFrame(() => {
+                            progressCircle.setAttribute('stroke-dasharray', `${filledLength} ${emptyLength}`);
+                            chartDiv.classList.add('animated');
+                        });
+                    }
+                }, 50 + (index * 200));
+            }
+        });
+    },
+    
+    animateTopicCorrelations: function() {
+        const charts = document.querySelectorAll('#topicCorrelationsContainer .mini-pie-chart');
+        const ROW_STAGGER_MS = 150; // Delay between each pie chart
+        
+        charts.forEach((chartDiv, index) => {
+            const progressCircle = chartDiv.querySelector('.progress-circle');
+            const percentText = chartDiv.querySelector('.pie-percentage');
+            
+            // Add cascading appearance effect
             setTimeout(() => {
-                const progressCircle = chartDiv.querySelector('.progress-circle');
+                chartDiv.classList.add('visible');
+                
                 if (progressCircle) {
+                    const filledLength = progressCircle.dataset.filledLength;
+                    const emptyLength = progressCircle.dataset.emptyLength;
+                    
+                    // Animate circle fill
                     requestAnimationFrame(() => {
                         progressCircle.setAttribute('stroke-dasharray', `${filledLength} ${emptyLength}`);
                         chartDiv.classList.add('animated');
                     });
                 }
-            }, 50 + (index * 200)); // Stagger animations
+                
+                // Animate percentage counting
+                if (percentText) {
+                    const targetValue = parseInt(percentText.dataset.target);
+                    const duration = 1200; // 1.2s to match circle animation
+                    const startTime = performance.now();
+                    
+                    const animateCount = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Ease out cubic for smooth deceleration
+                        const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                        const currentValue = Math.round(targetValue * easeOutCubic);
+                        
+                        percentText.textContent = currentValue + '%';
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animateCount);
+                        }
+                    };
+                    
+                    requestAnimationFrame(animateCount);
+                }
+            }, 50 + (index * ROW_STAGGER_MS)); // Stagger animations
         });
     }
 };

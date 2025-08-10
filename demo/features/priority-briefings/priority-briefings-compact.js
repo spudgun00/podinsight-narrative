@@ -55,7 +55,7 @@ const PriorityBriefingsCompact = {
         }
         
         const hasMore = this.visibleCount < this.briefings.length;
-        const buttonText = hasMore ? 'Show more briefings' : 'Show fewer briefings';
+        const buttonText = hasMore ? 'SHOW MORE' : 'SHOW FEWER';
         
         return `
             <div class="show-more-container">
@@ -132,7 +132,7 @@ const PriorityBriefingsCompact = {
         const btn = document.getElementById('show-more-btn');
         if (btn) {
             const hasMore = this.visibleCount < this.briefings.length;
-            const buttonText = hasMore ? 'Show more briefings' : 'Show fewer briefings';
+            const buttonText = hasMore ? 'SHOW MORE' : 'SHOW FEWER';
             btn.querySelector('.btn-text').textContent = buttonText;
             
             // Rotate icon

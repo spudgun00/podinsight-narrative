@@ -7,6 +7,8 @@ const NarrativePulse = {
     container: null,
     currentTimeRange: '7 days', // Track current time range
     hasAnimatedOnLoad: false, // Track if initial animation has run
+    hasAnimatedVolume: false, // Track if volume animation has run
+    hasAnimatedConsensus: false, // Track if consensus animation has run
     
     // Chart configuration
     chartWidth: 800,
@@ -621,8 +623,22 @@ const NarrativePulse = {
                 this.createMomentumView();
             } else if (this.currentView === 'volume') {
                 this.createVolumeView();
+                
+                // Trigger volume animation if first time viewing volume
+                if (!this.hasAnimatedVolume) {
+                    setTimeout(() => {
+                        this.animateVolumeOnLoad();
+                    }, 200); // Small delay to ensure DOM is ready
+                }
             } else {
                 this.createConsensusView();
+                
+                // Trigger consensus animation if first time viewing consensus
+                if (!this.hasAnimatedConsensus) {
+                    setTimeout(() => {
+                        this.animateConsensusOnLoad();
+                    }, 200); // Small delay to ensure DOM is ready
+                }
             }
             
             chartContent.classList.remove('fade-out');
@@ -718,10 +734,24 @@ const NarrativePulse = {
                 viewText.textContent = 'Volume';
                 this.currentView = 'volume';
                 this.createVolumeView();
+                
+                // Trigger volume animation if first time
+                if (!this.hasAnimatedVolume) {
+                    setTimeout(() => {
+                        this.animateVolumeOnLoad();
+                    }, 200); // Small delay to ensure DOM is ready
+                }
             } else if (current === 'Volume') {
                 viewText.textContent = 'Consensus';
                 this.currentView = 'consensus';
                 this.createConsensusView();
+                
+                // Trigger consensus animation if first time
+                if (!this.hasAnimatedConsensus) {
+                    setTimeout(() => {
+                        this.animateConsensusOnLoad();
+                    }, 200); // Small delay to ensure DOM is ready
+                }
             } else {
                 viewText.textContent = 'Momentum';
                 this.currentView = 'momentum';
@@ -877,9 +907,17 @@ const NarrativePulse = {
                     if (barHeight > 0) {
                         currentY -= barHeight;
                         
+                        // Set initial height to 0 if not animated yet, keep bar at bottom
+                        const initialHeight = !this.hasAnimatedVolume ? 0 : barHeight;
+                        const initialY = !this.hasAnimatedVolume ? baseY : currentY;
+                        const finalHeight = barHeight;
+                        const finalY = currentY;
+                        
                         html += `
-                            <g class="volume-bar-segment" data-date="${date}" data-topic="${topic}" data-mentions="${mentions}">
-                                <rect x="${x}" y="${currentY}" width="${barWidth}" height="${barHeight}"
+                            <g class="volume-bar-segment" data-date="${date}" data-topic="${topic}" data-mentions="${mentions}" data-date-index="${dateIndex}">
+                                <rect x="${x}" y="${initialY}" width="${barWidth}" height="${initialHeight}"
+                                      data-final-height="${finalHeight}"
+                                      data-final-y="${finalY}"
                                       fill="${topicData.color}" opacity="0.8"
                                       class="volume-bar-rect"/>
                                 <!-- Hover dot (initially hidden) - positioned at top of this segment -->
@@ -1038,9 +1076,9 @@ const NarrativePulse = {
         this.updateLegend();
         
         // Grid layout configuration - align with chart axes
-        const gridStartX = this.padding; // Start at y-axis (50px)
+        const gridStartX = this.padding + 20; // Start at 70px to give room for labels
         const gridStartY = 50;  // Moved up another 10px (was 60)
-        const availableWidth = this.chartWidth - (2 * this.padding); // 700px
+        const availableWidth = this.chartWidth - this.padding - 70; // Adjust for new start position
         const numCells = this.dateLabels.length;
         const cellWidth = (availableWidth - ((numCells - 1) * 1)) / numCells;
         const cellHeight = (220 - gridStartY) / topicNames.length - 1; // Maximum vertical space
@@ -1071,8 +1109,20 @@ const NarrativePulse = {
                     const fillColor = getConsensusColor(percent);
                     const textColor = percent >= 60 ? 'white' : '#374151';
                     
+                    // Set initial opacity to 0 if not animated yet
+                    const initialOpacity = !this.hasAnimatedConsensus ? 0 : 1;
+                    const initialTransform = !this.hasAnimatedConsensus ? 
+                        'scale(0.95) translate(0, 5)' : '';
+                    
                     return `
-                        <g class="consensus-cell-group" data-topic="${topic}" data-date="${date}" data-percent="${percent}" data-index="${colIndex}">
+                        <g class="consensus-cell-group" 
+                           data-topic="${topic}" 
+                           data-date="${date}" 
+                           data-percent="${percent}" 
+                           data-row="${rowIndex}"
+                           data-col="${colIndex}"
+                           opacity="${initialOpacity}"
+                           transform="${initialTransform}">
                             <rect class="consensus-cell"
                                   x="${x}" y="${y}"
                                   width="${cellWidth}" height="${cellHeight}"
@@ -1098,12 +1148,12 @@ const NarrativePulse = {
                 if (topic === 'Capital Efficiency') {
                     return `
                         <g>
-                            <circle cx="${this.padding - 20}" cy="${y}" r="3" fill="${color}"/>
-                            <text x="${this.padding - 28}" y="${y - 6}"
+                            <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                            <text x="37" y="${y - 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Capital
                             </text>
-                            <text x="${this.padding - 28}" y="${y + 6}"
+                            <text x="37" y="${y + 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Efficiency
                             </text>
@@ -1114,12 +1164,12 @@ const NarrativePulse = {
                 if (topic === 'Developer Tools') {
                     return `
                         <g>
-                            <circle cx="${this.padding - 20}" cy="${y}" r="3" fill="${color}"/>
-                            <text x="${this.padding - 28}" y="${y - 6}"
+                            <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                            <text x="37" y="${y - 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Developer
                             </text>
-                            <text x="${this.padding - 28}" y="${y + 6}"
+                            <text x="37" y="${y + 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Tools
                             </text>
@@ -1130,12 +1180,12 @@ const NarrativePulse = {
                 if (topic === 'AI Infrastructure') {
                     return `
                         <g>
-                            <circle cx="${this.padding - 20}" cy="${y}" r="3" fill="${color}"/>
-                            <text x="${this.padding - 28}" y="${y - 6}"
+                            <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                            <text x="37" y="${y - 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 AI
                             </text>
-                            <text x="${this.padding - 28}" y="${y + 6}"
+                            <text x="37" y="${y + 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Infrastructure
                             </text>
@@ -1146,12 +1196,12 @@ const NarrativePulse = {
                 if (topic === 'Vertical SaaS') {
                     return `
                         <g>
-                            <circle cx="${this.padding - 20}" cy="${y}" r="3" fill="${color}"/>
-                            <text x="${this.padding - 28}" y="${y - 6}"
+                            <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                            <text x="37" y="${y - 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 Vertical
                             </text>
-                            <text x="${this.padding - 28}" y="${y + 6}"
+                            <text x="37" y="${y + 6}"
                                   fill="#666666" font-size="12" text-anchor="end">
                                 SaaS
                             </text>
@@ -1159,10 +1209,26 @@ const NarrativePulse = {
                     `;
                 }
                 
+                if (topic === 'Enterprise Agents') {
+                    return `
+                        <g>
+                            <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                            <text x="37" y="${y - 6}"
+                                  fill="#666666" font-size="12" text-anchor="end">
+                                Enterprise
+                            </text>
+                            <text x="37" y="${y + 6}"
+                                  fill="#666666" font-size="12" text-anchor="end">
+                                Agents
+                            </text>
+                        </g>
+                    `;
+                }
+                
                 return `
                     <g>
-                        <circle cx="${this.padding - 20}" cy="${y}" r="3" fill="${color}"/>
-                        <text x="${this.padding - 28}" y="${y + 4}"
+                        <circle cx="45" cy="${y}" r="3" fill="${color}"/>
+                        <text x="37" y="${y + 4}"
                               fill="#666666" font-size="12" text-anchor="end">
                             ${topic}
                         </text>
@@ -1172,7 +1238,7 @@ const NarrativePulse = {
             
             
             <!-- Legend (right side - outside chart area) -->
-            <g transform="translate(${this.chartWidth - this.padding + 20}, ${gridStartY})">
+            <g transform="translate(${this.chartWidth - this.padding}, ${gridStartY})">
                 <!-- Gradient bar -->
                 <defs>
                     <linearGradient id="consensusGradient" x1="0%" y1="100%" x2="0%" y2="0%">
@@ -1184,15 +1250,16 @@ const NarrativePulse = {
                     </linearGradient>
                 </defs>
                 
-                <rect x="0" y="0" width="10" height="${4 * (cellHeight + cellGap) - cellGap}" 
+                <!-- Calculate the actual grid height to match the topic grid exactly -->
+                <rect x="0" y="0" width="10" height="${(topicNames.length * (cellHeight + cellGap)) - cellGap}" 
                       fill="url(#consensusGradient)" stroke="#e5e7eb" stroke-width="1"/>
                 
-                <!-- Legend labels -->
-                <text x="15" y="5" fill="#666666" font-size="10">Peak (90%+)</text>
-                <text x="15" y="${cellHeight * 0.8}" fill="#666666" font-size="10">Strong (70%+)</text>
-                <text x="15" y="${cellHeight * 2}" fill="#666666" font-size="10">Building (50%+)</text>
-                <text x="15" y="${cellHeight * 3}" fill="#666666" font-size="10">Mixed (30%+)</text>
-                <text x="15" y="${cellHeight * 4 - 5}" fill="#666666" font-size="10">Contested (&lt;30%)</text>
+                <!-- Legend labels evenly distributed within bounds -->
+                <text x="15" y="12" fill="#666666" font-size="10">Peak (90%+)</text>
+                <text x="15" y="${12 + ((((topicNames.length * (cellHeight + cellGap)) - cellGap) - 15) * 0.25)}" fill="#666666" font-size="10">Strong (70%+)</text>
+                <text x="15" y="${12 + ((((topicNames.length * (cellHeight + cellGap)) - cellGap) - 15) * 0.5)}" fill="#666666" font-size="10">Building (50%+)</text>
+                <text x="15" y="${12 + ((((topicNames.length * (cellHeight + cellGap)) - cellGap) - 15) * 0.75)}" fill="#666666" font-size="10">Mixed (30%+)</text>
+                <text x="15" y="${((topicNames.length * (cellHeight + cellGap)) - cellGap) - 3}" fill="#666666" font-size="10">Contested (&lt;30%)</text>
             </g>
             
             <!-- Date labels (bottom) -->
@@ -1233,7 +1300,7 @@ const NarrativePulse = {
                 const topic = cellGroup.dataset.topic;
                 const date = cellGroup.dataset.date;
                 const percent = parseFloat(cellGroup.dataset.percent);
-                const dateIndex = parseInt(cellGroup.dataset.index);
+                const dateIndex = parseInt(cellGroup.dataset.col); // Use data-col instead of data-index
                 const currentData = this.getCurrentData();
                 const topicData = currentData.topics[topic];
                 
@@ -1241,8 +1308,10 @@ const NarrativePulse = {
                 const [month, day] = date.split(' ');
                 const formattedDate = `${month} ${day}`;
                 
-                // Calculate mentions for this date
-                const mentions = topicData && topicData.dataPoints ? topicData.dataPoints[dateIndex] : 0;
+                // Calculate mentions for this date - using dataPoints array at the column index
+                const mentions = topicData && topicData.dataPoints && topicData.dataPoints[dateIndex] !== undefined 
+                    ? topicData.dataPoints[dateIndex] 
+                    : 0;
                 const sources = Math.round(mentions * (percent / 100)); // Estimate positive sources
                 
                 // Build simplified tooltip
@@ -1897,6 +1966,74 @@ const NarrativePulse = {
         }, 300); // Increased delay for consensus view
     },
     
+    // Animate consensus cells with mosaic effect
+    animateConsensusOnLoad: function() {
+        const cells = this.container.querySelectorAll('.consensus-cell-group');
+        
+        // Animation parameters
+        const baseUnitDelay = 40; // ms - controls the speed of the diagonal wave
+        const maxRandomJitter = 40; // ms - controls the randomness range
+        const animationDuration = 300; // ms - duration for each cell's fade/pop animation
+        
+        cells.forEach(cell => {
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            // Calculate base delay for diagonal wave
+            const baseDelay = (row + col) * baseUnitDelay;
+            
+            // Add random jitter for mosaic effect
+            const randomOffset = (Math.random() - 0.5) * maxRandomJitter;
+            
+            // Calculate final delay (ensure non-negative)
+            const finalDelay = Math.max(0, baseDelay + randomOffset);
+            
+            // Animate cell with transition
+            setTimeout(() => {
+                cell.style.transition = `opacity ${animationDuration}ms ease-out, transform ${animationDuration}ms ease-out`;
+                cell.setAttribute('opacity', '1');
+                cell.setAttribute('transform', '');
+            }, finalDelay);
+        });
+        
+        this.hasAnimatedConsensus = true;
+    },
+    
+    // Animate volume bars on first view
+    animateVolumeOnLoad: function() {
+        const volumeBars = this.container.querySelectorAll('.volume-bar-rect');
+        
+        // Group bars by date index for cascading effect
+        const barsByDate = {};
+        volumeBars.forEach(bar => {
+            const segment = bar.parentElement;
+            const dateIndex = segment.dataset.dateIndex;
+            if (!barsByDate[dateIndex]) {
+                barsByDate[dateIndex] = [];
+            }
+            barsByDate[dateIndex].push(bar);
+        });
+        
+        // Animate each date column with cascade effect
+        Object.keys(barsByDate).sort((a, b) => parseInt(a) - parseInt(b)).forEach((dateIndex, index) => {
+            const bars = barsByDate[dateIndex];
+            
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    const finalHeight = bar.getAttribute('data-final-height');
+                    const finalY = bar.getAttribute('data-final-y');
+                    
+                    // Animate both height and y position for vertical growth (faster at 0.6s)
+                    bar.style.transition = 'height 0.6s cubic-bezier(0.42, 0, 0.58, 1), y 0.6s cubic-bezier(0.42, 0, 0.58, 1)';
+                    bar.setAttribute('height', finalHeight);
+                    bar.setAttribute('y', finalY);
+                });
+            }, index * 100); // 100ms stagger between date columns
+        });
+        
+        this.hasAnimatedVolume = true;
+    },
+    
     // Animate chart on page load
     animateChartOnLoad: function() {
         const paths = this.container.querySelectorAll('.topic-path');
@@ -1975,28 +2112,57 @@ const NarrativePulse = {
         
         if (!tooltip) return;
         
-        // Define the most powerful quotes for each topic
-        const quotes = {
-            'ai-infrastructure': '"Infrastructure capturing 70% of AI dollars confirmed"',
-            'enterprise-agents': '"$2B invested in agent startups H1 2025 confirmed"',
-            'defense-tech': '"Bipartisan support creating 10-year visibility"',
-            'exit-strategies': '"VCs adjusting underwriting to M&A multiples"',
-            'vertical-ai': '"Every vertical racing for its champion"'
+        // Define the most powerful quotes with context for each topic
+        const quotesData = {
+            'ai-infrastructure': {
+                quote: 'Infrastructure capturing 70% of AI dollars confirmed',
+                date: 'Jul 25, 2024',
+                source: 'All-In Pod • BG2Pod'
+            },
+            'enterprise-agents': {
+                quote: '$2B invested in agent startups H1 2025 confirmed',
+                date: 'Jul 25, 2024',
+                source: 'The Twenty Minute VC'
+            },
+            'defense-tech': {
+                quote: 'Bipartisan support creating 10-year visibility',
+                date: 'Jul 25, 2024',
+                source: 'All-In Pod'
+            },
+            'exit-strategies': {
+                quote: 'VCs adjusting underwriting to M&A multiples',
+                date: 'Jul 25, 2024',
+                source: 'Acquired • 20VC'
+            },
+            'vertical-ai': {
+                quote: 'Every vertical racing for its champion',
+                date: 'Jul 24, 2024',
+                source: 'SaaStr • Invest Like the Best'
+            }
         };
         
-        const quote = quotes[topic];
-        if (!quote) return;
+        const data = quotesData[topic];
+        if (!data) return;
         
-        // Set tooltip content
-        tooltip.innerHTML = `<div class="legend-tooltip-content">${quote}</div>`;
+        // Set tooltip content with rich formatting
+        tooltip.innerHTML = `
+            <div class="legend-tooltip-content">
+                <div class="tooltip-header">
+                    <span class="tooltip-date">${data.date}</span>
+                    <span class="tooltip-separator">•</span>
+                    <span class="tooltip-source">${data.source}</span>
+                </div>
+                <div class="tooltip-quote">"${data.quote}"</div>
+            </div>
+        `;
         
         // Position tooltip above the legend item
         const rect = legendItem.getBoundingClientRect();
-        const tooltipWidth = 250; // Approximate width
+        const tooltipWidth = 280; // Slightly wider for more content
         const tooltipLeft = rect.left + (rect.width / 2) - (tooltipWidth / 2);
         
         tooltip.style.left = Math.max(10, Math.min(tooltipLeft, window.innerWidth - tooltipWidth - 10)) + 'px';
-        tooltip.style.top = (rect.top - 45) + 'px';
+        tooltip.style.top = (rect.top - 85) + 'px'; // More space for additional content
         tooltip.style.display = 'block';
         
         // Add visible class after a tiny delay for animation

@@ -4,7 +4,7 @@
 
 **What it does**: Synthea.ai analyzes 1,500+ VC podcast episodes to provide pattern recognition and intelligence for venture capital professionals. The platform synthesizes insights from 50+ hours of weekly podcast content into actionable intelligence briefings.
 
-**Value Proposition**: VCs can understand market narratives, track portfolio companies, and identify investment opportunities without listening to dozens of hours of content weekly.
+**Value Proposition**: VCs can understand market narratives, track portfolio companies, and identify investment opportunities without listening to dozens of hours of content weekly. Saves 10+ hours/week by providing synthesized intelligence rather than requiring manual podcast consumption.
 
 **Key Features**:
 - Pattern recognition across podcast episodes
@@ -12,15 +12,49 @@
 - Market narrative synthesis
 - Thesis validation signals
 - Curated priority briefings
+- Semantic search across 823,763 transcript chunks
+- Entity tracking (123,000+ people, companies, topics)
+- Weekly Intelligence Brief for partner meetings
+
+## Business Context
+
+**Market Opportunity**:
+- 76,220 VC professionals globally
+- 50,000 English-speaking VCs (addressable market)
+- 6,000-9,000 VCs with active need for podcast intelligence
+- 47% of business professionals listen to podcasts monthly
+- VCs spend 7+ hours/week consuming podcast content
+
+**Pricing Strategy**:
+- Free tier: 1 topic, 7-day history (FOMO creator)
+- Pro: $297/month (individual VCs)
+- Team: $997/month (5 seats, API access)
+- Enterprise: Custom pricing (unlimited seats, white label)
+
+**Technical Infrastructure** (PodInsight Backend):
+- 1,500 episodes indexed and searchable
+- 823,763 transcript chunks with 768D vector embeddings
+- MongoDB Atlas for vector search (M20 cluster)
+- Modal.com for GPU compute (2.1GB Instructor-XL model)
+- Vercel API layer with FastAPI
+- Sub-3 second search response time (warm start)
+- Cost-optimized to $17.52/month (down from $240)
 
 ## Project Overview
 
-**Purpose**: Editorial/narrative-focused demo replacing the current data dashboard
-**Status**: Two parallel implementations - functional demo and future React app
+**Purpose**: Editorial/narrative-focused demo for validating the Synthea.ai value proposition with VCs
+**Current Phase**: Validation stage using realistic mock data before connecting live data feeds
+**Status**: Two parallel implementations - functional demo (complete) and future React app (10% scaffolded)
 **Target Audience**: Venture capital professionals seeking intelligence briefings rather than raw data visualization
 
 This project represents a fundamental shift from traditional dashboards to intelligence briefing platforms,
 emphasizing storytelling, narrative synthesis, and actionable insights over pure data visualization.
+
+**Validation Strategy**: The demo uses carefully crafted realistic mock data to:
+1. Test the intelligence briefing concept with real VCs
+2. Validate willingness to pay $297/month for the service
+3. Refine the editorial tone and UI before investing in live data integration
+4. Demonstrate value without the complexity of real-time infrastructure
 
   ## IMPORTANT: Current Implementation Status
 
@@ -531,5 +565,64 @@ if (currentFilter !== 'all' && currentFilter !== 'curated') {
   The goal is creating a platform that venture capital professionals would trust for market intelligence, combining
   the authority of premium research with the accessibility of modern web interfaces.
 
+## Data Architecture
+
+### IMPORTANT: Mock Data for Validation Phase
+**The demo currently uses realistic mock data to validate the value proposition before connecting to live data feeds.** This approach allows us to:
+- Test user interface and interaction patterns with realistic content
+- Validate the intelligence briefing concept with potential customers
+- Refine the editorial tone and presentation before investing in real-time infrastructure
+- Demonstrate the platform's potential without the complexity of live data integration
+
+### Unified Data Source (v2.0.0)
+The demo uses `unified-data.js` as its single source of truth, consolidating all **realistic mock data**:
+
+- **Episodes**: 1,547 realistic mock podcast episodes from 52 actual VC podcasts (20VC, All-In, etc.)
+- **Topics**: 7 tracked topics with realistic momentum metrics (AI Agents +107%, Defense Tech +111%, etc.)
+- **Intelligence Brief**: Mock weekly AI-synthesized summary mimicking real partner meeting briefs
+- **Signal Counts**: Realistic aggregated metrics for Notable Signals cards
+- **UI Configuration**: Actual search queries VCs would use, real trending topics from the market
+
+**Mock Data Philosophy**: All mock data is carefully crafted to feel authentic - using real VC firms (Sequoia, a16z), actual podcast names, genuine market themes, and realistic metrics that reflect current market conversations. This ensures validation feedback is based on realistic scenarios.
+
+### Backend Infrastructure (PodInsight API)
+The platform leverages a sophisticated search infrastructure:
+- **MongoDB Atlas**: 823,763 transcript chunks with 768D vector embeddings
+- **Modal.com**: GPU compute for 2.1GB Instructor-XL model (overcomes Vercel's 512MB limit)
+- **Supabase**: Episode metadata and entity tracking
+- **Search Performance**: 85-95% relevance (vs 60-70% with keyword search)
+
+## Critical Technical Debt (from Codebase Audit)
+
+### Priority Issues
+1. **Component Fragmentation**: 5 conflicting implementations of Priority Briefings
+   - Active: `priority-briefings-compact.js` (5.4KB)
+   - Unused: 4 other versions creating maintenance confusion
+
+2. **State Management Chaos**: State scattered across 5 mechanisms
+   - CSS classes, DOM attributes, JS objects, localStorage, global window objects
+   - No single source of truth
+
+3. **Data Source Proliferation**: 7+ data files when only 2 are needed
+   - Keep: `unified-data.js`, `data-adapter.js`
+   - Archive/Delete: All legacy data files
+
+4. **CSS Architecture**: Requires "nuclear" DOM replacement workarounds
+   - Heavy reliance on fragile nth-child selectors
+   - CSS doing double duty for styling AND state management
+
+### Recommended Refactoring Plan (4 weeks)
+- **Week 1**: Consolidate to single Priority Briefings implementation
+- **Week 2**: Implement centralized state management
+- **Week 3**: Adopt BEM CSS methodology
+- **Week 4**: Documentation and test framework
+
+## Key Achievements
+- **Search Quality**: 85-95% relevance using semantic search
+- **Cost Optimization**: Infrastructure reduced from $240/month to $17.52/month
+- **Performance**: Sub-3 second search response (warm start)
+- **Scale**: Processing 823,763 transcript chunks efficiently
+- **Security**: MongoDB password rotation completed, git history cleaned
+
   This CLAUDE.md provides comprehensive context for any future AI assistance, covering the philosophy, technical
-  details, and development guidelines needed to maintain consistency with your vision.
+  details, business context, and development guidelines needed to maintain consistency with the Synthea.ai vision.

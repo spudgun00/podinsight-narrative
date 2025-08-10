@@ -234,10 +234,13 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 0.75rem;
-            min-height: 1.5rem;
+            min-height: 2.25rem; /* Increased to accommodate 2 lines consistently */
+            height: 2.25rem; /* Fixed height to ensure all cards align */
             display: flex;
-            align-items: flex-end;
+            align-items: center; /* Center vertically for better alignment */
             justify-content: center;
+            line-height: 1.2; /* Better line spacing for wrapped text */
+            text-align: center; /* Center text when it wraps */
         }
         .signal-icon {
             width: 32px;

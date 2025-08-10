@@ -74,6 +74,14 @@ const PriorityBriefingsCompact = {
                 this.handleShowMore();
             }
             
+            // ALL BRIEFINGS link - opens Episode Library
+            if (e.target.closest('.view-all-link')) {
+                e.preventDefault();
+                if (window.EpisodeLibrary && window.EpisodeLibrary.open) {
+                    window.EpisodeLibrary.open();
+                }
+            }
+            
             // View brief button - opens Episode Panel
             if (e.target.closest('.view-brief-btn')) {
                 e.preventDefault();

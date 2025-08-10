@@ -2,6 +2,7 @@ const IntelligenceBrief = {
     init: function(container) {
         this.container = container;
         this.animatedSections = new Set(); // Track which sections have animated
+        this.thumbnailsEnabled = true; // Track thumbnail visibility state
         this.bindEvents();
         this.setupTimeRangeListener();
         this.setupIntersectionObserver(); // Set up visibility-based animations
@@ -222,6 +223,23 @@ const IntelligenceBrief = {
         
         listElement.innerHTML = '';
         
+        // Podcast thumbnail mapping - paths relative to demo.html
+        const PODCAST_THUMBNAILS = {
+            'all-in podcast': 'images/allin.png',
+            '20vc': 'images/20vc.jpeg',
+            'bg2pod': 'images/bg2.png',
+            'invest like best': 'images/investlikethebest.jpeg',
+            'acquired': 'images/acquired.jpeg',
+            'the logan bartlett show': 'images/loganbartlett.jpg',
+            'stratechery': 'images/stratechery.jpeg',
+            'the information': 'images/information.jpg',
+            'khosla ventures podcast': 'images/kv.png',
+            'indie hackers': 'images/indiehackers.png'
+        };
+        
+        // Fallback colors using the platform's warm editorial palette
+        const FALLBACK_COLORS = ['#4a7c59', '#c77d7d', '#f4a261', '#5a6c8c'];
+        
         metrics.forEach((metric, index) => {
             const influenceItem = document.createElement('div');
             influenceItem.className = 'influence-item influence-metric-item';
@@ -233,18 +251,112 @@ const IntelligenceBrief = {
                 percentage = parseInt(scoreMatch[1], 10);
             }
             
-            influenceItem.innerHTML = `
-                <span class="influence-name">${metric.name}</span>
-                <div class="influence-bar-container">
-                    <div class="influence-bar" data-percentage="${percentage}" style="width: 0%;"></div>
-                </div>
-                <span class="influence-score" data-target="${percentage}">0%</span>
-            `;
+            // Get thumbnail URL for this podcast
+            const podcastKey = metric.name.toLowerCase();
+            const thumbnailUrl = PODCAST_THUMBNAILS[podcastKey];
+            
+            // Create thumbnail element
+            const thumbnailDiv = document.createElement('div');
+            thumbnailDiv.className = 'influence-thumbnail';
+            thumbnailDiv.setAttribute('aria-hidden', 'true');
+            
+            if (thumbnailUrl) {
+                // Try to load the image
+                const img = new Image();
+                img.src = thumbnailUrl;
+                
+                img.onload = () => {
+                    thumbnailDiv.style.backgroundImage = `url(${thumbnailUrl})`;
+                    
+                    // Adjust sizing for logos with built-in padding (relative to 23px base)
+                    const podcastKey = metric.name.toLowerCase();
+                    if (podcastKey === 'the logan bartlett show') {
+                        thumbnailDiv.style.backgroundSize = '135%';
+                        thumbnailDiv.style.backgroundPosition = 'center';
+                    } else if (podcastKey === 'bg2pod') {
+                        thumbnailDiv.style.backgroundSize = '115%';
+                        thumbnailDiv.style.backgroundPosition = 'center';
+                    }
+                };
+                
+                img.onerror = () => {
+                    // Apply fallback initial on error
+                    this.applyThumbnailFallback(thumbnailDiv, metric.name, FALLBACK_COLORS);
+                };
+            } else {
+                // No image found, apply fallback immediately
+                this.applyThumbnailFallback(thumbnailDiv, metric.name, FALLBACK_COLORS);
+            }
+            
+            influenceItem.appendChild(thumbnailDiv);
+            
+            // Add the rest of the content
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'influence-name';
+            nameSpan.textContent = metric.name;
+            influenceItem.appendChild(nameSpan);
+            
+            const barContainer = document.createElement('div');
+            barContainer.className = 'influence-bar-container';
+            barContainer.innerHTML = `<div class="influence-bar" data-percentage="${percentage}" style="width: 0%;"></div>`;
+            influenceItem.appendChild(barContainer);
+            
+            const scoreSpan = document.createElement('span');
+            scoreSpan.className = 'influence-score';
+            scoreSpan.setAttribute('data-target', percentage);
+            scoreSpan.textContent = '0%';
+            influenceItem.appendChild(scoreSpan);
             
             listElement.appendChild(influenceItem);
         });
         
         // Animation will be triggered by intersection observer
+    },
+    
+    applyThumbnailFallback: function(element, name, colors) {
+        const initial = name.trim().charAt(0).toUpperCase();
+        
+        // Generate consistent color from name
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            hash = hash & hash;
+        }
+        const colorIndex = Math.abs(hash) % colors.length;
+        const color = colors[colorIndex];
+        
+        element.style.backgroundColor = color;
+        element.textContent = initial;
+    },
+    
+    toggleInfluenceThumbnails: function(enable) {
+        this.thumbnailsEnabled = enable !== undefined ? enable : !this.thumbnailsEnabled;
+        
+        const thumbnails = document.querySelectorAll('#influence-metrics-list .influence-thumbnail');
+        
+        if (this.thumbnailsEnabled) {
+            // Show thumbnails
+            thumbnails.forEach(thumb => {
+                thumb.style.display = 'flex';
+            });
+            
+            // Add class for proper spacing
+            document.querySelectorAll('#influence-metrics-list .influence-item').forEach(item => {
+                item.classList.add('has-thumbnail');
+            });
+        } else {
+            // Hide thumbnails
+            thumbnails.forEach(thumb => {
+                thumb.style.display = 'none';
+            });
+            
+            // Remove spacing class
+            document.querySelectorAll('#influence-metrics-list .influence-item').forEach(item => {
+                item.classList.remove('has-thumbnail');
+            });
+        }
+        
+        return this.thumbnailsEnabled;
     },
     
     animateInfluenceMetrics: function() {

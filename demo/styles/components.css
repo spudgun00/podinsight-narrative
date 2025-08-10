@@ -502,9 +502,44 @@
         }
         
         .legend-tooltip-content {
-            font-style: italic;
-            line-height: 1.4;
+            line-height: 1.5;
+        }
+        
+        .legend-tooltip .tooltip-header {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .legend-tooltip .tooltip-separator {
+            margin: 0 6px;
+            color: var(--gray-400);
+        }
+        
+        .legend-tooltip .tooltip-date {
             color: var(--gray-600);
+        }
+        
+        .legend-tooltip .tooltip-source {
+            color: var(--sage);
+        }
+        
+        .legend-tooltip .tooltip-quote {
+            font-style: italic;
+            color: var(--deep-ink);
+            font-size: 13px;
+            margin: 4px 0;
+            line-height: 1.4;
+        }
+        
+        .legend-tooltip .tooltip-footer {
+            font-size: 10px;
+            color: var(--gray-500);
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
         }
         
         /* Add hover effect to legend items */
@@ -2023,6 +2058,49 @@
             padding: 4px 0;
         }
         
+        /* Podcast thumbnail styles */
+        .influence-thumbnail {
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            flex-shrink: 0;
+            
+            /* Professional B2B muted saturation */
+            filter: saturate(75%);
+            
+            /* For fallback initials */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            font-size: 11px;
+            color: #fff;
+            
+            /* Smooth appearance */
+            opacity: 0;
+            animation: fadeInThumbnail 0.3s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+        
+        @keyframes fadeInThumbnail {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Adjust spacing when thumbnails are present */
+        .influence-item.has-thumbnail {
+            gap: 10px;
+        }
+        
+        .influence-item.has-thumbnail .influence-name {
+            min-width: 120px;
+        }
+        
         .consensus-item {
             display: flex;
             align-items: center;
@@ -2569,11 +2647,48 @@
         
         .volume-bar-rect {
             transition: filter 300ms ease-out, opacity 300ms ease-out, transform 300ms ease-out;
+            transform-origin: center bottom;
+        }
+        
+        /* Volume bar animation class for vertical growth */
+        .volume-bar-animate {
+            animation: volumeBarRise 0.6s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+        }
+        
+        @keyframes volumeBarRise {
+            from {
+                height: 0;
+                transform: scaleY(0);
+            }
+            to {
+                height: attr(data-final-height);
+                transform: scaleY(1);
+            }
         }
         
         .volume-bar-segment:hover .volume-bar-rect {
             filter: brightness(0.9) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
             transform: translateY(-2px);
+        }
+        
+        /* Consensus cell animation */
+        .consensus-cell-group {
+            transform-origin: center center;
+        }
+        
+        .consensus-cell-animate {
+            animation: fadeInPop 0.3s ease-out forwards;
+        }
+        
+        @keyframes fadeInPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .volume-hover-dot {

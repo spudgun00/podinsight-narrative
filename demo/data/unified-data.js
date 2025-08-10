@@ -1674,8 +1674,8 @@ intelligenceBrief: {
             { name: 'BG2Pod', score: 'High (91)' },
             { name: 'Invest Like Best', score: 'High (86)' },
             { name: 'Acquired', score: 'High (94)' },
-            { name: 'Tim Ferriss', score: 'High (91)' },
-            { name: 'Knowledge Project', score: 'High (88)' }
+            { name: 'The Logan Bartlett Show', score: 'High (91)' },
+            { name: 'Stratechery', score: 'High (88)' }
         ],
         consensusMonitor: [
             { topic: 'Infrastructure > Apps', level: 'Strong (>85% agreement)' },

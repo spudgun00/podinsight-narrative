@@ -2292,7 +2292,7 @@ const NarrativePulse = {
                         }
                         
                         requestAnimationFrame(updateNumber);
-                    }, index * 100); // Same stagger delay as momentum
+                    }, 100); // Fixed delay for all legend values to animate simultaneously
                 }
             }
         });
@@ -2418,7 +2418,7 @@ const NarrativePulse = {
                                 }
                             }
                         }, frameTime);
-                    }, index * 100); // Same delay as line animation
+                    }, 100); // Fixed delay for all legend values to animate simultaneously
                 } else {
                     console.warn(`No value element found in legend item for ${topic}`);
                 }

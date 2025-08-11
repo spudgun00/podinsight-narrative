@@ -142,37 +142,12 @@
             }
         });
         
-        // Calculate Y positions based on momentum and topic order
+        // Calculate Y positions dynamically based on data range
         function calculateYPositions(topicName, momentum) {
-            // Topic order with predefined positions for consistent chart layout
-            const topicPositions = {
-                'AI Infrastructure': { start: 20, end: 20 },      // Top position - highest momentum
-                'Enterprise Agents': { start: 40, end: 40 },      // Second
-                'Defense Tech': { start: 60, end: 60 },           // Third
-                'Vertical AI': { start: 80, end: 80 },            // Fourth
-                'Exit Strategies': { start: 100, end: 100 },      // Fifth
-                'Climate Tech': { start: 120, end: 120 },         // Sixth
-                'Traditional SaaS': { start: 180, end: 180 }      // Bottom - negative momentum
-            };
-            
-            // Return predefined position or calculate based on momentum
-            if (topicPositions[topicName]) {
-                return topicPositions[topicName];
-            }
-            
-            // Fallback: calculate based on momentum
-            const momentumValue = parseInt(momentum.replace('%', ''));
-            const isNegative = momentumValue < 0;
-            
-            if (isNegative) {
-                return { start: 180, end: 180 };
-            } else if (momentumValue > 40) {
-                return { start: 40, end: 40 };
-            } else if (momentumValue > 30) {
-                return { start: 80, end: 80 };
-            } else {
-                return { start: 120, end: 120 };
-            }
+            // Y positions will be calculated dynamically by the chart component
+            // based on the actual data values and selected topics
+            // This is just a placeholder that gets overridden
+            return { start: 100, end: 100 };
         }
         
         console.log('Narrative pulse data adapter initialized with topics:', Object.keys(window.narrativePulseData.sevenDayData.topics));

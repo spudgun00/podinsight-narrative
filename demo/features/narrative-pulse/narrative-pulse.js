@@ -596,7 +596,16 @@ const NarrativePulse = {
     // Get topic data for current time range
     getTopicData: function(topic) {
         const data = this.getCurrentData();
+        if (!data || !data.topics) {
+            console.warn('No data available for current time range');
+            return null;
+        }
         return data.topics[topic] || null;
+    },
+    
+    // Helper function to convert topic name to kebab-case key
+    getTopicKey: function(topicName) {
+        return topicName.toLowerCase().replace(/\s+/g, '-');
     },
     
     // Calculate Y scale for topic data points
@@ -1648,12 +1657,26 @@ const NarrativePulse = {
         const currentData = this.getCurrentData();
         const pathConfigs = {};
         
-        // Build path configs from current time range data
-        Object.keys(currentData.topics).forEach(topic => {
+        // Debug logging
+        console.log('Selected topics:', this.selectedTopics);
+        console.log('Available topics in data:', Object.keys(currentData.topics));
+        
+        // Build path configs ONLY for selected topics
+        this.selectedTopics.forEach(topic => {
             const topicData = currentData.topics[topic];
+            if (!topicData) {
+                console.warn(`No data found for selected topic: ${topic}`);
+                return;
+            }
+            
+            if (!topicData.dataPoints || topicData.dataPoints.length === 0) {
+                console.warn(`No dataPoints for topic: ${topic}`);
+                return;
+            }
+            
             const yScale = this.calculateYScale(topicData.dataPoints);
             pathConfigs[topic] = {
-                momentum: this.calculateMomentum(topicData.dataPoints),
+                momentum: topicData.displayMomentum || topicData.actualMomentum || this.calculateMomentum(topicData.dataPoints),
                 color: topicData.color,
                 yStart: yScale.start,
                 yEnd: yScale.end,
@@ -1661,15 +1684,21 @@ const NarrativePulse = {
             };
         });
         
-        const paths = this.selectedTopics.map(topic => ({
-            topic: topic,
-            ...pathConfigs[topic]
-        }));
+        const paths = this.selectedTopics
+            .filter(topic => pathConfigs[topic]) // Only include topics with valid data
+            .map(topic => ({
+                topic: topic,
+                ...pathConfigs[topic]
+            }));
         
-        // Calculate Y-axis scale based on actual data
-        const allDataPoints = Object.values(currentData.topics).flatMap(t => t.dataPoints);
-        const maxDataValue = Math.max(...allDataPoints);
-        const minDataValue = Math.min(...allDataPoints);
+        // Calculate Y-axis scale based on selected topics data only
+        const selectedTopicsData = this.selectedTopics
+            .map(topic => currentData.topics[topic])
+            .filter(data => data && data.dataPoints);
+        
+        const allDataPoints = selectedTopicsData.flatMap(t => t.dataPoints);
+        const maxDataValue = allDataPoints.length > 0 ? Math.max(...allDataPoints) : 100;
+        const minDataValue = allDataPoints.length > 0 ? Math.min(...allDataPoints) : 0;
         
         // Add some padding to the scale
         const range = maxDataValue - minDataValue;
@@ -1823,24 +1852,32 @@ const NarrativePulse = {
         const topics = Object.keys(window.narrativePulseData.sevenDayData.topics);
         this.availableTopics = [...topics];
         
-        // Load saved topics or use first maxTopics
+        // Define default topics to show (first 5 from available topics)
+        // This ensures we always show 5 topics by default, regardless of which ones they are
+        const defaultTopics = topics.slice(0, this.maxTopics);
+        
+        // Load saved topics or use the default topics
         const savedTopics = localStorage.getItem('narrativePulse_selectedTopics');
         if (savedTopics) {
             try {
                 const parsed = JSON.parse(savedTopics);
+                // Ensure saved topics still exist in the data
                 this.selectedTopics = parsed.filter(topic => topics.includes(topic));
             } catch (e) {
                 console.error('Failed to parse saved topics:', e);
-                this.selectedTopics = topics.slice(0, this.maxTopics);
+                // Use default topics
+                this.selectedTopics = defaultTopics;
             }
         } else {
+            // Use default topics (first 5 available)
+            this.selectedTopics = defaultTopics;
+        }
+        
+        // If no topics selected or less than maxTopics, use first maxTopics from available
+        if (this.selectedTopics.length === 0 || this.selectedTopics.length > this.maxTopics) {
             this.selectedTopics = topics.slice(0, this.maxTopics);
         }
         
-        // If no topics selected, use defaults
-        if (this.selectedTopics.length === 0) {
-            this.selectedTopics = topics.slice(0, this.maxTopics);
-        }
         
         // Update time range configs with date labels from the data
         // IMPORTANT: Use unified data config instead to ensure consistency
@@ -2222,6 +2259,44 @@ const NarrativePulse = {
             }, finalDelay);
         });
         
+        // Animate legend numbers (consistent with momentum view animation)
+        const legendItems = this.container.querySelectorAll('.legend-item');
+        legendItems.forEach((legendItem, index) => {
+            const valueElement = legendItem.querySelector('.legend-value');
+            if (valueElement) {
+                const finalValue = valueElement.getAttribute('data-final');
+                if (finalValue && finalValue !== 'N/A') {
+                    const numericValue = parseInt(finalValue.replace(/[^0-9-]/g, ''));
+                    const isPositive = finalValue.includes('+');
+                    
+                    // Same timing as momentum view for consistency
+                    setTimeout(() => {
+                        let currentValue = 0;
+                        const duration = 1000; // Same as animateChartOnLoad
+                        const frames = 30;
+                        const increment = numericValue / frames;
+                        const startTime = Date.now();
+                        
+                        function updateNumber() {
+                            const elapsed = Date.now() - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            
+                            currentValue = Math.round(numericValue * progress);
+                            valueElement.textContent = `${isPositive ? '+' : ''}${currentValue}%`;
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(updateNumber);
+                            } else {
+                                valueElement.textContent = finalValue;
+                            }
+                        }
+                        
+                        requestAnimationFrame(updateNumber);
+                    }, index * 100); // Same stagger delay as momentum
+                }
+            }
+        });
+        
         this.markAnimated('consensus');
     },
     
@@ -2265,20 +2340,17 @@ const NarrativePulse = {
         const paths = this.container.querySelectorAll('.topic-path');
         const legendItems = this.container.querySelectorAll('.legend-item');
         
-        // Map topic names to legend keys for matching
-        const topicToLegendKey = {
-            'AI Infrastructure': 'ai-infrastructure',
-            'Enterprise Agents': 'enterprise-agents', 
-            'Defense Tech': 'defense-tech',
-            'Exit Strategies': 'exit-strategies',
-            'Vertical AI': 'vertical-ai'
-        };
+        console.log('Animating chart with topics:', this.selectedTopics);
+        console.log('Found paths:', paths.length);
+        console.log('Found legend items:', legendItems.length);
         
         // Simply animate in DOM order (left to right cascade)
         paths.forEach((path, index) => {
             const parentG = path.parentElement;
             const topic = parentG.dataset.topic;
             const length = path.getTotalLength();
+            
+            console.log(`Animating path for topic: ${topic}, length: ${length}`);
             
             // Safety check for zero-length or malformed paths
             if (!length || length === 0) {
@@ -2298,17 +2370,20 @@ const NarrativePulse = {
                 path.style.strokeDashoffset = '0';
             }, index * 100);
             
-            // Find corresponding legend item
-            const legendKey = topicToLegendKey[topic];
+            // Legend items use the actual topic name, not kebab-case
+            console.log(`Looking for legend item with data-topic="${topic}"`);
+            
             const legendItem = Array.from(legendItems).find(legendEl => 
-                legendEl.getAttribute('data-topic') === legendKey
+                legendEl.getAttribute('data-topic') === topic
             );
             
             if (legendItem) {
+                console.log(`Found legend item for ${topic}`);
                 const valueElement = legendItem.querySelector('.legend-value');
                 if (valueElement) {
                     // Get final value from data attribute
                     const finalValue = valueElement.getAttribute('data-final') || valueElement.textContent;
+                    console.log(`Animating legend value for ${topic}: ${finalValue}`);
                     const numericValue = parseInt(finalValue.replace(/[^0-9-]/g, ''));
                     const isPositive = finalValue.includes('+');
                     const finalText = finalValue;
@@ -2323,16 +2398,34 @@ const NarrativePulse = {
                         
                         const countInterval = setInterval(() => {
                             currentValue += increment;
-                            if (currentValue >= numericValue) {
+                            
+                            // Check if animation is complete (handles both positive and negative)
+                            const isComplete = numericValue >= 0 ? 
+                                currentValue >= numericValue : 
+                                currentValue <= numericValue;
+                            
+                            if (isComplete) {
                                 currentValue = numericValue;
                                 valueElement.textContent = finalText; // Use exact final value
                                 clearInterval(countInterval);
                             } else {
-                                valueElement.textContent = (isPositive ? '+' : '') + Math.round(currentValue) + '%';
+                                // Format the text based on whether it's positive or negative
+                                const displayValue = Math.round(currentValue);
+                                if (displayValue > 0) {
+                                    valueElement.textContent = '+' + displayValue + '%';
+                                } else {
+                                    valueElement.textContent = displayValue + '%';
+                                }
                             }
                         }, frameTime);
                     }, index * 100); // Same delay as line animation
+                } else {
+                    console.warn(`No value element found in legend item for ${topic}`);
                 }
+            } else {
+                console.warn(`No legend item found for topic "${topic}" with key "${legendKey}"`);
+                // Log all available legend items for debugging
+                console.log('Available legend items:', Array.from(legendItems).map(el => el.getAttribute('data-topic')));
             }
         });
     },
@@ -2340,10 +2433,13 @@ const NarrativePulse = {
     // Show legend tooltip with powerful quote
     showLegendTooltip: function(event) {
         const legendItem = event.currentTarget;
-        const topic = legendItem.dataset.topic;
+        const topic = legendItem.dataset.topic; // Now this is the actual topic name
         const tooltip = document.getElementById('legendTooltip');
         
         if (!tooltip) return;
+        
+        // Convert topic name to kebab-case for lookup
+        const topicKey = this.getTopicKey(topic);
         
         // Define the most powerful quotes with context for each topic
         const quotesData = {
@@ -2371,10 +2467,20 @@ const NarrativePulse = {
                 quote: 'Every vertical racing for its champion',
                 date: 'Jul 24, 2024',
                 source: 'SaaStr • Invest Like the Best'
+            },
+            'traditional-saas': {
+                quote: 'Traditional SaaS showing resilience in enterprise',
+                date: 'Jul 25, 2024',
+                source: 'SaaStr Pod'
+            },
+            'climate-tech': {
+                quote: 'Climate Tech accelerating with policy support',
+                date: 'Jul 25, 2024',
+                source: 'My Climate Journey'
             }
         };
         
-        const data = quotesData[topic];
+        const data = quotesData[topicKey];
         if (!data) return;
         
         // Set tooltip content with rich formatting
@@ -2653,9 +2759,16 @@ const NarrativePulse = {
     },
     
     applyTopicSelection: function() {
+        // Debug logging
+        console.log('Applying topic selection:');
+        console.log('- Previous topics:', this.selectedTopics);
+        console.log('- New topics:', this.tempSelectedTopics);
+        
         // Update selected topics with the temporary selection
         this.selectedTopics = [...this.tempSelectedTopics];
         this.saveSelectedTopics();
+        
+        console.log('- Saved topics:', this.selectedTopics);
         
         // Update chart
         this.updateChartWithNewTopics();
@@ -2668,20 +2781,65 @@ const NarrativePulse = {
     },
     
     updateChartWithNewTopics: function() {
+        console.log('Updating chart with new topics');
+        console.log('Current view:', this.currentView);
+        console.log('Selected topics:', this.selectedTopics);
+        
         // Clean up existing event handlers before recreating views
         this.cleanupViewEventHandlers();
+        
+        // Reset animation state to allow animations to run for new topics
+        // Clear the current view/time combination so animations can run again
+        const currentKey = `${this.currentView}-${this.currentTimeRange}`;
+        this.animatedCombinations.delete(currentKey);
+        
+        // Recalculate X positions (critical for chart rendering)
+        this.calculateXPositions();
         
         // Update the legend
         this.updateLegend();
         
+        // Get current view from the active button
+        const viewBtns = this.container.querySelectorAll('.view-toggle-btn');
+        let activeView = 'momentum';
+        viewBtns.forEach(btn => {
+            if (btn.classList.contains('active')) {
+                activeView = btn.dataset.view;
+            }
+        });
+        
+        console.log('Active view:', activeView);
+        
         // Recreate the current view with new topics
-        const viewText = this.container.querySelector('#viewText').textContent;
-        if (viewText === 'Momentum') {
+        if (activeView === 'momentum') {
             this.createMomentumView();
-        } else if (viewText === 'Volume') {
+            // Reattach event listeners for momentum view
+            setTimeout(() => {
+                this.initMomentumView();
+                // Trigger animation for new topics
+                if (!this.hasAnimated('momentum')) {
+                    this.animateChartOnLoad();
+                    this.markAnimated('momentum');
+                }
+            }, 100);
+        } else if (activeView === 'volume') {
             this.createVolumeView();
+            // Volume view handles events inline, trigger animation
+            setTimeout(() => {
+                if (!this.hasAnimated('volume')) {
+                    this.animateVolumeOnLoad();
+                    this.markAnimated('volume');
+                }
+            }, 100);
         } else {
             this.createConsensusView();
+            // Consensus view handles events inline, trigger animation
+            setTimeout(() => {
+                if (!this.hasAnimated('consensus')) {
+                    this.animateConsensusOnLoad();
+                    this.markAnimated('consensus');
+                }
+            }, 100);
         }
     },
     
@@ -2718,49 +2876,110 @@ const NarrativePulse = {
         }
     },
     
+    // Calculate consensus percentage point change for a topic
+    calculateConsensusChange: function(topicName) {
+        const currentData = this.getCurrentData();
+        const topicData = currentData.topics[topicName];
+        
+        if (!topicData || !topicData.consensus || topicData.consensus.length < 2) {
+            return null;
+        }
+        
+        // Consensus is already an array of percentages [65, 68, 72, ...]
+        const firstValue = topicData.consensus[0];
+        const lastValue = topicData.consensus[topicData.consensus.length - 1];
+        
+        // Calculate percentage point change
+        // Example: 84% - 65% = +19 percentage points
+        return lastValue - firstValue;
+    },
+
     updateLegend: function() {
         const legend = this.container.querySelector('.pulse-legend');
-        const currentData = this.getCurrentData();
+        
+        // Get current active view
+        const viewBtns = this.container.querySelectorAll('.view-toggle-btn');
+        let activeView = 'momentum';
+        viewBtns.forEach(btn => {
+            if (btn.classList.contains('active')) {
+                activeView = btn.dataset.view;
+            }
+        });
         
         // Get data from unified source
         const unifiedTopics = window.unifiedData?.narrativePulse?.topics || {};
         
-        // Define our specific topics with their data-topic keys
-        const specificTopics = [
-            { name: 'AI Infrastructure', key: 'ai-infrastructure', unifiedKey: 'AI Infrastructure' },
-            { name: 'Enterprise Agents', key: 'enterprise-agents', unifiedKey: 'Enterprise Agents' },
-            { name: 'Defense Tech', key: 'defense-tech', unifiedKey: 'Defense Tech' },
-            { name: 'Exit Strategies', key: 'exit-strategies', unifiedKey: 'Exit Strategies' },
-            { name: 'Vertical AI', key: 'vertical-ai', unifiedKey: 'Vertical AI' }
-        ];
+        // Use currently selected topics dynamically
+        const topicsToShow = this.selectedTopics.map(topicName => ({
+            name: topicName,
+            key: this.getTopicKey(topicName),
+            unifiedKey: topicName
+        }));
         
         legend.innerHTML = '';
-        specificTopics.forEach(topic => {
+        console.log('Creating legend for topics:', topicsToShow);
+        
+        topicsToShow.forEach(topic => {
             const topicData = unifiedTopics[topic.unifiedKey];
-            if (!topicData) return;
+            if (!topicData) {
+                console.warn(`No data found for topic: ${topic.unifiedKey}`);
+                return;
+            }
+            console.log(`Creating legend item for ${topic.name} with key ${topic.key}`);
             
-            // Get momentum value based on current time range
-            let momentum = '+0%';
-            if (this.currentTimeRange === '7 days') {
-                momentum = topicData.momentum || topicData.weeklyChange || '+0%';
-            } else if (this.currentTimeRange === '30 days') {
-                momentum = topicData.chartData?.['30d']?.momentum?.weeklyGrowth || '+0%';
-            } else if (this.currentTimeRange === '90 days') {
-                momentum = topicData.chartData?.['90d']?.momentum?.quarterlyGrowth || '+0%';
+            let displayValue, finalValue, valueColor;
+            
+            // Check if we're in consensus view
+            if (activeView === 'consensus') {
+                // Calculate consensus percentage point change
+                const consensusChange = this.calculateConsensusChange(topic.unifiedKey);
+                
+                if (consensusChange !== null) {
+                    // Format as percentage point change
+                    const rounded = Math.round(consensusChange);
+                    finalValue = `${rounded >= 0 ? '+' : ''}${rounded}%`;
+                    
+                    // Check if first view for animation (same pattern as momentum view)
+                    const isFirstView = this.currentView === 'consensus' && !this.hasAnimated('consensus');
+                    displayValue = isFirstView ? (rounded >= 0 ? '+0%' : '0%') : finalValue;
+                    
+                    // Use red color for negative changes
+                    valueColor = rounded >= 0 ? topicData.color : '#c77d7d';
+                } else {
+                    // No consensus data available
+                    displayValue = 'N/A';
+                    finalValue = 'N/A';
+                    valueColor = '#9ca3af';
+                }
+            } else {
+                // Use momentum values for Momentum and Volume views
+                let momentum = '+0%';
+                if (this.currentTimeRange === '7 days') {
+                    momentum = topicData.momentum || topicData.weeklyChange || '+0%';
+                } else if (this.currentTimeRange === '30 days') {
+                    momentum = topicData.chartData?.['30d']?.momentum?.weeklyGrowth || '+0%';
+                } else if (this.currentTimeRange === '90 days') {
+                    momentum = topicData.chartData?.['90d']?.momentum?.quarterlyGrowth || '+0%';
+                }
+                
+                finalValue = momentum;
+                valueColor = topicData.color;
+                
+                // Check if this view+time combination has been animated
+                const isFirstView = this.currentView === 'momentum' && !this.hasAnimated('momentum');
+                displayValue = isFirstView ? (momentum.includes('+') ? '+0%' : '0%') : momentum;
             }
             
             const item = document.createElement('div');
             item.className = 'legend-item';
-            item.setAttribute('data-topic', topic.key);
-            
-            // Check if this view+time combination has been animated
-            const isFirstView = this.currentView === 'momentum' && !this.hasAnimated('momentum');
-            const displayValue = isFirstView ? (momentum.includes('+') ? '+0%' : '0%') : momentum;
+            // Use the actual topic name, not the kebab-case key, to match paths
+            item.setAttribute('data-topic', topic.name);
+            console.log(`Creating legend item with data-topic="${topic.name}"`);
             
             item.innerHTML = `
                 <span class="legend-dot" style="background: ${topicData.color};"></span>
                 <span class="legend-label">${topic.name}</span>
-                <span class="legend-value" style="color: ${topicData.color};" data-final="${momentum}">${displayValue}</span>
+                <span class="legend-value" style="color: ${valueColor};" data-final="${finalValue}">${displayValue}</span>
             `;
             
             // Add hover event listeners directly

@@ -6,9 +6,7 @@ const NarrativePulse = {
     activeFilter: null,
     container: null,
     currentTimeRange: '7 days', // Track current time range
-    hasAnimatedOnLoad: false, // Track if initial animation has run
-    hasAnimatedVolume: false, // Track if volume animation has run
-    hasAnimatedConsensus: false, // Track if consensus animation has run
+    animatedCombinations: new Set(), // Track which view+time combinations have been animated
     
     // Chart configuration
     chartWidth: 800,
@@ -39,6 +37,18 @@ const NarrativePulse = {
     panel: null,
     backdrop: null,
     hasChanges: false,
+    
+    // Check if this view+time combination has been animated
+    hasAnimated: function(viewType) {
+        const key = `${viewType}-${this.currentTimeRange}`;
+        return this.animatedCombinations.has(key);
+    },
+    
+    // Mark this view+time combination as animated
+    markAnimated: function(viewType) {
+        const key = `${viewType}-${this.currentTimeRange}`;
+        this.animatedCombinations.add(key);
+    },
     
     // Consensus sentiment data
     consensusData: {
@@ -398,26 +408,33 @@ const NarrativePulse = {
         this.createMomentumView(); // Create the momentum view with all elements
         this.updateInsightCards(); // Initialize insight cards
         
+        // Parse URL parameters to restore shared state
+        this.parseUrlState();
+        
         // Initialize interactions after a small delay to ensure DOM is ready
         setTimeout(() => {
             this.initMomentumView(); // Initialize interactions
             // Only animate on very first load
-            if (!this.hasAnimatedOnLoad) {
+            if (!this.hasAnimated('momentum')) {
                 // Set initial legend values to 0%
                 const legendItems = this.container.querySelectorAll('.legend-item');
                 legendItems.forEach(item => {
                     const valueElement = item.querySelector('.legend-value');
                     if (valueElement) {
-                        const finalValue = valueElement.textContent;
+                        // Get the final value from data-final attribute (already set by updateLegend)
+                        const finalValue = valueElement.getAttribute('data-final') || valueElement.textContent;
                         const isPositive = finalValue.includes('+');
-                        valueElement.setAttribute('data-final', finalValue);
-                        valueElement.textContent = isPositive ? '+0%' : '0%';
+                        // Only reset to 0% if not already at 0%
+                        if (valueElement.textContent !== '+0%' && valueElement.textContent !== '0%') {
+                            valueElement.setAttribute('data-final', finalValue);
+                            valueElement.textContent = isPositive ? '+0%' : '0%';
+                        }
                     }
                 });
                 
                 // Run animation
                 this.animateChartOnLoad();
-                this.hasAnimatedOnLoad = true;
+                this.markAnimated('momentum');
             }
         }, 100);
         
@@ -440,11 +457,13 @@ const NarrativePulse = {
             timeRangeBtn.addEventListener('click', this.toggleTimeRange.bind(this));
         }
         
-        // View toggle
-        const viewBtn = container.querySelector('[data-action="toggleView"]');
-        if (viewBtn) {
-            viewBtn.addEventListener('click', this.toggleView.bind(this));
-        }
+        // View toggle buttons
+        const viewButtons = container.querySelectorAll('.view-toggle-btn');
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.switchToView(btn.dataset.view);
+            });
+        });
         
         // Filter clear button
         const filterClearBtn = container.querySelector('[data-action="clearTopicFilter"]');
@@ -457,6 +476,32 @@ const NarrativePulse = {
         legendItems.forEach(item => {
             item.addEventListener('mouseenter', this.showLegendTooltip.bind(this));
             item.addEventListener('mouseleave', this.hideLegendTooltip.bind(this));
+        });
+        
+        // Share button
+        const shareBtn = container.querySelector('[data-action="shareChart"]');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', this.toggleShareDropdown.bind(this));
+        }
+        
+        // Share dropdown options
+        const copyLinkBtn = container.querySelector('[data-action="copyLink"]');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', this.copyShareLink.bind(this));
+        }
+        
+        const downloadBtn = container.querySelector('[data-action="downloadImage"]');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', this.downloadChart.bind(this));
+        }
+        
+        // Close dropdown on outside click
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('shareDropdown');
+            const shareBtn = container.querySelector('[data-action="shareChart"]');
+            if (dropdown && shareBtn && !dropdown.contains(e.target) && !shareBtn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
         });
         
         // Topic customization button
@@ -621,11 +666,18 @@ const NarrativePulse = {
         setTimeout(() => {
             if (this.currentView === 'momentum') {
                 this.createMomentumView();
+                
+                // Trigger momentum animation if first time viewing this combination
+                if (!this.hasAnimated('momentum')) {
+                    // Start animation immediately - no delay
+                    this.animateChartOnLoad();
+                    this.markAnimated('momentum');
+                }
             } else if (this.currentView === 'volume') {
                 this.createVolumeView();
                 
                 // Trigger volume animation if first time viewing volume
-                if (!this.hasAnimatedVolume) {
+                if (!this.hasAnimated('volume')) {
                     setTimeout(() => {
                         this.animateVolumeOnLoad();
                     }, 200); // Small delay to ensure DOM is ready
@@ -634,7 +686,7 @@ const NarrativePulse = {
                 this.createConsensusView();
                 
                 // Trigger consensus animation if first time viewing consensus
-                if (!this.hasAnimatedConsensus) {
+                if (!this.hasAnimated('consensus')) {
                     setTimeout(() => {
                         this.animateConsensusOnLoad();
                     }, 200); // Small delay to ensure DOM is ready
@@ -649,7 +701,8 @@ const NarrativePulse = {
             }, 150);
         }, 150);
         
-        // Update insight cards for the new time range
+        // Update legend and insight cards for the new time range
+        this.updateLegend();
         this.updateInsightCards();
     },
     
@@ -716,11 +769,19 @@ const NarrativePulse = {
         });
     },
     
-    // Toggle View Mode with smooth transitions
-    toggleView: function() {
-        const viewText = this.container.querySelector('#viewText');
+    // Switch to specific view with smooth transitions
+    switchToView: function(viewName) {
         const chartContent = this.container.querySelector('#chartContent');
-        const current = viewText.textContent;
+        
+        // Update button states
+        const buttons = this.container.querySelectorAll('.view-toggle-btn');
+        buttons.forEach(btn => {
+            if (btn.dataset.view === viewName) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
         
         // Clean up existing event handlers before switching views
         this.cleanupViewEventHandlers();
@@ -730,32 +791,29 @@ const NarrativePulse = {
         
         // Wait for fade out, then switch view and fade in
         setTimeout(() => {
-            if (current === 'Momentum') {
-                viewText.textContent = 'Volume';
-                this.currentView = 'volume';
+            this.currentView = viewName;
+            
+            // Switch to appropriate view
+            if (viewName === 'momentum') {
+                this.createMomentumView();
+            } else if (viewName === 'volume') {
                 this.createVolumeView();
                 
                 // Trigger volume animation if first time
-                if (!this.hasAnimatedVolume) {
+                if (!this.hasAnimated('volume')) {
                     setTimeout(() => {
                         this.animateVolumeOnLoad();
                     }, 200); // Small delay to ensure DOM is ready
                 }
-            } else if (current === 'Volume') {
-                viewText.textContent = 'Consensus';
-                this.currentView = 'consensus';
+            } else if (viewName === 'consensus') {
                 this.createConsensusView();
                 
                 // Trigger consensus animation if first time
-                if (!this.hasAnimatedConsensus) {
+                if (!this.hasAnimated('consensus')) {
                     setTimeout(() => {
                         this.animateConsensusOnLoad();
                     }, 200); // Small delay to ensure DOM is ready
                 }
-            } else {
-                viewText.textContent = 'Momentum';
-                this.currentView = 'momentum';
-                this.createMomentumView();
             }
             
             // Remove fade-out and add fade-in
@@ -908,8 +966,8 @@ const NarrativePulse = {
                         currentY -= barHeight;
                         
                         // Set initial height to 0 if not animated yet, keep bar at bottom
-                        const initialHeight = !this.hasAnimatedVolume ? 0 : barHeight;
-                        const initialY = !this.hasAnimatedVolume ? baseY : currentY;
+                        const initialHeight = !this.hasAnimated('volume') ? 0 : barHeight;
+                        const initialY = !this.hasAnimated('volume') ? baseY : currentY;
                         const finalHeight = barHeight;
                         const finalY = currentY;
                         
@@ -1110,8 +1168,8 @@ const NarrativePulse = {
                     const textColor = percent >= 60 ? 'white' : '#374151';
                     
                     // Set initial opacity to 0 if not animated yet
-                    const initialOpacity = !this.hasAnimatedConsensus ? 0 : 1;
-                    const initialTransform = !this.hasAnimatedConsensus ? 
+                    const initialOpacity = !this.hasAnimated('consensus') ? 0 : 1;
+                    const initialTransform = !this.hasAnimated('consensus') ? 
                         'scale(0.95) translate(0, 5)' : '';
                     
                     return `
@@ -1422,6 +1480,163 @@ const NarrativePulse = {
         });
     },
     
+    // Share functionality methods
+    toggleShareDropdown: function(e) {
+        e.stopPropagation();
+        const dropdown = document.getElementById('shareDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    },
+    
+    getCurrentState: function() {
+        // Get active view
+        const viewBtns = this.container.querySelectorAll('.view-toggle-btn');
+        let activeView = 'momentum';
+        viewBtns.forEach(btn => {
+            if (btn.classList.contains('active')) {
+                activeView = btn.dataset.view;
+            }
+        });
+        
+        // Get time range
+        const timeText = this.container.querySelector('#timeRangeText').textContent;
+        const timeMap = {'7 days': '7d', '30 days': '30d', '90 days': '90d'};
+        const time = timeMap[timeText] || '30d';
+        
+        // Get active topics from legend (non-inactive items)
+        const activeTopics = [];
+        this.container.querySelectorAll('.legend-item:not(.inactive)').forEach(item => {
+            activeTopics.push(item.dataset.topic);
+        });
+        
+        return { 
+            view: activeView, 
+            time: time, 
+            topics: activeTopics.join(',') 
+        };
+    },
+    
+    copyShareLink: function() {
+        const state = this.getCurrentState();
+        const params = new URLSearchParams(state);
+        const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        
+        navigator.clipboard.writeText(url).then(() => {
+            // Show success feedback
+            const dropdown = document.getElementById('shareDropdown');
+            const copyBtn = dropdown.querySelector('[data-action="copyLink"] span');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                dropdown.style.display = 'none';
+            }, 1500);
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const dropdown = document.getElementById('shareDropdown');
+            const copyBtn = dropdown.querySelector('[data-action="copyLink"] span');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                dropdown.style.display = 'none';
+            }, 1500);
+        });
+    },
+    
+    downloadChart: function() {
+        const svg = this.container.querySelector('#narrativeChart');
+        const svgData = new XMLSerializer().serializeToString(svg);
+        
+        // Create a canvas element
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        // Set canvas dimensions
+        canvas.width = 800;
+        canvas.height = 280;
+        
+        img.onload = function() {
+            // Fill white background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw the SVG image
+            ctx.drawImage(img, 0, 0);
+            
+            // Trigger download
+            const link = document.createElement('a');
+            link.download = 'narrative-pulse-chart.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        
+        // Convert SVG to blob and create URL
+        const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+        const url = URL.createObjectURL(svgBlob);
+        img.src = url;
+        
+        // Close dropdown
+        document.getElementById('shareDropdown').style.display = 'none';
+    },
+    
+    // Parse URL state to restore from shared links
+    parseUrlState: function() {
+        const params = new URLSearchParams(window.location.search);
+        
+        // Restore view if present
+        if (params.has('view')) {
+            const view = params.get('view');
+            if (['momentum', 'volume', 'consensus'].includes(view)) {
+                // Find and click the appropriate view button
+                const viewBtn = this.container.querySelector(`[data-view="${view}"]`);
+                if (viewBtn && view !== 'momentum') { // momentum is default, only switch if different
+                    setTimeout(() => {
+                        viewBtn.click();
+                    }, 100);
+                }
+            }
+        }
+        
+        // Restore time range if present
+        if (params.has('time')) {
+            const timeMap = {'7d': '7 days', '30d': '30 days', '90d': '90 days'};
+            const timeText = timeMap[params.get('time')];
+            if (timeText && timeText !== '7 days') { // 7 days is default
+                const timeTextElement = document.getElementById('timeRangeText');
+                if (timeTextElement) {
+                    timeTextElement.textContent = timeText;
+                    this.currentTimeRange = timeText;
+                    
+                    // Trigger update after a short delay
+                    setTimeout(() => {
+                        this.updateChart();
+                    }, 200);
+                }
+            }
+        }
+        
+        // Restore topics if present
+        if (params.has('topics')) {
+            const topics = params.get('topics').split(',');
+            // This would require integration with the topic customization panel
+            // For now, we'll just log it
+            console.log('Shared topics:', topics);
+            // TODO: Implement topic restoration when topic customization is fully integrated
+        }
+    },
+    
     // Create Momentum View (to avoid page reload)
     createMomentumView: function() {
         const chartContent = this.container.querySelector('#chartContent');
@@ -1509,21 +1724,26 @@ const NarrativePulse = {
                 // Create smooth path data
                 let pathData = '';
                 
-                if (yPositions.length > 1) {
+                if (yPositions.length > 1 && this.xPositions && this.xPositions.length > 0) {
+                    // Use the pre-calculated xPositions, ensuring we have the right number
+                    const xPosToUse = this.xPositions.slice(0, yPositions.length);
+                    
                     // Different approaches based on number of points
                     if (yPositions.length <= 5) {
                         // For 5 or fewer points (30-day view), use quadratic curves
-                        pathData = `M ${this.xPositions[0]},${yPositions[0]}`;
-                        pathData += ` Q ${this.xPositions[1]},${yPositions[1]} ${this.xPositions[2]},${yPositions[2]}`;
+                        pathData = `M ${xPosToUse[0]},${yPositions[0]}`;
+                        if (yPositions.length >= 3) {
+                            pathData += ` Q ${xPosToUse[1]},${yPositions[1]} ${xPosToUse[2]},${yPositions[2]}`;
+                        }
                         if (yPositions.length > 3) {
-                            pathData += ` T ${this.xPositions[3]},${yPositions[3]}`;
+                            pathData += ` T ${xPosToUse[3]},${yPositions[3]}`;
                         }
                         if (yPositions.length > 4) {
-                            pathData += ` T ${this.xPositions[4]},${yPositions[4]}`;
+                            pathData += ` T ${xPosToUse[4]},${yPositions[4]}`;
                         }
                     } else {
                         // For more points (7-day and 90-day), use Catmull-Rom spline
-                        pathData = this.createCatmullRomPath(this.xPositions, yPositions);
+                        pathData = this.createCatmullRomPath(xPosToUse, yPositions);
                     }
                 }
                 
@@ -1532,7 +1752,7 @@ const NarrativePulse = {
                 const animationDelay = topicIndex * 0.1; // 100ms stagger
                 
                 // Only hide initially if this is the first load
-                const initialStyle = !this.hasAnimatedOnLoad ? 
+                const initialStyle = !this.hasAnimated('momentum') ? 
                     `stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0;` : 
                     '';
                 
@@ -1542,10 +1762,16 @@ const NarrativePulse = {
                           class="topic-path"
                           style="${initialStyle}"/>
                     <!-- Static dots at data points -->
-                    ${this.xPositions.map((x, i) => `
-                        <circle cx="${x}" cy="${yPositions[i]}" r="3" fill="${p.color}" 
-                                class="data-point-dot chart-transition" opacity="0" data-topic="${p.topic}"/>
-                    `).join('')}
+                    ${yPositions.map((y, i) => {
+                        // Use pre-calculated xPositions with bounds checking
+                        const x = (this.xPositions && i < this.xPositions.length) ? 
+                            this.xPositions[i] : 
+                            this.padding + i * ((this.chartWidth - 2 * this.padding) / (yPositions.length - 1));
+                        return `
+                            <circle cx="${x}" cy="${y}" r="3" fill="${p.color}" 
+                                    class="data-point-dot chart-transition" opacity="0" data-topic="${p.topic}"/>
+                        `;
+                    }).join('')}
                 </g>`;
             }).join('')}
             
@@ -1996,7 +2222,7 @@ const NarrativePulse = {
             }, finalDelay);
         });
         
-        this.hasAnimatedConsensus = true;
+        this.markAnimated('consensus');
     },
     
     // Animate volume bars on first view
@@ -2023,15 +2249,15 @@ const NarrativePulse = {
                     const finalHeight = bar.getAttribute('data-final-height');
                     const finalY = bar.getAttribute('data-final-y');
                     
-                    // Animate both height and y position for vertical growth (faster at 0.6s)
-                    bar.style.transition = 'height 0.6s cubic-bezier(0.42, 0, 0.58, 1), y 0.6s cubic-bezier(0.42, 0, 0.58, 1)';
+                    // Animate both height and y position for vertical growth (optimized at 0.3s)
+                    bar.style.transition = 'height 0.3s cubic-bezier(0.42, 0, 0.58, 1), y 0.3s cubic-bezier(0.42, 0, 0.58, 1)';
                     bar.setAttribute('height', finalHeight);
                     bar.setAttribute('y', finalY);
                 });
-            }, index * 100); // 100ms stagger between date columns
+            }, index * 50); // 50ms stagger between date columns
         });
         
-        this.hasAnimatedVolume = true;
+        this.markAnimated('volume');
     },
     
     // Animate chart on page load
@@ -2053,6 +2279,13 @@ const NarrativePulse = {
             const parentG = path.parentElement;
             const topic = parentG.dataset.topic;
             const length = path.getTotalLength();
+            
+            // Safety check for zero-length or malformed paths
+            if (!length || length === 0) {
+                console.warn(`Path for topic "${topic}" has zero length, skipping animation`);
+                path.style.opacity = '1'; // Just make it visible
+                return;
+            }
             
             // Ensure proper initial state
             path.style.strokeDasharray = length;
@@ -2489,28 +2722,45 @@ const NarrativePulse = {
         const legend = this.container.querySelector('.pulse-legend');
         const currentData = this.getCurrentData();
         
+        // Get data from unified source
+        const unifiedTopics = window.unifiedData?.narrativePulse?.topics || {};
+        
         // Define our specific topics with their data-topic keys
         const specificTopics = [
-            { name: 'AI Infrastructure', key: 'ai-infrastructure', color: '#4a7c59', momentum: '+64%' },
-            { name: 'Enterprise Agents', key: 'enterprise-agents', color: '#f4a261', momentum: '+107%' },
-            { name: 'Defense Tech', key: 'defense-tech', color: '#5a6c8c', momentum: '+111%' },
-            { name: 'Exit Strategies', key: 'exit-strategies', color: '#c77d7d', momentum: '+50%' },
-            { name: 'Vertical AI', key: 'vertical-ai', color: '#8a68a8', momentum: '+60%' }
+            { name: 'AI Infrastructure', key: 'ai-infrastructure', unifiedKey: 'AI Infrastructure' },
+            { name: 'Enterprise Agents', key: 'enterprise-agents', unifiedKey: 'Enterprise Agents' },
+            { name: 'Defense Tech', key: 'defense-tech', unifiedKey: 'Defense Tech' },
+            { name: 'Exit Strategies', key: 'exit-strategies', unifiedKey: 'Exit Strategies' },
+            { name: 'Vertical AI', key: 'vertical-ai', unifiedKey: 'Vertical AI' }
         ];
         
         legend.innerHTML = '';
         specificTopics.forEach(topic => {
+            const topicData = unifiedTopics[topic.unifiedKey];
+            if (!topicData) return;
+            
+            // Get momentum value based on current time range
+            let momentum = '+0%';
+            if (this.currentTimeRange === '7 days') {
+                momentum = topicData.momentum || topicData.weeklyChange || '+0%';
+            } else if (this.currentTimeRange === '30 days') {
+                momentum = topicData.chartData?.['30d']?.momentum?.weeklyGrowth || '+0%';
+            } else if (this.currentTimeRange === '90 days') {
+                momentum = topicData.chartData?.['90d']?.momentum?.quarterlyGrowth || '+0%';
+            }
+            
             const item = document.createElement('div');
             item.className = 'legend-item';
             item.setAttribute('data-topic', topic.key);
             
-            // Always show final value after animation has run once
-            const displayValue = topic.momentum;
+            // Check if this view+time combination has been animated
+            const isFirstView = this.currentView === 'momentum' && !this.hasAnimated('momentum');
+            const displayValue = isFirstView ? (momentum.includes('+') ? '+0%' : '0%') : momentum;
             
             item.innerHTML = `
-                <span class="legend-dot" style="background: ${topic.color};"></span>
+                <span class="legend-dot" style="background: ${topicData.color};"></span>
                 <span class="legend-label">${topic.name}</span>
-                <span class="legend-value" style="color: ${topic.color};" data-final="${topic.momentum}">${displayValue}</span>
+                <span class="legend-value" style="color: ${topicData.color};" data-final="${momentum}">${displayValue}</span>
             `;
             
             // Add hover event listeners directly

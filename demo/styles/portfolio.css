@@ -894,13 +894,22 @@ body.portfolio-open [data-company="openai"]::before {
         width: 100%;
         max-height: 90vh;
         border-radius: 16px 16px 0 0;
-        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        
+        /* CRITICAL FIX: Hide panel off-screen by default */
+        transform: translateY(100%);
+        
+        /* Smooth transition when state changes */
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        
+        /* REMOVED: animation that was causing auto-show on load */
     }
     
+    /* Show panel only when explicitly opened */
     .portfolio-panel[data-state="open"] {
-        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(0);
     }
     
+    /* Optional: Keep slideUp keyframes for future use */
     @keyframes slideUp {
         from {
             transform: translateY(100%);

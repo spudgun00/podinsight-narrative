@@ -829,6 +829,7 @@ const EpisodeLibrary = {
             
             // Topic expansion
             if (e.target.classList.contains('library-topic-more')) {
+                e.stopPropagation(); // Prevent event from bubbling up to row click handler
                 this.toggleTopicExpansion(e.target);
             }
             

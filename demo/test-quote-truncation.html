@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Truncation Test</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h2>Quote Truncation Test (80 chars max)</h2>
+        <div class="epb-panel-v2">
+            <div class="epb-key-quotes" id="quotes-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test quotes with varying lengths
+        const testQuotes = [
+            {
+                id: 'q1',
+                text: 'Short quote under 80 characters should display fully.',
+                speaker: 'Test Speaker 1',
+                role: 'CEO',
+                timestamp: '5:30'
+            },
+            {
+                id: 'q2',
+                text: 'This is a medium length quote that is exactly around eighty characters long to test the boundary condition of our truncation logic.',
+                speaker: 'Test Speaker 2',
+                role: 'Founder',
+                timestamp: '12:45'
+            },
+            {
+                id: 'q3',
+                text: 'This is a very long quote that definitely exceeds eighty characters and should be truncated with an ellipsis at the end. The full text should only be visible when the user clicks to expand the quote card. This helps save vertical space in the interface while still allowing access to the complete quote text when needed.',
+                speaker: 'Test Speaker 3',
+                role: 'Partner',
+                timestamp: '24:18'
+            }
+        ];
+
+        // Render quotes
+        const container = document.getElementById('quotes-container');
+        
+        testQuotes.forEach(quote => {
+            const quoteCard = document.createElement('div');
+            quoteCard.className = 'epb-quote-card';
+            quoteCard.dataset.quoteId = quote.id;
+            
+            // Truncate quote text to 80 characters for single-line display
+            const truncatedText = quote.text.length > 80 
+                ? quote.text.substring(0, 77) + '...' 
+                : quote.text;
+            
+            quoteCard.innerHTML = `
+                <button class="epb-quote-play-btn" data-timestamp="${quote.timestamp}" aria-label="Play quote">
+                    <svg width="40" height="40" viewBox="0 0 40 40" class="play-button-svg">
+                        <circle cx="20" cy="20" r="19" fill="var(--epb-sage)" opacity="0.1"/>
+                        <path class="play-icon" d="M16 13 L16 27 L28 20 Z" fill="var(--epb-sage)"/>
+                    </svg>
+                </button>
+                <div class="epb-quote-body">
+                    <div class="epb-quote-text" data-full-text="${quote.text.replace(/"/g, '&quot;')}">"${truncatedText}"</div>
+                    <div class="epb-quote-attribution">— ${quote.speaker}, ${quote.role} • ${quote.timestamp}</div>
+                </div>
+            `;
+            
+            // Add click handler for expand/collapse
+            quoteCard.addEventListener('click', (e) => {
+                // Don't toggle if clicking play button
+                if (e.target.closest('.epb-quote-play-btn')) return;
+                
+                const isExpanded = quoteCard.classList.contains('expanded');
+                const quoteTextEl = quoteCard.querySelector('.epb-quote-text');
+                const fullText = quoteTextEl.getAttribute('data-full-text');
+                
+                // Collapse all other quotes
+                container.querySelectorAll('.epb-quote-card').forEach(card => {
+                    card.classList.remove('expanded');
+                    const textEl = card.querySelector('.epb-quote-text');
+                    const truncated = textEl.getAttribute('data-full-text');
+                    if (truncated && truncated.length > 80) {
+                        textEl.textContent = '"' + truncated.substring(0, 77) + '..."';
+                    }
+                });
+                
+                // Toggle this quote
+                if (!isExpanded) {
+                    quoteCard.classList.add('expanded');
+                    quoteTextEl.textContent = '"' + fullText + '"';
+                } else {
+                    // If collapsing, restore truncated text
+                    if (fullText.length > 80) {
+                        quoteTextEl.textContent = '"' + fullText.substring(0, 77) + '..."';
+                    }
+                }
+            });
+            
+            container.appendChild(quoteCard);
+        });
+        
+        // Display truncation info
+        console.log('Quote lengths:', testQuotes.map(q => ({
+            id: q.id,
+            length: q.text.length,
+            truncated: q.text.length > 80
+        })));
+    </script>
+</body>
+</html>

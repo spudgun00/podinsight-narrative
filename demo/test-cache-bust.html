@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cache Bust Test</title>
+</head>
+<body>
+    <h1>Force Reload Instructions</h1>
+    <ol>
+        <li>Open Chrome DevTools (F12)</li>
+        <li>Right-click the Refresh button</li>
+        <li>Select "Empty Cache and Hard Reload"</li>
+        <li>Or use Cmd+Shift+R (Mac) / Ctrl+Shift+R (Windows)</li>
+    </ol>
+    
+    <h2>Test in Console:</h2>
+    <pre>
+// Check if the method exists
+console.log('attachQuoteClickHandlers exists?', typeof NarrativePulse.attachQuoteClickHandlers);
+
+// Check the function source to see if debug is there
+console.log(NarrativePulse.attachQuoteClickHandlers.toString().includes('[DEBUG]'));
+    </pre>
+    
+    <p><a href="demo.html">Go to Demo</a></p>
+</body>
+</html>

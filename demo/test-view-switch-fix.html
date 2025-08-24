@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test View Switch and Timeline Fix</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #4a7c59;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .test-steps {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .test-steps ol {
+            line-height: 1.8;
+        }
+        .code-block {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #f4a261;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #4a7c59;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        .button {
+            background: #4a7c59;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background: #3a6c49;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test: View Switch and Timeline Fix</h1>
+    
+    <div class="warning">
+        <strong>⚠️ Important:</strong> Make sure to open the browser console (F12) before testing to see debug messages!
+    </div>
+
+    <div class="test-section">
+        <h2>Problem Being Fixed</h2>
+        <p>When switching from Consensus/Volume view to Momentum view after changing timeline to 30 days, the old tooltip system and redundant filter box appear.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Steps</h2>
+        
+        <div class="test-steps">
+            <h3>Test 1: Reproduce the Original Issue</h3>
+            <ol>
+                <li>Open <a href="demo.html" target="_blank" class="button">Demo Page</a></li>
+                <li>Open browser console (F12)</li>
+                <li>In Narrative Pulse, switch to <strong>Consensus</strong> view</li>
+                <li>Change timeline to <strong>30 days</strong></li>
+                <li>Switch to <strong>Momentum</strong> view</li>
+                <li>Check if you see:
+                    <ul>
+                        <li>❌ Old tooltip (without quotes)</li>
+                        <li>❌ Redundant green filter box</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="test-steps">
+            <h3>Test 2: Verify the Fix</h3>
+            <ol>
+                <li>Look for these debug messages in console:
+                    <ul>
+                        <li><code>[DEBUG] ========== TIMELINE CHANGE START ==========</code></li>
+                        <li><code>[DEBUG] Clearing filter state on timeline change</code></li>
+                        <li><code>[DEBUG] ========== VIEW SWITCH START ==========</code></li>
+                        <li><code>[DEBUG] Starting full cleanup before view switch</code></li>
+                    </ul>
+                </li>
+                <li>Verify NO warnings about:
+                    <ul>
+                        <li>Multiple tooltips detected</li>
+                        <li>Filter indicator showing without active filter</li>
+                    </ul>
+                </li>
+                <li>Confirm only ONE tooltip appears with quotes</li>
+                <li>Confirm NO redundant filter box appears</li>
+            </ol>
+        </div>
+
+        <div class="test-steps">
+            <h3>Test 3: Additional Scenarios</h3>
+            <ol>
+                <li><strong>Volume → 30 days → Momentum:</strong> Should work correctly</li>
+                <li><strong>Momentum → 90 days → Consensus:</strong> Should work correctly</li>
+                <li><strong>Any view → Any timeline → Any view:</strong> Should always show correct tooltip</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Commands for Testing</h2>
+        <div class="code-block">
+// Check for duplicate tooltips
+document.querySelectorAll('#chartTooltip').length
+
+// Check filter state
+NarrativePulse.activeFilter
+
+// Check if filter indicator is showing
+document.querySelector('#filterActive').classList.contains('show')
+
+// Force cleanup (if needed)
+NarrativePulse.cleanupViewEventHandlers()
+
+// Check current view
+NarrativePulse.currentView
+
+// Check current timeline
+NarrativePulse.currentTimeRange
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Expected Results</h2>
+        <div class="success">
+            <strong>✅ Success Criteria:</strong>
+            <ul>
+                <li>Only ONE tooltip element exists at any time</li>
+                <li>Tooltip always shows quotes in Momentum view</li>
+                <li>Filter box only shows when a topic is actually filtered</li>
+                <li>No old UI elements persist after view/timeline changes</li>
+                <li>Console shows proper cleanup debug messages</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Debug Output Legend</h2>
+        <ul>
+            <li><strong>[DEBUG] cleanupViewEventHandlers called</strong> - Full cleanup initiated</li>
+            <li><strong>[DEBUG] Hiding filter indicator</strong> - Filter box being hidden</li>
+            <li><strong>[DEBUG] Multiple tooltips detected!</strong> - WARNING: Duplicate tooltips found and removed</li>
+            <li><strong>[DEBUG] Filter indicator showing without active filter!</strong> - WARNING: Orphaned filter box removed</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>If Issues Persist</h2>
+        <ol>
+            <li>Hard refresh the page: <code>Cmd+Shift+R</code> (Mac) or <code>Ctrl+Shift+R</code> (Windows)</li>
+            <li>Clear browser cache</li>
+            <li>Check console for any JavaScript errors</li>
+            <li>Verify the latest changes are loaded by checking for debug messages</li>
+        </ol>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <a href="demo.html" class="button">Open Demo to Test</a>
+    </div>
+</body>
+</html>

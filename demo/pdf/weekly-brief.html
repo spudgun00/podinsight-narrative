@@ -1058,6 +1058,14 @@
                 </div>
             </div>
 
+            <!-- Footnotes Section -->
+            <div class="card" id="footnotes-section" style="display: none; margin-top: 32px;">
+                <h3 class="card-title" style="margin-bottom: 16px;">References</h3>
+                <div id="footnotes-list" style="font-size: 12px; line-height: 1.8; color: #6B7280;">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
             <!-- Footer -->
             <div class="footer">
                 <div class="footer-content">
@@ -1316,6 +1324,26 @@
                 `;
                 monitorDiv.appendChild(item);
             });
+            
+            // Populate footnotes if they exist
+            if (data.weeklyBrief.footnotes && data.weeklyBrief.footnotes.length > 0) {
+                const footnotesSection = document.getElementById('footnotes-section');
+                const footnotesList = document.getElementById('footnotes-list');
+                
+                // Clear existing content
+                footnotesList.innerHTML = '';
+                
+                // Add each footnote
+                data.weeklyBrief.footnotes.forEach(footnote => {
+                    const p = document.createElement('p');
+                    p.style.marginBottom = '8px';
+                    p.innerHTML = footnote;
+                    footnotesList.appendChild(p);
+                });
+                
+                // Show the footnotes section
+                footnotesSection.style.display = 'block';
+            }
         }
         
         // Helper function to get topic color from unified data

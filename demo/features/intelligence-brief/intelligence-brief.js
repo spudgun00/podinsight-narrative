@@ -656,8 +656,12 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
                 levelClass = 'consensus-medium';
             }
             
+            // Add data-topic attribute for clickable topics
+            const clickableAttr = (item.label === 'Defense Tech') ? 
+                `data-topic="${item.label}" role="button" tabindex="0" style="cursor: pointer;" title="Click for details"` : '';
+            
             consensusItem.innerHTML = `
-                <span class="influence-name">${item.label}</span>
+                <span class="influence-name" ${clickableAttr}>${item.label}</span>
                 <div class="influence-bar-container">
                     <div class="influence-bar ${levelClass}" 
                          role="progressbar" 
@@ -905,9 +909,13 @@ Synthesized from ${meta.analysis.hoursAnalyzed.toLocaleString()} hours across ${
             // Extract numeric value for animation
             const percentValue = parseInt(momentum.replace('%', '').replace('+', '').replace('-', ''));
             
+            // Add data-topic attribute for clickable topics
+            const clickableAttr = (topicName === 'Defense Tech') ? 
+                `data-topic="${topicName}" role="button" tabindex="0" style="cursor: pointer;" title="Click for details"` : '';
+            
             return `
                 <div class="influence-item velocity-item">
-                    <span class="influence-name">${topicName}</span>
+                    <span class="influence-name" ${clickableAttr}>${topicName}</span>
                     ${sparklineSVG}
                     <span class="velocity-change ${colorClass}" 
                           data-value="${percentValue}" 

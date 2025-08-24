@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential Quote Test</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css">
+    <style>
+        body {
+            background: #333;
+            padding: 20px;
+        }
+        .test-container {
+            width: 400px;
+            background: var(--epb-gray-800);
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container epb-panel-v2">
+        <div class="epb-sidebar">
+            <div class="epb-quote">
+                <div class="epb-section-title">ESSENTIAL QUOTE</div>
+                <div class="epb-quote-text"></div>
+                <div class="epb-quote-author"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test populating the quote
+        const quoteText = document.querySelector('.epb-quote-text');
+        const quoteAuthor = document.querySelector('.epb-quote-author');
+        
+        console.log('Quote text element found:', quoteText);
+        console.log('Quote author element found:', quoteAuthor);
+        
+        if (quoteText) {
+            quoteText.textContent = '"The dirty secret of cloud computing is that it\'s a 70% margin business for Amazon. That margin is coming from somewhere - your pockets."';
+            console.log('Quote text set to:', quoteText.textContent);
+            console.log('Quote text computed styles:', window.getComputedStyle(quoteText));
+        }
+        
+        if (quoteAuthor) {
+            quoteAuthor.textContent = '— Dylan Field at 24:18';
+            console.log('Quote author set to:', quoteAuthor.textContent);
+        }
+    </script>
+</body>
+</html>

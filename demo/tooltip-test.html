@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tooltip Fix Verification</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .pass { background: #d4edda; }
+        .fail { background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>Tooltip Quote Click Handler Fix Verification</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(msg, pass) {
+            const div = document.createElement('div');
+            div.className = `test ${pass ? 'pass' : 'fail'}`;
+            div.textContent = msg;
+            results.appendChild(div);
+        }
+        
+        // Check if the fix is in place
+        fetch('features/narrative-pulse/narrative-pulse.js')
+            .then(r => r.text())
+            .then(code => {
+                // Check for the fix: no setTimeout around closeOnClickOutside
+                if (code.includes('// Add immediately, no setTimeout to avoid race conditions')) {
+                    log('✓ Fix found: setTimeout removed from closeOnClickOutside', true);
+                } else {
+                    log('✗ Fix not found: setTimeout still present', false);
+                }
+                
+                // Check for same-click check
+                if (code.includes('if (e === mouseEvent)')) {
+                    log('✓ Fix found: Same-click check in place', true);
+                } else {
+                    log('✗ Fix not found: Same-click check missing', false);
+                }
+                
+                // Check for global event delegation
+                if (code.includes('// Add global event delegation for quote clicks')) {
+                    log('✓ Global event delegation for quotes is set up', true);
+                } else {
+                    log('✗ Global event delegation missing', false);
+                }
+                
+                // Check for debug logging
+                if (code.includes('[DEBUG]')) {
+                    log('✓ Debug logging is in place', true);
+                } else {
+                    log('✗ Debug logging missing', false);
+                }
+                
+                log('Test complete. Please manually verify by clicking data points and quotes.', true);
+            })
+            .catch(err => {
+                log('Error loading narrative-pulse.js: ' + err, false);
+            });
+    </script>
+</body>
+</html>

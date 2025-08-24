@@ -1179,6 +1179,46 @@ async function initializeApp() {
         console.error('✗ Failed to initialize Portfolio Manager:', error);
     }
     
+    // Initialize Narrative Pulse Drill-Down Panel
+    try {
+        if (window.NarrativePulseDrilldown) {
+            window.NarrativePulseDrilldown.init();
+            console.log('✓ Narrative Pulse Drill-Down initialized');
+        } else {
+            console.warn('⚠ Narrative Pulse Drill-Down component not found');
+        }
+    } catch (error) {
+        console.error('✗ Failed to initialize Narrative Pulse Drill-Down:', error);
+    }
+    
+    // Initialize Customization Panel
+    try {
+        if (window.CustomizationPanel) {
+            const initialized = window.CustomizationPanel.init();
+            if (initialized) {
+                console.log('✓ Customization Panel initialized');
+            } else {
+                console.error('✗ Customization Panel initialization failed');
+            }
+            
+            // Hook up the customization button
+            const customizeBtn = document.querySelector('.customize-btn');
+            if (customizeBtn) {
+                customizeBtn.addEventListener('click', () => {
+                    console.log('[Main] Customization button clicked');
+                    window.CustomizationPanel.open();
+                });
+                console.log('✓ Customization button connected');
+            } else {
+                console.warn('⚠ Customization button not found (.customize-btn)');
+            }
+        } else {
+            console.warn('⚠ Customization Panel component not found on window object');
+        }
+    } catch (error) {
+        console.error('✗ Failed to initialize Customization Panel:', error);
+    }
+    
     // Wait a moment for all component scripts to load
     await new Promise(resolve => setTimeout(resolve, 100));
     

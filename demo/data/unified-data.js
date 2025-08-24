@@ -43,9 +43,9 @@ window.unifiedData = {
                   "Series A revenue requirements July 2025",
                   "Defense tech momentum and key players",
                   "Enterprise agent adoption rates",
-                  "Exit environment - M&A vs IPO trends",
-                  "CalPERS venture allocation impact",
-                  "Vertical AI valuations and opportunities"
+                  "European vs US Series A requirements July 2025",
+                  "Fintech path to profitability in current market",
+                  "What VCs are saying about Revolut's trajectory"
               ],
               trendingTopics: [
                   { name: 'Enterprise Agents', trend: '↑107% w/w' },
@@ -325,23 +325,23 @@ window.unifiedData = {
               chartData: {
                   '7d': {
                       momentum: {
-                          dataPoints: [18, 21, 19, 28, 35, 42, 38],
-                          dailyAverage: 28.7,
+                          dataPoints: [28, 32, 35, 33, 35, 42, 38],
+                          dailyAverage: 34.7,
                           peakDay: 'Jul 24'
                       },
                       volume: {
-                          dataPoints: [18, 21, 19, 28, 35, 42, 38],
-                          total: 201
+                          dataPoints: [28, 32, 35, 33, 35, 42, 38],
+                          total: 243
                       },
                       consensus: {
                           levels: [0.48, 0.51, 0.50, 0.58, 0.65, 0.68, 0.67],
                           label: 'Mixed'
                       },
                       quotes: {
-                          'Jul 19': 'Anduril valuation sets defense tech tone',
-                          'Jul 20': 'Geopolitical tensions driving investor interest',
-                          'Jul 21': 'Weekend analysis of dual-use opportunities',
-                          'Jul 22': 'Palmer Luckey on Tim Ferriss sparks discussion',
+                          'Jul 19': 'Defense tech investment thesis gaining traction',
+                          'Jul 20': 'Founders Fund doubles down on defense startups',
+                          'Jul 21': 'Pentagon modernization creating opportunities',
+                          'Jul 22': 'Geopolitical tensions driving investment urgency',
                           'Jul 23': '3 of top 10 Q2 deals in defense highlighted',
                           'Jul 24': 'National security pods drive peak coverage',
                           'Jul 25': 'Bipartisan support creating 10-year visibility'
@@ -683,23 +683,23 @@ window.unifiedData = {
                       {
                           name: 'All-In Podcast - AI Infrastructure Deep Dive',
                           time: '2h ago',
-                          quote: 'Scale AI at $14.3B proves the thesis. Every LP wants infrastructure exposure - application layer is getting commoditized at light speed.'
+                          quote: 'Scale AI at $14.3B proves the thesis. Every LP wants infrastructure exposure - application layer is getting commoditized at light speed. • All-In Ep 167 • 34:12'
                       },
                       {
                           name: 'BG2Pod with Brad Gerstner',
                           time: '7h ago',
-                          quote: 'We\'re seeing 70% of AI dollars flow to infrastructure. The picks-and-shovels play is the only defensible position.'
+                          quote: 'We\'re seeing 70% of AI dollars flow to infrastructure. The picks-and-shovels play is the only defensible position. • 20VC Ep 789 • 55:08'
                       },
                       {
                           name: 'Invest Like the Best',
                           time: '1d ago',
-                          quote: 'Foundation model companies need $100M+ just to compete. Infrastructure is where sustainable moats exist.'
+                          quote: 'Foundation model companies need $100M+ just to compete. Infrastructure is where sustainable moats exist. • Invest Like the Best Ep 321 • 28:50'
                       }
                   ],
                   dissent: {
                       name: 'Contrarian Corner Podcast',
                       time: '3d ago',
-                      quote: 'When everyone rushes to infrastructure, the real opportunity might be in overlooked vertical applications.'
+                      quote: 'When everyone rushes to infrastructure, the real opportunity might be in overlooked vertical applications. • All-In Ep 184 • 61:30'
                   }
               }
           },
@@ -712,20 +712,41 @@ window.unifiedData = {
                   contrarian: {
                       name: 'First Round Review Special',
                       time: '5h ago',
-                      quote: 'The Series A crunch is real. We won\'t even take meetings below $2.5M ARR unless it\'s AI infrastructure. Extension rounds are the new normal.'
+                      quote: 'The Series A crunch is real. We won\'t even take meetings below $2.5M ARR unless it\'s AI infrastructure. Extension rounds are the new normal. • Acquired Ep 203 • 72:15'
                   },
                   mainstream: [
                       {
                           name: 'Emergence Capital Thesis Update',
                           time: 'This week',
-                          quote: 'Quality bar keeps rising. Companies need 18-24 months runway because the next round will be harder.'
+                          quote: 'Quality bar keeps rising. Companies need 18-24 months runway because the next round will be harder. • Khosla Ventures Podcast Ep 51 • 40:05'
                       },
                       {
                           name: 'SaaStr Annual Preview',
                           time: '2d ago',
-                          quote: '75% higher revenue requirements than 2021. This is healthy market correction, not a crisis.'
+                          quote: '75% higher revenue requirements than 2021. This is healthy market correction, not a crisis. • The Information\'s 411 Ep 1456 • 19:40'
                       }
                   ]
+              }
+          },
+          {
+              id: 'feed-euro-1',
+              time: '18h ago',
+              event: 'European tech momentum accelerating - H1 deployments at record levels',
+              category: 'pattern',
+              expansion: {
+                  sources: [
+                      {
+                          name: 'The European Founder',
+                          time: '18h ago',
+                          quote: '€15B deployed in European tech H1 2025, with UK capturing 35% despite macro concerns. Multiple US funds opening London offices.'
+                      },
+                      {
+                          name: '20VC European Special',
+                          time: '1d ago',
+                          quote: 'The arbitrage opportunity is real - similar quality companies at 40% discount to Bay Area valuations.'
+                      }
+                  ],
+                  implications: 'US LPs increasingly allocating to European funds for value. Cross-Atlantic rounds accelerating.'
               }
           },
           {
@@ -738,17 +759,17 @@ window.unifiedData = {
                       {
                           name: 'Enterprise Software Weekly',
                           time: '8h ago',
-                          quote: '70% of Fortune 500s now in production with AI agents. Decagon\'s $1.5B valuation validates enterprise appetite.'
+                          quote: '70% of Fortune 500s now in production with AI agents. Decagon\'s $1.5B valuation validates enterprise appetite. • The Information\'s 411 Ep 1582 • 25:10'
                       },
                       {
                           name: 'CloudNative Podcast',
                           time: '1d ago',
-                          quote: 'AWS reporting 3x growth in agent infrastructure consumption. This isn\'t experimentation anymore.'
+                          quote: 'AWS reporting 3x growth in agent infrastructure consumption. This isn\'t experimentation anymore. • The Information\'s 411 Ep 1320 • 31:22'
                       },
                       {
                           name: 'CTO Confidential',
                           time: '2d ago',
-                          quote: 'Every software budget now has AI allocation. 30% of traditional SaaS spend shifting to AI tools.'
+                          quote: 'Every software budget now has AI allocation. 30% of traditional SaaS spend shifting to AI tools. • Indie Hackers Ep 287 • 48:35'
                       }
                   ],
                   momentum: '42 mentions this week vs. 11 mentions last week (+281%)'
@@ -757,22 +778,22 @@ window.unifiedData = {
           {
               id: 'feed-4',
               time: '1d ago',
-              event: 'CalPERS announces 10% venture allocation - largest pension shift in decade',
-              category: 'lp-intel',
+              event: 'Thiel: "10% venture allocation is intellectually dishonest - either go to zero or 50%, anything else is bureaucratic cowardice"',
+              category: 'divergence',
               expansion: {
                   indicators: [
                       {
-                          name: 'Capital Allocators Podcast',
+                          name: 'Conversations with Tyler',
                           time: '1d ago',
-                          quote: 'CalPERS moving $21B into venture over 3 years. They want specialist funds with clear DPI paths.'
+                          quote: 'Pension funds optimize for not getting fired, not returns. A 10% allocation lets them claim innovation while avoiding real risk. True believers should be 50%+ in venture or admit they don\'t understand the future. • Conversations with Tyler Ep 189 • 42:15'
                       },
                       {
-                          name: 'LP Roundtable Coverage',
+                          name: 'Josh Wolfe Counterpoint',
                           time: '2d ago',
-                          quote: 'Distribution drought forcing creativity. GP-led secondaries now 46% of all secondary transactions.'
+                          quote: 'Thiel\'s binary worldview ignores portfolio theory. But he\'s right that most LPs are fighting the last war - optimizing for 2008 when they should prepare for 2030. • The Tim Ferriss Show Ep 712 • 67:40'
                       }
                   ],
-                  impact: 'Specialist funds seeing 2x easier fundraising. Generalists struggling to close.'
+                  impact: 'Institutional LPs privately admitting their allocation models are "compliance theater" not return optimization.'
               }
           },
           {
@@ -785,17 +806,17 @@ window.unifiedData = {
                       {
                           name: 'Vertical SaaS Summit',
                           time: '1d ago',
-                          quote: 'Every major vertical will have its $10B+ AI winner. Healthcare and legal are just the beginning.'
+                          quote: 'Every major vertical will have its $10B+ AI winner. Healthcare and legal are just the beginning. • The Logan Bartlett Show Ep 92 • 16:00'
                       },
                       {
                           name: 'Index Ventures Thesis',
                           time: '2d ago',
-                          quote: 'Domain expertise plus AI equals defensible moats. Horizontal plays are dead on arrival.'
+                          quote: 'Domain expertise plus AI equals defensible moats. Horizontal plays are dead on arrival. • 20VC Ep 851 • 68:40'
                       },
                       {
                           name: 'NEA Partner Meeting Leak',
                           time: '3d ago',
-                          quote: 'We\'re only backing teams that own the entire workflow in their vertical. No more point solutions.'
+                          quote: 'We\'re only backing teams that own the entire workflow in their vertical. No more point solutions. • All-In Ep 195 • 45:00'
                       }
                   ],
                   implications: 'Watch for vertical-specific funds launching Q4. Healthcare AI fund rumors from Bessemer, Greylock.'
@@ -811,17 +832,17 @@ window.unifiedData = {
                       {
                           name: 'Acquired Podcast Special',
                           time: '2d ago',
-                          quote: 'Only 27 IPOs in H1 2025 - lowest in a decade. Strategic acquirers are the new exit path.'
+                          quote: 'Only 27 IPOs in H1 2025 - lowest in a decade. Strategic acquirers are the new exit path. • Acquired Ep 221 • 81:03'
                       },
                       {
                           name: 'Banker Roundtable',
                           time: '3d ago',
-                          quote: 'Tech giants sitting on $500B+ cash. M&A premiums averaging 40% above last private round.'
+                          quote: 'Tech giants sitting on $500B+ cash. M&A premiums averaging 40% above last private round. • Invest Like the Best Ep 298 • 37:25'
                       },
                       {
                           name: 'Stratechery Analysis',
                           time: '4d ago',
-                          quote: 'IPO window might not truly open until 2026. Founders need to adjust expectations now.'
+                          quote: 'IPO window might not truly open until 2026. Founders need to adjust expectations now. • Stratechery Ep 35 • 14:50'
                       }
                   ],
                   implications: 'VCs increasingly underwriting to strategic exit multiples, not public market comps.'
@@ -1698,6 +1719,49 @@ intelligenceBrief: {
 },
 
 // ============================================
+// DRILL-DOWN PANEL EPISODES - DEMO DATA
+// ============================================
+drilldownEpisodes: {
+    'Defense Tech': [
+        {
+            id: 'dd-defense-1',
+            podcast: 'All-In Podcast',
+            timeAgo: '2 days ago',
+            mentions: 42,
+            title: "Anduril's $14B Valuation: Defense Tech Goes Mainstream",
+            quote: "This is the SpaceX moment for defense tech. Every LP who ignored this sector is scrambling",
+            guest: 'Chamath Palihapitiya',
+            priority: 'critical'
+        },
+        {
+            id: 'dd-defense-2',
+            podcast: '20VC',
+            timeAgo: '3 days ago',
+            mentions: 31,
+            title: "Why We Led Anduril's Round",
+            quote: "Geopolitics gave us a 10-year tailwind. This isn't a trend, it's a generational shift",
+            guest: 'Bill Gurley',
+            priority: 'opportunity'
+        },
+        {
+            id: 'dd-defense-3',
+            podcast: 'Acquired',
+            timeAgo: '4 days ago',
+            mentions: 28,
+            title: "Defense Tech Deep Dive: From Taboo to Table Stakes",
+            quote: "Three of the top 10 Q2 deals were defense tech, including cyber-defense plays following market leaders like Darktrace",
+            guest: 'Ben Gilbert',
+            priority: 'elevated'
+        }
+    ],
+    // Placeholder for other topics
+    'AI Infrastructure': [],
+    'Enterprise Agents': [],
+    'Climate Tech': [],
+    'Traditional SaaS': []
+},
+
+// ============================================
 // WEEKLY BRIEF - FOR PDF GENERATION
 // ============================================
 weeklyBrief: {
@@ -1706,22 +1770,22 @@ weeklyBrief: {
             {
                 type: 'consensus',
                 text: 'AI infrastructure reaches 70% of funding',
-                details: '[287 mentions across 46 episodes] with Scale AI at $14.3B proving "picks and shovels" thesis.'
+                details: '[287 mentions across 46 episodes] with Scale AI at $14.3B proving "picks and shovels" thesis¹'
             },
             {
                 type: 'growth',
                 text: 'Enterprise agents explode +107% w/w',
-                details: '[234 mentions] as 70% of Fortune 500s move from pilots to production deployments.'
+                details: '[234 mentions] as 70% of Fortune 500s move from pilots to production deployments²'
             },
             {
                 type: 'contrarian',
                 text: 'Defense tech defies critics',
-                details: 'Anduril at $14B and 3 of top 10 Q2 deals validate sector despite ESG concerns.'
+                details: 'Anduril at $14B and 3 of top 10 Q2 deals validate sector despite ESG concerns³'
             },
             {
                 type: 'warning',
-                text: 'Exit drought deepens:',
-                details: 'Only 27 IPOs in H1 2025. M&A becomes primary path with 40% premiums.'
+                text: 'Exit drought deepens',
+                details: 'Only 27 IPOs in H1 2025. M&A becomes primary path with 40% premiums⁴'
             }
         ]
     },
@@ -1815,41 +1879,41 @@ weeklyBrief: {
     ],
     consensusForming: [
         {
-            title: 'Infrastructure > Applications clear winner',
+            title: 'Infrastructure > Applications clear winner⁵',
             sources: '[8 tier-1 sources aligned: All-In, BG2Pod, Index, a16z]',
             insight: '4x revenue multiples prove picks-and-shovels thesis'
         },
         {
-            title: 'Enterprise AI hits production inflection',
+            title: 'Enterprise AI hits production inflection⁶',
             sources: '[42 mentions across CTO panels and enterprise pods]',
             insight: 'Moving from pilots to real workflow automation at scale'
         },
         {
-            title: 'Series A bar permanently higher',
+            title: 'Series A bar permanently higher⁷',
             sources: '[15+ funds confirm: Benchmark, First Round, Emergence]',
             insight: '$3M ARR minimum, no return to 2021 standards'
         }
     ],
     contrarian: [
         {
-            title: 'Traditional SaaS accelerating decline',
+            title: 'Traditional SaaS accelerating decline⁸',
             description: '-58% while all AI categories surge',
             context: 'AI-native solutions making legacy obsolete'
         },
         {
-            title: 'Europe deep tech arbitrage ignored',
+            title: 'Europe deep tech arbitrage ignored⁹',
             description: '44% of global deep tech funding',
             context: 'US VCs missing significant opportunity'
         }
     ],
     blindspots: [
         {
-            title: 'Developer tools consolidation wave',
+            title: 'Developer tools consolidation wave¹⁰',
             description: 'GitHub Copilot dominance underdiscussed',
             context: 'M&A wave coming Q4 2025'
         },
         {
-            title: 'Climate tech profitability turn',
+            title: 'Climate tech profitability turn¹¹',
             description: 'Industrial applications working quietly',
             context: 'First profitable exits changing narrative'
         }
@@ -1869,7 +1933,7 @@ weeklyBrief: {
     portfolioImpact: {
         portfolio: [
             {
-                company: "OpenAI",
+                company: "OpenAI¹²",
                 mentions: 12,
                 trend: "up",
                 sentiment: {
@@ -1892,7 +1956,7 @@ weeklyBrief: {
                 ]
             },
             {
-                company: "Anthropic",
+                company: "Anthropic¹³",
                 mentions: 7,
                 trend: "up",
                 sentiment: {
@@ -1913,11 +1977,34 @@ weeklyBrief: {
                         tag: null
                     }
                 ]
+            },
+            {
+                company: "Revolut",
+                mentions: 8,
+                trend: "up",
+                sentiment: {
+                    score: 8.2,
+                    label: "Positive"
+                },
+                insights: [
+                    {
+                        text: "Q2 profitability milestone driving positive sentiment",
+                        tag: "Signal"
+                    },
+                    {
+                        text: "Multiple discussions on Revolut's path as template for European fintech",
+                        tag: null
+                    },
+                    {
+                        text: "US expansion strategy cited as model for geographic arbitrage",
+                        tag: null
+                    }
+                ]
             }
         ],
         watchlist: [
             {
-                company: "Perplexity",
+                company: "Perplexity¹⁴",
                 mentions: 7,
                 trend: "up",
                 sentiment: {
@@ -1942,7 +2029,278 @@ weeklyBrief: {
         ]
     },
     // Add podcastHighlights to satisfy validator
-    podcastHighlights: []
+    podcastHighlights: [],
+    
+    // Footnotes for all citations in the weekly brief
+    footnotes: [
+        "¹ All-In Ep 184 (61:30), 20VC Ep 789 with Brad Gerstner (55:08), discussing Scale AI's infrastructure thesis",
+        "² The Information's 411 Ep 1582 (25:10), Enterprise Software Weekly Ep 67 (12:30), The Logan Bartlett Show Ep 92 (16:00)",
+        "³ Acquired Ep 221 (81:03), analyzing Q2 2025 defense tech deals with ESG analysis",
+        "⁴ Acquired Ep 203 (72:15), Stratechery Ep 35 (14:50), Invest Like the Best Ep 298 (37:25) on M&A premiums",
+        "⁵ All-In Ep 147 with Chamath Palihapitiya (23:45), 20VC Ep 892 with Bill Gurley (1:02:30), BG2Pod Ep 89 (45:12)",
+        "⁶ CloudNative Podcast Ep 234 (34:20), CTO Confidential Ep 45 (56:10), The Information's 411 Ep 1320 (31:22)",
+        "⁷ First Round Review Ep 45 (15:20), Emergence Capital Podcast Ep 23 (45:10), Benchmark Partners Ep 78 (33:40)",
+        "⁸ All-In Ep 195 (45:00), Stratechery Ep 35 (14:50), 20VC Ep 851 (68:40) on SaaS decline",
+        "⁹ Khosla Ventures Podcast Ep 68 (22:55), The Information's 411 Ep 1456 (19:40), Index Ventures Europe Ep 12 (38:15)",
+        "¹⁰ Indie Hackers Ep 287 (48:35), The Logan Bartlett Show Ep 92 (16:00), GitHub Copilot market share analysis",
+        "¹¹ Invest Like the Best Ep 321 (28:50), The Information's 411 Ep 1320 (31:22), climate tech profitability milestones",
+        "¹² All-In Ep 167 (34:12), The Information's 411 Ep 1582 (25:10), 20VC Ep 789 (55:08) on OpenAI developments",
+        "¹³ 20VC Ep 851 (68:40), Acquired Ep 203 (72:15), The Information's 411 Ep 1456 (19:40) on Anthropic positioning",
+        "¹⁴ All-In Ep 184 (61:30), The Logan Bartlett Show Ep 92 (16:00), Invest Like the Best Ep 298 (37:25) on Perplexity disruption"
+    ]
+},
+
+// ============================================
+// SEARCH RESULTS - Single Source of Truth
+// ============================================
+searchResults: {
+    queries: {
+        'european': {
+            confidence: '91%',
+            discussions: {
+                '7days': 14,
+                '30days': 52,
+                '90days': 178
+            },
+            synthesis: {
+                '7days': {
+                    title: 'Geographic arbitrage emerging',
+                    content: 'Growing divergence in Series A requirements: US firms requiring $5M ARR while European VCs maintaining $2-3M threshold. UK funds particularly active, with 14 discussions noting better entry prices for similar quality. Notable shift: US LPs increasingly looking at European opportunities.'
+                },
+                '30days': {
+                    title: 'Arbitrage window widening rapidly',
+                    content: "The US-Europe Series A gap has expanded from 1.5x to 2.5x over the past month. US requirements hardened to $5M ARR minimum (up from $4M in June), while European thresholds remain stable at €2-3M. Key development: Sequoia and Accel opened dedicated European early-stage funds to capitalize on the arbitrage. We're tracking 52 discussions showing US funds deploying 30% of Series A capital in Europe - up from just 12% a month ago. UK startups are the primary beneficiaries, with London capturing 60% of US crossover investments. Critical insight: European founders achieving US valuations at half the revenue threshold by strategically incorporating in Delaware while operating from Europe."
+                },
+                '90days': {
+                    title: 'Geographic decoupling complete',
+                    content: "The transatlantic Series A market has fundamentally bifurcated over the past quarter. What began as temporary post-SVB divergence in April - when both markets required $3M ARR - has crystallized into distinct ecosystems. US requirements escalated through three distinct phases: $3M (April) → $4M (May) → $5M (July), while Europe held steady at €2-3M throughout. The catalyst was May's flight to quality in US markets following several high-profile down rounds. Three structural changes emerged: (1) US LPs now allocate 15-20% to European early-stage as a distinct asset class, (2) European startups increasingly bypass US Series A entirely, going straight to US Series B at $10M+ ARR, and (3) A new class of 'arbitrage specialists' - US funds with European partners - captured 40% of European Series A deals. The data is conclusive: geographic diversification is no longer optional for Series A investors. Winners: UK and German startups securing US valuations at European revenue bars. Losers: US-only funds missing 2-3x valuation arbitrage opportunities."
+                }
+            },
+            sources: {
+                '7days': [
+                    {
+                        podcast: '20VC',
+                        guest: 'Harry Stebbings',
+                        timeAgo: '1 day ago',
+                        duration: '45',
+                        quote: "European Series A is where US Series A was 18 months ago - that's an opportunity. We're seeing Bay Area funds setting up London offices specifically for the valuation arbitrage."
+                    },
+                    {
+                        podcast: 'The European Founder',
+                        guest: 'Andreas Klinger',
+                        timeAgo: '2 days ago',
+                        duration: '38',
+                        quote: "€15B deployed in European tech H1 2025. The quality gap has closed but the valuation gap remains. Smart US LPs are taking notice."
+                    }
+                ],
+                '30days': [
+                    {
+                        podcast: 'All-In Podcast',
+                        guest: 'Jason Calacanis',
+                        timeAgo: '2 weeks ago',
+                        duration: '56',
+                        quote: "We're literally getting the same quality founders in Berlin at 40% of the San Francisco price. This arbitrage won't last - either US valuations come down or European goes up."
+                    },
+                    {
+                        podcast: 'Invest Like the Best',
+                        guest: 'Patrick O\'Shaughnessy',
+                        timeAgo: '3 weeks ago',
+                        duration: '48',
+                        quote: "Sequoia Europe just closed their largest fund ever. The smart money is moving - 30% of our Series A allocation is now European. The returns speak for themselves."
+                    }
+                ],
+                '90days': [
+                    {
+                        podcast: 'The Tim Ferriss Show',
+                        guest: 'Matt Clifford',
+                        timeAgo: '2 months ago',
+                        duration: '72',
+                        quote: "In April, we all thought the markets would reconverge. Now it's clear we have two distinct ecosystems. European founders don't even pitch to US VCs for Series A anymore - they wait for B."
+                    },
+                    {
+                        podcast: '20VC',
+                        guest: 'Danny Rimer',
+                        timeAgo: '6 weeks ago',
+                        duration: '65',
+                        quote: "The bifurcation is permanent. US LPs treating Europe as a separate asset class with 15-20% allocation is the new normal. We're seeing 2-3x arbitrage on identical business models."
+                    }
+                ]
+            }
+        },
+        'revolut': {
+            confidence: '88%',
+            discussions: 8,
+            synthesis: {
+                title: 'Profitability playbook emerging',
+                content: "Consensus forming that fintech winners are hitting profitability without additional capital. Revolut's Q2 2025 numbers mentioned across 8 episodes as the template: £1.9B revenue run rate with 45M users, proving European scale. The narrative has shifted from 'can fintech be profitable?' to 'who can replicate Revolut's playbook?' Key insight: geographic expansion before product depth, monetize the base through premium tiers, and maintain sub-30% cost-to-income ratio. Multiple VCs now screening for 'Revolut DNA' - founders who prioritize unit economics from day one. Notable: US neobanks still burning $50M+ monthly while European fintechs achieve profitability at half the user base."
+            },
+            sources: [
+                {
+                    podcast: 'Fintech Insider',
+                    guest: 'Simon Taylor',
+                    timeAgo: '18 hours ago',
+                    duration: '34',
+                    quote: "Revolut proved you can hit profitability while still growing 50% YoY. They're the template every European fintech is now following."
+                },
+                {
+                    podcast: '20VC',
+                    guest: 'Harry Stebbings',
+                    timeAgo: '2 days ago',
+                    duration: '42',
+                    quote: "The profitability turn changes everything for European fintech. Revolut's path shows you don't need Silicon Valley capital to build a global winner."
+                }
+            ]
+        },
+        'contrarian': {
+            confidence: '76%',
+            discussions: 3,
+            synthesis: {
+                title: 'Limited contrarian views',
+                content: 'While the majority is bullish on AI, Peter Thiel and others question timeline to profitability. "We\'re building infrastructure for use cases that don\'t exist yet."'
+            },
+            sources: [] // Uses default sources
+        },
+        'series_a': {
+            confidence: '91%',
+            discussions: 8,
+            synthesis: {
+                title: 'Valuation normalization',
+                content: 'Series A rounds settling at 20-30x ARR for AI companies, down from 50-100x in 2023. "Reality is setting in," per Benchmark\'s latest.'
+            },
+            sources: []
+        },
+        'brad_gerstner': {
+            confidence: '94%',
+            discussions: 3,
+            synthesis: {
+                title: "Gerstner's thesis evolution",
+                content: 'Shifted focus to AI infrastructure plays and companies with "10x productivity gains". Emphasizing capital efficiency over growth at all costs.'
+            },
+            sources: []
+        },
+        'fintech_profitability': {
+            // Alias for Revolut search
+            confidence: '88%',
+            discussions: 8,
+            synthesis: {
+                title: 'Profitability playbook emerging',
+                content: "Consensus forming that fintech winners are hitting profitability without additional capital. Revolut's Q2 2025 numbers mentioned across 8 episodes as the template: £1.9B revenue run rate with 45M users, proving European scale. The narrative has shifted from 'can fintech be profitable?' to 'who can replicate Revolut's playbook?' Key insight: geographic expansion before product depth, monetize the base through premium tiers, and maintain sub-30% cost-to-income ratio. Multiple VCs now screening for 'Revolut DNA' - founders who prioritize unit economics from day one. Notable: US neobanks still burning $50M+ monthly while European fintechs achieve profitability at half the user base."
+            },
+            sources: [
+                {
+                    podcast: 'Fintech Insider',
+                    guest: 'Simon Taylor',
+                    timeAgo: '18 hours ago',
+                    duration: '34',
+                    quote: "Revolut proved you can hit profitability while still growing 50% YoY. They're the template every European fintech is now following."
+                },
+                {
+                    podcast: '20VC',
+                    guest: 'Harry Stebbings',
+                    timeAgo: '2 days ago',
+                    duration: '42',
+                    quote: "The profitability turn changes everything for European fintech. Revolut's path shows you don't need Silicon Valley capital to build a global winner."
+                }
+            ]
+        },
+        'vertical_ai': {
+            confidence: '94%',
+            discussions: {
+                '7days': 14,
+                '30days': 47,
+                '90days': 156
+            },
+            synthesis: {
+                '7days': {
+                    title: 'Strong consensus forming',
+                    content: 'Vertical AI applications with proprietary data moats are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to "AI for specific workflows" with deep domain expertise.'
+                },
+                '30days': {
+                    title: 'Pattern shift accelerating',
+                    content: "Vertical AI winners are emerging with unprecedented clarity. Over the past month, we've tracked a 139% increase in vertical-specific discussions, with Harvey's legal AI and Abridge's healthcare platform both crossing $5B valuations. The narrative has evolved from 'will vertical work?' to 'which vertical is next?' - with fintech and manufacturing showing early signals. Notably, horizontal AI platforms are pivoting to vertical strategies, validating the thesis that domain expertise plus AI equals defensible moats."
+                },
+                '90days': {
+                    title: 'Fundamental market restructuring complete',
+                    content: "The past quarter witnessed the definitive end of horizontal AI euphoria and the rise of vertical specialization. What started as contrarian thinking in late April - with just 45 mentions across all podcasts - has become mainstream consensus at 287 mentions by late July. The inflection point came in Week 7 (early June) when Bessemer and NEA simultaneously announced vertical-focused funds. Three critical learnings have emerged: (1) Workflow ownership trumps technology superiority, (2) Compliance and industry-specific needs create natural moats, and (3) Customers pay 3-5x premiums for vertical solutions over horizontal alternatives. The market has spoken: generalist AI is a feature, specialist AI is a company."
+                }
+            },
+            sources: {
+                '7days': [
+                    {
+                        podcast: '20VC',
+                        guest: 'Brad Gerstner',
+                        timeAgo: '2 days ago',
+                        duration: '45',
+                        quote: "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow. Look at what's happening with Salesforce and ServiceNow - they're embedding AI into existing enterprise workflows where the data already lives. That's the moat."
+                    },
+                    {
+                        podcast: 'Invest Like Best',
+                        guest: 'Elad Gil',
+                        timeAgo: '4 days ago',
+                        duration: '38',
+                        quote: "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance - these verticals have specific compliance needs, data requirements, and workflow patterns that horizontal platforms can't address effectively."
+                    }
+                ],
+                '30days': [
+                    {
+                        podcast: 'All-In Podcast',
+                        guest: 'Chamath Palihapitiya',
+                        timeAgo: '2 weeks ago',
+                        duration: '52',
+                        quote: "Harvey hitting $5B changed everything. Every vertical is now racing to find its AI champion. We're seeing a land grab where domain expertise matters more than model performance."
+                    },
+                    {
+                        podcast: 'BG2Pod',
+                        guest: 'Bill Gurley',
+                        timeAgo: '3 weeks ago',
+                        duration: '41',
+                        quote: "The pivot from horizontal to vertical happened faster than anyone predicted. Companies that tried to be everything to everyone are now desperately trying to pick a vertical before it's too late."
+                    }
+                ],
+                '90days': [
+                    {
+                        podcast: 'The Tim Ferriss Show',
+                        guest: 'Reid Hoffman',
+                        timeAgo: '2 months ago',
+                        duration: '67',
+                        quote: "In April, vertical AI was contrarian. By July, it's consensus. This is the fastest I've seen a market narrative flip in my entire career. The data is undeniable - vertical solutions have 3-5x better retention."
+                    },
+                    {
+                        podcast: 'Acquired',
+                        guest: 'Special Episode',
+                        timeAgo: '6 weeks ago',
+                        duration: '89',
+                        quote: "The June inflection point when Bessemer and NEA announced vertical funds was the moment everyone realized horizontal AI was dead. It's not about the technology anymore, it's about owning the customer workflow."
+                    }
+                ]
+            }
+        }
+    },
+    // Default result for unmatched queries
+    default: {
+        confidence: '89%',
+        discussions: 14,
+        synthesis: {
+            title: 'Strong consensus forming',
+            content: 'Vertical AI applications with proprietary data moats are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to "AI for specific workflows" with deep domain expertise.'
+        },
+        sources: [
+            {
+                podcast: '20VC',
+                guest: 'Brad Gerstner',
+                timeAgo: '2 days ago',
+                duration: '45',
+                quote: "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow. Look at what's happening with Salesforce and ServiceNow - they're embedding AI into existing enterprise workflows where the data already lives. That's the moat."
+            },
+            {
+                podcast: 'Invest Like Best',
+                guest: 'Elad Gil',
+                timeAgo: '4 days ago',
+                duration: '38',
+                quote: "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance - these verticals have specific compliance needs, data requirements, and workflow patterns that horizontal platforms can't address effectively."
+            }
+        ]
+    }
 },
 };
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Tooltip Fix</title>
+</head>
+<body>
+    <h1>Tooltip Fix Test</h1>
+    <p>Steps to test:</p>
+    <ol>
+        <li>Open the main demo at <a href="demo.html">demo.html</a></li>
+        <li>Click on a data point in the Narrative Pulse chart to show tooltip</li>
+        <li>Check if quotes have cursor:pointer style</li>
+        <li>Click on a quote to open brief panel</li>
+        <li>Close the brief panel</li>
+        <li>Click the same data point again</li>
+        <li>Check if quotes still have cursor:pointer style and are clickable</li>
+    </ol>
+    
+    <h2>Debug Console Commands:</h2>
+    <pre>
+// Check if attachQuoteClickHandlers exists
+console.log(typeof NarrativePulse.attachQuoteClickHandlers);
+
+// Check if quotes have click handlers
+document.querySelectorAll('.topic-quote').forEach(el => {
+    console.log('Quote:', el.textContent.substring(0, 30), 'onclick:', el.onclick);
+});
+
+// Manually call the attach function
+NarrativePulse.attachQuoteClickHandlers();
+
+// Check quotes again
+document.querySelectorAll('.topic-quote').forEach(el => {
+    console.log('After attach - Quote:', el.textContent.substring(0, 30), 'onclick:', el.onclick);
+});
+    </pre>
+</body>
+</html>

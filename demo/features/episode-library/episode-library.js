@@ -69,11 +69,72 @@ const EpisodeLibrary = {
             return;
         }
         
+        // Extract all unique topics from episodes for the filter
+        this.allTopics = this.getAllUniqueTopics();
+        
         this.createOverlay();
         this.attachEventListeners();
         console.log('[Episode Library] Initialized with data source:', 
             window.unifiedData ? 'unified-data.js' : 'unknown');
+        console.log('[Episode Library] Found unique topics:', this.allTopics.length);
         console.log('Episode Library initialized');
+    },
+    
+    // Extract all unique topics from all episodes
+    getAllUniqueTopics() {
+        const topicsSet = new Set();
+        const episodes = window.unifiedData?.priorityBriefings?.items || [];
+        
+        episodes.forEach(episode => {
+            const hashtags = episode.cardView?.hashtags || episode.hashtags || [];
+            hashtags.forEach(tag => {
+                // Remove # prefix and add to set
+                const cleanTag = tag.replace(/^#/, '');
+                if (cleanTag) {
+                    topicsSet.add(cleanTag);
+                }
+            });
+        });
+        
+        // Convert to array and sort alphabetically
+        return Array.from(topicsSet).sort((a, b) => 
+            a.toLowerCase().localeCompare(b.toLowerCase())
+        );
+    },
+    
+    // Format topic name for display
+    formatTopicForDisplay(topic) {
+        // Use the more sophisticated formatHashtagForDisplay method
+        return this.formatHashtagForDisplay(topic);
+    },
+    
+    // Convert topic name to ID-safe value
+    topicToId(topic) {
+        return topic.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    },
+    
+    // Render the topics dropdown with dynamic topics
+    renderTopicsDropdown() {
+        let html = `
+            <div class="multi-select-option">
+                <input type="checkbox" id="topic-all" value="all" checked>
+                <label for="topic-all">All Topics</label>
+            </div>
+        `;
+        
+        // Add all unique topics from the data
+        this.allTopics.forEach(topic => {
+            const topicId = this.topicToId(topic);
+            const displayName = this.formatTopicForDisplay(topic);
+            html += `
+                <div class="multi-select-option">
+                    <input type="checkbox" id="topic-${topicId}" value="${topic}">
+                    <label for="topic-${topicId}">${displayName}</label>
+                </div>
+            `;
+        });
+        
+        return html;
     },
 
     createOverlay() {
@@ -168,6 +229,15 @@ const EpisodeLibrary = {
                         <option value="khosla-ventures">Khosla Ventures</option>
                         <option value="indie-hackers">Indie Hackers</option>
                     </select>
+                    <div class="library-multi-select-wrapper" data-filter="topics">
+                        <button class="library-multi-select-toggle">
+                            <span class="multi-select-label">All Topics</span>
+                            <span class="multi-select-arrow">▼</span>
+                        </button>
+                        <div class="library-multi-select-dropdown">
+                            ${this.renderTopicsDropdown()}
+                        </div>
+                    </div>
                     <select class="library-filter-dropdown" data-filter="dateRange">
                         <option value="all">All Time</option>
                         <option value="7days">Last 7 Days</option>
@@ -175,62 +245,6 @@ const EpisodeLibrary = {
                         <option value="3months">Last 3 Months</option>
                         <option value="custom">Custom Range</option>
                     </select>
-                    <div class="library-multi-select-wrapper" data-filter="topics">
-                        <button class="library-multi-select-toggle">
-                            <span class="multi-select-label">All Topics</span>
-                            <span class="multi-select-arrow">▼</span>
-                        </button>
-                        <div class="library-multi-select-dropdown">
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-all" value="all" checked>
-                                <label for="topic-all">All Topics</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-ai-infrastructure" value="ai-infrastructure">
-                                <label for="topic-ai-infrastructure">AI Infrastructure</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-ai-agents" value="ai-agents">
-                                <label for="topic-ai-agents">AI Agents</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-developer-tools" value="developer-tools">
-                                <label for="topic-developer-tools">Developer Tools</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-defense-tech" value="defense-tech">
-                                <label for="topic-defense-tech">Defense Tech</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-series-a" value="series-a">
-                                <label for="topic-series-a">Series A</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-ma" value="ma">
-                                <label for="topic-ma">M&A</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-vertical-ai" value="vertical-ai">
-                                <label for="topic-vertical-ai">Vertical AI</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-enterprise-software" value="enterprise-software">
-                                <label for="topic-enterprise-software">Enterprise Software</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-fundraising" value="fundraising">
-                                <label for="topic-fundraising">Fundraising</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-lp-strategy" value="lp-strategy">
-                                <label for="topic-lp-strategy">LP Strategy</label>
-                            </div>
-                            <div class="multi-select-option">
-                                <input type="checkbox" id="topic-market-analysis" value="market-analysis">
-                                <label for="topic-market-analysis">Market Analysis</label>
-                            </div>
-                        </div>
-                    </div>
                     <div class="library-active-filters" id="activeFilters"></div>
                 </div>
 
@@ -502,60 +516,204 @@ const EpisodeLibrary = {
         // 1. Remove '#' prefix
         let text = hashtag.startsWith('#') ? hashtag.substring(1) : hashtag;
         
-        // 2. Handle specific transformations that can't be derived from patterns
-        const specificReplacements = {
+        // 2. Handle exact matches and specific transformations
+        const exactMatches = {
+            // Common acronyms and terms that should stay together
+            'AI': 'AI',
+            'AIAgents': 'AI Agents',
+            'AIAdoption': 'AI Adoption',
+            'AIEconomics': 'AI Economics',
+            'AIFunding': 'AI Funding',
+            'AIInfrastructure': 'AI Infrastructure',
+            'AIMonetization': 'AI Monetization',
+            'B2B': 'B2B',
+            'B2BSaaS': 'B2B SaaS',
+            'B2C': 'B2C',
+            'DeFi': 'DeFi',
+            'DevOps': 'DevOps',
+            'DevTools': 'Dev Tools',
+            'DeveloperTools': 'Developer Tools',
+            'DefenseTech': 'Defense Tech',
+            'DeepTech': 'Deep Tech',
+            'DeveloperProductivity': 'Developer Productivity',
+            'FinTech': 'FinTech',
+            'GenAI': 'GenAI',
+            'GPUEconomics': 'GPU Economics',
+            'LLMs': 'LLMs',
+            'LLM': 'LLM',
+            'ML': 'ML',
+            'MLOps': 'MLOps',
+            'SaaS': 'SaaS',
+            'PaaS': 'PaaS',
+            'IaaS': 'IaaS',
+            'API': 'API',
+            'APIs': 'APIs',
+            'SDK': 'SDK',
+            'IoT': 'IoT',
+            'VR': 'VR',
+            'AR': 'AR',
+            'XR': 'XR',
+            'Web3': 'Web3',
+            'DePIN': 'DePIN',
+            // M&A related
             'mastrategy': 'M&A Strategy',
             'maStrategy': 'M&A Strategy',
             'MAStrategy': 'M&A Strategy',
-            'dpi': 'DPI',
-            'arr': 'ARR',
-            'roi': 'ROI',
-            'ipo': 'IPO',
-            'ceo': 'CEO',
-            'cto': 'CTO',
-            'cfo': 'CFO'
+            'MA': 'M&A',
+            // Financial metrics
+            'DPI': 'DPI',
+            'ARR': 'ARR',
+            'ROI': 'ROI',
+            'IPO': 'IPO',
+            'SPV': 'SPV',
+            'LP': 'LP',
+            'LPStrategy': 'LP Strategy',
+            'LPAllocations': 'LP Allocations',
+            'LPLiquidity': 'LP Liquidity',
+            'GP': 'GP',
+            'VC': 'VC',
+            // C-suite
+            'CEO': 'CEO',
+            'CTO': 'CTO',
+            'CFO': 'CFO',
+            'COO': 'COO',
+            'CPO': 'CPO',
+            'CMO': 'CMO',
+            // Series
+            'SeriesA': 'Series A',
+            'SeriesB': 'Series B',
+            'SeriesC': 'Series C',
+            'SeriesD': 'Series D',
+            // Other common terms
+            'GoToMarket': 'Go-to-Market',
+            'GTM': 'GTM',
+            'PMF': 'PMF',
+            'TAM': 'TAM',
+            'SAM': 'SAM',
+            'SOM': 'SOM',
+            'CAC': 'CAC',
+            'LTV': 'LTV',
+            'NPS': 'NPS',
+            'KPI': 'KPI',
+            'OKR': 'OKR',
+            'MVP': 'MVP',
+            'POC': 'POC',
+            'UI': 'UI',
+            'UX': 'UX',
+            'UIUX': 'UI/UX',
+            'QA': 'QA',
+            'CI': 'CI',
+            'CD': 'CD',
+            'CICD': 'CI/CD',
+            'ETL': 'ETL',
+            'ERP': 'ERP',
+            'CRM': 'CRM',
+            'HRM': 'HRM',
+            'ESG': 'ESG',
+            'DEI': 'DEI',
+            'R&D': 'R&D',
+            'RnD': 'R&D',
+            'M&A': 'M&A',
+            'P&L': 'P&L',
+            'B2B2C': 'B2B2C',
+            'D2C': 'D2C',
+            'DTC': 'DTC',
+            // Additional hashtags from data
+            'BootstrappedAI': 'Bootstrapped AI',
+            'Bootstrapping': 'Bootstrapping',
+            'BurnRate': 'Burn Rate',
+            'CloudRepatriation': 'Cloud Repatriation',
+            'CodingAssistants': 'Coding Assistants',
+            'CorpDev': 'Corp Dev',
+            'DataCenters': 'Data Centers',
+            'DataCenterScaling': 'Data Center Scaling',
+            'DownRounds': 'Down Rounds',
+            'EnergyInfrastructure': 'Energy Infrastructure',
+            'EnergyTech': 'Energy Tech',
+            'ExitPlanning': 'Exit Planning',
+            'ExitStrategy': 'Exit Strategy',
+            'FundingBar': 'Funding Bar',
+            'Hyperscalers': 'Hyperscalers',
+            'IndieSuccess': 'Indie Success',
+            'Infrastructure': 'Infrastructure',
+            'InfrastructureArbitrage': 'Infrastructure Arbitrage',
+            'MicroSaaS': 'MicroSaaS',
+            'PortfolioConstruction': 'Portfolio Construction',
+            'Productivity': 'Productivity',
+            'RunwayPlanning': 'Runway Planning',
+            'SaaSDisruption': 'SaaS Disruption',
+            'SecondaryMarkets': 'Secondary Markets',
+            'SeedExtensions': 'Seed Extensions',
+            'SeriesA': 'Series A',
+            'SoftwareDemand': 'Software Demand',
+            'SoloFounders': 'Solo Founders',
+            'StrategicBuyers': 'Strategic Buyers',
+            'StrategicPartnerships': 'Strategic Partnerships',
+            'Sustainability': 'Sustainability',
+            'TechnicalDebt': 'Technical Debt',
+            'UnitEconomics': 'Unit Economics',
+            'VentureReturns': 'Venture Returns',
+            'WorkflowAutomation': 'Workflow Automation',
+            'AgentEconomics': 'Agent Economics',
+            'AgentOrchestration': 'Agent Orchestration'
         };
         
+        // Check for exact match (case-sensitive first)
+        if (exactMatches[text]) {
+            return exactMatches[text];
+        }
+        
         // Check for exact match (case-insensitive)
-        const lowerText = text.toLowerCase();
-        if (specificReplacements[lowerText]) {
-            return specificReplacements[lowerText];
+        const textUpper = text.toUpperCase();
+        for (const [key, value] of Object.entries(exactMatches)) {
+            if (key.toUpperCase() === textUpper) {
+                return value;
+            }
         }
         
-        // Check for exact match (case-sensitive) 
-        if (specificReplacements[text]) {
-            return specificReplacements[text];
-        }
+        // 3. Apply CamelCase/PascalCase splitting for unmatched terms
+        // But first, protect known acronyms from being split
+        const protectedAcronyms = ['AI', 'ML', 'B2B', 'B2C', 'API', 'SDK', 'IoT', 'VR', 'AR', 'XR', 'UI', 'UX', 'QA', 'CI', 'CD'];
+        let protectedText = text;
+        protectedAcronyms.forEach(acronym => {
+            // Add markers to protect the acronym from splitting
+            const regex = new RegExp(`\\b${acronym}\\b`, 'g');
+            protectedText = protectedText.replace(regex, `__${acronym}__`);
+        });
         
-        // 3. Apply CamelCase/PascalCase splitting
-        // First pass: Insert space before uppercase that follows lowercase/digit
-        text = text.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+        // Apply splitting on the protected text
+        protectedText = protectedText.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+        protectedText = protectedText.replace(/([A-Z]{2,})([A-Z][a-z])/g, '$1 $2');
         
-        // Second pass: Split acronyms from following words
-        // Matches 2+ uppercase letters followed by uppercase+lowercase (new word)
-        text = text.replace(/([A-Z]{2,})([A-Z][a-z])/g, '$1 $2');
+        // Remove the protection markers
+        protectedAcronyms.forEach(acronym => {
+            protectedText = protectedText.replace(new RegExp(`__${acronym}__`, 'g'), acronym);
+        });
         
         // 4. Clean up whitespace
-        text = text.replace(/\s+/g, ' ').trim();
+        text = protectedText.replace(/\s+/g, ' ').trim();
         
         // 5. Smart capitalization - preserve acronyms and special casing
         const words = text.split(' ');
         const processedWords = words.map(word => {
-            // Keep word as-is if it's:
-            // - All uppercase (likely an acronym like AI, B2B, DPI)
-            // - Contains digits (like B2B, Web3)
-            // - Already properly cased (like SaaS)
-            if (word.toUpperCase() === word && word.length <= 4) {
-                // Likely an acronym, keep it uppercase
+            // Check if word is a known acronym
+            if (protectedAcronyms.includes(word.toUpperCase())) {
+                return word.toUpperCase();
+            }
+            // Keep word as-is if it's all uppercase and short (likely an acronym)
+            else if (word.toUpperCase() === word && word.length <= 4) {
                 return word;
-            } else if (/\d/.test(word)) {
-                // Contains digits, keep original casing
+            }
+            // Contains digits - keep original casing
+            else if (/\d/.test(word)) {
                 return word;
-            } else if (word === 'SaaS' || word === 'PaaS' || word === 'IaaS') {
-                // Known mixed-case terms
+            }
+            // Known mixed-case terms
+            else if (['SaaS', 'PaaS', 'IaaS', 'DeFi', 'FinTech', 'DevOps', 'GenAI', 'MLOps', 'DePIN'].includes(word)) {
                 return word;
-            } else {
-                // Standard word - capitalize first letter only
+            }
+            // Standard word - capitalize first letter only
+            else {
                 return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
             }
         });
@@ -567,17 +725,14 @@ const EpisodeLibrary = {
         let topics = [];
         
         // Handle both cardView structure and direct properties
-        const podcast = episode.cardView?.podcast || episode.podcast;
         const rawHashtags = episode.cardView?.hashtags || episode.hashtags || [];
         
-        // 1. Prioritize actual hashtags from the episode data
+        // 1. Extract hashtags from the episode data and clean them
         if (rawHashtags && rawHashtags.length > 0) {
-            // Format each hashtag for display
-            const formattedTopics = rawHashtags
-                .map(tag => this.formatHashtagForDisplay(tag))
+            // Remove # prefix but keep original casing
+            topics = rawHashtags
+                .map(tag => tag.replace(/^#/, ''))
                 .filter(tag => tag.length > 0); // Remove empty strings
-            
-            topics.push(...formattedTopics);
         }
         
         // 2. Use fallback topics only if no hashtags are found
@@ -628,32 +783,9 @@ const EpisodeLibrary = {
     },
 
     getTopicValue(topicName) {
-        // Map topic display names to filter values
-        const topicMap = {
-            'AI Infrastructure': 'ai-infrastructure',
-            'AI Agents': 'ai-agents',
-            'Developer Tools': 'developer-tools',
-            'Defense Tech': 'defense-tech',
-            'Series A': 'series-a',
-            'M&A': 'ma',
-            'Vertical AI': 'vertical-ai',
-            'Enterprise Software': 'enterprise-software',
-            'Fundraising': 'fundraising',
-            'LP Strategy': 'lp-strategy',
-            'Market Analysis': 'market-analysis',
-            'Seed Funding': 'fundraising',
-            'IPO Market': 'market-analysis',
-            'Valuations': 'market-analysis',
-            'B2B SaaS': 'enterprise-software',
-            'Healthcare': 'vertical-ai',
-            'Legal Tech': 'vertical-ai',
-            'Fintech': 'vertical-ai',
-            'Revenue Growth': 'market-analysis',
-            'Capital Efficiency': 'market-analysis',
-            'Market Shifts': 'market-analysis'
-        };
-        
-        return topicMap[topicName] || topicName.toLowerCase().replace(/\s+/g, '-');
+        // Since we're now using the raw hashtag values (without #),
+        // we can just return the topic as-is for matching
+        return topicName;
     },
 
     getInfluenceIcon(influence) {
@@ -1098,21 +1230,9 @@ const EpisodeLibrary = {
         if (topics.includes('all') || topics.length === 0) {
             label.textContent = 'All Topics';
         } else if (topics.length === 1) {
-            // Get the label text for the single topic
-            const topicLabels = {
-                'ai-infrastructure': 'AI Infrastructure',
-                'ai-agents': 'AI Agents',
-                'developer-tools': 'Developer Tools',
-                'defense-tech': 'Defense Tech',
-                'series-a': 'Series A',
-                'ma': 'M&A',
-                'vertical-ai': 'Vertical AI',
-                'enterprise-software': 'Enterprise Software',
-                'fundraising': 'Fundraising',
-                'lp-strategy': 'LP Strategy',
-                'market-analysis': 'Market Analysis'
-            };
-            label.textContent = topicLabels[topics[0]] || topics[0];
+            // Format the topic for display using the same logic as formatHashtagForDisplay
+            const formattedTopic = this.formatHashtagForDisplay(topics[0]);
+            label.textContent = formattedTopic;
         } else {
             label.textContent = `${topics.length} topics selected`;
         }

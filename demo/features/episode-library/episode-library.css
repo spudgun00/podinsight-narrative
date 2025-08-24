@@ -162,7 +162,7 @@
 
 .library-search-box {
     flex: 1;
-    min-width: 300px;
+    min-width: 250px;
     position: relative;
 }
 
@@ -211,7 +211,7 @@
 /* Multi-select dropdown */
 .library-multi-select-wrapper {
     position: relative;
-    min-width: 140px;
+    min-width: 200px;
 }
 
 .library-multi-select-toggle {
@@ -226,7 +226,7 @@
     color: var(--deep-ink);
     font-size: 14px;
     cursor: pointer;
-    min-width: 140px;
+    min-width: 200px;
     transition: all 0.2s;
 }
 

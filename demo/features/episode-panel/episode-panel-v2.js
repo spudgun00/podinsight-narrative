@@ -85,20 +85,13 @@ class EpisodePanelV2 {
                             <div class="epb-insights"></div>
                         </div>
                         
-                        <!-- Inline Badges (Portfolio/Watchlist) -->
+                        <!-- Key Quotes Section -->
                         <div class="epb-section">
-                            <div class="epb-badges">
-                                <div class="epb-badge" data-type="portfolio">
-                                    <span class="epb-badge-label">📁 PORTFOLIO</span>
-                                    <span class="epb-badge-count">0</span>
-                                </div>
-                                <div class="epb-badge" data-type="watchlist">
-                                    <span class="epb-badge-label">👁 WATCHLIST</span>
-                                    <span class="epb-badge-count">0</span>
-                                </div>
+                            <div class="epb-section-header">
+                                <div class="epb-section-title">KEY QUOTES</div>
+                                <span class="epb-quote-count"></span>
                             </div>
-                            <!-- Expandable content area -->
-                            <div class="epb-badge-content" id="badgeContent"></div>
+                            <div class="epb-key-quotes"></div>
                         </div>
                     </div>
                     
@@ -118,6 +111,22 @@ class EpisodePanelV2 {
                         <div class="epb-topics">
                             <div class="epb-section-title">RELATED TOPICS</div>
                             <div class="epb-tags"></div>
+                        </div>
+                        
+                        <!-- Portfolio/Watchlist Badges - Moved to bottom of Sidebar -->
+                        <div class="epb-section epb-sidebar-badges">
+                            <div class="epb-badges epb-badges-vertical">
+                                <div class="epb-badge" data-type="portfolio">
+                                    <span class="epb-badge-label">📁 PORTFOLIO</span>
+                                    <span class="epb-badge-count">0</span>
+                                </div>
+                                <div class="epb-badge" data-type="watchlist">
+                                    <span class="epb-badge-label">👁 WATCHLIST</span>
+                                    <span class="epb-badge-count">0</span>
+                                </div>
+                            </div>
+                            <!-- Expandable content area -->
+                            <div class="epb-badge-content" id="badgeContent"></div>
                         </div>
                     </div>
                 </div>
@@ -357,16 +366,24 @@ class EpisodePanelV2 {
         // Key Insights
         this.populateInsights(expanded.keyInsights || []);
 
+        // Key Quotes
+        this.populateKeyQuotes(expanded.essentialQuote);
+
         // Portfolio and Watchlist
         this.populateBadges('portfolio', expanded.portfolioMentions || []);
         this.populateBadges('watchlist', expanded.watchlistMentions || []);
 
-        // Quote
+        // Quote - Use more specific selector to target sidebar quote
         if (expanded.essentialQuote) {
-            this.panel.querySelector('.epb-quote-text').textContent = 
-                `"${expanded.essentialQuote.text}"`;
-            this.panel.querySelector('.epb-quote-author').textContent = 
-                `— ${expanded.essentialQuote.author}${expanded.essentialQuote.time ? ' at ' + expanded.essentialQuote.time : ''}`;
+            const sidebarQuote = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-text');
+            const sidebarAuthor = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-author');
+            
+            if (sidebarQuote) {
+                sidebarQuote.textContent = `"${expanded.essentialQuote.text}"`;
+            }
+            if (sidebarAuthor) {
+                sidebarAuthor.textContent = `— ${expanded.essentialQuote.author}${expanded.essentialQuote.time ? ' at ' + expanded.essentialQuote.time : ''}`;
+            }
         }
 
         // Notable Numbers
@@ -391,6 +408,181 @@ class EpisodePanelV2 {
             `;
             container.appendChild(insightEl);
         });
+    }
+
+    // Populate key quotes section
+    populateKeyQuotes(essentialQuote) {
+        const container = this.panel.querySelector('.epb-key-quotes');
+        const countEl = this.panel.querySelector('.epb-quote-count');
+        container.innerHTML = '';
+        
+        // Create demo quotes array mixing real and demo data
+        const demoQuotes = [
+            {
+                text: essentialQuote?.text || "Every successful AI company is becoming an infrastructure company. The ones that don't will be eaten by OpenAI or Google.",
+                speaker: essentialQuote?.author || "Chamath Palihapitiya",
+                role: "Social Capital",
+                timestamp: essentialQuote?.time || "34:21",
+                id: 'quote-1'
+            },
+            {
+                text: "We're not automating programmers - we're giving every business analyst the power to code. The demand for software will explode 100x.",
+                speaker: "Nat Friedman",
+                role: "Former GitHub CEO", 
+                timestamp: "12:45",
+                id: 'quote-2'
+            },
+            {
+                text: "The biggest mistake founders make is waiting until they need an exit to build acquirer relationships. By then, you have zero leverage.",
+                speaker: "Emilie Choi",
+                role: "Coinbase President",
+                timestamp: "56:03",
+                id: 'quote-3'
+            }
+        ];
+        
+        // Limit to 2 quotes maximum
+        const quotesToDisplay = demoQuotes.slice(0, 2);
+        
+        // Update count badge - aligned with title
+        countEl.textContent = `${quotesToDisplay.length} QUOTES`;
+        countEl.style.fontSize = '11px';
+        countEl.style.color = 'var(--epb-gray-600)';
+        countEl.style.marginLeft = 'auto';
+        
+        // Create quote cards
+        quotesToDisplay.forEach(quote => {
+            const quoteCard = document.createElement('div');
+            quoteCard.className = 'epb-quote-card';
+            quoteCard.dataset.quoteId = quote.id;
+            
+            // Truncate quote text to 80 characters for single-line display
+            const truncatedText = quote.text.length > 80 
+                ? quote.text.substring(0, 77) + '...' 
+                : quote.text;
+            
+            quoteCard.innerHTML = `
+                <button class="epb-quote-play-btn" data-timestamp="${quote.timestamp}" aria-label="Play quote">
+                    <svg width="30" height="30" viewBox="0 0 30 30" class="play-button-svg">
+                        <!-- Background circle -->
+                        <circle cx="15" cy="15" r="14" fill="var(--epb-sage)" opacity="0.1"/>
+                        <!-- Play icon -->
+                        <path class="play-icon" d="M12 10 L12 20 L21 15 Z" fill="var(--epb-sage)"/>
+                        <!-- Pause icon (hidden by default) -->
+                        <g class="pause-icon" style="display: none;">
+                            <rect x="10.5" y="10" width="3" height="10" fill="var(--epb-sage)"/>
+                            <rect x="16.5" y="10" width="3" height="10" fill="var(--epb-sage)"/>
+                        </g>
+                        <!-- Progress ring -->
+                        <circle class="progress-ring" cx="15" cy="15" r="13.5" 
+                                fill="none" stroke="var(--epb-sage)" stroke-width="1.5"
+                                stroke-dasharray="0 85" stroke-linecap="round"
+                                transform="rotate(-90 15 15)" style="opacity: 0; transition: opacity 0.3s;"/>
+                    </svg>
+                </button>
+                <div class="epb-quote-body">
+                    <div class="epb-quote-text" data-full-text="${quote.text.replace(/"/g, '&quot;')}">"${truncatedText}"</div>
+                    <div class="epb-quote-attribution">— ${quote.speaker}${quote.role ? ', ' + quote.role : ''} • ${quote.timestamp}</div>
+                </div>
+            `;
+            
+            // Add click handler for expand/collapse
+            quoteCard.addEventListener('click', (e) => {
+                // Don't toggle if clicking play button
+                if (e.target.closest('.epb-quote-play-btn')) return;
+                
+                const isExpanded = quoteCard.classList.contains('expanded');
+                const quoteTextEl = quoteCard.querySelector('.epb-quote-text');
+                const fullText = quoteTextEl.getAttribute('data-full-text');
+                
+                // Collapse all other quotes
+                container.querySelectorAll('.epb-quote-card').forEach(card => {
+                    card.classList.remove('expanded');
+                    const textEl = card.querySelector('.epb-quote-text');
+                    const truncated = textEl.getAttribute('data-full-text');
+                    if (truncated && truncated.length > 80) {
+                        textEl.textContent = '"' + truncated.substring(0, 77) + '..."';
+                    }
+                });
+                
+                // Toggle this quote
+                if (!isExpanded) {
+                    quoteCard.classList.add('expanded');
+                    quoteTextEl.textContent = '"' + fullText + '"';
+                } else {
+                    // If collapsing, restore truncated text
+                    if (fullText.length > 80) {
+                        quoteTextEl.textContent = '"' + fullText.substring(0, 77) + '..."';
+                    }
+                }
+            });
+            
+            // Add play button handler with animation
+            const playBtn = quoteCard.querySelector('.epb-quote-play-btn');
+            if (playBtn) {
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.handleQuotePlayback(playBtn, quote.timestamp);
+                });
+            }
+            
+            container.appendChild(quoteCard);
+        });
+    }
+
+    // Handle quote playback with professional animation
+    handleQuotePlayback(button, timestamp) {
+        const svg = button.querySelector('.play-button-svg');
+        const playIcon = svg.querySelector('.play-icon');
+        const pauseIcon = svg.querySelector('.pause-icon');
+        const progressRing = svg.querySelector('.progress-ring');
+        const isPlaying = button.classList.contains('playing');
+        
+        if (isPlaying) {
+            // Stop playback
+            button.classList.remove('playing');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            progressRing.style.opacity = '0';
+            progressRing.style.strokeDasharray = '0 85';
+            
+            // Clear any existing timeout
+            if (button.playbackTimeout) {
+                clearTimeout(button.playbackTimeout);
+                button.playbackTimeout = null;
+            }
+        } else {
+            // Stop any other playing quotes
+            this.panel.querySelectorAll('.epb-quote-play-btn.playing').forEach(btn => {
+                if (btn !== button) {
+                    this.handleQuotePlayback(btn, null);
+                }
+            });
+            
+            // Start playback
+            button.classList.add('playing');
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+            progressRing.style.opacity = '1';
+            
+            // Animate progress ring
+            const duration = 15000; // 15 seconds demo duration
+            progressRing.style.transition = `stroke-dasharray ${duration}ms linear`;
+            requestAnimationFrame(() => {
+                progressRing.style.strokeDasharray = '85 0';
+            });
+            
+            // Auto-stop after duration
+            button.playbackTimeout = setTimeout(() => {
+                this.handleQuotePlayback(button, null);
+            }, duration);
+        }
+        
+        // Trigger actual playback logic
+        if (!isPlaying && timestamp) {
+            console.log(`Playing quote from ${timestamp}`);
+            // Here you would integrate with actual audio player
+        }
     }
 
     // Populate badge with companies - INLINE PILLS
@@ -633,6 +825,16 @@ class EpisodePanelV2 {
         });
         
         this.currentEpisodeId = null;
+        
+        // Check if we need to restore the drill-down panel
+        if (window.drilldownReturnState && window.drilldownReturnState.isOpen) {
+            // Restore the drill-down panel
+            if (window.NarrativePulseDrilldown) {
+                window.NarrativePulseDrilldown.restorePanel();
+            }
+            // Clear the return state
+            delete window.drilldownReturnState;
+        }
     }
 
     // Cleanup method

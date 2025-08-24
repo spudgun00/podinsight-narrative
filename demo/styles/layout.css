@@ -14,9 +14,8 @@
             margin: 0 auto;
             padding: 1rem 2rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            position: relative;
         }
         .header-metrics {
             display: none; /* Hide the ticker to save space */
@@ -38,9 +37,64 @@
             align-items: center;
             gap: 0.25rem;
         }
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start; /* Align to the left to be next to logo */
+            align-items: center;
+            gap: 1rem;
+            margin-left: 2rem; /* Space from logo */
+            margin-right: calc(140px + 1rem); /* Space for Episode Library button width + gap */
+            padding-right: 0;
+        }
+        /* Search container positioning - next to Episode Library */
+        .search-container {
+            position: absolute;
+            right: calc(2rem + 320px + 2rem + 140px + 20px); /* Aligns with main content edge + Episode Library width + 20px gap */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            max-width: 400px;
+            z-index: 1000; /* Ensure search container and its children appear above other content */
+        }
+        /* Episode Library button positioning */
+        .episode-library-btn {
+            position: absolute;
+            right: calc(2rem + 320px + 2rem); /* Aligns perfectly with main content right edge */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* Fix hover transform conflict for absolutely positioned button */
+        .episode-library-btn:hover {
+            transform: translateY(-50%) translateY(-1px) !important;
+        }
+        .header-right {
+            position: absolute;
+            right: 2rem; /* Match container padding */
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 320px; /* Match sidebar column width */
+            justify-content: flex-end; /* Group buttons on the right */
+            padding-right: 0; /* Position at exact edge */
+        }
         .header-actions {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
+            align-items: center;
+        }
+        /* Ensure consistent button heights */
+        .header-actions button {
+            height: 42px; /* Consistent height for both buttons */
+            padding: 0.5rem 1rem; /* Consistent padding */
+            display: flex;
             align-items: center;
         }
         /* Removed demo-toggle styles - no longer needed */
@@ -73,7 +127,7 @@
         }
         .pulse-controls {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             align-items: center;
             position: relative;
         }
@@ -121,6 +175,7 @@
             gap: 0.5rem;
             font-size: 0.75rem;
             color: var(--deep-ink);
+            white-space: nowrap;
         }
         /* Subtle Filter Indicator */
         .filter-active {

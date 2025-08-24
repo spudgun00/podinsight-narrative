@@ -9,6 +9,15 @@ const NarrativeFeed = {
     
     bindEvents: function() {
         this.container.addEventListener('click', (e) => {
+            // Handle quote clicks - link to random briefing card
+            const quote = e.target.closest('.expansion-quote');
+            if (quote) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleQuoteClick();
+                return;
+            }
+            
             // Handle feed entry expansion
             const header = e.target.closest('.feed-entry-header');
             if (header) {
@@ -25,6 +34,21 @@ const NarrativeFeed = {
                 this.handleAction(action, itemId);
             }
         });
+    },
+    
+    handleQuoteClick: function() {
+        // Get random priority briefing to open (same logic as tooltip quotes)
+        const briefings = window.unifiedData?.priorityBriefings?.items || [];
+        if (briefings.length > 0) {
+            const randomBriefing = briefings[Math.floor(Math.random() * briefings.length)];
+            
+            // Open episode panel
+            if (window.episodePanelV2 && window.episodePanelV2.open) {
+                window.episodePanelV2.open(randomBriefing.id);
+            } else if (window.openEpisodePanel) {
+                window.openEpisodePanel(randomBriefing.id);
+            }
+        }
     },
     
     handleAction: function(action, itemId) {

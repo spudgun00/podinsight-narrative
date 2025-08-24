@@ -1,0 +1,588 @@
+/* Narrative Pulse Drill-Down Panel Styles */
+
+/* Backdrop - Similar to portfolio panel */
+.drilldown-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.drilldown-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Panel Container */
+.drilldown-panel {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 40%;
+    min-width: 480px;
+    max-width: 600px;
+    background: var(--warm-paper);
+    box-shadow: 
+        -1px 0 3px rgba(0, 0, 0, 0.04),
+        -4px 0 16px rgba(0, 0, 0, 0.08),
+        -12px 0 32px rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    
+    /* Position off-screen to the right */
+    right: -600px;
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drilldown-panel[data-state="open"] {
+    right: 0;
+}
+
+/* Panel Header - COMPACT TERMINAL STYLE */
+.drilldown-panel .panel-header {
+    padding: 12px 16px; /* Much tighter than 1.5rem 2rem */
+    border-bottom: 1px solid var(--gray-200);
+    background: white;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.drilldown-panel .panel-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--deep-ink);
+    margin: 0;
+}
+
+.drilldown-panel .panel-subtitle {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin: 4px 0 0 0;
+}
+
+/* Topic momentum styling in subtitle */
+.drilldown-panel .panel-subtitle .topic-momentum {
+    font-weight: 500;
+}
+
+.drilldown-panel .panel-subtitle .topic-momentum.positive {
+    color: var(--sage);
+}
+
+.drilldown-panel .panel-subtitle .topic-momentum.negative {
+    color: var(--dusty-rose);
+}
+
+.drilldown-panel .close-button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--gray-200);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--gray-600);
+    flex-shrink: 0;
+}
+
+.drilldown-panel .close-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--gray-400);
+    color: var(--deep-ink);
+}
+
+.drilldown-panel .close-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Panel Content - MAXIMUM DENSITY */
+.drilldown-panel .panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px; /* Better breathing room */
+    background: var(--warm-paper);
+}
+
+/* Section Styles - MINIMAL SPACING */
+.drilldown-panel section {
+    margin-bottom: 20px; /* Better section separation */
+}
+
+.drilldown-panel section:last-child {
+    margin-bottom: 0;
+}
+
+.drilldown-panel h3 {
+    font-size: 12px; /* Consistent with system */
+    font-weight: 700;
+    color: var(--gray-600);
+    margin: 16px 0 10px 0; /* Better spacing */
+    padding: 0;
+    border: none;
+    text-transform: uppercase; /* Professional style */
+    letter-spacing: 0.05em;
+    opacity: 1;
+}
+
+/* Remove top margin for first section heading */
+.drilldown-panel section:first-child h3 {
+    margin-top: 0;
+}
+
+/* Key Drivers Section - CARD STYLE MATCHING PRIORITY BRIEFINGS */
+.episode-drivers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Consistent gap between cards */
+}
+
+.episode-driver-card {
+    background: white; /* Clean white background */
+    border: 1px solid #E5E7EB; /* Subtle border matching other cards */
+    border-radius: 8px; /* Matching border radius */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    padding: 12px; /* Proper internal spacing */
+    margin-bottom: 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Better spacing between content lines */
+}
+
+.episode-driver-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Match Priority Briefings shadow */
+    transform: translateY(-2px); /* Match Priority Briefings lift */
+    border-color: #e2e8f0; /* Keep subtle border, don't change to green */
+}
+
+.episode-driver-card:last-child {
+    /* No special treatment needed */
+}
+
+/* Hover effect moved inline with card definition */
+
+.episode-driver-card .episode-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+/* Podcast Badge - Matching system style */
+.episode-driver-card .podcast-badge {
+    background: #1e293b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: none; /* Remove uppercase transform */
+    letter-spacing: normal; /* Reset letter spacing */
+    display: inline-block; /* Ensure proper display */
+}
+
+.episode-driver-card .separator {
+    color: var(--gray-400);
+}
+
+.episode-driver-card .time-ago {
+    color: var(--gray-600);
+}
+
+.episode-driver-card .mentions-count {
+    font-weight: 500;
+    color: var(--sage);
+}
+
+.episode-driver-card .episode-title {
+    font-size: 16px; /* Larger for better hierarchy */
+    font-weight: 600; /* Semi-bold */
+    color: var(--deep-ink); /* Black/dark text */
+    margin: 0;
+    line-height: 1.3;
+    /* Allow title to wrap for readability */
+    white-space: normal;
+    overflow: visible;
+}
+
+.episode-driver-card .key-quote {
+    background: #F9FAFB; /* Subtle gray background like Weekly Brief */
+    border-left: 3px solid #4a7c59; /* Green accent border */
+    border-radius: 6px;
+    padding: 8px 12px; /* Proper padding for quote box */
+    margin: 4px 0 0 0; /* Small top margin */
+    display: block;
+    cursor: pointer; /* Show it's clickable */
+    transition: background 0.2s ease;
+}
+
+.episode-driver-card .key-quote:hover {
+    background: #F3F4F6; /* Slightly darker on hover */
+}
+
+/* Hover styles removed - no box to hover */
+
+/* Play Button - SMALL PROPORTIONAL SIZE */
+.episode-driver-card .play-button-inline {
+    /* Reset */
+    appearance: none;
+    border: none;
+    padding: 0;
+    margin: 0 0 0 6px; /* Small left margin to separate from text */
+    cursor: pointer;
+    
+    /* Small circular button */
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    border-radius: 50%;
+    background-color: rgba(74, 124, 89, 0.1);
+    border: 1px solid var(--sage);
+    
+    /* Center content */
+    display: inline-flex; /* Inline with text */
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 150ms ease;
+    vertical-align: middle; /* Align with text baseline */
+}
+
+.episode-driver-card:hover .play-button-inline {
+    background-color: var(--sage);
+    transform: scale(1.1);
+}
+
+/* Style the SVG icon inside */
+.episode-driver-card .play-button-inline svg {
+    width: 7px;
+    height: 7px;
+    fill: var(--sage);
+}
+
+.episode-driver-card:hover .play-button-inline svg {
+    fill: white;
+}
+
+/* Adjust path visibility */
+.episode-driver-card .play-button-inline .icon-play {
+    display: block;
+    fill: var(--sage);
+}
+
+.episode-driver-card:hover .play-button-inline .icon-play {
+    fill: white;
+}
+
+.episode-driver-card .play-button-inline .icon-pause {
+    display: none;
+    fill: var(--sage);
+}
+
+.episode-driver-card:hover .play-button-inline .icon-pause {
+    fill: white;
+}
+
+.episode-driver-card .play-button-inline:hover {
+    transform: scale(1.1);
+}
+
+.episode-driver-card .play-button-inline:active {
+    transform: scale(0.95);
+}
+
+.episode-driver-card .play-button-inline:focus {
+    outline: none; /* Remove focus outline to prevent green ring */
+}
+
+.episode-driver-card .play-icon-svg {
+    display: block;
+}
+
+/* Show/hide play and pause icons based on state */
+.episode-driver-card .play-button-inline.is-playing .icon-play {
+    display: none;
+}
+
+.episode-driver-card .play-button-inline.is-playing .icon-pause {
+    display: block;
+}
+
+/* Quote Content - Match Episode Panel styling */
+.episode-driver-card .quote-content {
+    display: block; /* Simple block for inline content */
+    width: 100%;
+    line-height: 1.4; /* Comfortable line height */
+}
+
+.episode-driver-card .quote-body {
+    display: inline; /* Inline container for quote + author */
+    overflow: hidden;
+}
+
+.episode-driver-card .quote-text {
+    font-size: 14px; /* Slightly larger for better readability */
+    color: #4B5563; /* Slightly gray text */
+    font-style: italic;
+    font-weight: normal;
+    margin: 0;
+    /* Allow wrapping for readability */
+    white-space: normal;
+    display: inline;
+}
+
+.episode-driver-card .quote-author {
+    font-size: 12px; /* Medium gray for attribution */
+    color: var(--gray-500);
+    font-style: normal;
+    font-weight: 500;
+    white-space: nowrap;
+    display: inline;
+    margin-left: 0;
+}
+
+.episode-driver-card .quote-author::before {
+    content: " - "; /* Space before dash */
+}
+
+
+/* Momentum Breakdown - CONTAINED TABLE */
+.daily-progression {
+    background: #F9FAFB; /* Subtle background container */
+    border: 1px solid var(--gray-200); /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 12px; /* Internal padding */
+    font-size: 11px;
+}
+
+.progression-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 0; /* Slightly more padding */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 8px;
+    min-height: 28px; /* Slightly taller rows */
+}
+
+.progression-item:last-child {
+    border-bottom: none;
+}
+
+/* Remove zebra striping for cleaner look */
+
+.progression-item .day-label {
+    font-weight: 600;
+    color: var(--deep-ink);
+    font-size: 11px;
+    min-width: 45px;
+}
+
+.progression-item .day-metrics {
+    font-size: 11px;
+    color: var(--sage);
+    font-weight: 600;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.progression-item .mention-count {
+    font-weight: 600;
+    color: var(--sage);
+}
+
+.progression-item .day-insight {
+    font-size: 11px;
+    color: var(--gray-700);
+    line-height: 1.3;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.progression-peak {
+    background: rgba(74, 124, 89, 0.08) !important;
+    font-weight: 600;
+}
+
+/* Consensus Status - CLEAN CARD STYLE */
+.consensus-status {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: left; /* Left align for data style */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.consensus-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.consensus-badge.strong {
+    background: rgba(74, 124, 89, 0.1);
+    color: var(--sage);
+}
+
+.consensus-badge.building {
+    background: rgba(244, 162, 97, 0.1);
+    color: var(--amber-glow);
+}
+
+.consensus-badge.contested {
+    background: rgba(199, 125, 125, 0.1);
+    color: var(--dusty-rose);
+}
+
+.consensus-description {
+    margin: 0; /* No margin - inline with badge */
+    font-size: 11px;
+    color: var(--gray-600);
+    line-height: 1.2;
+    flex: 1;
+}
+
+/* Fix legend layout to prevent wrapping */
+.legend-item {
+    white-space: nowrap !important;
+    display: flex;
+    align-items: center;
+}
+
+/* Unified legend item hover effect for clickable topics */
+.legend-item[data-has-clickable] {
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    margin: -4px -8px; /* Negative margin to maintain original spacing */
+}
+
+/* Hover state for the entire legend item - subtle background only */
+.legend-item[data-has-clickable]:hover {
+    background-color: rgba(74, 124, 89, 0.1);
+}
+
+/* Focus state for keyboard users only - not mouse clicks */
+.legend-item[data-has-clickable]:focus-visible {
+    outline: 2px solid var(--sage);
+    outline-offset: 2px;
+    background-color: rgba(74, 124, 89, 0.05);
+}
+
+/* Also apply focus-visible to child elements for keyboard navigation */
+.legend-item[data-has-clickable] [tabindex]:focus-visible {
+    outline: 2px solid var(--sage);
+    outline-offset: 2px;
+}
+
+/* Legend Value - Remove individual hover styles */
+.legend-value[role="button"] {
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .drilldown-panel {
+        width: 50%;
+        min-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .drilldown-panel {
+        width: 100%;
+        min-width: unset;
+        max-width: unset;
+        right: -100%;
+    }
+    
+    .drilldown-panel .panel-header {
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .drilldown-panel .panel-header h2 {
+        font-size: 16px;
+    }
+    
+    .drilldown-panel .panel-subtitle {
+        font-size: 12px;
+    }
+    
+    .drilldown-panel .panel-content {
+        padding: 12px; /* Ultra tight on mobile */
+    }
+}
+
+/* Loading State */
+.drilldown-panel .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    color: var(--gray-400);
+}
+
+/* Empty State */
+.drilldown-panel .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--gray-600);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Animation for content fade-in */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.drilldown-panel[data-state="open"] .panel-content > * {
+    animation: fadeInUp 0.3s ease 0.1s both;
+}
+
+.drilldown-panel[data-state="open"] .panel-content > *:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.drilldown-panel[data-state="open"] .panel-content > *:nth-child(3) {
+    animation-delay: 0.2s;
+}

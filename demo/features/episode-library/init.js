@@ -29,21 +29,25 @@
     }
 
     function addLibraryButton() {
-        // Find the header actions container
-        const headerActions = document.querySelector('.header-actions');
-        if (!headerActions) {
-            // Retry after a short delay
-            setTimeout(addLibraryButton, 100);
-            return;
-        }
-
         // Check if button already exists
-        if (document.querySelector('.episode-library-btn')) {
-            return;
-        }
+        let libraryButton = document.querySelector('.episode-library-btn');
+        
+        if (libraryButton) {
+            // Button exists in HTML, just add the click handler
+            libraryButton.addEventListener('click', () => {
+                window.EpisodeLibrary.open();
+            });
+        } else {
+            // Find the header actions container for dynamic creation
+            const headerActions = document.querySelector('.header-actions');
+            if (!headerActions) {
+                // Retry after a short delay
+                setTimeout(addLibraryButton, 100);
+                return;
+            }
 
-        // Create the Episode Library button
-        const libraryButton = document.createElement('button');
+            // Create the Episode Library button
+            libraryButton = document.createElement('button');
         libraryButton.className = 'episode-library-btn';
         libraryButton.innerHTML = `
             <span class="library-text">Episode Library</span>
@@ -57,7 +61,7 @@
             .episode-library-btn {
                 display: flex;
                 align-items: center;
-                padding: 10px 16px;
+                padding: 10px 20px;
                 background: white;
                 border: 1px solid var(--gray-200);
                 border-radius: 8px;
@@ -67,6 +71,8 @@
                 cursor: pointer;
                 transition: all 0.2s ease;
                 white-space: nowrap;
+                min-width: 140px;
+                justify-content: center;
             }
 
             .episode-library-btn:hover {
@@ -98,25 +104,30 @@
         `;
         document.head.appendChild(style);
 
-        // Insert before the portfolio button
-        const portfolioButton = headerActions.querySelector('.portfolio-button');
-        if (portfolioButton) {
-            headerActions.insertBefore(libraryButton, portfolioButton);
-        } else {
-            headerActions.appendChild(libraryButton);
+            // Insert before the portfolio button
+            const portfolioButton = headerActions.querySelector('.portfolio-button');
+            if (portfolioButton) {
+                headerActions.insertBefore(libraryButton, portfolioButton);
+            } else {
+                headerActions.appendChild(libraryButton);
+            }
+
+            // Add click handler
+            libraryButton.addEventListener('click', () => {
+                window.EpisodeLibrary.open();
+            });
         }
 
-        // Add click handler
-        libraryButton.addEventListener('click', () => {
-            window.EpisodeLibrary.open();
-        });
-
-        // Add keyboard shortcut (Cmd/Ctrl + L)
-        document.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
-                e.preventDefault();
-                window.EpisodeLibrary.open();
-            }
-        });
+        // Add keyboard shortcut (Cmd/Ctrl + L) - outside the if/else
+        // Only add it once
+        if (!window.episodeLibraryShortcutAdded) {
+            window.episodeLibraryShortcutAdded = true;
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
+                    e.preventDefault();
+                    window.EpisodeLibrary.open();
+                }
+            });
+        }
     }
 })();

@@ -347,6 +347,16 @@ class EpisodePanel {
         if (this.panel) {
             this.panel.style.display = 'none';
             document.body.style.overflow = '';
+            
+            // Check if we need to restore the drill-down panel
+            if (window.drilldownReturnState && window.drilldownReturnState.isOpen) {
+                // Restore the drill-down panel
+                if (window.NarrativePulseDrilldown) {
+                    window.NarrativePulseDrilldown.restorePanel();
+                }
+                // Clear the return state
+                delete window.drilldownReturnState;
+            }
         }
     }
 }

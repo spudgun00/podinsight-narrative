@@ -6,8 +6,8 @@
 
 /* Search Container in Header */
 .search-container {
-    width: 400px;
-    position: relative;
+    /* Position is handled in layout.css for absolute positioning */
+    width: 400px; /* Fixed width 400px (increased by 1/3 from ~300px) */
 }
 
 .search-wrapper {
@@ -20,10 +20,11 @@
     padding: 10px 120px 10px 16px;
     border: 1px solid var(--gray-200);
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 14px;  /* Reduced from 15px for better hierarchy */
     transition: all 0.2s ease;
     background: #fafaf9;
     font-family: inherit;
+    color: var(--deep-ink);
 }
 
 .search-input:focus {
@@ -80,7 +81,7 @@
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.2s ease;
-    z-index: 200;
+    z-index: 1001;
     max-height: 480px;
     overflow-y: auto;
 }
@@ -92,7 +93,7 @@
 }
 
 .dropdown-section {
-    padding: 16px 20px;
+    padding: 14px 18px;  /* Slightly tighter for better density */
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -101,34 +102,37 @@
 }
 
 .dropdown-section .section-title {
-    font-size: 11px;
+    font-size: 10px;  /* Slightly smaller for less prominence */
     text-transform: uppercase;
     color: #999;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
-    font-weight: 500;
+    margin-bottom: 10px;  /* Tighter spacing */
+    letter-spacing: 0.8px;  /* More spacing for readability at smaller size */
+    font-weight: 600;  /* Slightly bolder for clarity */
 }
 
 .search-suggestions {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;  /* Reduced from 8px for tighter spacing */
 }
 
 .suggestion-item {
-    padding: 8px 12px;
+    padding: 6px 10px;  /* Reduced padding for more compact appearance */
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
-    color: #333;
+    font-size: 13px;  /* Reduced from 14px to be less dominant */
+    font-weight: 400;  /* Normal weight, not bold */
+    color: #444;  /* Slightly lighter to be less prominent */
+    line-height: 1.4;  /* Tighter line height */
 }
 
 .suggestion-item:hover {
-    background: #f5f5f5;
+    background: #f8f8f8;  /* Even more subtle hover state */
+    color: var(--deep-ink);  /* Slightly darker text on hover */
 }
 
 .suggestion-meta {
@@ -483,7 +487,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 480px;
+    /* Width is controlled by #searchPanel ID selector below */
     background: var(--warm-paper, #FDFDFB);
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -494,6 +498,13 @@
     flex-direction: column;
 }
 
+/* Specific ID selector for higher specificity - ensures 1/2 screen width */
+#searchPanel {
+    width: 50vw !important;  /* Exactly 1/2 of screen */
+    min-width: 400px !important;
+    max-width: 850px !important;
+}
+
 .search-panel.active {
     transform: translateX(0);
 }
@@ -502,7 +513,7 @@
 .search-panel .panel-header {
     background: white;
     border-bottom: 1px solid var(--gray-200);
-    padding: 1rem 1.25rem;
+    padding: 1rem 1.25rem 1.25rem;  /* Added extra bottom padding */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -561,10 +572,12 @@
     padding: 8px 12px;
     border: 1px solid var(--gray-200);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 18px;  /* Reduced from ~24px for better hierarchy */
+    font-weight: 600;  /* Keep bold but not too heavy */
     transition: all 0.2s ease;
     background: #fafaf9;
     font-family: inherit;
+    color: var(--deep-ink);
 }
 
 .search-panel .panel-search-input:focus {
@@ -602,7 +615,7 @@
 .search-panel .panel-content {
     flex: 1;
     overflow-y: auto;
-    padding: 1.25rem;
+    padding: 1.5rem;  /* Increased from 1.25rem for better proportion with wider panel */
 }
 
 /* Results Content - Adapted for 480px width */
@@ -623,7 +636,8 @@
 .confidence-metadata {
     font-size: 0.75rem;
     color: #999;
-    margin-bottom: 12px;
+    margin-top: 8px;  /* Add space from search query */
+    margin-bottom: 16px;  /* Increased from 12px */
     display: flex;
     align-items: center;
     gap: 4px;
@@ -898,18 +912,18 @@
     text-decoration: underline;
 }
 
-/* Action Row - Stack buttons vertically for better fit */
+/* Action Row - Now with more space, buttons can be side-by-side */
 .search-panel .action-row {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: row;  /* Changed from column to row for wider panel */
+    gap: 12px;
     margin-top: 24px;
     padding-top: 24px;
     border-top: 1px solid var(--gray-200);
 }
 
-.search-panel .action-row .btn {
-    width: 100%;
+.search-panel .action-row .panel-search-btn {
+    flex: 1;  /* Equal width buttons */
     justify-content: center;
 }
 
@@ -933,20 +947,44 @@
         gap: 12px;
     }
     
-    .search-container {
-        order: 3;
-        flex-basis: 100%;
+    /* Stack header actions vertically on mobile */
+    .header-actions {
+        flex-direction: column;
+        gap: 8px;
         max-width: none;
+    }
+    
+    .search-container {
+        flex: none;
+        width: 100%;
+        order: initial;
         margin: 0;
     }
     
     /* Search panel takes full width on mobile */
-    .search-panel {
-        width: 100%;
+    #searchPanel {
+        width: 100% !important;  /* Full width on mobile */
+        min-width: unset !important;
+        max-width: unset !important;
+    }
+    
+    /* Reduce search query text size on mobile */
+    .search-panel .panel-search-input {
+        font-size: 16px;  /* Smaller on mobile for more content above fold */
+    }
+    
+    /* Adjust header padding on mobile */
+    .search-panel .panel-header {
+        padding: 0.875rem 1rem 1rem;
     }
     
     .shortcut-hint {
         display: none;
+    }
+    
+    /* Adjust search input padding on mobile */
+    .search-input {
+        padding-right: 50px; /* Less space needed without shortcut hint */
     }
     
     /* Mobile adjustments for CTA */
@@ -976,5 +1014,105 @@
     
     .timeframe-option {
         min-height: 44px;
+    }
+    
+    /* Stack action buttons vertically on mobile */
+    .search-panel .action-row {
+        flex-direction: column;
+    }
+    
+    .search-panel .action-row .panel-search-btn {
+        width: 100%;
+    }
+}
+
+/* Time Filter in Search Dropdown */
+.dropdown-time-filter {
+    padding: 8px 14px;  /* Reduced padding to be less prominent */
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: center;
+}
+
+.inline-time-selector {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+}
+
+.time-option {
+    padding: 3px 8px;  /* Smaller padding */
+    font-size: 11px;  /* Smaller text */
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--gray-600);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.time-option:hover {
+    background: white;
+    border-color: var(--gray-200);
+    color: var(--deep-ink);
+}
+
+.time-option.active {
+    background: white;
+    border-color: var(--sage);
+    color: var(--sage);
+    font-weight: 500;
+}
+
+/* Time Filter in Results Panel - Update existing styles */
+.confidence-metadata {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.results-time-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.results-time-selector {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.results-time-selector .time-option {
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .dropdown-time-filter {
+        padding: 8px 12px;
+    }
+    
+    .inline-time-selector {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+    }
+    
+    .time-option {
+        flex: 1;
+        min-width: 60px;
     }
 }

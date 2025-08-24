@@ -225,6 +225,35 @@
             tooltip.innerHTML = html;
             tooltip.classList.add('visible');
             this.updateTooltipPosition(mouseEvent);
+            
+            // Add click handlers to quotes
+            const quotes = tooltip.querySelectorAll('.topic-quote');
+            const self = this; // Capture the correct context
+            quotes.forEach(quoteElement => {
+                if (quoteElement) {
+                    quoteElement.style.cursor = 'pointer';
+                    quoteElement.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Get random priority briefing to open
+                        const briefings = window.unifiedData?.priorityBriefings?.items || [];
+                        if (briefings.length > 0) {
+                            const randomBriefing = briefings[Math.floor(Math.random() * briefings.length)];
+                            
+                            // Open episode panel
+                            if (window.episodePanelV2 && window.episodePanelV2.open) {
+                                window.episodePanelV2.open(randomBriefing.id);
+                            } else if (window.openEpisodePanel) {
+                                window.openEpisodePanel(randomBriefing.id);
+                            }
+                            
+                            // Hide tooltip immediately after opening episode
+                            self.resetTooltip();
+                        }
+                    };
+                }
+            });
         };
 
         // Override volume view interactions to use dynamic calculations

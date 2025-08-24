@@ -91,6 +91,9 @@
                 // Convert consensus levels to percentages
                 const consensusPercentages = consensusData.map(level => Math.round(level * 100));
                 
+                // Get quotes from 7-day data if available
+                const sevenDayQuotes = topicData.chartData['7d'] ? (topicData.chartData['7d'].quotes || {}) : {};
+                
                 window.narrativePulseData.thirtyDayData.topics[topicName] = {
                     color: topicData.color,
                     displayMomentum: topicData.momentum,
@@ -102,7 +105,9 @@
                     weeklyGrowth: thirtyDayData.momentum.weeklyGrowth,
                     consensusProgression: thirtyDayData.consensus.progression,
                     yPositions: calculateYPositions(topicName, topicData.momentum),
-                    weeklyNarrative: thirtyDayData.weeklyNarrative || {}
+                    weeklyNarrative: thirtyDayData.weeklyNarrative || {},
+                    // Include quotes from 7-day data for consistent tooltip display
+                    quotes: sevenDayQuotes
                 };
             }
             
@@ -125,6 +130,9 @@
                     consensusMap[level] || 50
                 );
                 
+                // Get quotes from 7-day data if available
+                const sevenDayQuotes = topicData.chartData['7d'] ? (topicData.chartData['7d'].quotes || {}) : {};
+                
                 window.narrativePulseData.ninetyDayData.topics[topicName] = {
                     color: topicData.color,
                     displayMomentum: topicData.momentum,
@@ -137,7 +145,9 @@
                     consensusProgression: ninetyDayData.consensus.progression,
                     yPositions: calculateYPositions(topicName, topicData.momentum),
                     narrative: ninetyDayData.narrative,
-                    keyInflectionPoint: ninetyDayData.keyInflectionPoint
+                    keyInflectionPoint: ninetyDayData.keyInflectionPoint,
+                    // Include quotes from 7-day data for consistent tooltip display
+                    quotes: sevenDayQuotes
                 };
             }
         });

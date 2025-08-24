@@ -25,15 +25,11 @@ class PatternFlowSearch {
         // Bind event handlers to preserve context
         this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
         
-        // Timeframe options
+        // Timeframe options - keep it simple with 3 most relevant options
         this.timeframeOptions = [
             { label: 'Last 7 days', value: '7days', discussions: 14, default: true },
             { label: 'Last 30 days', value: '30days', discussions: 47 },
-            { label: 'Last 3 months', value: '3months', discussions: 156 },
-            { label: 'Last 6 months', value: '6months', discussions: 289 },
-            { label: 'Since last Monday', value: 'lastmonday', discussions: 11 },
-            { label: 'This quarter', value: 'quarter', discussions: 98 },
-            { label: 'Year to date', value: 'ytd', discussions: 412 }
+            { label: 'Last 90 days', value: '90days', discussions: 156 }
         ];
         
         // Current selected timeframe
@@ -58,6 +54,14 @@ class PatternFlowSearch {
         if (!this.searchInput) {
             console.error('Search input not found');
             return;
+        }
+        
+        // Clean up any stuck dropdowns from previous sessions
+        const timeframeDropdown = document.getElementById('timeframeDropdown');
+        if (timeframeDropdown) {
+            timeframeDropdown.classList.remove('active');
+            timeframeDropdown.style.cssText = '';
+            delete timeframeDropdown.dataset.source;
         }
         
         // Bind events
@@ -111,6 +115,7 @@ class PatternFlowSearch {
     generateTimeframeOptions() {
         return this.timeframeOptions.map(option => `
             <div class="timeframe-option ${option.value === this.selectedTimeframe.value ? 'selected' : ''}" 
+                 onmousedown="event.preventDefault()"
                  onclick="patternFlowSearch.selectTimeframe('${option.value}', event)">
                 ${option.value === this.selectedTimeframe.value ? '<span class="checkmark">✓</span>' : '<span class="checkmark-placeholder"></span>'}
                 <span>${option.label}</span>
@@ -160,9 +165,36 @@ class PatternFlowSearch {
         
         // Check if panel exists, if not create it
         if (!document.getElementById('searchPanel')) {
-            // Generate initial random durations
-            const duration1 = Math.floor(Math.random() * 21) + 30; // 30-50 seconds
-            const duration2 = Math.floor(Math.random() * 21) + 30; // 30-50 seconds
+            // Get default search data from unified source
+            const defaultData = window.unifiedData?.searchResults?.default || {
+                confidence: '89%',
+                discussions: 14,
+                synthesis: {
+                    title: 'Strong consensus forming',
+                    content: 'Vertical AI applications with proprietary data moats are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to "AI for specific workflows" with deep domain expertise.'
+                },
+                sources: [
+                    {
+                        podcast: '20VC',
+                        guest: 'Brad Gerstner',
+                        timeAgo: '2 days ago',
+                        duration: '45',
+                        quote: "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow."
+                    },
+                    {
+                        podcast: 'Invest Like Best',
+                        guest: 'Elad Gil',
+                        timeAgo: '4 days ago',
+                        duration: '38',
+                        quote: "Vertical AI is where we're seeing actual revenue, not just usage."
+                    }
+                ]
+            };
+            
+            // Apply highlighting to default content
+            const highlightedContent = defaultData.synthesis.content
+                .replace(/proprietary data moats/g, '<span class="highlight">proprietary data moats</span>')
+                .replace(/"AI for specific workflows"/g, '<span class="highlight">"AI for specific workflows"</span>');
             
             const panelHtml = `
                 <div class="search-panel" id="searchPanel">
@@ -193,11 +225,15 @@ class PatternFlowSearch {
                     <div class="panel-content" id="searchResults">
                         <div class="synthesis-content">
                             <div class="confidence-metadata">
-                                <span class="confidence-value">89% confidence</span>
+                                <span class="confidence-value">${defaultData.confidence} confidence</span>
                                 <span class="separator">•</span>
-                                <span class="discussion-count">Based on ${this.selectedTimeframe.discussions} discussions</span>
+                                <span class="discussion-count">Based on ${defaultData.discussions || this.selectedTimeframe.discussions} discussions</span>
                                 <span class="separator">•</span>
-                                <span class="timeframe-selector" onclick="patternFlowSearch.toggleTimeframeDropdown(event)">
+                                <span class="timeframe-selector" 
+                                      onclick="patternFlowSearch.toggleTimeframeDropdown(event, 'results')"
+                                      aria-haspopup="true" 
+                                      aria-controls="timeframeDropdown" 
+                                      aria-expanded="false">
                                     <span class="timeframe-text">${this.selectedTimeframe.label}</span>
                                     <span class="dropdown-arrow">▾</span>
                                     <div class="timeframe-dropdown" id="timeframeDropdown">
@@ -212,7 +248,7 @@ class PatternFlowSearch {
                                     <span class="insight-label">AI-Generated Synthesis</span>
                                 </div>
                                 <div class="insight-text">
-                                    <strong>Strong consensus forming:</strong> Vertical AI applications with <span class="highlight">proprietary data moats</span> are seeing 2-3x better retention than horizontal plays. The narrative has shifted from "AI for everything" to <span class="highlight">"AI for specific workflows"</span> with deep domain expertise.
+                                    <strong>${defaultData.synthesis.title}:</strong> ${highlightedContent}
                                 </div>
                             </div>
                             
@@ -233,15 +269,15 @@ class PatternFlowSearch {
                             </div>
                             
                             <div class="source-previews" id="sourcePreviewsContainer">
-                                ${this.createQuoteCard('20VC', 'Brad Gerstner', '2 days ago', duration1, "The winners in AI won't be the broadest platforms, they'll be the ones who own the workflow. Look at what's happening with Salesforce and ServiceNow - they're embedding AI into existing enterprise workflows where the data already lives. That's the moat.")}
-                                ${this.createQuoteCard('Invest Like Best', 'Elad Gil', '4 days ago', duration2, "Vertical AI is where we're seeing actual revenue, not just usage. Legal, healthcare, finance - these verticals have specific compliance needs, data requirements, and workflow patterns that horizontal platforms can't address effectively.")}
+                                ${defaultData.sources.map(source => 
+                                    this.createQuoteCard(source.podcast, source.guest, source.timeAgo, source.duration, source.quote)
+                                ).join('')}
                             </div>
                         </div>
                         
                         <div class="action-row">
-                            <button class="btn btn-primary" onclick="patternFlowSearch.viewDeepAnalysis()">View Deep Analysis</button>
-                            <button class="btn" onclick="patternFlowSearch.shareInsight()">Share Insight</button>
-                            <button class="btn" onclick="patternFlowSearch.saveToNotebook()">Save to Notebook</button>
+                            <button class="panel-search-btn" onclick="patternFlowSearch.viewDeepAnalysis()">View Full Brief</button>
+                            <button class="panel-search-btn" onclick="patternFlowSearch.shareInsight()">Share Insight</button>
                         </div>
                     </div>
                 </div>
@@ -486,7 +522,10 @@ class PatternFlowSearch {
         // Populate quick questions
         this.populateQuickQuestions(this.searchInput.value);
         
-        // Show panel and backdrop
+        // Update results based on query BEFORE showing panel
+        this.updateResultsForQuery(this.searchInput.value);
+        
+        // Show panel and backdrop AFTER content is updated
         if (this.backdrop) {
             this.backdrop.classList.add('active');
         }
@@ -495,12 +534,9 @@ class PatternFlowSearch {
             this.searchPanel.classList.add('active');
         }
         
-        // Update results based on query
-        this.updateResultsForQuery(this.searchInput.value);
-        
         // Temporary console logs to verify correct pattern
         console.log('Search Panel Config:', {
-            width: getComputedStyle(this.searchPanel).width,  // Should be "480px"
+            width: getComputedStyle(this.searchPanel).width,  // Should be 50% of viewport
             backdrop: getComputedStyle(this.backdrop).backgroundColor,  // Should be "rgba(0, 0, 0, 0.3)"
             blur: getComputedStyle(this.backdrop).backdropFilter,  // Should be "none"
             animation: getComputedStyle(this.searchPanel).transition  // Should match Notable Signals
@@ -514,49 +550,111 @@ class PatternFlowSearch {
     }
     
     updateResultsForQuery(query) {
-        const confidenceValue = document.querySelector('.confidence-value');
-        const discussionCount = document.querySelector('.discussion-count');
-        const insightText = document.querySelector('.insight-text');
-        const sourceCards = document.querySelectorAll('.source-card');
+        const searchData = window.unifiedData?.searchResults;
+        if (!searchData) {
+            console.error('Search data not found in unifiedData');
+            return;
+        }
         
-        if (!confidenceValue || !discussionCount || !insightText) return;
+        // Find matching query pattern
+        let resultData = searchData.default;
+        const lowerQuery = query.toLowerCase();
         
-        // Update source cards with random durations
-        sourceCards.forEach(card => {
-            const sourceInfo = card.querySelector('.source-info');
-            if (sourceInfo) {
-                // Get existing text and split by bullets
-                const spans = sourceInfo.querySelectorAll('span');
-                if (spans.length >= 3) {
-                    const duration = this.generateClipDuration();
-                    // Check if duration already exists to avoid duplicating
-                    const currentText = spans[2].textContent;
-                    if (!currentText.includes('0:')) {
-                        // Only add duration if it doesn't already exist
-                        spans[2].textContent = currentText + ` • ${duration}`;
-                    }
-                    
-                    // Also update the play button data attribute
-                    const playBtn = card.querySelector('.play-clip-btn');
-                    if (playBtn) {
-                        playBtn.setAttribute('data-duration', duration.replace('0:', ''));
-                    }
-                }
+        // Check for matching patterns
+        if (lowerQuery.includes('european') || lowerQuery.includes('europe')) {
+            // Get the current timeframe
+            const timeframeValue = this.selectedTimeframe.value;
+            
+            // Get the european data
+            const europeanData = searchData.queries.european;
+            
+            // Build resultData with timeframe-specific content
+            resultData = {
+                confidence: europeanData.confidence,
+                discussions: europeanData.discussions[timeframeValue],
+                synthesis: europeanData.synthesis[timeframeValue],
+                sources: europeanData.sources[timeframeValue] || searchData.default.sources
+            };
+        } else if (lowerQuery.includes('revolut')) {
+            resultData = searchData.queries.revolut;
+        } else if (lowerQuery.includes('fintech profitability')) {
+            resultData = searchData.queries.fintech_profitability;
+        } else if (lowerQuery.includes('contrarian')) {
+            resultData = searchData.queries.contrarian;
+        } else if (lowerQuery.includes('series a')) {
+            resultData = searchData.queries.series_a;
+        } else if (lowerQuery.includes('brad gerstner')) {
+            resultData = searchData.queries.brad_gerstner;
+        } else if (lowerQuery.includes('vertical ai')) {
+            // Get the current timeframe
+            const timeframeValue = this.selectedTimeframe.value; // '7days', '30days', or '90days'
+            
+            // Get the vertical_ai data
+            const verticalData = searchData.queries.vertical_ai;
+            
+            // Build resultData with timeframe-specific content
+            resultData = {
+                confidence: verticalData.confidence,
+                discussions: verticalData.discussions[timeframeValue],
+                synthesis: verticalData.synthesis[timeframeValue],
+                sources: verticalData.sources[timeframeValue] || searchData.default.sources
+            };
+        }
+        
+        // Update UI elements with data from unified source
+        // IMPORTANT: Only look for elements within the search panel to avoid updating wrong elements
+        const searchPanel = document.getElementById('searchPanel');
+        if (!searchPanel) {
+            console.error('Search panel not found');
+            return;
+        }
+        
+        const confidenceValue = searchPanel.querySelector('.confidence-value');
+        const discussionCount = searchPanel.querySelector('.discussion-count');
+        const insightText = searchPanel.querySelector('.insight-text');
+        
+        if (confidenceValue) {
+            confidenceValue.textContent = `${resultData.confidence} confidence`;
+        }
+        
+        if (discussionCount) {
+            discussionCount.textContent = `Based on ${resultData.discussions} discussions`;
+        }
+        
+        if (insightText) {
+            // Apply highlighting to certain terms
+            let htmlContent = resultData.synthesis.content
+                .replace(/\$5M ARR/g, '<span class="highlight">$5M ARR</span>')
+                .replace(/\$2-3M threshold/g, '<span class="highlight">$2-3M threshold</span>')
+                .replace(/Revolut's Q2 numbers/g, '<span class="highlight">Revolut\'s Q2 numbers</span>')
+                .replace(/20-30x ARR/g, '<span class="highlight">20-30x ARR</span>')
+                .replace(/AI infrastructure plays/g, '<span class="highlight">AI infrastructure plays</span>')
+                .replace(/timeline to profitability/g, '<span class="highlight">timeline to profitability</span>')
+                .replace(/proprietary data moats/g, '<span class="highlight">proprietary data moats</span>')
+                .replace(/AI for specific workflows/g, '<span class="highlight">AI for specific workflows</span>');
+            
+            insightText.innerHTML = `<strong>${resultData.synthesis.title}:</strong> ${htmlContent}`;
+        }
+        
+        // Update source cards if they exist
+        const sourcePreviewsContainer = document.getElementById('sourcePreviewsContainer');
+        if (sourcePreviewsContainer) {
+            // Use specific sources if available, otherwise use default sources
+            const sources = resultData.sources && resultData.sources.length > 0 
+                ? resultData.sources 
+                : searchData.default.sources;
+            
+            if (sources && sources.length > 0) {
+                sourcePreviewsContainer.innerHTML = sources
+                    .map(source => this.createQuoteCard(
+                        source.podcast,
+                        source.guest,
+                        source.timeAgo,
+                        source.duration,
+                        source.quote
+                    ))
+                    .join('');
             }
-        });
-        
-        if (query.toLowerCase().includes('contrarian')) {
-            confidenceValue.textContent = '76% confidence';
-            discussionCount.textContent = 'Based on 3 dissenting voices';
-            insightText.innerHTML = '<strong>Limited contrarian views:</strong> While the majority is bullish on AI, Peter Thiel and others question <span class="highlight">timeline to profitability</span>. "We\'re building infrastructure for use cases that don\'t exist yet."';
-        } else if (query.toLowerCase().includes('series a')) {
-            confidenceValue.textContent = '91% confidence';
-            discussionCount.textContent = 'Based on 8 discussions';
-            insightText.innerHTML = '<strong>Valuation normalization:</strong> Series A rounds settling at <span class="highlight">20-30x ARR</span> for AI companies, down from 50-100x in 2023. "Reality is setting in," per Benchmark\'s latest.';
-        } else if (query.toLowerCase().includes('brad gerstner')) {
-            confidenceValue.textContent = '94% confidence';
-            discussionCount.textContent = 'Based on 3 appearances';
-            insightText.innerHTML = '<strong>Gerstner\'s thesis evolution:</strong> Shifted focus to <span class="highlight">AI infrastructure plays</span> and companies with "10x productivity gains". Emphasizing capital efficiency over growth at all costs.';
         }
     }
     
@@ -578,16 +676,20 @@ class PatternFlowSearch {
     
     // Action handlers
     viewDeepAnalysis() {
-        alert('In production: Opens comprehensive analysis with all sources, timeline, and dissenting views');
+        // Close the search panel
+        this.closeResults();
+        
+        // Scroll to Priority Briefings section
+        const briefingsSection = document.querySelector('.priority-briefings');
+        if (briefingsSection) {
+            briefingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
     
     shareInsight() {
         alert('In production: Share to Slack, Email, or copy formatted insight');
     }
     
-    saveToNotebook() {
-        alert('In production: Save to your intelligence notebook for future reference');
-    }
     
     newSearch() {
         // Close the panel
@@ -756,25 +858,37 @@ class PatternFlowSearch {
         this.updateResultsForQuery(question);
     }
     
-    // Toggle timeframe dropdown
-    toggleTimeframeDropdown(event) {
+    // Simple toggle for timeframe dropdown
+    toggleTimeframeDropdown(event, source = 'results') {
         event.stopPropagation();
+        
         const dropdown = document.getElementById('timeframeDropdown');
         if (!dropdown) return;
         
+        const trigger = event.currentTarget;
         const isOpen = dropdown.classList.contains('active');
         
-        // Close any other open dropdowns
-        document.querySelectorAll('.timeframe-dropdown').forEach(d => d.classList.remove('active'));
-        
         if (!isOpen) {
+            // Open dropdown
             dropdown.classList.add('active');
+            trigger.setAttribute('aria-expanded', 'true');
             
-            // Add click outside listener
+            // Add click outside listener after a brief delay
             setTimeout(() => {
-                document.addEventListener('click', this.closeTimeframeDropdown);
-            }, 0);
+                document.addEventListener('click', this.handleClickOutside);
+            }, 10);
         } else {
+            this.closeTimeframeDropdown();
+        }
+    }
+    
+    // Handle click outside dropdown
+    handleClickOutside = (event) => {
+        const dropdown = document.getElementById('timeframeDropdown');
+        const selector = event.target.closest('.timeframe-selector');
+        
+        // If clicking outside the selector, close dropdown
+        if (!selector) {
             this.closeTimeframeDropdown();
         }
     }
@@ -785,7 +899,13 @@ class PatternFlowSearch {
         if (dropdown) {
             dropdown.classList.remove('active');
         }
-        document.removeEventListener('click', this.closeTimeframeDropdown);
+        
+        // Reset aria-expanded on trigger
+        document.querySelectorAll('.timeframe-selector')
+            .forEach(el => el.setAttribute('aria-expanded', 'false'));
+        
+        // Remove the event listener
+        document.removeEventListener('click', this.handleClickOutside);
     }
     
     // Select timeframe option
@@ -799,7 +919,8 @@ class PatternFlowSearch {
         // Update selected timeframe
         this.selectedTimeframe = option;
         
-        // Update display
+        // Update BOTH filter displays
+        // 1. Update results panel filter
         const timeframeText = document.querySelector('.timeframe-text');
         const discussionCount = document.querySelector('.discussion-count');
         
@@ -819,6 +940,12 @@ class PatternFlowSearch {
         
         // Close dropdown
         this.closeTimeframeDropdown();
+        
+        // After closing dropdown, refresh results if a search is active
+        if (this.searchPanel && this.searchPanel.classList.contains('active')) {
+            const currentQuery = this.searchInput.value || 'vertical ai';
+            this.updateResultsForQuery(currentQuery);
+        }
         
         // Log for demo
         console.log(`Timeframe selected: ${option.label} (${option.discussions} discussions)`);
@@ -860,6 +987,56 @@ class PatternFlowSearch {
                 console.log('Would save quote to user\'s notebook/collection');
                 break;
         }
+    }
+    
+    // Set time filter from dropdown
+    setTimeFilter(value, element, event) {
+        // Stop event propagation to prevent dropdown from closing
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        
+        // Remove active class from all options
+        const allOptions = document.querySelectorAll('.inline-time-selector .time-option');
+        allOptions.forEach(opt => opt.classList.remove('active'));
+        
+        // Add active class to selected option
+        if (element) {
+            element.classList.add('active');
+        }
+        
+        // Update the selected timeframe (for demo purposes)
+        const timeframeMap = {
+            '7days': 'Last 7 days',
+            '30days': 'Last 30 days',
+            '90days': 'Last 90 days',
+            'all': 'All time'
+        };
+        
+        this.selectedTimeframe = {
+            label: timeframeMap[value] || 'Last 7 days',
+            value: value
+        };
+        
+        // Update the results panel timeframe if it's open
+        const resultsTimeframe = document.querySelector('.timeframe-text');
+        if (resultsTimeframe) {
+            resultsTimeframe.textContent = this.selectedTimeframe.label;
+        }
+        
+        // Update discussions count in metadata if visible
+        const discussionCount = document.querySelector('.discussion-count');
+        if (discussionCount) {
+            const discussionCounts = {
+                '7days': 14,
+                '30days': 47,
+                '90days': 156
+            };
+            discussionCount.textContent = `Based on ${discussionCounts[value] || 14} discussions`;
+        }
+        
+        console.log('Time filter set to:', this.selectedTimeframe.label);
     }
     
     // Clean up method

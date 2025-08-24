@@ -1,12 +1,21 @@
 // Narrative Pulse Component
 // Modular implementation of the Narrative Pulse feature
 
+console.log('[DEBUG] narrative-pulse.js loading...');
+
 const NarrativePulse = {
     // Component state
     activeFilter: null,
     container: null,
     currentTimeRange: '7 days', // Track current time range
     animatedCombinations: new Set(), // Track which view+time combinations have been animated
+    
+    // Tooltip state management
+    tooltipPinned: false,
+    currentLegendItem: null,
+    tooltipOpenedByClick: false,
+    highlightedDots: [], // Track currently enlarged dots
+    closeOnClickOutsideHandler: null, // Store reference to remove handler properly
     
     // Chart configuration
     chartWidth: 800,
@@ -362,6 +371,7 @@ const NarrativePulse = {
     
     // Initialize the component
     init: function(containerElement) {
+        console.log('[DEBUG] NarrativePulse.init called with:', containerElement);
         if (!containerElement) {
             console.error('NarrativePulse: No container element provided');
             return;
@@ -440,6 +450,8 @@ const NarrativePulse = {
         
         this.addTouchSupport(); // Add touch event support
         
+        // Note: Quote click handler moved to global scope at end of file
+        
         // Expose global functions for backward compatibility
         window.createConsensusView = this.createConsensusView.bind(this);
         window.updateTooltipPosition = this.updateTooltipPosition.bind(this);
@@ -471,12 +483,8 @@ const NarrativePulse = {
             filterClearBtn.addEventListener('click', this.clearTopicFilter.bind(this));
         }
         
-        // Legend item hover handlers
-        const legendItems = container.querySelectorAll('.legend-item');
-        legendItems.forEach(item => {
-            item.addEventListener('mouseenter', this.showLegendTooltip.bind(this));
-            item.addEventListener('mouseleave', this.hideLegendTooltip.bind(this));
-        });
+        // Legend items no longer have hover handlers
+        // Tooltips are now triggered by clicking on the chart
         
         // Share button
         const shareBtn = container.querySelector('[data-action="shareChart"]');
@@ -643,6 +651,11 @@ const NarrativePulse = {
         const timeText = this.container.querySelector('#timeRangeText');
         const current = timeText.textContent;
         
+        console.log('[DEBUG] ========== TIMELINE CHANGE START ==========');
+        console.log('[DEBUG] Current time range:', current);
+        console.log('[DEBUG] Current view:', this.currentView);
+        console.log('[DEBUG] Active filter before timeline change:', this.activeFilter);
+        
         // Update time range
         if (current === '7 days') {
             this.currentTimeRange = '30 days';
@@ -651,6 +664,8 @@ const NarrativePulse = {
         } else {
             this.currentTimeRange = '7 days';
         }
+        
+        console.log('[DEBUG] New time range:', this.currentTimeRange);
         
         // Update UI text
         timeText.textContent = this.currentTimeRange;
@@ -665,12 +680,24 @@ const NarrativePulse = {
         this.dateLabels = config.dateLabels;
         this.calculateXPositions();
         
-        // Time range changed
+        // Time range changed - ensure filter is cleared
+        console.log('[DEBUG] Clearing filter state on timeline change');
+        this.activeFilter = null;
+        window.activeFilter = null;
         
+        // Hide filter indicator explicitly
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (filterIndicator) {
+            filterIndicator.classList.remove('show');
+        }
         
         // Refresh current view with new data
         const chartContent = this.container.querySelector('#chartContent');
         chartContent.classList.add('fade-out');
+        
+        // CRITICAL: Clean up current view handlers before recreating
+        this.cleanupViewEventHandlers();
+        console.log('[DEBUG] Cleaned up handlers before time range refresh');
         
         setTimeout(() => {
             if (this.currentView === 'momentum') {
@@ -708,6 +735,10 @@ const NarrativePulse = {
             setTimeout(() => {
                 chartContent.classList.remove('fade-in');
             }, 150);
+            
+            console.log('[DEBUG] Timeline change complete');
+            console.log('[DEBUG] Active filter after timeline change:', this.activeFilter);
+            console.log('[DEBUG] ========== TIMELINE CHANGE END ==========');
         }, 150);
         
         // Update legend and insight cards for the new time range
@@ -782,6 +813,11 @@ const NarrativePulse = {
     switchToView: function(viewName) {
         const chartContent = this.container.querySelector('#chartContent');
         
+        console.log('[DEBUG] ========== VIEW SWITCH START ==========');
+        console.log('[DEBUG] Switching from', this.currentView, 'to', viewName);
+        console.log('[DEBUG] Current timeline:', this.currentTimeRange);
+        console.log('[DEBUG] Active filter before switch:', this.activeFilter);
+        
         // Update button states
         const buttons = this.container.querySelectorAll('.view-toggle-btn');
         buttons.forEach(btn => {
@@ -792,18 +828,36 @@ const NarrativePulse = {
             }
         });
         
-        // Clean up existing event handlers before switching views
+        // IMPORTANT: Full cleanup before switching
+        console.log('[DEBUG] Starting full cleanup before view switch');
+        
+        // Clean up handlers for the view we're switching TO (not FROM)
+        this.removeViewListeners(viewName);
+        console.log('[DEBUG] Cleaned up', viewName, 'handlers before switch');
+        
+        // Also clean up current view handlers
         this.cleanupViewEventHandlers();
+        
+        // Double-check filter is cleared
+        this.activeFilter = null;
+        window.activeFilter = null;
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (filterIndicator && filterIndicator.classList.contains('show')) {
+            console.warn('[DEBUG] Filter indicator still showing after cleanup! Force hiding...');
+            filterIndicator.classList.remove('show');
+        }
         
         // Fade out current view
         chartContent.classList.add('fade-out');
         
         // Wait for fade out, then switch view and fade in
         setTimeout(() => {
+            console.log('[DEBUG] Inside setTimeout, switching to:', viewName);
             this.currentView = viewName;
             
             // Switch to appropriate view
             if (viewName === 'momentum') {
+                console.log('[DEBUG] About to call createMomentumView');
                 this.createMomentumView();
             } else if (viewName === 'volume') {
                 this.createVolumeView();
@@ -833,6 +887,10 @@ const NarrativePulse = {
             setTimeout(() => {
                 chartContent.classList.remove('fade-in');
             }, 150);
+            
+            console.log('[DEBUG] View switch complete to:', viewName);
+            console.log('[DEBUG] Active filter after switch:', this.activeFilter);
+            console.log('[DEBUG] ========== VIEW SWITCH END ==========');
         }, 150);
         
         // Update insight cards for the new time range
@@ -904,6 +962,36 @@ const NarrativePulse = {
     
     // Create Volume View
     createVolumeView: function() {
+        console.log('[DEBUG] createVolumeView - START');
+        
+        // Safeguard: Check for duplicate tooltips before creating view
+        const allTooltips = document.querySelectorAll('#chartTooltip');
+        if (allTooltips.length > 1) {
+            console.warn('[DEBUG] Multiple tooltips detected in createVolumeView! Cleaning up...');
+            for (let i = 1; i < allTooltips.length; i++) {
+                allTooltips[i].remove();
+            }
+        }
+        
+        // Ensure filter is not showing when it shouldn't
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (!this.activeFilter) {
+            if (filterIndicator && filterIndicator.classList.contains('show')) {
+                console.warn('[DEBUG] Filter indicator showing without active filter! Hiding...');
+                filterIndicator.classList.remove('show');
+            }
+        } else {
+            // If there IS an active filter, log it (this helps debug)
+            console.log('[DEBUG] Active filter in createMomentumView:', this.activeFilter);
+            // For now, clear it as filters shouldn't persist across timeline changes
+            console.warn('[DEBUG] Clearing unexpected filter:', this.activeFilter);
+            this.clearTopicFilter();
+        }
+        
+        // Clean up any existing volume handlers first
+        this.removeViewListeners('volume');
+        console.log('[DEBUG] Cleaned up old volume handlers');
+        
         const chartContent = this.container.querySelector('#chartContent');
         const currentData = this.getCurrentData();
         
@@ -1135,6 +1223,36 @@ const NarrativePulse = {
     
     // Create Consensus View  
     createConsensusView: function() {
+        console.log('[DEBUG] createConsensusView - START');
+        
+        // Safeguard: Check for duplicate tooltips before creating view
+        const allTooltips = document.querySelectorAll('#chartTooltip');
+        if (allTooltips.length > 1) {
+            console.warn('[DEBUG] Multiple tooltips detected in createConsensusView! Cleaning up...');
+            for (let i = 1; i < allTooltips.length; i++) {
+                allTooltips[i].remove();
+            }
+        }
+        
+        // Ensure filter is not showing when it shouldn't
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (!this.activeFilter) {
+            if (filterIndicator && filterIndicator.classList.contains('show')) {
+                console.warn('[DEBUG] Filter indicator showing without active filter! Hiding...');
+                filterIndicator.classList.remove('show');
+            }
+        } else {
+            // If there IS an active filter, log it (this helps debug)
+            console.log('[DEBUG] Active filter in createMomentumView:', this.activeFilter);
+            // For now, clear it as filters shouldn't persist across timeline changes
+            console.warn('[DEBUG] Clearing unexpected filter:', this.activeFilter);
+            this.clearTopicFilter();
+        }
+        
+        // Clean up any existing consensus handlers first
+        this.removeViewListeners('consensus');
+        console.log('[DEBUG] Cleaned up old consensus handlers');
+        
         const chartContent = this.container.querySelector('#chartContent');
         const topicNames = this.selectedTopics;
         const currentData = this.getCurrentData();
@@ -1419,7 +1537,56 @@ const NarrativePulse = {
         });
     },
     
-    // Update tooltip position
+    // Update tooltip position centered over data point and in middle of viewport
+    updateTooltipPositionCentered: function(dataPointX) {
+        const chartContainer = this.container.querySelector('.chart-container');
+        const tooltip = this.container.querySelector('#chartTooltip');
+        const svg = this.container.querySelector('#narrativeChart');
+        
+        if (!chartContainer || !tooltip || !svg) return;
+        
+        const svgRect = svg.getBoundingClientRect();
+        
+        // Convert SVG coordinate to viewport coordinate
+        const svgWidth = svgRect.width;
+        const viewBoxWidth = 800; // From viewBox="0 0 800 280"
+        const xInViewport = svgRect.left + (dataPointX / viewBoxWidth) * svgWidth;
+        
+        // Get tooltip dimensions
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const tooltipWidth = tooltipRect.width;
+        const tooltipHeight = tooltipRect.height;
+        
+        // Use fixed positioning for center of viewport
+        tooltip.style.position = 'fixed';
+        
+        // Center tooltip horizontally over data point (in viewport coordinates)
+        let tooltipX = xInViewport - (tooltipWidth / 2);
+        
+        // Center tooltip vertically in viewport
+        const viewportHeight = window.innerHeight;
+        let tooltipY = (viewportHeight - tooltipHeight) / 2;
+        
+        // Ensure minimum distance from top
+        if (tooltipY < 20) {
+            tooltipY = 20;
+        }
+        
+        // Adjust horizontal position if tooltip goes off-screen
+        const viewportWidth = window.innerWidth;
+        if (tooltipX < 10) {
+            tooltipX = 10;
+        } else if (tooltipX + tooltipWidth > viewportWidth - 10) {
+            tooltipX = viewportWidth - tooltipWidth - 10;
+        }
+        
+        // Apply position
+        tooltip.style.left = tooltipX + 'px';
+        tooltip.style.top = tooltipY + 'px';
+        tooltip.style.zIndex = '10000'; // Ensure it's above everything
+    },
+    
+    // Update tooltip position (legacy - for mouse-based positioning)
     updateTooltipPosition: function(e) {
         const chartContainer = this.container.querySelector('.chart-container');
         const tooltip = this.container.querySelector('#chartTooltip');
@@ -1457,13 +1624,22 @@ const NarrativePulse = {
     
     // Set topic filter
     setTopicFilter: function(topic) {
+        console.log('[DEBUG] setTopicFilter called with topic:', topic);
+        console.trace('[DEBUG] setTopicFilter call stack');
+        
         const filterIndicator = this.container.querySelector('#filterActive');
         const filterTopicSpan = this.container.querySelector('#filterTopic');
+        
+        if (!topic) {
+            console.warn('[DEBUG] setTopicFilter called with empty topic! Ignoring...');
+            return;
+        }
         
         this.activeFilter = topic;
         window.activeFilter = topic; // Maintain global compatibility
         filterTopicSpan.textContent = topic;
         filterIndicator.classList.add('show');
+        console.log('[DEBUG] Filter indicator shown for topic:', topic);
         
         this.container.querySelectorAll('.topic-line').forEach(line => {
             if (line.dataset.topic === topic) {
@@ -1478,15 +1654,27 @@ const NarrativePulse = {
     
     // Clear topic filter
     clearTopicFilter: function() {
+        console.log('[DEBUG] clearTopicFilter called');
         const filterIndicator = this.container.querySelector('#filterActive');
+        const filterTopicSpan = this.container.querySelector('#filterTopic');
         
         this.activeFilter = null;
         window.activeFilter = null; // Maintain global compatibility
-        filterIndicator.classList.remove('show');
+        
+        if (filterIndicator) {
+            filterIndicator.classList.remove('show');
+            console.log('[DEBUG] Filter indicator hidden');
+        }
+        
+        if (filterTopicSpan) {
+            filterTopicSpan.textContent = '';
+        }
         
         this.container.querySelectorAll('.topic-line, .volume-bar, .consensus-row').forEach(el => {
             el.classList.remove('active', 'dimmed');
         });
+        
+        console.log('[DEBUG] Filter cleared completely');
     },
     
     // Share functionality methods
@@ -1648,7 +1836,36 @@ const NarrativePulse = {
     
     // Create Momentum View (to avoid page reload)
     createMomentumView: function() {
+        console.log('[DEBUG] createMomentumView called');
+        
+        // Safeguard: Check for duplicate tooltips before creating view
+        const allTooltips = document.querySelectorAll('#chartTooltip');
+        if (allTooltips.length > 1) {
+            console.warn('[DEBUG] Multiple tooltips detected in createMomentumView! Cleaning up...');
+            for (let i = 1; i < allTooltips.length; i++) {
+                allTooltips[i].remove();
+            }
+        }
+        
+        // Ensure filter is not showing when it shouldn't
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (!this.activeFilter) {
+            if (filterIndicator && filterIndicator.classList.contains('show')) {
+                console.warn('[DEBUG] Filter indicator showing without active filter! Hiding...');
+                filterIndicator.classList.remove('show');
+            }
+        } else {
+            // If there IS an active filter, log it (this helps debug)
+            console.log('[DEBUG] Active filter in createMomentumView:', this.activeFilter);
+            // For now, clear it as filters shouldn't persist across timeline changes
+            console.warn('[DEBUG] Clearing unexpected filter:', this.activeFilter);
+            this.clearTopicFilter();
+        }
+        
         const chartContent = this.container.querySelector('#chartContent');
+        
+        // Ensure X positions are calculated for current date labels
+        this.calculateXPositions();
         
         // Update legend first
         this.updateLegend();
@@ -1662,6 +1879,11 @@ const NarrativePulse = {
         console.log('Available topics in data:', Object.keys(currentData.topics));
         
         // Build path configs ONLY for selected topics
+        console.log('[DEBUG] Building paths for time range:', this.currentTimeRange);
+        console.log('[DEBUG] Current data keys:', Object.keys(currentData));
+        console.log('[DEBUG] Date labels:', this.dateLabels);
+        console.log('[DEBUG] X positions:', this.xPositions);
+        
         this.selectedTopics.forEach(topic => {
             const topicData = currentData.topics[topic];
             if (!topicData) {
@@ -1673,6 +1895,8 @@ const NarrativePulse = {
                 console.warn(`No dataPoints for topic: ${topic}`);
                 return;
             }
+            
+            console.log(`[DEBUG] Topic ${topic} has ${topicData.dataPoints.length} data points`);
             
             const yScale = this.calculateYScale(topicData.dataPoints);
             pathConfigs[topic] = {
@@ -1753,12 +1977,19 @@ const NarrativePulse = {
                 // Create smooth path data
                 let pathData = '';
                 
+                console.log(`[DEBUG PATH] Creating path for ${p.topic}:`);
+                console.log(`  - yPositions count: ${yPositions.length}`);
+                console.log(`  - yPositions values:`, yPositions);
+                console.log(`  - this.xPositions:`, this.xPositions);
+                
                 if (yPositions.length > 1 && this.xPositions && this.xPositions.length > 0) {
                     // Use the pre-calculated xPositions, ensuring we have the right number
                     const xPosToUse = this.xPositions.slice(0, yPositions.length);
+                    console.log(`  - xPosToUse:`, xPosToUse);
                     
                     // Different approaches based on number of points
                     if (yPositions.length <= 5) {
+                        console.log(`  - Using quadratic curves for ${yPositions.length} points`);
                         // For 5 or fewer points (30-day view), use quadratic curves
                         pathData = `M ${xPosToUse[0]},${yPositions[0]}`;
                         if (yPositions.length >= 3) {
@@ -1770,10 +2001,18 @@ const NarrativePulse = {
                         if (yPositions.length > 4) {
                             pathData += ` T ${xPosToUse[4]},${yPositions[4]}`;
                         }
+                        console.log(`  - Generated pathData: "${pathData}"`);
                     } else {
+                        console.log(`  - Using Catmull-Rom spline for ${yPositions.length} points`);
                         // For more points (7-day and 90-day), use Catmull-Rom spline
                         pathData = this.createCatmullRomPath(xPosToUse, yPositions);
+                        console.log(`  - Generated pathData length: ${pathData.length} chars`);
                     }
+                } else {
+                    console.log(`  - SKIPPING PATH: Not enough data or missing xPositions`);
+                    console.log(`    - yPositions.length: ${yPositions.length}`);
+                    console.log(`    - this.xPositions exists: ${!!this.xPositions}`);
+                    console.log(`    - this.xPositions length: ${this.xPositions ? this.xPositions.length : 0}`);
                 }
                 
                 // Calculate animation delay based on topic index
@@ -1784,6 +2023,11 @@ const NarrativePulse = {
                 const initialStyle = !this.hasAnimated('momentum') ? 
                     `stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0;` : 
                     '';
+                
+                console.log(`  - Path will be rendered: ${pathData.length > 0 ? 'YES' : 'NO'}`);
+                if (!pathData) {
+                    console.warn(`  - WARNING: Empty pathData for ${p.topic}!`);
+                }
                 
                 return `<g class="topic-line chart-transition" data-topic="${p.topic}" data-momentum="${p.momentum}" data-color="${p.color}">
                     <path d="${pathData}" 
@@ -1815,6 +2059,43 @@ const NarrativePulse = {
         // Re-initialize momentum view interactions after DOM update
         setTimeout(() => {
             this.initMomentumView();
+            
+            // CRITICAL FIX: Always make paths visible when switching back to momentum view
+            // If we've already animated before, paths need to be made visible immediately
+            if (this.hasAnimated('momentum')) {
+                console.log('[DEBUG] Making paths visible (already animated before)');
+                const paths = this.container.querySelectorAll('.topic-path');
+                const dots = this.container.querySelectorAll('.data-point-dot');
+                
+                paths.forEach(path => {
+                    // Reset to visible state
+                    path.style.strokeDasharray = '';
+                    path.style.strokeDashoffset = '';
+                    path.style.opacity = '1';
+                });
+                
+                // Also make dots visible
+                dots.forEach(dot => {
+                    dot.style.opacity = '1';
+                });
+                
+                // Update legend values to their final state
+                const legendItems = this.container.querySelectorAll('.legend-item');
+                legendItems.forEach(item => {
+                    const valueElement = item.querySelector('.legend-value');
+                    if (valueElement) {
+                        const finalValue = valueElement.getAttribute('data-final');
+                        if (finalValue) {
+                            valueElement.textContent = finalValue;
+                        }
+                    }
+                });
+            } else {
+                // First time showing momentum view - animate it
+                console.log('[DEBUG] First time showing momentum - animating');
+                this.animateChartOnLoad();
+                this.markAnimated('momentum');
+            }
         }, 50);
     },
     
@@ -1903,6 +2184,21 @@ const NarrativePulse = {
     
     // Initialize momentum view interactions
     initMomentumView: function() {
+        console.log('[DEBUG] initMomentumView - START');
+        console.log('[DEBUG] Current timeline:', this.currentTimeRange);
+        console.log('[DEBUG] Active filter at momentum init:', this.activeFilter);
+        
+        // CRITICAL: Ensure no filter is active when initializing after timeline change
+        // The filter should only be set by explicit user action
+        if (this.activeFilter) {
+            console.warn('[DEBUG] Filter active at momentum init! This should not happen. Clearing...');
+            this.clearTopicFilter();
+        }
+        
+        // CRITICAL: Clean up any existing momentum handlers first
+        this.removeViewListeners('momentum');
+        console.log('[DEBUG] Cleaned up old momentum handlers');
+        
         const chartContent = this.container.querySelector('#chartContent');
         const tooltip = this.container.querySelector('#chartTooltip');
         const verticalTracker = this.container.querySelector('#verticalTracker');
@@ -1922,8 +2218,8 @@ const NarrativePulse = {
             return;
         }
         
-        // Ensure tooltip is properly positioned
-        tooltip.style.pointerEvents = 'none';
+        // Make tooltip interactive so users can click on quotes
+        tooltip.style.pointerEvents = 'auto';
         
         // Show dots and vertical line on chart hover - use chartContent instead of container
         const handleMomentumMouseEnter = () => {
@@ -1933,11 +2229,19 @@ const NarrativePulse = {
         
         const handleMomentumMouseLeave = () => {
             if (verticalTracker) verticalTracker.setAttribute('opacity', '0');
-            dots.forEach(dot => dot.setAttribute('opacity', '0'));
-            this.hideTooltipWithDelay();
+            dots.forEach(dot => {
+                dot.setAttribute('opacity', '0');
+                // Also reset radius to normal size
+                dot.setAttribute('r', '3');
+            });
+            // Only hide tooltip if it wasn't opened by click
+            if (!this.tooltipOpenedByClick) {
+                this.hideTooltipWithDelay();
+            }
         };
         
-        const handleMomentumMouseMove = (e) => {
+        // Handle mouse hover for visual feedback only (vertical line and dot enlargement)
+        const handleMomentumHover = (e) => {
             // Cancel previous frame if still pending
             if (this.mouseMoveFrame) {
                 cancelAnimationFrame(this.mouseMoveFrame);
@@ -1970,9 +2274,6 @@ const NarrativePulse = {
                     }
                 }
                 
-                
-                
-                
                 // Update vertical line position
                 let nearestX = this.xPositions[nearestIndex];
                 
@@ -1994,54 +2295,130 @@ const NarrativePulse = {
                     verticalTracker.setAttribute('x2', nearestX);
                 }
                 
+                // Reset previously highlighted dots
+                this.resetHighlightedDots();
+                
                 // Highlight data points at this x position
                 dots.forEach(dot => {
                     const dotX = parseFloat(dot.getAttribute('cx'));
                     if (Math.abs(dotX - nearestX) < 1) {
                         dot.setAttribute('r', '5');
                         dot.setAttribute('opacity', '1');
+                        // Track this dot as highlighted
+                        this.highlightedDots.push(dot);
                     } else {
                         dot.setAttribute('r', '3');
                         dot.setAttribute('opacity', '0.5');
                     }
                 });
                 
-                // Show tooltip with rich content
-                this.showRichTooltip(nearestIndex, e);
+                // Store the current hover position for click handler
+                this.currentHoverIndex = nearestIndex;
+                this.currentHoverX = nearestX;
                 
                 this.mouseMoveFrame = null;
             });
         };
+
+        // Handle click to show tooltip (reuses hover logic for consistency)
+        const handleMomentumClick = (e) => {
+            // Get mouse position relative to chart container
+            const containerRect = chartContainer.getBoundingClientRect();
+            const svgRect = svg.getBoundingClientRect();
+            const x = e.clientX - svgRect.left;
+            
+            // Map client X to SVG viewBox coordinates
+            const containerWidth = svgRect.width;
+            const viewBoxWidth = 800; // From viewBox="0 0 800 280"
+            let svgX = (x / containerWidth) * viewBoxWidth;
+            
+            // Find nearest date index
+            let nearestIndex = 0;
+            let minDistance = Math.abs(svgX - this.xPositions[0]);
+            
+            for (let i = 1; i < this.xPositions.length; i++) {
+                const distance = Math.abs(svgX - this.xPositions[i]);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestIndex = i;
+                }
+            }
+            
+            // Update vertical line position
+            let nearestX = this.xPositions[nearestIndex];
+            
+            // Apply offset for specific dates in 90-day view
+            if (this.currentTimeRange === '90 days') {
+                const dateLabel = this.dateLabels[nearestIndex] || '';
+                if (dateLabel === 'May 2') {
+                    nearestX = nearestX + 8;
+                } else if (dateLabel === 'May 9') {
+                    nearestX = nearestX + 3;
+                }
+            }
+            
+            // Update visual feedback (in case user clicks without hovering first)
+            if (verticalTracker) {
+                verticalTracker.setAttribute('x1', nearestX);
+                verticalTracker.setAttribute('x2', nearestX);
+            }
+            
+            // Reset previously highlighted dots
+            this.resetHighlightedDots();
+            
+            // Highlight data points at this x position
+            dots.forEach(dot => {
+                const dotX = parseFloat(dot.getAttribute('cx'));
+                if (Math.abs(dotX - nearestX) < 1) {
+                    dot.setAttribute('r', '5');
+                    dot.setAttribute('opacity', '1');
+                    // Track this dot as highlighted
+                    this.highlightedDots.push(dot);
+                } else {
+                    dot.setAttribute('r', '3');
+                    dot.setAttribute('opacity', '0.5');
+                }
+            });
+            
+            // Show tooltip with rich content
+            this.showRichTooltip(nearestIndex, e, nearestX);
+        };
         
         // Add event listeners using the new management system
-        // Also add listeners to the SVG element to ensure proper boundary detection
+        // Show visual feedback on hover but only show tooltip on click
+        console.log('[DEBUG] Adding momentum event handlers');
         this.addEventListener(chartContent, 'mouseenter', handleMomentumMouseEnter, 'momentum');
+        console.log('[DEBUG] Added mouseenter handler');
         this.addEventListener(chartContent, 'mouseleave', handleMomentumMouseLeave, 'momentum');
-        this.addEventListener(chartContent, 'mousemove', handleMomentumMouseMove, 'momentum');
+        console.log('[DEBUG] Added mouseleave handler');
+        this.addEventListener(chartContent, 'mousemove', handleMomentumHover, 'momentum'); // Visual feedback on hover
+        console.log('[DEBUG] Added mousemove handler');
+        this.addEventListener(chartContent, 'click', handleMomentumClick, 'momentum'); // Show tooltip on click
+        console.log('[DEBUG] Added click handler');
         
         // Add additional listeners to the SVG element for better event capture
         this.addEventListener(svg, 'mouseleave', handleMomentumMouseLeave, 'momentum');
         
-        // Handle click for filtering
-        const topicLines = this.container.querySelectorAll('.topic-line');
-        topicLines.forEach(line => {
-            const handleLineClick = () => {
-                const topic = line.dataset.topic;
-                if (this.activeFilter === topic || window.activeFilter === topic) {
-                    this.clearTopicFilter();
-                } else {
-                    this.setTopicFilter(topic);
-                }
-            };
-            this.addEventListener(line, 'click', handleLineClick, 'momentum');
-        });
+        // REMOVED: Chart lines should NOT toggle filters when clicked
+        // Filters should only be toggled via legend items or dedicated filter controls
+        // This was causing the filter box to appear unintentionally when clicking
+        // on chart lines to view tooltips
+        console.log('[DEBUG] Filter toggle handler removed from chart lines - tooltips only now');
     },
     
     // Show rich tooltip with all topic data
-    showRichTooltip: function(dateIndex, mouseEvent) {
+    showRichTooltip: function(dateIndex, mouseEvent, dataPointX) {
+        console.log('[DEBUG] showRichTooltip called for timeline:', this.currentTimeRange);
         const tooltip = this.container.querySelector('#chartTooltip');
+        
+        // Ensure tooltip has correct classes and is clean
+        tooltip.className = 'chart-tooltip chart-tooltip-momentum';
+        
         const date = this.dateLabels[dateIndex];
         const currentData = this.getCurrentData();
+        
+        // Set flag to indicate tooltip was opened by click
+        this.tooltipOpenedByClick = true;
         
         // Tooltip data ready
         
@@ -2079,8 +2456,16 @@ const NarrativePulse = {
                 
                 // Get quote from unified data if available
                 let quote = null;
-                if (this.currentTimeRange === '7 days' && topicData.quotes && topicData.quotes[date]) {
+                if (topicData.quotes && topicData.quotes[date]) {
+                    // Try to get quote for the specific date
                     quote = topicData.quotes[date];
+                } else if (this.currentTimeRange !== '7 days' && topicData.quotes) {
+                    // For 30/90 day views, use a sample quote from available quotes
+                    const availableQuotes = Object.values(topicData.quotes).filter(q => q);
+                    if (availableQuotes.length > 0) {
+                        // Use a consistent quote based on the date index to avoid randomness
+                        quote = availableQuotes[dateIndex % availableQuotes.length];
+                    }
                 }
                 
                 // Store the first quote we find as the daily quote
@@ -2132,7 +2517,70 @@ const NarrativePulse = {
         html += '</div>';
         tooltip.innerHTML = html;
         tooltip.classList.add('visible');
-        this.updateTooltipPosition(mouseEvent);
+        
+        // Position tooltip centered over the data point
+        if (dataPointX !== undefined) {
+            this.updateTooltipPositionCentered(dataPointX);
+        } else {
+            this.updateTooltipPosition(mouseEvent);
+        }
+        
+        // Add mouse event handlers to the tooltip
+        // When mouse enters tooltip, cancel any pending hide timer
+        tooltip.onmouseenter = () => {
+            if (this.hideTooltipTimer) {
+                clearTimeout(this.hideTooltipTimer);
+                this.hideTooltipTimer = null;
+            }
+        };
+        
+        // When mouse leaves tooltip, hide it with delay
+        tooltip.onmouseleave = () => {
+            this.hideTooltipWithDelay();
+            this.tooltipOpenedByClick = false; // Reset flag
+            this.resetHighlightedDots(); // Reset dot sizes
+        };
+        
+        // Remove any existing click-outside handler
+        if (this.closeOnClickOutsideHandler) {
+            document.removeEventListener('click', this.closeOnClickOutsideHandler);
+            this.closeOnClickOutsideHandler = null;
+        }
+        
+        // Add click-outside handler to close tooltip
+        const closeOnClickOutside = (e) => {
+            // Skip if this is the same click that opened the tooltip
+            if (e === mouseEvent) {
+                console.log('[DEBUG] Same click that opened tooltip, skipping...');
+                return;
+            }
+            
+            console.log('[DEBUG] closeOnClickOutside fired, target:', e.target.className);
+            
+            // Skip if this is a quote click - let the quote handler manage it
+            if (e.target.closest('.topic-quote')) {
+                console.log('[DEBUG] Quote click detected in closeOnClickOutside, skipping...');
+                return;
+            }
+            
+            // Use closest() instead of contains() to handle innerHTML DOM recreation
+            if (!e.target.closest('#chartTooltip')) {
+                console.log('[DEBUG] Click was outside tooltip, closing...');
+                this.tooltipOpenedByClick = false; // Reset flag
+                this.resetHighlightedDots(); // Reset dot sizes
+                this.hideTooltipWithDelay();
+                document.removeEventListener('click', closeOnClickOutside);
+                this.closeOnClickOutsideHandler = null;
+            } else {
+                console.log('[DEBUG] Click was inside tooltip, not closing');
+            }
+        };
+        
+        // Store reference for cleanup
+        this.closeOnClickOutsideHandler = closeOnClickOutside;
+        
+        // Add immediately, no setTimeout to avoid race conditions
+        document.addEventListener('click', closeOnClickOutside);
     },
     
     // Get topic color
@@ -2172,7 +2620,12 @@ const NarrativePulse = {
     },
     
     removeViewListeners: function(view) {
-        if (!this.eventListeners[view]) return;
+        if (!this.eventListeners[view]) {
+            console.log('[DEBUG] No listeners to remove for view:', view);
+            return;
+        }
+        
+        console.log('[DEBUG] Removing', this.eventListeners[view].length, 'listeners for view:', view);
         
         this.eventListeners[view].forEach(({ element, event, handler }) => {
             if (element && handler) {
@@ -2193,6 +2646,12 @@ const NarrativePulse = {
         const tooltip = this.container?.querySelector('#chartTooltip');
         if (!tooltip) return;
         
+        // Remove click-outside handler if it exists
+        if (this.closeOnClickOutsideHandler) {
+            document.removeEventListener('click', this.closeOnClickOutsideHandler);
+            this.closeOnClickOutsideHandler = null;
+        }
+        
         // Clear all content
         tooltip.innerHTML = '';
         
@@ -2208,6 +2667,17 @@ const NarrativePulse = {
         tooltip.style.display = 'none';
     },
     
+    // Reset highlighted dots to normal size
+    resetHighlightedDots: function() {
+        this.highlightedDots.forEach(dot => {
+            if (dot) {
+                dot.setAttribute('r', '3');
+                dot.setAttribute('opacity', '0');
+            }
+        });
+        this.highlightedDots = [];
+    },
+    
     // Hide tooltip with delay
     hideTooltipWithDelay: function() {
         // Clear any existing timer first
@@ -2219,6 +2689,7 @@ const NarrativePulse = {
             const tooltip = this.container.querySelector('#chartTooltip');
             if (tooltip) {
                 tooltip.classList.remove('visible');
+                this.tooltipOpenedByClick = false; // Reset flag when hiding
                 // Also ensure display is hidden after transition
                 setTimeout(() => {
                     if (!tooltip.classList.contains('visible')) {
@@ -2430,100 +2901,7 @@ const NarrativePulse = {
         });
     },
     
-    // Show legend tooltip with powerful quote
-    showLegendTooltip: function(event) {
-        const legendItem = event.currentTarget;
-        const topic = legendItem.dataset.topic; // Now this is the actual topic name
-        const tooltip = document.getElementById('legendTooltip');
-        
-        if (!tooltip) return;
-        
-        // Convert topic name to kebab-case for lookup
-        const topicKey = this.getTopicKey(topic);
-        
-        // Define the most powerful quotes with context for each topic
-        const quotesData = {
-            'ai-infrastructure': {
-                quote: 'Infrastructure capturing 70% of AI dollars confirmed',
-                date: 'Jul 25, 2024',
-                source: 'All-In Pod • BG2Pod'
-            },
-            'enterprise-agents': {
-                quote: '$2B invested in agent startups H1 2025 confirmed',
-                date: 'Jul 25, 2024',
-                source: 'The Twenty Minute VC'
-            },
-            'defense-tech': {
-                quote: 'Bipartisan support creating 10-year visibility',
-                date: 'Jul 25, 2024',
-                source: 'All-In Pod'
-            },
-            'exit-strategies': {
-                quote: 'VCs adjusting underwriting to M&A multiples',
-                date: 'Jul 25, 2024',
-                source: 'Acquired • 20VC'
-            },
-            'vertical-ai': {
-                quote: 'Every vertical racing for its champion',
-                date: 'Jul 24, 2024',
-                source: 'SaaStr • Invest Like the Best'
-            },
-            'traditional-saas': {
-                quote: 'Traditional SaaS showing resilience in enterprise',
-                date: 'Jul 25, 2024',
-                source: 'SaaStr Pod'
-            },
-            'climate-tech': {
-                quote: 'Climate Tech accelerating with policy support',
-                date: 'Jul 25, 2024',
-                source: 'My Climate Journey'
-            }
-        };
-        
-        const data = quotesData[topicKey];
-        if (!data) return;
-        
-        // Set tooltip content with rich formatting
-        tooltip.innerHTML = `
-            <div class="legend-tooltip-content">
-                <div class="tooltip-header">
-                    <span class="tooltip-date">${data.date}</span>
-                    <span class="tooltip-separator">•</span>
-                    <span class="tooltip-source">${data.source}</span>
-                </div>
-                <div class="tooltip-quote">"${data.quote}"</div>
-            </div>
-        `;
-        
-        // Position tooltip above the legend item
-        const rect = legendItem.getBoundingClientRect();
-        const tooltipWidth = 280; // Slightly wider for more content
-        const tooltipLeft = rect.left + (rect.width / 2) - (tooltipWidth / 2);
-        
-        tooltip.style.left = Math.max(10, Math.min(tooltipLeft, window.innerWidth - tooltipWidth - 10)) + 'px';
-        tooltip.style.top = (rect.top - 85) + 'px'; // More space for additional content
-        tooltip.style.display = 'block';
-        
-        // Add visible class after a tiny delay for animation
-        setTimeout(() => {
-            tooltip.classList.add('visible');
-        }, 10);
-    },
     
-    // Hide legend tooltip
-    hideLegendTooltip: function() {
-        const tooltip = document.getElementById('legendTooltip');
-        if (!tooltip) return;
-        
-        tooltip.classList.remove('visible');
-        
-        // Hide completely after transition
-        setTimeout(() => {
-            if (!tooltip.classList.contains('visible')) {
-                tooltip.style.display = 'none';
-            }
-        }, 200);
-    },
     
     // Create loading skeleton
     createLoadingSkeleton: function() {
@@ -2845,29 +3223,64 @@ const NarrativePulse = {
     
     // Clean up view-specific event handlers
     cleanupViewEventHandlers: function() {
+        console.log('[DEBUG] cleanupViewEventHandlers called');
+        console.log('[DEBUG] Current view:', this.currentView);
+        console.log('[DEBUG] Active filter before cleanup:', this.activeFilter);
+        
         // Remove all event listeners for the current view
         if (this.currentView) {
+            console.log('[DEBUG] Removing listeners for view:', this.currentView);
             this.removeViewListeners(this.currentView);
         }
         
         // Cancel any pending animation frames
         if (this.mouseMoveFrame) {
+            console.log('[DEBUG] Cancelling animation frame');
             cancelAnimationFrame(this.mouseMoveFrame);
             this.mouseMoveFrame = null;
         }
         
         // Clear any hide tooltip timers
         if (this.hideTooltipTimer) {
+            console.log('[DEBUG] Clearing hide tooltip timer');
             clearTimeout(this.hideTooltipTimer);
             this.hideTooltipTimer = null;
         }
         
         // Reset view-specific state
+        console.log('[DEBUG] Resetting view-specific state');
         this.currentHoveredDate = null;
         this.activeFilter = null;
+        window.activeFilter = null; // Also clear global filter
+        
+        // Hide the filter indicator
+        const filterIndicator = this.container.querySelector('#filterActive');
+        if (filterIndicator) {
+            console.log('[DEBUG] Hiding filter indicator');
+            filterIndicator.classList.remove('show');
+        }
+        
+        // Clear filter topic text
+        const filterTopicSpan = this.container.querySelector('#filterTopic');
+        if (filterTopicSpan) {
+            filterTopicSpan.textContent = '';
+        }
         
         // Reset tooltip completely
+        console.log('[DEBUG] Resetting tooltip');
         this.resetTooltip();
+        
+        // Remove any duplicate tooltips
+        const allTooltips = document.querySelectorAll('#chartTooltip');
+        console.log('[DEBUG] Found', allTooltips.length, 'tooltip elements');
+        if (allTooltips.length > 1) {
+            console.warn('[DEBUG] Multiple tooltips detected! Removing extras...');
+            for (let i = 1; i < allTooltips.length; i++) {
+                allTooltips[i].remove();
+            }
+        }
+        
+        console.log('[DEBUG] cleanupViewEventHandlers complete');
         
         // Clear chart content
         const chartContent = this.container?.querySelector('#chartContent');
@@ -2974,17 +3387,33 @@ const NarrativePulse = {
             item.className = 'legend-item';
             // Use the actual topic name, not the kebab-case key, to match paths
             item.setAttribute('data-topic', topic.name);
+            // Add data-has-clickable attribute for unified hover effect
+            item.setAttribute('data-has-clickable', 'true');
             console.log(`Creating legend item with data-topic="${topic.name}"`);
             
+            // Make both legend-label and legend-value clickable for drill-down
             item.innerHTML = `
                 <span class="legend-dot" style="background: ${topicData.color};"></span>
-                <span class="legend-label">${topic.name}</span>
-                <span class="legend-value" style="color: ${valueColor};" data-final="${finalValue}">${displayValue}</span>
+                <span class="legend-label" 
+                      data-topic="${topic.name}"
+                      role="button"
+                      tabindex="0"
+                      title="Click for details">
+                    ${topic.name}
+                </span>
+                <span class="legend-value" 
+                      style="color: ${valueColor};" 
+                      data-final="${finalValue}"
+                      data-topic="${topic.name}"
+                      role="button"
+                      tabindex="0"
+                      title="Click for details">
+                    ${displayValue}
+                </span>
             `;
             
-            // Add hover event listeners directly
-            item.addEventListener('mouseenter', this.showLegendTooltip.bind(this));
-            item.addEventListener('mouseleave', this.hideLegendTooltip.bind(this));
+            // Legend items no longer have hover handlers
+            // Tooltips are now triggered by clicking on the chart
             
             legend.appendChild(item);
         });
@@ -3023,3 +3452,36 @@ const NarrativePulse = {
 
 // Export for use
 window.NarrativePulse = NarrativePulse;
+
+// Add global event delegation for quote clicks
+// This runs immediately when the script loads, not waiting for init
+console.log('[DEBUG] Adding global quote click handler');
+document.addEventListener('click', (e) => {
+    console.log('[DEBUG] Document click detected on:', e.target.className || e.target.tagName);
+    const quote = e.target.closest('#chartTooltip .topic-quote');
+    if (quote) {
+        console.log('[DEBUG] Quote click handler fired!');
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Get random priority briefing to open
+        const briefings = window.unifiedData?.priorityBriefings?.items || [];
+        console.log('[DEBUG] Found', briefings.length, 'briefings');
+        if (briefings.length > 0) {
+            const randomBriefing = briefings[Math.floor(Math.random() * briefings.length)];
+            console.log('[DEBUG] Opening briefing:', randomBriefing.id);
+            
+            // Open episode panel
+            if (window.episodePanelV2?.open) {
+                window.episodePanelV2.open(randomBriefing.id);
+            } else if (window.openEpisodePanel) {
+                window.openEpisodePanel(randomBriefing.id);
+            }
+            
+            // Hide tooltip - use NarrativePulse instance
+            if (window.NarrativePulse && window.NarrativePulse.resetTooltip) {
+                window.NarrativePulse.resetTooltip();
+            }
+        }
+    }
+});

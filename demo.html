@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="synthea.ai - Synthesized intelligence for venture capital">
+    <meta name="theme-color" content="#4a7c59">
+    <meta property="og:title" content="synthea.ai - Venture Capital Intelligence Platform">
+    <meta property="og:description" content="Track narratives, signals, and insights from 1,498+ venture capital podcasts">
+    <meta property="og:type" content="website">
+    <title>synthea.ai - Synthesized intelligence for venture capital</title>
+    
+    <!-- Performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <!-- Web Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='44' height='44' fill='white'/%3E%3Cdefs%3E%3CclipPath id='c1'%3E%3Ccircle r='13' cx='14' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c2'%3E%3Ccircle r='13' cx='30' cy='16'/%3E%3C/clipPath%3E%3CclipPath id='c3'%3E%3Ccircle r='13' cx='22' cy='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='30' cy='16' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.3'/%3E%3C/g%3E%3Cg clip-path='url(%23c1)'%3E%3Cg clip-path='url(%23c2)'%3E%3Ccircle r='13' cx='22' cy='30' fill='%234a7c59' fill-opacity='0.6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Critical CSS for initial load */
+        body { margin: 0; background: #fafaf9; }
+        .loading {
+            padding: 2rem;
+            text-align: center;
+            color: #6b7280;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/variables.css?v=20250118">
+    <link rel="stylesheet" href="styles/base.css?v=20250118">
+    <link rel="stylesheet" href="styles/layout.css?v=20250118">
+    <link rel="stylesheet" href="styles/components.css?v=20250118">
+    <link rel="stylesheet" href="styles/utilities.css?v=20250118">
+    
+    <!-- Episode Panel v2.0 Styles - Clean architecture without !important -->
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css">
+    <!-- Episode Panel v2.0 Override - Ensures header displays correctly -->
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2-override.css">
+    
+    <!-- Portfolio Panel Styles -->
+    <link rel="stylesheet" href="styles/portfolio.css">
+    
+    <!-- Briefing Card Clickable -->
+    <link rel="stylesheet" href="briefing-card-clickable.css">
+    
+    <!-- Search Styles -->
+    <link rel="stylesheet" href="styles/search.css">
+    
+    <!-- Episode Library Styles -->
+    <link rel="stylesheet" href="features/episode-library/episode-library.css">
+    
+    <!-- Priority Briefings Compact Styles -->
+    <link rel="stylesheet" href="styles/priority-briefings-compact.css">
+    
+    <!-- Narrative Pulse Drill-Down Panel Styles -->
+    <link rel="stylesheet" href="styles/narrative-pulse-drilldown.css">
+    
+    <!-- Customization Panel Styles -->
+    <link rel="stylesheet" href="styles/customization-panel.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-main">
+            <!-- Left: Logo -->
+            <div class="header-left">
+                <div class="logo-container">
+                <svg class="logo-mark" width="56" height="56" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-label="Synthea.ai (Working Title) Logo">
+                    <defs>
+                        <clipPath id="sage-circle1">
+                            <circle r="13" cx="14" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="sage-circle2">
+                            <circle r="13" cx="30" cy="16"></circle>
+                        </clipPath>
+                        <clipPath id="sage-circle3">
+                            <circle r="13" cx="22" cy="30"></circle>
+                        </clipPath>
+                    </defs>
+                    
+                    <!-- Overlap between circle 1 and 2 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="30" cy="16" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 1 and 3 -->
+                    <g clip-path="url(#sage-circle1)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Overlap between circle 2 and 3 -->
+                    <g clip-path="url(#sage-circle2)">
+                        <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.3"></circle>
+                    </g>
+                    
+                    <!-- Center overlap (all three) -->
+                    <g clip-path="url(#sage-circle1)">
+                        <g clip-path="url(#sage-circle2)">
+                            <circle r="13" cx="22" cy="30" fill="#4a7c59" fill-opacity="0.6"></circle>
+                        </g>
+                    </g>
+                </svg>
+                <div class="logo-text">
+                    <div class="logo">synthea.ai</div>
+                    <div class="tagline">synthesized intelligence</div>
+                    <span class="working-title-badge" aria-hidden="true">working title</span>
+                </div>
+            </div>
+            
+            <!-- Center: Search and Episode Library -->
+            <div class="header-center">
+                <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        placeholder="What are VCs discussing?"
+                        id="searchInput"
+                    >
+                    <span class="shortcut-hint">⌘K</span>
+                    <span class="search-icon">🔍</span>
+                    
+                    <!-- Search Dropdown -->
+                    <div class="search-dropdown" id="searchDropdown">
+                        <!-- Time Filter in Dropdown -->
+                        <div class="dropdown-time-filter" onmousedown="event.preventDefault()">
+                            <div class="inline-time-selector">
+                                <button class="time-option active" data-value="7days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('7days', this, event)">7 days</button>
+                                <button class="time-option" data-value="30days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('30days', this, event)">30 days</button>
+                                <button class="time-option" data-value="90days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('90days', this, event)">90 days</button>
+                                <button class="time-option" data-value="all" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('all', this, event)">All time</button>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Jump to Insights</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('What\'s the consensus on vertical AI?')">
+                                    <span>What's the consensus on vertical AI?</span>
+                                </div>
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('Series A valuations this month')">
+                                    <span>Series A valuations this month</span>
+                                </div>
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('European vs US Series A requirements')">
+                                    <span>European vs US Series A requirements</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Trending Topics This Week</div>
+                            <div class="search-suggestions">
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('AI Agents')">
+                                    <span>AI Agents</span>
+                                    <span class="trending-badge">↑85% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('Capital efficiency')">
+                                    <span>Capital efficiency metrics</span>
+                                    <span class="trending-badge">↑17% w/w</span>
+                                </div>
+                                <div class="suggestion-item" onclick="patternFlowSearch.fillSearch('DePIN')">
+                                    <span>DePIN infrastructure</span>
+                                    <span class="trending-badge">↑190% w/w</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-section">
+                            <div class="section-title">Quick Filters</div>
+                            <div class="quick-filters">
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('consensus')">Consensus views</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('contrarian')">Contrarian takes</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('emerging')">Emerging themes</span>
+                                <span class="filter-chip" onclick="patternFlowSearch.filterBy('deals')">Deal mentions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Episode Library - aligned with main content -->
+            <button class="episode-library-btn" 
+                    aria-label="Open Episode Library"
+                    title="Browse all analyzed episodes">
+                <span class="library-text">Episode Library</span>
+            </button>
+            
+            <!-- Right: Customization and Company Tracking -->
+            <div class="header-right">
+                <div class="header-actions">
+                    <button class="customize-btn" 
+                            aria-label="Customize Dashboard"
+                            title="Customize your dashboard">
+                        <span class="customize-text">Customization</span>
+                    </button>
+                    <button class="portfolio-button" 
+                            aria-label="Company tracking"
+                            data-portfolio-count="0"
+                            data-new-mentions="0"
+                            data-panel-state="closed">
+                        <span class="portfolio-text">Company Tracking</span>
+                        <span class="notification-badge" aria-hidden="true" style="display: none;">0</span>
+                        <span class="pulse-indicator" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="header-metrics">
+            <div class="header-metrics-inner">
+                <!-- Ticker content loaded from data -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Main Content -->
+        <main>
+            <!-- Narrative Pulse Component Container -->
+            <div id="narrative-pulse-container" class="loading">Loading Narrative Pulse...</div>
+
+            <!-- Narrative Feed Component Container -->
+            <div id="narrative-feed-container"></div>
+
+            <!-- Notable Signals Component Container -->
+            <div id="notable-signals-container"></div>
+
+            <!-- Priority Briefings Component Container -->
+            <div id="priority-briefings-container"></div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Weekly Intelligence Brief (Top of Sidebar) -->
+            <div id="intelligence-brief-container"></div>
+            
+            <!-- Supporting Analytics (Below Brief) -->
+            <div id="supporting-analytics-container"></div>
+        </aside>
+    </div>
+
+    <!-- AI Search Interface (Replaced by header search) -->
+    <!-- <div class="ai-search-interface">
+        <button class="ai-search-button" title="AI Intelligence Search">
+            <svg width="44" height="44" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 4 L8 14 L18 32 L28 14 Z" fill="none"/>
+                <line x1="18" y1="4" x2="18" y2="32"/>
+                <line x1="8" y1="14" x2="28" y2="14"/>
+                <line x1="8" y1="14" x2="13" y2="23"/>
+                <line x1="28" y1="14" x2="23" y2="23"/>
+                <circle cx="18" cy="14" r="3" fill="currentColor" opacity="0.5" class="crystal-core"/>
+            </svg>
+        </button>
+        <div class="ai-search-prompt">
+            Ask anything about 1,498 episodes
+        </div>
+    </div> -->
+    
+    <!-- Scripts -->
+    <!-- Data -->
+    <!-- <script src="data/demo-data.js" defer></script> -->
+    <!-- <script src="data/narrative-pulse-data.js" defer></script> -->
+    <!-- New unified data source -->
+    <script src="data/unified-data.js" defer></script>
+    <script src="data/data-adapter.js" defer></script>
+    <script src="data/data-validator.js" defer></script>
+    <!-- Backup data for clean guest information -->
+    <script src="data/priorityBriefings_backup_20250805_213425.js" defer></script>
+    
+    <!-- Component Scripts -->
+    <script src="features/narrative-pulse/unified-data-adapter.js" defer></script>
+    <!-- <script src="features/narrative-pulse/data-transformer.js" defer></script> Removed to eliminate conflicts -->
+    <script src="features/narrative-pulse/narrative-pulse.js" defer></script>
+    <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script>
+    <!-- <script src="features/narrative-pulse/apply-data-updates.js" defer></script> Removed - causing conflicts -->
+    <!-- <script src="features/narrative-pulse/final-fixes.js" defer></script> Removed - causing conflicts -->
+    <script src="features/narrative-pulse/init.js" defer></script>
+    
+    <script src="features/narrative-feed/narrative-feed.js" defer></script>
+    <script src="features/narrative-feed/init.js" defer></script>
+    
+    <script src="features/notable-signals/notable-signals.js" defer></script>
+    <script src="features/notable-signals/init.js" defer></script>
+    
+    <!-- Shared Briefing Card Renderer - Used by Priority Briefings and Episode Library -->
+    <script src="shared/briefing-card-renderer.js?v=20250108" defer></script>
+    
+    <!-- Priority Briefings Compact Implementation -->
+    <script src="features/priority-briefings/priority-briefings-compact.js" defer></script>
+    <!-- Commenting out old Priority Briefings scripts -->
+    <!-- <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script> -->
+    <!-- <script src="features/priority-briefings/priority-briefings-expanded.js" defer></script> -->
+    <!-- <script src="features/priority-briefings/init.js" defer></script> -->
+    
+    <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
+    <script src="features/intelligence-brief/init.js" defer></script>
+    <!-- Removed velocity-tracking.js - now using unified data source in intelligence-brief.js -->
+    
+    <!-- Episode Panel v2.0 - Enhanced with interactive badges -->
+    <script src="features/episode-panel/episode-panel-v2.js?v=20250107" defer></script>
+    
+    <!-- Search -->
+    <script src="search.js" defer></script>
+    
+    <!-- Episode Library -->
+    <script src="features/episode-library/episode-library.js?v=20250108" defer></script>
+    <script src="features/episode-library/init.js" defer></script>
+    
+    <!-- Narrative Pulse Drill-Down Panel -->
+    <script src="features/narrative-pulse-drilldown/narrative-pulse-drilldown.js" defer></script>
+    
+    <!-- Customization Panel -->
+    <script src="features/customization-panel/customization-panel.js" defer></script>
+    
+    <!-- Main Application Orchestrator -->
+    <script src="main.js" defer></script>
+    
+    <!-- Debug Script -->
+    <!-- <script src="debug-narrative-pulse.js" defer></script> -->
+    <!-- <script src="verify-narrative-pulse.js" defer></script> -->
+    
+    <!-- No JavaScript Fallback -->
+    <noscript>
+        <div style="padding: 2rem; text-align: center; background: #fafaf9;">
+            <h2>JavaScript Required</h2>
+            <p>synthea.ai requires JavaScript to display venture capital insights.</p>
+        </div>
+    </noscript>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-tagline">Synthesized intelligence for venture capital</p>
+            <p class="footer-copyright">© 2024 synthea.ai. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Demo Mode Indicator -->
+    <div class="demo-mode-indicator">Demo Mode</div>
+
+    <!-- Portfolio Panel -->
+    <div class="portfolio-backdrop" style="display: none;"></div>
+    <div class="portfolio-panel" data-state="closed">
+        <!-- Header -->
+        <div class="panel-header">
+            <h2>Company Tracking</h2>
+            <button class="close-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="panel-content">
+            <!-- Unified Metrics Header -->
+            <div class="unified-metrics-header" id="portfolio-metrics">
+                <span class="metrics-text">Tracking <span id="companyCount">3</span> companies • <span id="mentionCount">26</span> mentions this week • <span id="sentimentPercent">46%</span> positive sentiment</span>
+            </div>
+
+            <!-- Portfolio Section -->
+            <div class="company-section portfolio-section">
+                <h3 class="section-label">PORTFOLIO COMPANIES</h3>
+                
+                <!-- Add Company Input -->
+                <div class="add-company-wrapper">
+                    <input 
+                        type="text" 
+                        class="company-input" 
+                        placeholder="Add portfolio company"
+                        data-list="portfolio"
+                    >
+                    <button class="add-button primary-btn" data-list="portfolio">Add</button>
+                </div>
+                
+
+                <!-- Portfolio List -->
+                <div class="list-header">
+                    <h3>PORTFOLIO <span class="company-count portfolio-count">(2)</span></h3>
+                </div>
+                <div class="portfolio-companies" data-list="portfolio">
+                    <!-- Existing portfolio cards stay here -->
+                    <div class="company-card positive" data-company="anthropic" data-list="portfolio">
+                        <div class="company-content">
+                            <div class="company-header">
+                                <span class="company-name">Anthropic</span>
+                                <button class="remove-btn" aria-label="Remove Anthropic">×</button>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="mention-trend">↑</span>
+                                <span class="mention-count">7 mentions</span>
+                                <span class="sentiment-dots">
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot positive"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                </span>
+                            </div>
+                            <div class="company-insight">
+                                Strong AI safety narrative aligning with thesis
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="company-card negative" data-company="openai" data-list="portfolio">
+                        <div class="company-content">
+                            <div class="company-header">
+                                <span class="company-name">OpenAI</span>
+                                <button class="remove-btn" aria-label="Remove OpenAI">×</button>
+                            </div>
+                            <div class="company-metrics">
+                                <span class="mention-trend">↑</span>
+                                <span class="mention-count">12 mentions</span>
+                                <span class="sentiment-dots">
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot negative"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                    <span class="dot neutral"></span>
+                                </span>
+                            </div>
+                            <div class="company-insight">
+                                Competitive landscape intensifying, monitor closely
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watchlist Section -->
+            <div class="company-section watchlist-section">
+                <h3 class="section-label">WATCHLIST COMPANIES</h3>
+                
+                <!-- Add Company Input -->
+                <div class="add-company-wrapper">
+                    <input 
+                        type="text" 
+                        class="company-input" 
+                        placeholder="Add company to monitor"
+                        data-list="watchlist"
+                    >
+                    <button class="add-button primary-btn" data-list="watchlist">Add</button>
+                </div>
+
+                <!-- Watchlist List -->
+                <div class="list-header">
+                    <h3>WATCHLIST <span class="company-count watchlist-count">(1)</span></h3>
+                </div>
+                <div class="watchlist-companies" data-list="watchlist">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M26 26L34 34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <p>Add companies to monitor for investment opportunities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="panel-footer">
+            <a href="#" class="import-link" id="import-companies">Import companies from CSV or CRM</a>
+        </div>
+    </div>
+
+    <!-- Dashboard Customization Panel -->
+    <div class="customization-backdrop" style="display: none;"></div>
+    <div class="customization-panel" data-state="closed">
+        <!-- Header -->
+        <div class="panel-header">
+            <div>
+                <h2>Dashboard Customization</h2>
+                <p class="panel-subtitle">Filter your entire dashboard to show only what matters</p>
+            </div>
+            <button class="close-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="panel-content">
+            <!-- Podcast Sources Section -->
+            <section class="customization-section podcast-sources">
+                <h3 class="section-title">Select Podcasts to Track <span class="selected-count" id="podcastSelectedCount">(12 selected)</span></h3>
+                <p class="section-helper">Choose preset groups or individual shows</p>
+                
+                <div class="preset-groups">
+                    <label class="preset-option">
+                        <input type="radio" name="podcast-preset" value="all" checked>
+                        <span class="preset-label">All Podcasts</span>
+                        <span class="preset-count">(60+ shows)</span>
+                    </label>
+                    
+                    <div class="preset-option expandable">
+                        <label class="preset-header">
+                            <input type="radio" name="podcast-preset" value="signal">
+                            <span class="preset-label">Tier 1 Only</span>
+                            <svg class="expand-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </label>
+                        <div class="preset-podcasts" data-expanded="false">
+                            <label class="podcast-item">
+                                <input type="checkbox" value="20VC" checked disabled>
+                                <span>20VC</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="All-In" checked disabled>
+                                <span>All-In Podcast</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="BG2Pod" checked disabled>
+                                <span>BG2Pod</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="Acquired" checked disabled>
+                                <span>Acquired</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="preset-option expandable">
+                        <label class="preset-header">
+                            <input type="radio" name="podcast-preset" value="broad">
+                            <span class="preset-label">Broad Coverage</span>
+                            <span class="preset-description">(Tier 1 + Adjacent)</span>
+                            <svg class="expand-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </label>
+                        <div class="preset-podcasts" data-expanded="false">
+                            <label class="podcast-item">
+                                <input type="checkbox" value="20VC" checked disabled>
+                                <span>20VC</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="All-In" checked disabled>
+                                <span>All-In Podcast</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="InvestLike" checked disabled>
+                                <span>Invest Like the Best</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="TimFerriss" checked disabled>
+                                <span>Tim Ferriss Show</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="Acquired" checked disabled>
+                                <span>Acquired</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="BG2Pod" checked disabled>
+                                <span>BG2Pod</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="MyFirstMillion" checked disabled>
+                                <span>My First Million</span>
+                            </label>
+                            <label class="podcast-item">
+                                <input type="checkbox" value="Founders" checked disabled>
+                                <span>Founders</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topics to Monitor Section -->
+            <section class="customization-section topic-monitor">
+                <h3 class="section-title">Focus Areas</h3>
+                <p class="section-helper">Track only topics relevant to your thesis</p>
+                
+                <div class="section-controls">
+                    <button class="link-button select-all">Select All</button>
+                    <span class="separator">•</span>
+                    <button class="link-button clear-all">Clear All</button>
+                </div>
+                
+                <div class="topic-grid">
+                    <label class="topic-item">
+                        <input type="checkbox" value="ai-infrastructure" checked>
+                        <span>AI Infrastructure</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="defense-tech" checked>
+                        <span>Defense Tech</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="enterprise-agents" checked>
+                        <span>Enterprise Agents</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="exit-strategies" checked>
+                        <span>Exit Strategies</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="vertical-ai" checked>
+                        <span>Vertical AI</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="traditional-saas" checked>
+                        <span>Traditional SaaS</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="climate-tech" checked>
+                        <span>Climate Tech</span>
+                    </label>
+                    <label class="topic-item">
+                        <input type="checkbox" value="web3-crypto">
+                        <span>Web3/Crypto</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="customization-section preview-section">
+                <div class="preview-box">
+                    <div class="preview-content">
+                        <span class="preview-label">Your View:</span>
+                        <span class="preview-calculation">
+                            <span id="podcastCount">7</span> podcasts × 
+                            <span id="topicCount">5</span> topics = 
+                            <span class="coverage-percent">~45%</span> of total content
+                        </span>
+                    </div>
+                    <p class="preview-note">This will update all charts, briefs, and insights</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <div class="panel-footer">
+            <button class="primary-button apply-changes">Apply Changes</button>
+            <button class="secondary-button reset-defaults">Reset to Defaults</button>
+            <p class="footer-note">Changes apply immediately</p>
+        </div>
+    </div>
+
+    <!-- Topic Customization Panel -->
+    <div class="topic-customization-backdrop" style="display: none;"></div>
+    <div class="topic-customization-panel" data-state="closed">
+        <div class="panel-header">
+            <div>
+                <h2>Customize Topics</h2>
+                <p class="panel-subtitle">Select up to 5 topics to track their momentum</p>
+            </div>
+            <button class="close-button" data-action="closeCustomizationPanel">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="panel-content">
+            <div class="selection-info">
+                <span class="selection-count" id="selectionCount">0 of 5 topics selected</span>
+            </div>
+            
+            <div class="topic-list" id="topicList">
+                <!-- Topics will be dynamically populated here -->
+            </div>
+        </div>
+        
+        <div class="panel-footer">
+            <button class="secondary-button" data-action="resetTopics">Reset to Default</button>
+            <button class="primary-button" data-action="applyTopics" disabled>Apply Changes</button>
+        </div>
+    </div>
+
+</body>
+</html>

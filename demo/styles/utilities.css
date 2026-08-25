@@ -94,3 +94,35 @@
                 width: 100%;
             }
         }
+        
+        /* Nuclear option - remove ALL shadows and overlays */
+        * {
+            box-shadow: none !important;
+        }
+        
+        /* Remove any possible vignette or edge effects */
+        body::after,
+        body::before,
+        html::after,
+        html::before,
+        div::after,
+        div::before,
+        main::after,
+        main::before,
+        .container::after,
+        .container::before,
+        aside::after,
+        aside::before {
+            display: none !important;
+            content: none !important;
+            box-shadow: none !important;
+            background: none !important;
+        }
+        
+        /* Ensure body has no gradients or shadows */
+        body, html {
+            background: var(--warm-paper) !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+        }

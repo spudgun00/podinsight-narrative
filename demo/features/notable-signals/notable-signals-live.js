@@ -63,6 +63,13 @@ const NotableSignalsLive = {
             this.movement = await window.SyntheaData.fetchJSON(
                 'notable-signals', '/api/topic-mentions?bucket=month');
         } catch (err) { this.movement = null; }
+        // Market Narratives. The slot stayed absent until the discovery engine
+        // existed; it exists now, so the card renders - and if the endpoint is
+        // not there, the slot goes back to being absent rather than empty.
+        try {
+            this.narratives = await window.SyntheaData.fetchJSON(
+                'notable-signals', '/api/narratives?limit=12');
+        } catch (err) { this.narratives = null; }
 
         this.render();
         // The watchlist card is live against Company Tracking, so it repaints
@@ -100,6 +107,8 @@ const NotableSignalsLive = {
 
     render() {
         this.grid.innerHTML = '';
+        const nar = this.narrativesCard();
+        if (nar) this.grid.appendChild(nar);
         this.grid.appendChild(this.watchlistCard());
         this.grid.appendChild(this.figuresCard());
         this.grid.appendChild(this.movementCard());
@@ -163,6 +172,248 @@ const NotableSignalsLive = {
         c.title = 'Summed per company, so an episode naming two watchlist '
                 + 'companies counts in both.';
         return c;
+    },
+
+    /**
+     * Market Narratives. Absent until the discovery engine existed; present now.
+     *
+     * Ranked by BREADTH - distinct podcasts, then episodes - not by volume,
+     * because the engine's own second rule is that a cluster one show talks
+     * about constantly is that show's preoccupation. The number on the card is
+     * how many narratives cleared all three rules, out of how many clusters.
+     */
+    narrativesCard() {
+        const d = this.narratives;
+        if (!d || !d.narratives || !d.narratives.length) return null;
+        const c = this.card('Market Narratives', {
+            big: d.count.toLocaleString(),
+            label: `discovered topics, ${d.excluded_count} clusters excluded`,
+            ariaLabel: 'Show the discovered market narratives',
+            onClick: () => this.openNarratives()
+        });
+        const list = document.createElement('div');
+        list.className = 'nsl-move';
+        d.narratives.slice(0, 3).forEach(n => {
+            const row = document.createElement('div');
+            row.className = 'nsl-move-row';
+            const nm = document.createElement('span');
+            nm.className = 'nsl-move-name';
+            nm.textContent = n.topic;
+            row.appendChild(nm);
+            const v = document.createElement('span');
+            v.className = 'nsl-move-value';
+            v.textContent = `${n.podcasts} pods`;
+            v.title = `${n.podcasts} distinct podcasts, ${n.episodes.toLocaleString()} episodes, `
+                    + `${n.chunks.toLocaleString()} passages`;
+            row.appendChild(v);
+            list.appendChild(row);
+        });
+        c.appendChild(list);
+        const note = document.createElement('div');
+        note.className = 'nsl-card-note';
+        note.textContent = d.ranking;
+        c.appendChild(note);
+        return c;
+    },
+
+    openNarratives() {
+        this.buildNarrativePanel();
+        this.npanel.setAttribute('data-state', 'open');
+        this.nbackdrop.setAttribute('data-state', 'open');
+        this.renderNarrativeList();
+    },
+
+    renderNarrativeList() {
+        const d = this.narratives;
+        const body = this.npanel.querySelector('.drilldown-live-body');
+        const sub = this.npanel.querySelector('.drilldown-live-sub');
+        this.npanel.querySelector('.drilldown-live-title').textContent = 'Market Narratives';
+        sub.textContent = `${d.count} narratives from ${d.count + d.excluded_count} clusters, `
+                        + `k=${d.k}. Jan–Jun 2025.`;
+        body.innerHTML = '';
+
+        const method = document.createElement('div');
+        method.className = 'drilldown-live-summary';
+        method.textContent = d.method;
+        body.appendChild(method);
+
+        const T = window.SyntheaTrend;
+        const list = document.createElement('ol');
+        list.className = 'drilldown-live-list';
+        d.narratives.forEach(n => {
+            const li = document.createElement('li');
+            li.className = 'drilldown-live-row';
+            li.tabIndex = 0;
+            li.setAttribute('role', 'button');
+            li.setAttribute('aria-label', `Show the episodes behind ${n.topic}`);
+
+            const count = document.createElement('span');
+            count.className = 'drilldown-live-count';
+            count.textContent = n.podcasts;
+            count.title = `${n.podcasts} distinct podcasts — the breadth this list is ranked by`;
+            li.appendChild(count);
+
+            const meta = document.createElement('div');
+            meta.className = 'drilldown-live-meta';
+            const title = document.createElement('div');
+            title.className = 'drilldown-live-episode';
+            title.textContent = n.topic;
+            meta.appendChild(title);
+            const s2 = document.createElement('div');
+            s2.className = 'drilldown-live-podcast';
+            // The unit is passages, not mentions, and the floor is the shared
+            // one - same function, same threshold, same colours as every other
+            // trend on the page.
+            const fmt = T ? T.format(n, 'passage') : null;
+            s2.textContent = `${n.episodes.toLocaleString()} episodes · `
+                           + `${n.chunks.toLocaleString()} passages`;
+            meta.appendChild(s2);
+            li.appendChild(meta);
+
+            if (fmt) {
+                const tr = document.createElement('span');
+                tr.className = 'nsl-nar-trend';
+                tr.textContent = fmt.text;
+                tr.style.color = fmt.colour;
+                tr.title = fmt.title;
+                li.appendChild(tr);
+            }
+
+            const open = () => this.openNarrative(n);
+            li.addEventListener('click', open);
+            li.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+            });
+            list.appendChild(li);
+        });
+        body.appendChild(list);
+    },
+
+    /** Topic -> episodes. A row opens that episode's brief. */
+    async openNarrative(n) {
+        const body = this.npanel.querySelector('.drilldown-live-body');
+        this.npanel.querySelector('.drilldown-live-title').textContent = n.topic;
+        this.npanel.querySelector('.drilldown-live-sub').textContent =
+            `${n.podcasts} podcasts · ${n.episodes.toLocaleString()} episodes · `
+            + `${n.chunks.toLocaleString()} passages`;
+        body.innerHTML = '<div class="drilldown-live-empty">Loading…</div>';
+
+        const back = document.createElement('button');
+        back.type = 'button';
+        back.className = 'nsl-nar-back';
+        back.textContent = '← All narratives';
+        back.addEventListener('click', () => this.renderNarrativeList());
+
+        let d;
+        try {
+            d = await window.SyntheaData.fetchJSON(
+                'notable-signals', '/api/narratives/' + n.cluster_id + '?limit=300');
+        } catch (err) {
+            body.innerHTML = '';
+            body.appendChild(back);
+            const e = document.createElement('div');
+            e.className = 'drilldown-live-empty';
+            e.textContent = 'Could not load the episodes behind this narrative.';
+            body.appendChild(e);
+            return;
+        }
+        body.innerHTML = '';
+        body.appendChild(back);
+
+        const summary = document.createElement('div');
+        summary.className = 'drilldown-live-summary';
+        summary.textContent = `${d.chunks.toLocaleString()} passages across `
+                            + `${d.episodes.toLocaleString()} episodes. Biggest contributor first.`;
+        body.appendChild(summary);
+
+        const list = document.createElement('ol');
+        list.className = 'drilldown-live-list';
+        d.episodes_listed.forEach(ep => {
+            const li = document.createElement('li');
+            li.className = 'drilldown-live-row';
+            li.tabIndex = 0;
+            li.setAttribute('role', 'button');
+            li.setAttribute('aria-label', `Open the brief for ${ep.episode_title}`);
+
+            const count = document.createElement('span');
+            count.className = 'drilldown-live-count';
+            count.textContent = ep.chunk_count;
+            count.title = `${ep.chunk_count} passage${ep.chunk_count === 1 ? '' : 's'} `
+                        + `from this episode in this narrative`;
+            li.appendChild(count);
+
+            const meta = document.createElement('div');
+            meta.className = 'drilldown-live-meta';
+            const t = document.createElement('div');
+            t.className = 'drilldown-live-episode';
+            t.textContent = ep.episode_title;
+            meta.appendChild(t);
+            const sub2 = document.createElement('div');
+            sub2.className = 'drilldown-live-podcast';
+            sub2.textContent = ep.podcast_name
+                + (ep.published_at ? ' · ' + this.dateLabel(ep.published_at) : '');
+            meta.appendChild(sub2);
+            li.appendChild(meta);
+
+            // Episodes to briefs, the same surface every other list opens.
+            if (window.BriefingsLive) {
+                const open = () => window.BriefingsLive.openById(ep.episode_id);
+                li.addEventListener('click', open);
+                li.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+                });
+            }
+            list.appendChild(li);
+        });
+        body.appendChild(list);
+
+        if (d.truncated) {
+            const more = document.createElement('div');
+            more.className = 'drilldown-live-empty';
+            more.textContent = `Showing the top ${d.episodes_listed.length} of `
+                             + `${d.episodes.toLocaleString()}.`;
+            body.appendChild(more);
+        }
+    },
+
+    dateLabel(iso) {
+        const d = new Date(iso);
+        if (isNaN(d)) return (iso || '').slice(0, 10);
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    },
+
+    buildNarrativePanel() {
+        if (this.npanel) return;
+        // The existing drilldown's own markup and classes, so this reads as the
+        // same surface the Narrative Pulse drilldown does.
+        this.npanel = document.createElement('div');
+        this.npanel.className = 'drilldown-live nsl-nar-panel';
+        this.npanel.setAttribute('data-state', 'closed');
+        this.npanel.setAttribute('role', 'dialog');
+        this.npanel.setAttribute('aria-modal', 'true');
+        this.npanel.innerHTML = `
+            <div class="drilldown-live-header">
+                <div>
+                    <h3 class="drilldown-live-title"></h3>
+                    <p class="drilldown-live-sub"></p>
+                </div>
+                <button type="button" class="drilldown-live-close" aria-label="Close" title="Close">✕</button>
+            </div>
+            <div class="drilldown-live-body"></div>`;
+        document.body.appendChild(this.npanel);
+        this.nbackdrop = document.createElement('div');
+        this.nbackdrop.className = 'drilldown-live-backdrop';
+        this.nbackdrop.setAttribute('data-state', 'closed');
+        document.body.appendChild(this.nbackdrop);
+        const close = () => {
+            this.npanel.setAttribute('data-state', 'closed');
+            this.nbackdrop.setAttribute('data-state', 'closed');
+        };
+        this.npanel.querySelector('.drilldown-live-close').addEventListener('click', close);
+        this.nbackdrop.addEventListener('click', close);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.npanel.getAttribute('data-state') === 'open') close();
+        });
     },
 
     figuresCard() {

@@ -74,3 +74,16 @@
     color: var(--sage, #4a7c59); background: white; border: 1px solid var(--gray-200, #e5e7eb);
     border-radius: 5px; padding: .2rem .5rem; cursor: pointer; }
 .nsl-fig-play:disabled { opacity: .6; cursor: default; }
+
+/* Market Narratives — the card sits in the same grid, the panel reuses the
+   Narrative Pulse drilldown's own classes so it reads as the same surface. */
+.nsl-grid { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1400px) { .nsl-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1100px) { .nsl-grid { grid-template-columns: repeat(2, 1fr); } }
+.nsl-nar-panel .drilldown-live-row { align-items: center; }
+.nsl-nar-trend { font-size: .75rem; font-weight: 600; white-space: nowrap;
+                 font-variant-numeric: tabular-nums; margin-left: .75rem; }
+.nsl-nar-back { font-family: inherit; font-size: .75rem; font-weight: 600;
+                color: var(--sage, #4a7c59); background: transparent; border: 0;
+                padding: 0 0 .75rem; cursor: pointer; }
+.nsl-nar-back:hover { text-decoration: underline; }

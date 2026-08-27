@@ -62,30 +62,42 @@
      * The single formatting decision. Returns what to print, the direction, and
      * the colour, so callers never re-derive any of the three.
      */
-    function format(topic) {
+    /**
+     * @param topic  a series in the /api/topic-mentions shape
+     * @param unit   what is being counted, singular. Tracked topics count
+     *               mentions; discovered narratives count chunks, which are
+     *               passages of transcript. The floor arithmetic is identical -
+     *               it is a monthly count either way - but calling chunks
+     *               "mentions" would be a false label, and giving the narratives
+     *               their own copy of this function would be worse. Defaults to
+     *               'mention' so every existing caller is unchanged.
+     */
+    function format(topic, unit) {
         var change = topic ? topic.change_pct : null;
         var baseline = baselineOf(topic);
         var total = (topic && topic.total_mentions) || 0;
+        var one = unit || 'mention';
+        var many = one + 's';
 
         if (change === null || change === undefined || baseline === null) {
-            return { text: total + ' mentions', dir: 'none', colour: COLOURS.none,
+            return { text: total + ' ' + many, dir: 'none', colour: COLOURS.none,
                      suppressed: true,
-                     title: total + ' mentions in total — not enough complete months for a rate of change' };
+                     title: total + ' ' + many + ' in total — not enough complete months for a rate of change' };
         }
         if (baseline < MIN_BASELINE_MENTIONS) {
             var pp = (100 / Math.max(baseline, 1)).toFixed(1);
             return { text: 'low volume', dir: 'flat', colour: COLOURS.flat,
                      suppressed: true,
-                     title: 'Only ' + baseline + ' mentions in the previous complete month. '
-                          + 'One more mention would move the figure by ' + pp
+                     title: 'Only ' + baseline + ' ' + many + ' in the previous complete month. '
+                          + 'One more ' + one + ' would move the figure by ' + pp
                           + ' percentage points, so the percentage is not printed. '
-                          + total + ' mentions in total.' };
+                          + total + ' ' + many + ' in total.' };
         }
         var dir = direction(change);
         return { text: (change >= 0 ? '+' : '') + Math.round(change) + '%',
                  dir: dir, colour: COLOURS[dir], suppressed: false,
                  title: 'Change against the previous complete month, from a baseline of '
-                      + baseline + ' mentions. ' + total + ' mentions in total.' };
+                      + baseline + ' ' + many + '. ' + total + ' ' + many + ' in total.' };
     }
 
     window.SyntheaTrend = {

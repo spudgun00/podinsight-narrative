@@ -10,6 +10,13 @@ const NarrativePulseDrilldown = {
     
     // Initialize the component
     init() {
+        // Vision only. This panel renders "Key Drivers This Week" and
+        // "Market Consensus" from unified-data; in Live it is replaced by
+        // drilldown-live.js, which lists the real episodes behind a count.
+        // Without this guard it still appended its markup to the body, leaving
+        // time-relative mock headings in the Live DOM.
+        if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
         console.log('Initializing Narrative Pulse Drilldown...');
         this.createPanel();
         this.attachEventListeners();

@@ -46,14 +46,6 @@
             why: 'Needs the highest-reranked passage per recent episode against a set of standing queries, rendered with its real citation and timestamp.',
             effort: '2–3 days, reuses the /api/search path'
         },
-        'drilldown': {
-            label: 'Narrative Pulse Drilldown',
-            root: '.drilldown-panel',
-            slot: null,
-            klass: 'B',
-            why: 'Needs the episodes contributing mentions to a clicked topic-and-month cell. The topic_mentions rollup already stores this per episode.',
-            effort: '1 day'
-        },
         'intelligence-brief': {
             label: 'Weekly Intelligence Brief',
             root: '.intelligence-brief-sidebar',

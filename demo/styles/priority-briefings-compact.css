@@ -214,13 +214,23 @@
     flex-wrap: wrap;
 }
 
+/* Tags are metadata, not controls. Every .tag on the page is a <span> with no
+   click handler - Notable Episodes, the Narrative Feed, and the mock card whose
+   only handler calls preventDefault - so the hover underline and the pointer
+   cursor were advertising a link that does not exist. The affordance is kept
+   behind `a`: should a tag ever become a real link, it gets its styling back. */
 .tag {
     font-size: 11px;
     color: #4a7c59;
     text-decoration: none;
+    cursor: default;
 }
 
-.tag:hover {
+a.tag {
+    cursor: pointer;
+}
+
+a.tag:hover {
     text-decoration: underline;
 }
 

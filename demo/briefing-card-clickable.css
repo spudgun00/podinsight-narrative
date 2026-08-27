@@ -12,9 +12,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Ensure buttons and tags maintain their own cursor styles */
-.briefing-card .view-brief-btn,
-.briefing-card .tag {
+/* The button keeps its own cursor. The tag used to be in this rule, and the
+   !important beat every later attempt to say a tag is not clickable - including
+   `.briefings-live-card .tag { cursor: default }` in data-resolver.css, which
+   was correct and simply never won. */
+.briefing-card .view-brief-btn {
     cursor: pointer !important;
 }
 

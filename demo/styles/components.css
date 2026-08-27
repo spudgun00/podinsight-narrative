@@ -4630,10 +4630,9 @@ body.portfolio-open {
             margin: 0 0 0.75rem 7.5rem;     /* aligns under the podcast column */
             gap: 0.75rem;
         }
-        /* The tags are metadata, not controls - the chips above do the
-           filtering - so they must not offer a link's hover affordance. */
-        .narrative-feed-live .nfl-tags .tag { cursor: default; }
-        .narrative-feed-live .nfl-tags .tag:hover { text-decoration: none; }
+        /* Tags are metadata, not controls - the chips above do the filtering.
+           The non-clickable styling now comes from the shared .tag rule in
+           priority-briefings-compact.css, so there is nothing to override here. */
 
         .narrative-feed-live .nfl-foot {
             display: flex;

@@ -118,7 +118,8 @@ All at **1440px** viewport, deviceScaleFactor 2, captured through CDP against
 | `filter-depin.png` | DePIN filter applied. |
 | `brief-from-row.png` | The brief panel a row opens. |
 | `state-loading.png`, `state-empty.png`, `state-error.png` | States. |
-| `live-feed-mobile.png` | 420px. The row collapses from four columns to date + chip / hook / count / tags. |
+| `live-feed-mobile.png` | 375px, **viewport-only** — see the cleanup pass for why `captureBeyondViewport` is wrong for a narrow-width check. The row collapses from four columns to date + chip / hook / count / tags. |
+| `tags-are-not-links.png` | A Notable Episodes card with a tag held in a forced `:hover`, showing no underline. |
 
 ---
 
@@ -165,14 +166,99 @@ replaces real rows with "2h ago" and a CONSENSUS pill.
 
 ---
 
+## Cleanup pass — 27 Aug, after the build
+
+Two blemishes were flagged when this component shipped. One was real and is
+fixed; the other was my own measurement error, and the correction is recorded
+here rather than quietly dropped.
+
+### Fixed — tags advertised a link they never were
+
+**The defect.** Every `.tag` on the page is a `<span>` with no click handler —
+32 of them, 0 anchors. All of them showed `cursor: pointer` and underlined on
+hover. Two rules combined to cause it:
+
+- `styles/priority-briefings-compact.css` — `.tag:hover { text-decoration: underline }`, unscoped.
+- `briefing-card-clickable.css` — `.briefing-card .view-brief-btn, .briefing-card .tag { cursor: pointer !important }`.
+
+The `!important` is why the correct rule already sitting in `data-resolver.css`
+— `.briefings-live-card .tag { cursor: default }` — never took effect. Someone
+had spotted this before and their fix silently lost the cascade.
+
+**The fix**, at source rather than by piling on another override: the base
+`.tag` now declares `cursor: default`, and the pointer and hover-underline moved
+to `a.tag` / `a.tag:hover`. Should a tag ever become a real link it gets its
+affordances back automatically. The Narrative Feed's own override, added last
+session, is now redundant and was removed.
+
+**Verified** at 1440px, computed styles, both surfaces:
+
+| | Notable Episodes | Narrative Feed |
+|---|---|---|
+| element | `SPAN` | `SPAN` |
+| `cursor` | `default` | `default` |
+| `text-decoration` under forced `:hover` | `none` | `none` |
+| focusable / `role` / `onclick` | no / none / no | no / none / no |
+
+`tags-are-not-links.png` is a Notable Episodes card with `#CryptoWeb3` held in a
+forced `:hover` — no underline.
+
+**No control regressed.** `cursor: pointer` still on: the briefing card, View
+Full Brief, the feed row, the filter chips, Load more. Clicking a tag on a
+Notable Episodes card still opens **that card's own brief** (Coinbase/Deribit →
+Coinbase/Deribit), so the inert tag does not swallow the card's click.
+
+### Not a defect — the customization panel does not overlay the feed
+
+I reported that a "Dashboard Customization" panel overlaid the feed at 420px.
+**That was wrong, and it was an artefact of how I took the screenshot.**
+
+`Page.captureScreenshot` with `captureBeyondViewport: true` expands the viewport
+to the full page height for the capture. A `position: fixed` element is then
+laid out against that expanded viewport, so the customization panel — a bottom
+sheet correctly parked off-screen — was relaid out into the region I had clipped
+around the feed. The bug was in the instrument, not the page.
+
+Measured at three real viewport widths, panel closed:
+
+| Viewport | `data-state` | `transform` | panel top vs viewport | on screen |
+|---|---|---|---|---|
+| 375px | closed | `translateY(810px)` | 900 vs 900 | **no** |
+| 420px | closed | `translateY(810px)` | 900 vs 900 | **no** |
+| 768px | closed | `translateY(810px)` | 900 vs 900 | **no** |
+
+The `@media (max-width: 768px)` block turns the panel into a bottom sheet held
+at `translateY(100%)`. It behaves correctly. `live-feed-mobile.png` has been
+**recaptured viewport-only** at 375px, and the panel is absent from it, as it
+should be.
+
+### Found instead — the page does not reflow below ~712px
+
+Recapturing honestly surfaced a real narrow-width problem, and it is not the
+feed's. At a 375px viewport `document.scrollWidth` is **712px**: the page
+overflows horizontally and rows are clipped on the right, which is visible in
+`live-feed-mobile.png`.
+
+Five independent outermost offenders, each wider than the viewport while its
+parent fits:
+
+| Element | Width at 375px viewport |
+|---|---|
+| `div.header-left` | 394 |
+| `main` | 444 |
+| `aside.sidebar` | 444 |
+| `g#chartContent` (Narrative Pulse SVG) | 387 |
+| `div.topic-customization-panel` | 480 |
+
+The feed's own `@media (max-width: 900px)` rules do fire — the stacked row
+layout is what `live-feed-mobile.png` shows — but the page container never
+narrows, so the rows are cut off regardless. This is page-level, affects every
+component, has at least five separate causes, and needs its own acceptance pass.
+**Not fixed here**, and deliberately not attempted as part of a cleanup pass.
+
+---
+
 ## Found, not fixed
 
-- **`.tag:hover` underlines on the Notable Episodes card too.**
-  `styles/priority-briefings-compact.css:223` gives every `.tag` a link's hover
-  affordance, and `briefings-live.js` renders non-interactive `<span
-  class="tag">`. Overridden inside the feed; the Notable Episodes instance is
-  untouched, being outside this component's scope. It is a small dead
-  affordance of the kind the standing rule targets.
-- **At 420px a page-level customization panel overlays the top of the feed.**
-  Page chrome, not the feed — visible in `live-feed-mobile.png`, unrelated to
-  this component.
+- **The page does not reflow below ~712px** — see the cleanup pass above. Five
+  page-level offenders, none of them this component.

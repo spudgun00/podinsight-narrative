@@ -1,6 +1,11 @@
 // Priority Briefings Compact Cards - Clean Implementation
 const PriorityBriefingsCompact = {
     init: function(container) {
+        // Vision only. In Live, briefings-live.js renders pre-generated briefs
+        // into this container. Without the guard the mock cards render first -
+        // "3h ago", "Score: 97", "CONSENSUS FORMING" - the same failure as the
+        // mock drilldown after its placeholder retired.
+        if (window.SyntheaData && window.SyntheaData.isLive()) return;
         this.container = container;
         this.briefings = window.unifiedData?.priorityBriefings?.items || [];
         this.visibleCount = 4; // Start with 4 cards visible

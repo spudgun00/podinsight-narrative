@@ -38,14 +38,6 @@
             why: 'Needs episodes ranked by how sharply their topic mentions rose against the previous month, each with a real quote from the chunk that drove the rise.',
             effort: '2–3 days'
         },
-        'priority-briefings': {
-            label: 'Priority Briefings',
-            root: '.priority-briefings-container',
-            slot: '#briefings-grid',
-            klass: 'B',
-            why: 'Needs the highest-reranked passage per recent episode against a set of standing queries, rendered with its real citation and timestamp.',
-            effort: '2–3 days, reuses the /api/search path'
-        },
         'intelligence-brief': {
             label: 'Weekly Intelligence Brief',
             root: '.intelligence-brief-sidebar',

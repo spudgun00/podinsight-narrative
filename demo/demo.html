@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="styles/variables.css?v=20250118">
     <link rel="stylesheet" href="styles/base.css?v=20250118">
     <link rel="stylesheet" href="styles/layout.css?v=20250118">
-    <link rel="stylesheet" href="styles/components.css?v=20260827p">
+    <link rel="stylesheet" href="styles/components.css?v=20260827q">
     <link rel="stylesheet" href="styles/utilities.css?v=20250118">
     
     <!-- Episode Panel v2.0 Styles - Clean architecture without !important -->
@@ -53,7 +53,7 @@
     
     <!-- Search Styles -->
     <link rel="stylesheet" href="styles/search.css">
-    <link rel="stylesheet" href="data-resolver.css?v=20260827p">
+    <link rel="stylesheet" href="data-resolver.css?v=20260827q">
     
     <!-- Episode Library Styles -->
     <link rel="stylesheet" href="features/episode-library/episode-library.css">
@@ -274,17 +274,17 @@
     <!-- New unified data source -->
     <!-- Resolver first: it seals the vision dataset in Live mode and stamps
          every component from what it actually returned. -->
-    <script src="data-resolver.js?v=20260827p"></script>
-    <script src="trend.js?v=20260827p"></script>
-    <script src="data-furniture.js?v=20260827p" defer></script>
-    <script src="data/unified-data.js" defer></script>
+    <script src="data-resolver.js?v=20260827q"></script>
+    <script src="trend.js?v=20260827q"></script>
+    <script src="data-furniture.js?v=20260827q" defer></script>
+    <script src="data/unified-data.js?v=20260827q" defer></script>
     <!-- Debug overlay (Ctrl+Shift+D). Instrumentation only - must load after the
          data source it wraps and before every consumer script. -->
-    <script src="debug-overlay.js" defer></script>
-    <script src="data/data-adapter.js" defer></script>
-    <script src="data/data-validator.js" defer></script>
+    <script src="debug-overlay.js?v=20260827q" defer></script>
+    <!-- data/data-adapter.js removed 2026-08-27: 18 globals, read by nothing. -->
+    <script src="data/data-validator.js?v=20260827q" defer></script>
     <!-- Backup data for clean guest information -->
-    <script src="data/priorityBriefings_backup_20250805_213425.js" defer></script>
+    <!-- data/priorityBriefings_backup_20250805_213425.js removed 2026-08-27: a July 2025 data blob read by nothing. -->
     
     <!-- Component Scripts -->
     <!-- Mock chart stack replaced by narrative-pulse-live.js (GET /api/topic-mentions):
@@ -293,55 +293,55 @@
     <!-- <script src="features/narrative-pulse/data-transformer.js" defer></script> Removed to eliminate conflicts -->
     <!-- <script src="features/narrative-pulse/narrative-pulse.js" defer></script> -->
     <!-- <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script> -->
-    <script src="features/narrative-pulse/narrative-pulse-live.js?v=20260827p" defer></script>
+    <script src="features/narrative-pulse/narrative-pulse-live.js?v=20260827q" defer></script>
     <!-- <script src="features/narrative-pulse/apply-data-updates.js" defer></script> Removed - causing conflicts -->
     <!-- <script src="features/narrative-pulse/final-fixes.js" defer></script> Removed - causing conflicts -->
     <!-- <script src="features/narrative-pulse/init.js" defer></script> -->
     
-    <script src="features/narrative-feed/narrative-feed.js" defer></script>
-    <script src="features/narrative-feed/init.js" defer></script>
+    <script src="features/narrative-feed/narrative-feed.js?v=20260827q" defer></script>
+    <script src="features/narrative-feed/init.js?v=20260827q" defer></script>
     
-    <script src="features/notable-signals/notable-signals.js" defer></script>
-    <script src="features/notable-signals/init.js" defer></script>
+    <script src="features/notable-signals/notable-signals.js?v=20260827q" defer></script>
+    <script src="features/notable-signals/init.js?v=20260827q" defer></script>
     
     <!-- Shared Briefing Card Renderer - Used by Priority Briefings and Episode Library -->
-    <script src="shared/briefing-card-renderer.js?v=20260825" defer></script>
+    <!-- shared/briefing-card-renderer.js removed 2026-08-27: read by nothing since the live cards replaced it. -->
     
     <!-- Priority Briefings Compact Implementation -->
-    <script src="features/priority-briefings/priority-briefings-compact.js?v=20260827p" defer></script>
+    <script src="features/priority-briefings/priority-briefings-compact.js?v=20260827q" defer></script>
     <!-- Commenting out old Priority Briefings scripts -->
     <!-- <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script> -->
     <!-- <script src="features/priority-briefings/priority-briefings-expanded.js" defer></script> -->
     <!-- <script src="features/priority-briefings/init.js" defer></script> -->
-    <script src="features/priority-briefings/briefings-live.js?v=20260827p" defer></script>
+    <script src="features/priority-briefings/briefings-live.js?v=20260827q" defer></script>
     
-    <script src="features/intelligence-brief/intelligence-brief.js?v=20260827p" defer></script>
-    <script src="features/intelligence-brief/influence-metrics.js?v=20260827p" defer></script>
-    <script src="features/intelligence-brief/velocity-tracking.js?v=20260827p" defer></script>
-    <script src="features/intelligence-brief/topic-correlations.js?v=20260827p" defer></script>
-    <script src="features/intelligence-brief/init.js" defer></script>
+    <script src="features/intelligence-brief/intelligence-brief.js?v=20260827q" defer></script>
+    <script src="features/intelligence-brief/influence-metrics.js?v=20260827q" defer></script>
+    <script src="features/intelligence-brief/velocity-tracking.js?v=20260827q" defer></script>
+    <script src="features/intelligence-brief/topic-correlations.js?v=20260827q" defer></script>
+    <script src="features/intelligence-brief/init.js?v=20260827q" defer></script>
     <!-- Removed velocity-tracking.js - now using unified data source in intelligence-brief.js -->
     
     <!-- Episode Panel v2.0 - Enhanced with interactive badges -->
-    <script src="features/episode-panel/episode-panel-v2.js?v=20260827p" defer></script>
+    <script src="features/episode-panel/episode-panel-v2.js?v=20260827q" defer></script>
     
     <!-- Search -->
-    <script src="search.js?v=20260827p" defer></script>
-    <script src="header-stats.js?v=20260827p" defer></script>
+    <script src="search.js?v=20260827q" defer></script>
+    <script src="header-stats.js?v=20260827q" defer></script>
     
     <!-- Episode Library -->
-    <script src="features/episode-library/episode-library.js?v=20260827p" defer></script>
-    <script src="features/episode-library/init.js" defer></script>
+    <script src="features/episode-library/episode-library.js?v=20260827q" defer></script>
+    <script src="features/episode-library/init.js?v=20260827q" defer></script>
     
     <!-- Narrative Pulse Drill-Down Panel -->
-    <script src="features/narrative-pulse-drilldown/narrative-pulse-drilldown.js?v=20260827p" defer></script>
-    <script src="features/narrative-pulse-drilldown/drilldown-live.js?v=20260827p" defer></script>
+    <script src="features/narrative-pulse-drilldown/narrative-pulse-drilldown.js?v=20260827q" defer></script>
+    <script src="features/narrative-pulse-drilldown/drilldown-live.js?v=20260827q" defer></script>
     
     <!-- Customization Panel -->
-    <script src="features/customization-panel/customization-panel.js" defer></script>
+    <script src="features/customization-panel/customization-panel.js?v=20260827q" defer></script>
     
     <!-- Main Application Orchestrator -->
-    <script src="main.js?v=20260827p" defer></script>
+    <script src="main.js?v=20260827q" defer></script>
     
     <!-- Debug Script -->
     <!-- <script src="debug-narrative-pulse.js" defer></script> -->

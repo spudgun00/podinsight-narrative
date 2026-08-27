@@ -1,4 +1,9 @@
 function initNotableSignals() {
+    // Vision only. In Live the resolver renders the not-built state into
+    // this container; fetching and injecting the mock Notable Signals template first
+    // just does work that is immediately overwritten.
+    if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
     const container = document.getElementById('notable-signals-container');
     if (!container) return;
     

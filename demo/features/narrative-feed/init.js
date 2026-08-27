@@ -1,4 +1,9 @@
 function initNarrativeFeed() {
+    // Vision only. In Live the resolver renders the not-built state into
+    // this container; fetching and injecting the mock Narrative Feed template first
+    // just does work that is immediately overwritten.
+    if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
     const container = document.getElementById('narrative-feed-container');
     if (!container) return;
     

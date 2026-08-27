@@ -1014,6 +1014,12 @@ class PortfolioManager {
             this.saveState();
         };
         
+        // Vision only. This cycles a fabricated "new mentions" badge through
+        // 1 -> 2 -> 3 every five minutes and persists it to localStorage. In
+        // Live it is an invented statistic that changes on a timer, on a
+        // Company Tracking feature that is not built.
+        if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
         // Schedule the first update, then set up the recurring interval
         setTimeout(() => {
             updateMentionsCycle(); // Perform the first update

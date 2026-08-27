@@ -16,8 +16,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (briefContent && window.IntelligenceBrief) {
                 window.IntelligenceBrief.init(briefContent);
                 
-                // Check if unified data is loaded, if not wait for it
-                if (!window.unifiedData) {
+                // Vision only. In Live window.unifiedData is sealed to
+                // undefined, so this polled every 100ms for five seconds
+                // waiting for something that can never arrive - 50 wasted
+                // cycles on every page load.
+                if (!window.unifiedData && window.SyntheaData && !window.SyntheaData.isLive()) {
                     // Poll for unified data to be loaded
                     const checkDataInterval = setInterval(() => {
                         if (window.unifiedData) {

@@ -30,14 +30,12 @@
     // Components with no honest implementation. In LIVE they render the
     // not-built state. Classification and effort are from COMPONENT_TRIAGE.md.
     var UNBUILT = {
-        'narrative-feed': {
-            label: 'Narrative Feed',
-            root: '.narrative-feed',
-            slot: '.feed-container',
-            klass: 'B',
-            why: 'Needs episodes ranked by how sharply their topic mentions rose against the previous month, each with a real quote from the chunk that drove the rise.',
-            effort: '2–3 days'
-        },
+        // narrative-feed retired from this list on 27 Aug 2026: it is now
+        // built, from the brief store, by
+        // features/narrative-feed/narrative-feed-live.js (GET /api/feed). The
+        // ranked-by-topic-rise design described here was never the only honest
+        // option - date order is a fact about the corpus and needs nothing
+        // computed - and that is what shipped.
         'intelligence-brief': {
             label: 'Weekly Intelligence Brief',
             root: '.intelligence-brief-sidebar',

@@ -1080,7 +1080,10 @@ const componentInitializers = [
     {
         name: 'Narrative Feed',
         containerId: 'narrative-feed-container',
-        loaded: () => !!window.NarrativeFeed
+        // NarrativeFeedLive replaced the mock NarrativeFeed. Same reason the
+        // Narrative Pulse entry above checks for its live module: this flag
+        // gates the postInit pass, so it has to know which one is on the page.
+        loaded: () => !!window.NarrativeFeedLive || !!window.NarrativeFeed
     },
     {
         name: 'Notable Signals',

@@ -2,6 +2,14 @@ const NarrativeFeed = {
     expandedEntries: new Set(),
     
     init: function(container) {
+        // Vision only. Retired on 27 Aug 2026 in favour of
+        // narrative-feed-live.js. Guarded here, at the entry point, rather than
+        // relying on every caller to check: the mock renders into the same
+        // .feed-container the live feed owns, so an unguarded call replaces
+        // real rows with "2h ago" and a CONSENSUS pill. Pages that load this
+        // component without the resolver at all - the standalone test harness -
+        // are unaffected.
+        if (window.SyntheaData && window.SyntheaData.isLive()) return;
         this.container = container;
         this.bindEvents();
         this.render();

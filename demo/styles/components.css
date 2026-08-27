@@ -4501,3 +4501,205 @@ body.portfolio-open {
     font-weight: 600;
     color: var(--deep-ink, #1a1a2e);
 }
+
+        /* ----------------------------------------------------------------
+           Narrative Feed - live (features/narrative-feed/narrative-feed-live.js)
+
+           Scoped to .narrative-feed-live so the Vision feed's own styles above
+           are untouched. This surface has no stance pill and no relative time,
+           so .feed-category and .feed-time never appear in it.
+           ---------------------------------------------------------------- */
+        .narrative-feed-live .nfl-rule {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            margin: 0.75rem 0 0 0;
+            line-height: 1.5;
+        }
+        .narrative-feed-live .nfl-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .narrative-feed-live .nfl-chip {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: var(--gray-600);
+            background: var(--warm-paper);
+            border: 1px solid var(--gray-200);
+            border-radius: 14px;
+            padding: 0.3rem 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .narrative-feed-live .nfl-chip:hover {
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+        .narrative-feed-live .nfl-chip.is-active {
+            background: var(--light-sage);
+            border-color: var(--sage);
+            color: var(--sage);
+        }
+        .narrative-feed-live .nfl-chip-count {
+            font-size: 0.688rem;
+            font-weight: 500;
+            opacity: 0.7;
+            font-variant-numeric: tabular-nums;
+        }
+        .narrative-feed-live .nfl-status {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin: 1rem 0 0 0;
+            min-height: 1rem;               /* no reflow between pages */
+        }
+        /* When the first load fails there is no rule, no chips and no count -
+           nothing about the store is known. Collapse them rather than leave the
+           message floating below their empty space. */
+        .narrative-feed-live .nfl-chips:empty,
+        .narrative-feed-live .nfl-status:empty,
+        .narrative-feed-live .nfl-rule:empty { display: none; }
+        .narrative-feed-live .nfl-list {
+            margin-top: 0.5rem;
+        }
+
+        /* A row. Grid rather than flex so the date and quote-count columns
+           line up down the list instead of tracking each hook's length. */
+        .narrative-feed-live .nfl-entry-header {
+            display: grid;
+            grid-template-columns: 6.5rem minmax(0, 12rem) minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 0.75rem;
+            margin: 0 -0.75rem;
+            cursor: default;
+        }
+        /* The Vision rule adds padding on hover, which shifts the row sideways.
+           The padding is constant here and only the background changes. */
+        .narrative-feed-live .feed-entry-header:hover {
+            padding: 0.875rem 0.75rem;
+            margin: 0 -0.75rem;
+            background: transparent;
+        }
+        .narrative-feed-live .nfl-entry.is-openable { cursor: pointer; }
+        .narrative-feed-live .nfl-entry.is-openable:hover .nfl-entry-header,
+        .narrative-feed-live .nfl-entry.is-openable:focus-visible .nfl-entry-header {
+            background: var(--warm-paper);
+        }
+        .narrative-feed-live .nfl-entry:focus-visible {
+            outline: 2px solid var(--sage);
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+        .narrative-feed-live .nfl-date {
+            font-size: 0.813rem;
+            font-weight: 500;
+            color: var(--sage);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .narrative-feed-live .nfl-podcast {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            justify-self: start;
+        }
+        .narrative-feed-live .nfl-hook {
+            font-size: 0.875rem;
+            color: var(--deep-ink);
+            line-height: 1.45;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .narrative-feed-live .nfl-claims {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .narrative-feed-live .nfl-tags {
+            margin: 0 0 0.75rem 7.5rem;     /* aligns under the podcast column */
+            gap: 0.75rem;
+        }
+        /* The tags are metadata, not controls - the chips above do the
+           filtering - so they must not offer a link's hover affordance. */
+        .narrative-feed-live .nfl-tags .tag { cursor: default; }
+        .narrative-feed-live .nfl-tags .tag:hover { text-decoration: none; }
+
+        .narrative-feed-live .nfl-foot {
+            display: flex;
+            justify-content: center;
+            padding-top: 1.25rem;
+        }
+        .narrative-feed-live .nfl-more {
+            font-family: inherit;
+            font-size: 0.813rem;
+            font-weight: 600;
+            color: var(--sage);
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .narrative-feed-live .nfl-more:hover:not(:disabled) {
+            background: var(--warm-paper);
+            border-color: var(--sage);
+        }
+        .narrative-feed-live .nfl-more:disabled { opacity: 0.6; cursor: default; }
+        .narrative-feed-live .nfl-end,
+        .narrative-feed-live .nfl-empty {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin: 0;
+            padding: 1rem 0;
+        }
+        .narrative-feed-live .nfl-error {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 0;
+        }
+        .narrative-feed-live .nfl-error-msg {
+            font-size: 0.875rem;
+            color: var(--deep-ink);
+            margin: 0;
+        }
+        .narrative-feed-live .nfl-retry {
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--sage);
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 0.375rem 1rem;
+            cursor: pointer;
+        }
+        .narrative-feed-live .nfl-retry:hover {
+            background: var(--warm-paper);
+            border-color: var(--sage);
+        }
+
+        @media (max-width: 900px) {
+            .narrative-feed-live .nfl-entry-header {
+                grid-template-columns: 6.5rem minmax(0, 1fr);
+                grid-template-areas: "date pod" "hook hook" "claims claims";
+                row-gap: 0.4rem;
+            }
+            .narrative-feed-live .nfl-date   { grid-area: date; }
+            .narrative-feed-live .nfl-podcast { grid-area: pod; }
+            .narrative-feed-live .nfl-hook   { grid-area: hook; }
+            .narrative-feed-live .nfl-claims { grid-area: claims; }
+            .narrative-feed-live .nfl-tags   { margin-left: 0; }
+        }

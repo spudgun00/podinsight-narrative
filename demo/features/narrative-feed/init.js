@@ -1,8 +1,10 @@
 function initNarrativeFeed() {
-    // Vision only. In Live the resolver renders the not-built state into
-    // this container; fetching and injecting the mock Narrative Feed template first
-    // just does work that is immediately overwritten.
-    if (window.SyntheaData && window.SyntheaData.isLive()) return;
+    // Vision only, and default-deny: the container now belongs to
+    // narrative-feed-live.js, and the mock template it would inject reuses the
+    // same .feed-container class, so a guard that fails open does not leave a
+    // stale placeholder - it wipes the live list. Absent resolver means we
+    // cannot tell which mode this is, so we do not render.
+    if (!window.SyntheaData || !window.SyntheaData.isVision()) return;
 
     const container = document.getElementById('narrative-feed-container');
     if (!container) return;

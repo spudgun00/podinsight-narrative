@@ -41,14 +41,12 @@
         // GET /api/intelligence-brief. The redesign dropped the three sections
         // that needed claim matching rather than waiting for it, and says so on
         // the page - see the document's absence note.
-        'notable-signals': {
-            label: 'Notable Signals',
-            root: '#notable-signals-container',
-            slot: null,
-            klass: 'C',
-            why: 'Awaiting the topic-discovery engine (parked). A shift count needs topics the corpus discovers for itself, not the five tracked by hand, and a week-on-week series to compare them across. The engine is what would produce both; until it exists there is nothing to count.',
-            effort: 'Parked — depends on the topic-discovery engine'
-        },
+        // notable-signals retired from this list on 28 Aug 2026: the strip is
+        // built, by features/notable-signals/notable-signals-live.js, from four
+        // cards that each have a real source. The fifth Vision card, Market
+        // Narratives, does not render at all - it needs the parked
+        // topic-discovery engine, and an absent card is honest where an empty
+        // one invites a reader to wonder what broke.
         // consensus-monitor is not here because it is no longer a Live surface
         // at all. Dropped 28 Aug 2026 by James: stance detection is not on any
         // roadmap, so a permanent not-built card is worse than the honest

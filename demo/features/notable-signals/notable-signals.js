@@ -1,5 +1,11 @@
 const NotableSignals = {
     init: function(container) {
+        // Vision only. Retired 28 Aug 2026 in favour of
+        // notable-signals-live.js. Guarded here, at the component's own entry
+        // point, rather than relying on every caller: the mock renders into
+        // the same .signals-grid the live strip owns.
+        if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
         this.container = container;
         this.bindEvents();
         this.setupPanelData();

@@ -1,8 +1,11 @@
 function initNotableSignals() {
-    // Vision only. In Live the resolver renders the not-built state into
-    // this container; fetching and injecting the mock Notable Signals template first
-    // just does work that is immediately overwritten.
-    if (window.SyntheaData && window.SyntheaData.isLive()) return;
+    // Vision only, and default-deny. The container now belongs to
+    // notable-signals-live.js, and the mock template reuses .signals-grid, so a
+    // guard that fails open does not leave a stale placeholder - it paints
+    // "67 narrative shifts, up 24 from last week" and four-dot confidence
+    // meters over the real cards. Absent resolver means we cannot tell which
+    // mode this is, so we do not render. Instance eight.
+    if (!window.SyntheaData || !window.SyntheaData.isVision()) return;
 
     const container = document.getElementById('notable-signals-container');
     if (!container) return;

@@ -4706,3 +4706,61 @@ body.portfolio-open {
             .narrative-feed-live .nfl-claims { grid-area: claims; }
             .narrative-feed-live .nfl-tags   { margin-left: 0; }
         }
+
+        /* ----------------------------------------------------------------
+           Narrative Pulse v2 — theme layer, overlays, watchlist
+           ---------------------------------------------------------------- */
+        .legend-item--openable {
+            font-family: inherit;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            text-align: left;
+        }
+        .legend-item--openable:hover .legend-label { text-decoration: underline; }
+        .legend-item--openable:focus-visible {
+            outline: 2px solid var(--sage, #4a7c59);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+        .np-overlay-badge {
+            font-size: 0.563rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; color: var(--gray-600, #6b7280);
+            background: var(--gray-200, #e5e7eb);
+            border-radius: 3px; padding: 1px 4px; margin-left: 4px;
+        }
+        .np-few-shows {
+            display: inline-block; font-size: 0.625rem; font-weight: 600;
+            color: #8a6d3b; background: #fdf3e3;
+            border-radius: 3px; padding: 1px 6px; margin-top: 3px;
+        }
+        .np-row--inert { cursor: default; }
+        .np-row--inert:hover { background: transparent; }
+
+        .np-watch-saved {
+            display: inline-block; font-size: 0.688rem; color: var(--gray-600, #6b7280);
+            border-bottom: 1px dotted var(--gray-400, #9ca3af); cursor: help; margin-bottom: 0.75rem;
+        }
+        .np-watch-head {
+            font-size: 0.625rem; font-weight: 700; letter-spacing: 0.06em;
+            text-transform: uppercase; color: var(--gray-600, #6b7280);
+            margin: 1rem 0 0.4rem;
+        }
+        .np-watch-list { display: flex; flex-direction: column; gap: 0.3rem; }
+        .np-watch-item {
+            display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+            width: 100%; text-align: left; font-family: inherit;
+            background: white; border: 1px solid var(--gray-200, #e5e7eb);
+            border-radius: 8px; padding: 0.5rem 0.75rem; cursor: pointer;
+        }
+        .np-watch-item:hover:not(:disabled) { border-color: var(--sage, #4a7c59); }
+        .np-watch-item.is-on {
+            background: var(--light-sage, #e8f0ea);
+            border-color: var(--sage, #4a7c59);
+        }
+        .np-watch-item.is-full { opacity: 0.45; cursor: default; }
+        .np-watch-name { font-size: 0.813rem; color: var(--deep-ink, #1a1a2e); }
+        .np-watch-meta {
+            font-size: 0.688rem; color: var(--gray-600, #6b7280);
+            white-space: nowrap; font-variant-numeric: tabular-nums;
+        }

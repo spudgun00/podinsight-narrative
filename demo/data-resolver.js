@@ -36,14 +36,11 @@
         // ranked-by-topic-rise design described here was never the only honest
         // option - date order is a fact about the corpus and needs nothing
         // computed - and that is what shipped.
-        'intelligence-brief': {
-            label: 'Weekly Intelligence Brief',
-            root: '.intelligence-brief-sidebar',
-            slot: '.brief-content',
-            klass: 'C',
-            why: 'The headline claims and their source counts require matching the same assertion across episodes. Retrieval finds who discussed a topic; it cannot tell whether two speakers asserted the same proposition.',
-            effort: 'Not scheduled — needs claim extraction and cross-episode claim matching'
-        },
+        // intelligence-brief retired from this list on 28 Aug 2026: it is built,
+        // by features/intelligence-brief/intelligence-brief-live.js against
+        // GET /api/intelligence-brief. The redesign dropped the three sections
+        // that needed claim matching rather than waiting for it, and says so on
+        // the page - see the document's absence note.
         'notable-signals': {
             label: 'Notable Signals',
             root: '#notable-signals-container',

@@ -27,6 +27,11 @@ const IntelligenceBrief = {
 
         if (window.SyntheaData && window.SyntheaData.isLive()) return;
 
+        // bindEvents attaches the Download Brief (PDF), Share and Email
+        // handlers. It is below the Live guard above, so in Live those controls
+        // never had handlers at all - they were dead markup that the not-built
+        // card happened to cover. intelligence-brief-live.js now replaces
+        // .brief-content outright, so they do not render either.
         this.bindEvents();
         this.setupTimeRangeListener();
 

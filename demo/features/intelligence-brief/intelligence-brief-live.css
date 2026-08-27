@@ -1,0 +1,111 @@
+/* The Intelligence Brief, live — intelligence-brief-live.js
+   Scoped to .ibl; the Vision brief's own styles are untouched. */
+
+.ibl { display: flex; flex-direction: column; gap: 1rem; }
+.ibl-status { font-size: 0.813rem; color: var(--gray-600, #6b7280); margin: 0; }
+.ibl-retry {
+    align-self: flex-start; font-family: inherit; font-size: 0.75rem; font-weight: 600;
+    color: var(--sage, #4a7c59); background: white;
+    border: 1px solid var(--gray-200, #e5e7eb); border-radius: 8px;
+    padding: 0.375rem 1rem; cursor: pointer;
+}
+.ibl-head { margin-bottom: 0; }
+.ibl-meta { border-bottom: 1px dotted var(--gray-400, #9ca3af); display: inline-block; cursor: help; }
+
+.ibl-section { margin: 0; }
+.ibl-section + .ibl-section { border-top: 1px solid var(--gray-200, #e5e7eb); padding-top: 0.875rem; }
+.ibl-rule { font-size: 0.688rem; color: var(--gray-600, #6b7280); line-height: 1.5; margin: 0 0 0.75rem; }
+.ibl-note { font-size: 0.688rem; color: var(--gray-600, #6b7280); line-height: 1.55; margin: 0.5rem 0 0; }
+.ibl-validation { font-style: italic; }
+
+/* (a) the numbers */
+.ibl-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.875rem; }
+.ibl-number {
+    display: flex; flex-direction: column; gap: 0.1rem; padding: 0.5rem;
+    background: var(--warm-paper, #fafaf9); border-radius: 6px;
+}
+.ibl-number-value {
+    font-size: 0.95rem; font-weight: 700; color: var(--deep-ink, #1a1a2e);
+    font-variant-numeric: tabular-nums;
+}
+.ibl-number-label {
+    font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--gray-600, #6b7280);
+}
+.ibl-rank { margin-bottom: 0.75rem; }
+.ibl-rank-label {
+    font-size: 0.625rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--gray-600, #6b7280); margin-bottom: 0.3rem;
+}
+.ibl-rank-row {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem;
+    padding: 0.2rem 0; border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+.ibl-rank-row:last-child { border-bottom: 0; }
+.ibl-rank-name {
+    font-size: 0.75rem; color: var(--deep-ink, #1a1a2e); min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ibl-rank-value {
+    font-size: 0.688rem; color: var(--gray-600, #6b7280);
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+
+/* (b) the prose */
+.ibl-topic + .ibl-topic { margin-top: 0.75rem; }
+.ibl-topic-title {
+    font-size: 0.688rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--sage, #4a7c59); margin-bottom: 0.25rem;
+}
+.ibl-para { font-size: 0.813rem; line-height: 1.6; color: var(--deep-ink, #1a1a2e); margin: 0; }
+.ibl-cite {
+    font-family: inherit; font-size: 0.55rem; line-height: 1; vertical-align: super;
+    color: var(--sage, #4a7c59); background: transparent; border: 0;
+    padding: 0 0.12rem; cursor: pointer;
+}
+.ibl-cite:hover, .ibl-cite.is-open { color: var(--deep-ink, #1a1a2e); }
+.ibl-cite:focus-visible { outline: 2px solid var(--sage, #4a7c59); outline-offset: 1px; border-radius: 2px; }
+
+.ibl-cite-box {
+    display: block; margin: 0.5rem 0; padding: 0.6rem 0.7rem;
+    background: var(--warm-paper, #fafaf9);
+    border-left: 2px solid var(--sage, #4a7c59); border-radius: 0 6px 6px 0;
+}
+.ibl-cite-src {
+    display: block; font-size: 0.625rem; font-weight: 600; color: var(--sage, #4a7c59);
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ibl-cite-title { display: block; font-size: 0.688rem; color: var(--gray-600, #6b7280); margin-top: 0.1rem; }
+.ibl-cite-claim {
+    display: block; font-size: 0.75rem; font-weight: 600;
+    color: var(--deep-ink, #1a1a2e); margin-top: 0.35rem; line-height: 1.45;
+}
+.ibl-cite-quote {
+    font-size: 0.75rem; font-style: italic; color: var(--gray-600, #6b7280);
+    line-height: 1.5; margin: 0.35rem 0 0; padding: 0;
+}
+.ibl-cite-foot { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.45rem; flex-wrap: wrap; }
+.ibl-cite-ts {
+    font-size: 0.688rem; color: var(--sage, #4a7c59); font-variant-numeric: tabular-nums;
+}
+.ibl-cite-play, .ibl-cite-open {
+    font-family: inherit; font-size: 0.625rem; font-weight: 600;
+    color: var(--sage, #4a7c59); background: white;
+    border: 1px solid var(--gray-200, #e5e7eb); border-radius: 5px;
+    padding: 0.2rem 0.5rem; cursor: pointer;
+}
+.ibl-cite-play:hover:not(:disabled), .ibl-cite-open:hover { border-color: var(--sage, #4a7c59); }
+.ibl-cite-play:disabled { opacity: 0.6; cursor: default; }
+
+.ibl-excluded { font-size: 0.688rem; color: var(--gray-600, #6b7280); line-height: 1.5; margin: 0.6rem 0 0; }
+
+/* (d) */
+.ibl-absence .ibl-note { color: var(--deep-ink, #1a1a2e); }
+
+.ibl-expand {
+    align-self: flex-start; font-family: inherit; font-size: 0.75rem; font-weight: 600;
+    color: var(--sage, #4a7c59); background: white;
+    border: 1px solid var(--gray-200, #e5e7eb); border-radius: 8px;
+    padding: 0.4rem 1rem; cursor: pointer;
+}
+.ibl-expand:hover { background: var(--warm-paper, #fafaf9); border-color: var(--sage, #4a7c59); }

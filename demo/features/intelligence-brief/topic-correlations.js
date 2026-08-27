@@ -111,48 +111,76 @@ const TopicCorrelations = {
             return;
         }
 
-        meaningful.forEach(pair => container.appendChild(this.buildPair(pair)));
+        container.appendChild(this.buildTable(meaningful));
 
-        if (thin.length) {
-            container.appendChild(this.buildNotice(
-                'Nothing else is computable',
-                `Too few episodes mention ${thin.join(', ')}, so no other pair can be counted.`));
-        }
+        // One explanatory line for the whole table, rather than repeating the
+        // same sentence under each of six blocks.
+        const note = document.createElement('p');
+        note.className = 'correlation-note';
+        note.textContent =
+            `Expected is what the overlap would be if the two topics were unrelated, ` +
+            `given how many episodes mention each. A pair only reads as above chance if ` +
+            `observed clears expected by two standard deviations` +
+            (thin.length ? `. Too few episodes mention ${thin.join(', ')} to include.` : '.');
+        container.appendChild(note);
     },
 
-    buildPair(pair) {
+    buildTable(pairs) {
         const total = this.data.episodes_scanned;
-        // Compare with what independence alone would produce before calling it a correlation
-        const chance = pair.both <= Math.ceil(pair.expected_if_unrelated);
+        const table = document.createElement('table');
+        table.className = 'correlation-table';
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'correlation-figure';
+        const head = document.createElement('thead');
+        head.innerHTML =
+            '<tr><th scope="col">Topic pair</th>' +
+            '<th scope="col" class="num">Observed</th>' +
+            '<th scope="col" class="num">Expected</th>' +
+            '<th scope="col">Verdict</th></tr>';
+        table.appendChild(head);
 
-        const value = document.createElement('div');
-        value.className = 'correlation-value';
-        value.textContent = `${pair.both} of ${total}`;
-        wrapper.appendChild(value);
+        const body = document.createElement('tbody');
+        pairs.forEach(pair => {
+            // Compare against independence, allowing for small-count noise.
+            // A plain "observed > expected" test called 4-vs-2.3 a correlation,
+            // which is one episode away from nothing. Counting overlaps is a
+            // Poisson process, so the standard deviation of the expected count
+            // is sqrt(expected); a pair only reads as above chance if it clears
+            // expected by two of those. On this corpus that leaves all six
+            // pairs indistinguishable from chance, which is the honest answer.
+            const sigma = Math.sqrt(Math.max(pair.expected_if_unrelated, 1));
+            const chance = pair.both <= pair.expected_if_unrelated + 2 * sigma;
+            const row = document.createElement('tr');
 
-        const label = document.createElement('div');
-        label.className = 'correlation-label';
-        label.textContent = `episodes mention both ${pair.topic_a} and ${pair.topic_b}`;
-        wrapper.appendChild(label);
+            const cell = document.createElement('th');
+            cell.scope = 'row';
+            cell.className = 'correlation-pair';
+            cell.textContent = `${pair.topic_a} + ${pair.topic_b}`;
+            cell.title =
+                `${pair.topic_a} appears in ${pair.episodes_a} episodes, ` +
+                `${pair.topic_b} in ${pair.episodes_b}, of ${total}.`;
+            row.appendChild(cell);
 
-        const detail = document.createElement('div');
-        detail.className = 'correlation-detail';
-        detail.textContent =
-            `${pair.topic_a} appears in ${pair.episodes_a}, ${pair.topic_b} in ${pair.episodes_b}. ` +
-            `If the two were unrelated you would expect about ${pair.expected_if_unrelated}.`;
-        wrapper.appendChild(detail);
+            const observed = document.createElement('td');
+            observed.className = 'num';
+            observed.textContent = pair.both;
+            row.appendChild(observed);
 
-        if (chance) {
-            const verdict = document.createElement('div');
-            verdict.className = 'correlation-verdict';
-            verdict.textContent = 'Indistinguishable from chance — not a correlation.';
-            wrapper.appendChild(verdict);
-        }
+            const expected = document.createElement('td');
+            expected.className = 'num correlation-expected';
+            expected.textContent = Math.round(pair.expected_if_unrelated);
+            row.appendChild(expected);
 
-        return wrapper;
+            const verdict = document.createElement('td');
+            verdict.className = 'correlation-verdict' + (chance ? ' is-chance' : ' is-signal');
+            verdict.textContent = chance
+                ? 'Indistinguishable from chance'
+                : 'Above chance';
+            row.appendChild(verdict);
+
+            body.appendChild(row);
+        });
+        table.appendChild(body);
+        return table;
     },
 
     buildNotice(title, body) {

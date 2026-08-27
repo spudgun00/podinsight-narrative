@@ -192,23 +192,23 @@ const VelocityTracking = {
             item.appendChild(sparse);
         }
 
+        // Shared formatter: same floor and same colour per direction as the
+        // Narrative Pulse legend and the topic movement widget.
+        const fmt = window.SyntheaTrend.format(topic);
         const change = document.createElement('span');
-        change.className = 'velocity-change ' + (rising ? 'trend-up' : 'trend-down');
+        change.className = 'velocity-change trend-' + fmt.dir;
         change.style.fontWeight = '600';
+        change.style.color = fmt.colour;
+        change.title = fmt.title;
+        change.setAttribute('data-direction', fmt.dir);
 
-        if (topic.change_pct === null || topic.change_pct === undefined) {
-            // Too little data for a rate of change - show the raw total instead
-            // of inventing a percentage.
-            change.style.color = 'var(--gray-400, #9ca3af)';
-            change.textContent = `${topic.total_mentions}×`;
-            change.title = `${topic.total_mentions} mentions total — too few for a rate of change`;
+        if (fmt.suppressed) {
+            change.textContent = fmt.text;
         } else {
-            const positive = topic.change_pct >= 0;
-            change.style.color = positive ? 'var(--sage)' : 'var(--dusty-rose)';
-            change.setAttribute('data-value', Math.abs(Math.round(topic.change_pct)));
-            change.setAttribute('data-positive', positive);
-            change.innerHTML = `${positive ? '↑' : '↓'} <span class="velocity-percentage">${Math.abs(Math.round(topic.change_pct))}</span>%`;
-            change.title = `Change in mentions per episode, ${this.lastTwoBuckets()}`;
+            const arrow = fmt.dir === 'rising' ? '↑' : (fmt.dir === 'falling' ? '↓' : '→');
+            const n = Math.abs(Math.round(topic.change_pct));
+            change.setAttribute('data-value', n);
+            change.innerHTML = `${arrow} <span class="velocity-percentage">${n}</span>%`;
         }
 
         item.appendChild(change);
@@ -247,7 +247,12 @@ const VelocityTracking = {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', d);
         path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', rising ? '#10B981' : '#EF4444');
+        // Shared direction colours. This used to be #10B981/#EF4444, a second
+        // palette that disagreed with the badge sitting next to it.
+        const sparkFmt = window.SyntheaTrend.format(topic);
+        path.setAttribute('stroke', sparkFmt.dir === 'none'
+            ? window.SyntheaTrend.COLOURS.flat
+            : sparkFmt.colour);
         path.setAttribute('stroke-width', '1.5');
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');

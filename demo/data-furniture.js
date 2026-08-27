@@ -95,13 +95,26 @@
         SD.fetchJSON('trending-topics', '/api/topic-mentions').then(function (data) {
             s2.innerHTML = '';
             s2.appendChild(el('div', 'section-title', 'Topic movement, month over month'));
+            // Same shared formatter, so a topic suppressed as "low volume" in
+            // the sidebar is suppressed here too.
             (data.topics || [])
-                .filter(function (t) { return t.has_data && t.change_pct !== null; })
-                .sort(function (a, b) { return Math.abs(b.change_pct) - Math.abs(a.change_pct); })
-                .forEach(function (t) {
-                    var sign = t.change_pct > 0 ? '↑' : '↓';
-                    s2.appendChild(suggestionItem(t.topic,
-                        sign + Math.abs(t.change_pct).toFixed(0) + '%'));
+                .filter(function (t) { return t.has_data; })
+                .map(function (t) { return { t: t, fmt: window.SyntheaTrend.format(t) }; })
+                .sort(function (a, b) {
+                    if (a.fmt.suppressed !== b.fmt.suppressed) return a.fmt.suppressed ? 1 : -1;
+                    return Math.abs(b.t.change_pct || 0) - Math.abs(a.t.change_pct || 0);
+                })
+                .forEach(function (row) {
+                    var arrow = row.fmt.dir === 'rising' ? '↑'
+                              : (row.fmt.dir === 'falling' ? '↓' : '');
+                    // The arrow already carries the direction, so strip the
+                    // sign from the number rather than printing "down -10%".
+                    var item = suggestionItem(row.t.topic,
+                        row.fmt.suppressed ? row.fmt.text
+                                           : arrow + row.fmt.text.replace(/^[+-]/, ''));
+                    var badge = item.querySelector('.trending-badge');
+                    if (badge) { badge.style.color = row.fmt.colour; badge.title = row.fmt.title; }
+                    s2.appendChild(item);
                 });
             var foot = el('div', 'suggestion-item');
             var span = el('span', null,
@@ -164,8 +177,27 @@
         }
     }
 
+    /**
+     * Lint that would otherwise go stale: a hardcoded copyright year, and a
+     * "1,498 episodes" claim against a corpus of 1,236. The year is computed
+     * and the count comes from /api/episodes.
+     */
+    function fixStaleCopy() {
+        var yr = document.getElementById('footerYear');
+        if (yr) yr.textContent = String(new Date().getFullYear());
+
+        var slot = document.getElementById('corpusEpisodeCount');
+        if (!slot) return;
+        if (SD.isVision()) { slot.textContent = 'the corpus'; return; }
+        SD.fetchJSON('corpus-count', '/api/episodes?limit=1').then(function (d) {
+            var n = d && d.total;
+            slot.textContent = n ? n.toLocaleString() + ' episodes' : 'the corpus';
+        }).catch(function () { slot.textContent = 'the corpus'; });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         handleValidator();
+        setTimeout(fixStaleCopy, 80);
         setTimeout(clearSeededSearchResults, 120);
         setTimeout(clearSeededSearchResults, 1200);
         setTimeout(rebuildDropdown, 60);

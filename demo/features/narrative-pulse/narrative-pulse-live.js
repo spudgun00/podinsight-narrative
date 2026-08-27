@@ -231,17 +231,17 @@ const NarrativePulseLive = {
         legend.innerHTML = this.topics.map(topic => {
             const plotted = this.plotted.includes(topic);
             const color = plotted ? this.colorFor(topic.topic) : '#9ca3af';
-            const value = plotted
-                ? (topic.change_pct === null || topic.change_pct === undefined
-                    ? `${topic.total_mentions} mentions`
-                    : `${topic.change_pct >= 0 ? '+' : ''}${Math.round(topic.change_pct)}%`)
-                : 'no data';
+            // One formatter for every trend on the page, so a topic cannot
+            // read "+136%" here and "low volume" in the sidebar.
+            const fmt = window.SyntheaTrend.format(topic);
+            const value = plotted ? fmt.text : 'no data';
             return `
                 <div class="legend-item${plotted ? '' : ' legend-item--empty'}"
                      title="${topic.total_mentions} mentions in ${topic.episodes_with_mentions} of ${this.meta.episodesScanned} episodes">
                     <span class="legend-dot" style="background: ${color};"></span>
                     <span class="legend-label"${plotted ? '' : ' style="color:#9ca3af;"'}>${topic.topic}</span>
-                    <span class="legend-value" style="color: ${color};">${value}</span>
+                    <span class="legend-value" style="color: ${plotted ? fmt.colour : '#9ca3af'};"
+                          title="${plotted ? fmt.title.replace(/"/g, '&quot;') : 'No mentions in this corpus'}">${value}</span>
                 </div>
             `;
         }).join('');

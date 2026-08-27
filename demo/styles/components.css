@@ -4342,3 +4342,162 @@ body.portfolio-open {
     margin-bottom: 8px;
 }
 
+
+/* ============================================
+   Influence Metrics - live entity states
+   ============================================ */
+
+.influence-empty {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--gray-600, #6b7280);
+    padding: 8px 0;
+}
+
+.influence-empty--error {
+    color: var(--dusty-rose, #c77d7d);
+}
+
+.influence-retry {
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 0.6875rem;
+    font-family: inherit;
+    color: var(--deep-ink, #1a1a2e);
+    background: transparent;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.influence-retry:hover {
+    background: var(--light-sage, #e8f0ea);
+}
+
+/* Velocity Tracking - topics the corpus never mentions */
+.velocity-nodata {
+    margin-left: auto;
+    font-size: 0.6875rem;
+    color: var(--gray-400, #9ca3af);
+    font-style: italic;
+}
+
+/* ============================================
+   Header stats
+   ============================================
+   .header-metrics is display:none in layout.css. It is now a sibling of
+   .header-main rather than a child of that flex row, so it lays out as the
+   full-width bar its own styles always assumed. header-stats.js adds
+   --live once the real numbers arrive, which is what reveals it. */
+
+.header-metrics.header-metrics--live {
+    display: block;
+}
+
+/* Search panel: the date range is stated, not selectable */
+.timeframe-static {
+    color: var(--gray-400, #9ca3af);
+    cursor: default;
+}
+
+/* Disabled corpus-range chip in the search dropdown */
+.inline-time-selector .time-option[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   Topic Correlations - single real figure
+   ============================================ */
+
+/* Topic correlations: a compact table, not six stacked blocks.
+   The verdict is neutral typography, not red. "Indistinguishable from chance"
+   is a correct finding about the corpus, not an error, and colouring it like a
+   failure told the reader the opposite of what it means. */
+
+.correlation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.correlation-table th,
+.correlation-table td {
+    padding: 7px 6px;
+    text-align: left;
+    vertical-align: baseline;
+    border-bottom: 1px solid var(--gray-200, #eceae6);
+}
+
+.correlation-table thead th {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-400, #9ca3af);
+    border-bottom: 1px solid var(--gray-300, #ddd9d2);
+    padding-bottom: 5px;
+}
+
+.correlation-table tbody tr:last-child th,
+.correlation-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.correlation-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.correlation-pair {
+    font-weight: 500;
+    color: var(--deep-ink, #1a1a2e);
+    line-height: 1.35;
+}
+
+.correlation-expected {
+    color: var(--gray-400, #9ca3af);
+}
+
+.correlation-verdict {
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+/* Neutral by default: most pairs sit at or below chance, and that is fine. */
+.correlation-verdict.is-chance {
+    color: var(--gray-500, #7b7b7b);
+}
+
+.correlation-verdict.is-signal {
+    color: var(--sage, #4a7c59);
+    font-weight: 600;
+}
+
+.correlation-note {
+    font-size: 0.6875rem;
+    color: var(--gray-400, #9ca3af);
+    line-height: 1.6;
+    margin: 10px 0 0;
+}
+
+.correlation-detail {
+    font-size: 0.6875rem;
+    color: var(--gray-400, #9ca3af);
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+.correlation-notice {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.correlation-notice-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--deep-ink, #1a1a2e);
+}

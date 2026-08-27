@@ -461,3 +461,26 @@
     text-transform: uppercase; letter-spacing: 0.05em;
     color: var(--text-tertiary, #9ca3af);
 }
+
+/* Density figure carries its methodology in the tooltip, not on the card. */
+.briefings-live-density { border-bottom: 1px dotted currentColor; cursor: help; }
+
+.briefings-live-card .view-brief-btn {
+    background: var(--sage, #4a7c59);
+    color: #fff;
+    border: 0;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font: 600 11px/1 'Inter', system-ui, sans-serif;
+    cursor: pointer;
+}
+.briefings-live-card .view-brief-btn:hover { background: #3f6b4c; }
+
+.briefings-live-card .tag { cursor: default; }
+
+.briefings-live-noclaims {
+    font: 400 12px/1.6 'Inter', system-ui, sans-serif;
+    color: var(--text-tertiary, #8a8a8a);
+    background: var(--bg-secondary, #f8f7f4);
+    border-radius: 6px; padding: 12px 14px; margin: 0 0 18px;
+}

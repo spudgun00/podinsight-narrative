@@ -77,44 +77,108 @@ const BriefingsLive = {
     },
 
     card(b) {
-        const el = document.createElement('article');
-        el.className = 'briefings-live-card';
+        // Deliberately the Vision card's structure and classes, so the visual
+        // grammar matches, with only honest slots filled:
+        //   podcast-badge -> podcast          episode-info -> date, duration, density
+        //   guest-info    -> guests           card-title   -> title
+        //   card-summary  -> hook (one line)  card-tags    -> tracked topics mentioned
+        //   mentions      -> entity counts    view-brief-btn -> claim count
+        // The Vision card's "Score: 97" and its stance tag have no slot here:
+        // nothing computes either.
+        const el = document.createElement('div');
+        el.className = 'briefing-card briefings-live-card';
 
-        const head = document.createElement('div');
-        head.className = 'briefings-live-head';
-        head.innerHTML =
-            `<span class="briefings-live-podcast"></span>` +
-            `<span class="briefings-live-meta"></span>`;
-        head.querySelector('.briefings-live-podcast').textContent = b.podcast_name;
-        // Absolute date, and the ranking inputs rather than a synthesised score.
-        head.querySelector('.briefings-live-meta').textContent =
-            `${this.dateLabel(b.published_at)} · ${b.rank_mentions} topic mentions in `
-            + `${b.rank_words.toLocaleString()} words (${b.rank_density}/1k)`;
-        el.appendChild(head);
+        const header = document.createElement('div');
+        header.className = 'card-header';
 
-        const h = document.createElement('h3');
-        h.className = 'briefings-live-title';
-        h.textContent = b.episode_title;
-        el.appendChild(h);
+        const badge = document.createElement('span');
+        badge.className = 'podcast-badge';
+        badge.textContent = b.podcast_name;
+        header.appendChild(badge);
+
+        const info = document.createElement('div');
+        info.className = 'episode-info';
+        const bits = [this.dateLabel(b.published_at)];
+        if (b.duration_minutes) bits.push(`${b.duration_minutes} min`);
+        bits.forEach((t, i) => {
+            if (i) {
+                const sep = document.createElement('span');
+                sep.className = 'separator'; sep.textContent = '•';
+                info.appendChild(sep);
+            }
+            const sp = document.createElement('span');
+            sp.textContent = t;
+            info.appendChild(sp);
+        });
+        const sep2 = document.createElement('span');
+        sep2.className = 'separator'; sep2.textContent = '•';
+        info.appendChild(sep2);
+        const dens = document.createElement('span');
+        dens.className = 'briefings-live-density';
+        dens.textContent = `${b.rank_density}/1k`;
+        // Methodology in the tooltip rather than on the card.
+        dens.title = `${b.rank_mentions} tracked-topic mentions in ${b.rank_words.toLocaleString()} `
+                   + `words = ${b.rank_density} per 1,000 words. This is the ranking input, `
+                   + `not a score.`;
+        info.appendChild(dens);
+        header.appendChild(info);
+        el.appendChild(header);
 
         if (b.guests && b.guests.length) {
             const g = document.createElement('div');
-            g.className = 'briefings-live-guests';
-            g.textContent = 'Guests: ' + b.guests.join(', ');
+            g.className = 'guest-info';
+            g.textContent = b.guests.join(', ');
             el.appendChild(g);
         }
 
-        const p = document.createElement('p');
-        p.className = 'briefings-live-summary';
-        p.textContent = b.summary;
-        el.appendChild(p);
+        const h = document.createElement('h3');
+        h.className = 'card-title';
+        h.textContent = b.episode_title;
+        el.appendChild(h);
+
+        const hook = document.createElement('p');
+        hook.className = 'card-summary';
+        hook.textContent = b.hook || '';
+        el.appendChild(hook);
+
+        if (b.topic_tags && b.topic_tags.length) {
+            const tags = document.createElement('div');
+            tags.className = 'card-tags';
+            b.topic_tags.forEach(t => {
+                const a = document.createElement('span');
+                a.className = 'tag';
+                a.textContent = '#' + t.replace(/[^A-Za-z0-9]/g, '');
+                a.title = `${t} is mentioned in this episode`;
+                tags.appendChild(a);
+            });
+            el.appendChild(tags);
+        }
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+
+        const mentions = document.createElement('div');
+        mentions.className = 'mentions';
+        if (b.top_entities && b.top_entities.length) {
+            const eye = document.createElement('span');
+            eye.textContent = '👁';
+            mentions.appendChild(eye);
+            const list = document.createElement('span');
+            list.className = 'mention-count';
+            list.textContent = b.top_entities.map(e => `${e.name} (${e.count})`).join(', ');
+            list.title = 'Most-mentioned named entities, counted from the 2025 extraction';
+            mentions.appendChild(list);
+        }
+        footer.appendChild(mentions);
 
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'briefings-live-open';
-        btn.textContent = `View Full Brief (${b.claims.length} claims) →`;
+        btn.className = 'view-brief-btn';
+        btn.textContent = `View Full Brief (${b.claims.length}) →`;
         btn.addEventListener('click', () => this.openFull(b));
-        el.appendChild(btn);
+        footer.appendChild(btn);
+
+        el.appendChild(footer);
         return el;
     },
 
@@ -161,8 +225,17 @@ const BriefingsLive = {
 
         const sum = document.createElement('p');
         sum.className = 'briefings-live-panel-summary';
-        sum.textContent = b.summary;
+        sum.textContent = b.summary;          // the long summary lives here, not on the card
         body.appendChild(sum);
+
+        if (b.no_playable_claims) {
+            const none = document.createElement('p');
+            none.className = 'briefings-live-noclaims';
+            none.textContent = 'No playable claims. Every quote this episode produced failed '
+                             + 'the verbatim or timestamp check, so none is shown rather than '
+                             + 'shipping a Play clip that lands on the wrong audio.';
+            body.appendChild(none);
+        }
 
         const h = document.createElement('h4');
         h.className = 'briefings-live-claims-head';

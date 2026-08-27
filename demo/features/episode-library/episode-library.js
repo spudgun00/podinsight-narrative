@@ -41,6 +41,16 @@ const EpisodeLibrary = {
         viewMode: 'table' // 'table' or 'cards'
     },
 
+    // --- Live episode catalogue (GET /api/episodes) ----------------------
+    // This component no longer reads unified-data.js. Everything it shows
+    // comes from the episode_metadata collection via the API.
+    apiBaseUrl: window.SYNTHEA_API_BASE || 'http://localhost:8000',
+    apiTimeoutMs: 30000,
+    episodes: [],
+    dataState: 'loading',   // 'loading' | 'ready' | 'error'
+    dataError: null,
+    catalogue: { total: 0, podcastCount: 0, hours: 0 },
+
     podcastImages: {
         'All-In': 'images/allin.png',
         'The Twenty Minute VC': 'images/20vc.jpeg',
@@ -74,16 +84,116 @@ const EpisodeLibrary = {
         
         this.createOverlay();
         this.attachEventListeners();
-        console.log('[Episode Library] Initialized with data source:', 
-            window.unifiedData ? 'unified-data.js' : 'unknown');
-        console.log('[Episode Library] Found unique topics:', this.allTopics.length);
-        console.log('Episode Library initialized');
+        console.log('[Episode Library] Initialized with data source:', this.apiBaseUrl + '/api/episodes');
+
+        // Fetch the catalogue now so the overlay is populated before it opens.
+        this.loadEpisodes();
+    },
+
+    // Fetch the live episode catalogue and re-render.
+    async loadEpisodes() {
+        this.dataState = 'loading';
+        this.dataError = null;
+        this.updateContent();
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
+
+        try {
+            const response = await (window.SyntheaData.claim('episode-library', '.episode-library-overlay, .episode-library'), window.SyntheaData).fetchResponse('episode-library', `${this.apiBaseUrl}/api/episodes`, { signal: controller.signal });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const items = Array.isArray(data.episodes) ? data.episodes : [];
+
+            this.episodes = items.map(item => this.mapEpisode(item));
+            this.catalogue = {
+                total: typeof data.total === 'number' ? data.total : this.episodes.length,
+                podcastCount: typeof data.podcast_count === 'number'
+                    ? data.podcast_count
+                    : new Set(this.episodes.map(e => e.podcast)).size,
+                hours: Math.round(items.reduce((sum, item) => sum + (item.duration_seconds || 0), 0) / 3600)
+            };
+            this.allTopics = this.getAllUniqueTopics();
+            this.dataState = 'ready';
+
+            console.log('[Episode Library] Loaded', this.episodes.length, 'episodes from',
+                this.catalogue.podcastCount, 'podcasts');
+        } catch (error) {
+            console.error('[Episode Library] Failed to load episodes:', error);
+            this.dataState = 'error';
+            this.dataError = error && error.name === 'AbortError'
+                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
+                : `Could not load episodes from ${this.apiBaseUrl}/api/episodes (${(error && error.message) || error}).`;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+
+        try {
+            this.refreshOverlay();
+        } catch (renderError) {
+            // Don't let a render failure leave the overlay stuck on "Loading…"
+            console.error('[Episode Library] Failed to render catalogue:', renderError);
+            this.dataState = 'error';
+            this.dataError = `Loaded the catalogue but could not render it: ${renderError.message}`;
+            this.updateContent();
+        }
+    },
+
+    retryLoad() {
+        this.loadEpisodes();
+    },
+
+    /**
+     * Map an /api/episodes record onto the shape the table and the shared card
+     * renderer already expect. Fields the endpoint does not carry (guests,
+     * influence score, topics, insights) are left absent rather than invented.
+     */
+    mapEpisode(item) {
+        return {
+            id: item.episode_id,
+            podcast: item.podcast_name,
+            title: item.episode_title,
+            publishedAt: item.published_at || null,
+            durationSeconds: item.duration_seconds || null,
+            wordCount: item.word_count || null,
+            totalChunks: item.total_chunks || 0,
+            cardView: {
+                podcast: item.podcast_name,
+                title: item.episode_title,
+                time: this.formatPublishedDate(item.published_at),
+                duration: this.formatDuration(item.duration_seconds),
+                hashtags: []
+            }
+        };
+    },
+
+    formatPublishedDate(iso) {
+        if (!iso) return '';
+        const date = new Date(iso);
+        if (isNaN(date.getTime())) return '';
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    },
+
+    formatDuration(seconds) {
+        if (!seconds) return '';
+        return `${Math.round(seconds / 60)} min`;
+    },
+
+    // Rebuild the whole overlay (header stats, filters and content) after a load.
+    refreshOverlay() {
+        if (!this.overlay) return;
+        // All of this component's listeners are delegated from document, so
+        // replacing the markup does not orphan any handlers.
+        this.overlay.innerHTML = this.getOverlayHTML();
     },
     
     // Extract all unique topics from all episodes
     getAllUniqueTopics() {
         const topicsSet = new Set();
-        const episodes = window.unifiedData?.priorityBriefings?.items || [];
+        const episodes = this.episodes || [];
         
         episodes.forEach(episode => {
             const hashtags = episode.cardView?.hashtags || episode.hashtags || [];
@@ -184,12 +294,11 @@ const EpisodeLibrary = {
     },
 
     getOverlayHTML() {
-        const episodes = window.unifiedData?.priorityBriefings?.items || [];
-        const totalEpisodes = window.unifiedData?.meta?.analysis?.episodesAnalyzed || 1547;
-        const totalHours = window.unifiedData?.meta?.analysis?.hoursAnalyzed || 1426;
-        const lastUpdated = window.unifiedData?.meta?.analysis?.lastAnalysis || '38 mins ago';
-        
-        console.log('Episode Library: Generating HTML for', episodes.length, 'episodes');
+        const totalEpisodes = this.catalogue.total;
+        const totalHours = this.catalogue.hours;
+        const podcastCount = this.catalogue.podcastCount;
+
+        console.log('Episode Library: Generating HTML for', this.episodes.length, 'episodes');
 
         return `
             <div class="episode-library-container">
@@ -197,7 +306,7 @@ const EpisodeLibrary = {
                 <div class="episode-library-header">
                     <div class="library-header-left">
                         <h1>Podcast Intelligence Repository</h1>
-                        <div class="library-stats">${totalEpisodes.toLocaleString()} episodes • ${totalHours.toLocaleString()} hours analyzed • Updated ${lastUpdated}</div>
+                        <div class="library-stats">${this.renderStatsLine(totalEpisodes, podcastCount, totalHours)}</div>
                     </div>
                     <div class="library-header-actions">
                         <button class="btn-export">
@@ -218,16 +327,7 @@ const EpisodeLibrary = {
                         <input type="text" class="library-search-input" placeholder="Search episodes, topics, guests, or quotes...">
                     </div>
                     <select class="library-filter-dropdown" data-filter="podcast">
-                        <option value="all">All Podcasts</option>
-                        <option value="all-in">All-In</option>
-                        <option value="20vc">20VC</option>
-                        <option value="information-411">The Information's 411</option>
-                        <option value="acquired">Acquired</option>
-                        <option value="invest-like-best">Invest Like the Best</option>
-                        <option value="logan-bartlett">The Logan Bartlett Show</option>
-                        <option value="stratechery">Stratechery</option>
-                        <option value="khosla-ventures">Khosla Ventures</option>
-                        <option value="indie-hackers">Indie Hackers</option>
+                        ${this.renderPodcastOptions()}
                     </select>
                     <div class="library-multi-select-wrapper" data-filter="topics">
                         <button class="library-multi-select-toggle">
@@ -250,10 +350,66 @@ const EpisodeLibrary = {
 
                 <!-- Content Container -->
                 <div class="library-content-container" id="libraryContent">
-                    ${this.state.viewMode === 'table' ? this.renderTableView(episodes) : this.renderCardView(episodes)}
+                    ${this.renderContentHTML()}
                 </div>
             </div>
         `;
+    },
+
+    renderStatsLine(totalEpisodes, podcastCount, totalHours) {
+        if (this.dataState === 'loading') return 'Loading catalogue…';
+        if (this.dataState === 'error') return 'Catalogue unavailable';
+        return `${totalEpisodes.toLocaleString()} episodes • ${podcastCount} podcasts • ` +
+               `${totalHours.toLocaleString()} hours analysed`;
+    },
+
+    // Podcast filter options come from the episodes actually returned.
+    renderPodcastOptions() {
+        const names = Array.from(new Set(this.episodes.map(e => e.podcast).filter(Boolean)))
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        return ['<option value="all">All Podcasts</option>']
+            .concat(names.map(name =>
+                `<option value="${name.replace(/"/g, '&quot;')}">${name}</option>`))
+            .join('');
+    },
+
+    // Content is one of: loading, error, empty, table/cards.
+    renderContentHTML() {
+        if (this.dataState === 'loading') {
+            return `
+                <div class="library-data-state">
+                    <div class="library-data-spinner"></div>
+                    <div class="library-data-title">Loading episodes…</div>
+                    <div class="library-data-note">Reading the catalogue from ${this.apiBaseUrl}/api/episodes</div>
+                </div>
+            `;
+        }
+
+        if (this.dataState === 'error') {
+            return `
+                <div class="library-data-state library-data-state--error">
+                    <div class="library-data-title">Episodes unavailable</div>
+                    <div class="library-data-note">${this.dataError || 'Something went wrong.'}</div>
+                    <button class="btn-export library-retry-btn" onclick="window.EpisodeLibrary.retryLoad()">Try again</button>
+                </div>
+            `;
+        }
+
+        const sorted = this.sortEpisodes(this.filterEpisodes(this.episodes));
+
+        if (!sorted.length) {
+            return `
+                <div class="library-data-state">
+                    <div class="library-data-title">No episodes match these filters</div>
+                    <div class="library-data-note">${this.episodes.length} episodes in the catalogue.</div>
+                </div>
+            `;
+        }
+
+        return this.state.viewMode === 'table'
+            ? this.renderTableView(sorted)
+            : this.renderCardView(sorted);
     },
 
     renderTableView(episodes) {
@@ -301,7 +457,7 @@ const EpisodeLibrary = {
                 <!-- Pagination -->
                 <div class="library-pagination">
                     <div class="library-pagination-info">
-                        Showing 1-9 of 9 episodes
+                        Showing ${episodes.length} of ${this.episodes.length} episodes
                     </div>
                     <div class="library-pagination-controls">
                         <select class="library-filter-dropdown" style="width: auto;">
@@ -402,7 +558,7 @@ const EpisodeLibrary = {
                     </td>
                     <td>
                         <div class="library-episode-title">${card.title || 'No title'}</div>
-                        <div class="library-episode-subtitle">${this.getHostInfo(card)}</div>
+                        <div class="library-episode-subtitle">${this.renderEpisodeStats(episode)}</div>
                     </td>
                     <td>${card.time || ''}</td>
                     <td>${card.duration || ''}</td>
@@ -412,9 +568,10 @@ const EpisodeLibrary = {
                         </div>
                     </td>
                     <td>
+                        ${(card.score || card.influence) ? `
                         <span class="library-influence-score ${influenceClass}">
                             ${this.getInfluenceIcon(card.score || card.influence)} ${this.getInfluenceValue(card.score || card.influence)}
-                        </span>
+                        </span>` : '<span class="library-influence-score library-influence-none">—</span>'}
                     </td>
                     <td>
                         <div class="library-topic-tags" data-episode-id="${episode.id}">
@@ -439,6 +596,17 @@ const EpisodeLibrary = {
                 </tr>
             `;
         }).join('');
+    },
+
+    /**
+     * Subtitle line under the episode title: the transcript facts the API
+     * actually returns, instead of a host name we would have to guess.
+     */
+    renderEpisodeStats(episode) {
+        const parts = [];
+        if (episode.wordCount) parts.push(`${episode.wordCount.toLocaleString()} words`);
+        if (episode.totalChunks) parts.push(`${episode.totalChunks.toLocaleString()} chunks`);
+        return parts.length ? parts.join(' · ') : '';
     },
 
     renderTopicTags(topics, episodeId) {
@@ -735,37 +903,15 @@ const EpisodeLibrary = {
                 .filter(tag => tag.length > 0); // Remove empty strings
         }
         
-        // 2. Use fallback topics only if no hashtags are found
-        if (topics.length === 0) {
-            // Topic mapping based on podcast (fallback)
-            const podcastTopics = {
-                'All-In': ['Market Analysis', 'Venture Capital', 'AI Infrastructure', 'Policy'],
-                'The Twenty Minute VC': ['Series A', 'Fundraising', 'Growth Metrics', 'Portfolio Strategy'],
-                '20VC': ['Series A', 'Fundraising', 'Growth Metrics', 'Portfolio Strategy'],
-                'Capital Allocators': ['LP Strategy', 'Fund Management', 'Asset Allocation', 'Risk Management'],
-                'BG2Pod': ['AI Agents', 'Enterprise Software', 'B2B SaaS', 'Market Dynamics'],
-                'This Week in Startups': ['Startups', 'Founder Stories', 'Product Strategy', 'Growth Hacking'],
-                'Invest Like the Best': ['Defense Tech', 'Deep Tech', 'Capital Efficiency', 'Emerging Markets'],
-                'Acquired': ['M&A', 'Company Strategy', 'Tech History', 'Business Models'],
-                'The Tim Ferriss Show': ['Productivity', 'Leadership', 'Mental Models', 'Performance'],
-                'The Information\'s 411': ['Tech News', 'Industry Analysis', 'LP Strategy', 'Market Trends'],
-                'The Logan Bartlett Show': ['Portfolio Strategy', 'M&A', 'Exit Planning', 'Venture Capital'],
-                'Khosla Ventures Podcast': ['Energy Tech', 'Deep Tech', 'AI Infrastructure', 'Sustainability'],
-                'Indie Hackers': ['Bootstrapping', 'MicroSaaS', 'Indie Success', 'Product Strategy'],
-                'Changelog': ['Developer Tools', 'Open Source', 'DevOps', 'Programming'],
-                'Stratechery': ['Platform Strategy', 'Tech Analysis', 'Business Strategy', 'Disruption'],
-                'The Knowledge Project': ['Decision Making', 'Mental Models', 'Learning', 'Psychology']
-            };
-            
-            // Use podcast-specific fallback topics
-            const fallbackTopics = podcastTopics[podcast] || ['Tech Trends', 'Innovation'];
-            topics.push(...fallbackTopics);
-        }
-        
+        // 2. No hashtag topics, no topics. The /api/episodes catalogue does not
+        //    carry them, and the previous fallback invented a topic list from a
+        //    hardcoded per-podcast map (and referenced an undefined variable,
+        //    which only stayed hidden because every mock episode had hashtags).
+
         // 3. Deduplicate topics (case-sensitive now since we've formatted them)
         const uniqueTopics = [...new Set(topics)];
         
-        return uniqueTopics.length > 0 ? uniqueTopics : ['General'];
+        return uniqueTopics;
     },
 
     getInfluenceClass(influence) {
@@ -1309,20 +1455,17 @@ const EpisodeLibrary = {
     // Function removed - using raw episodes directly with shared renderer
 
     updateContent() {
-        // Get episodes from unified data - use raw format for shared renderer
-        const rawEpisodes = window.unifiedData?.priorityBriefings?.items || [];
-        // No conversion needed - shared renderer expects the raw format
-        const filtered = this.filterEpisodes(rawEpisodes);
-        const sorted = this.sortEpisodes(filtered);
-        
         const container = document.getElementById('libraryContent');
         if (container) {
-            console.log('[Episode Library] Updating content, view mode:', this.state.viewMode);
-            console.log('[Episode Library] Episodes to render:', sorted.length);
-            
-            container.innerHTML = this.state.viewMode === 'table' 
-                ? this.renderTableView(sorted)
-                : this.renderCardView(sorted);
+            console.log('[Episode Library] Updating content, view mode:', this.state.viewMode,
+                '| state:', this.dataState, '| episodes:', this.episodes.length);
+            container.innerHTML = this.renderContentHTML();
+        }
+
+        const stats = this.overlay && this.overlay.querySelector('.library-stats');
+        if (stats) {
+            stats.textContent = this.renderStatsLine(
+                this.catalogue.total, this.catalogue.podcastCount, this.catalogue.hours);
         }
     },
 
@@ -1349,37 +1492,11 @@ const EpisodeLibrary = {
                 }
             }
             
-            // Podcast filter
+            // Podcast filter - option values are the podcast names from the API
             if (this.state.activeFilters.podcast !== 'all') {
-                // Map filter values to actual podcast names
-                const podcastMap = {
-                    'all-in': 'All-In',
-                    '20vc': ['20VC', 'The Twenty Minute VC'],
-                    'information-411': 'The Information\'s 411',
-                    'acquired': 'Acquired',
-                    'invest-like-best': 'Invest Like the Best',
-                    'logan-bartlett': 'The Logan Bartlett Show',
-                    'stratechery': 'Stratechery',
-                    'khosla-ventures': ['Khosla Ventures Podcast', 'Khosla Ventures'],
-                    'indie-hackers': 'Indie Hackers'
-                };
-                
-                const filterValue = this.state.activeFilters.podcast;
-                const mappedValue = podcastMap[filterValue];
-                
-                if (mappedValue) {
-                    // Handle array of possible names (like 20VC)
-                    if (Array.isArray(mappedValue)) {
-                        const podcast = episode.cardView?.podcast || episode.podcast;
-                        if (!mappedValue.includes(podcast)) {
-                            return false;
-                        }
-                    } else {
-                        const podcast = episode.cardView?.podcast || episode.podcast;
-                        if (podcast !== mappedValue) {
-                            return false;
-                        }
-                    }
+                const podcast = episode.cardView?.podcast || episode.podcast;
+                if (podcast !== this.state.activeFilters.podcast) {
+                    return false;
                 }
             }
             
@@ -1422,12 +1539,15 @@ const EpisodeLibrary = {
                     bVal = b.cardView?.title || b.title || '';
                     break;
                 case 'date':
-                    // Convert time strings to sortable values
-                    // Handle both direct properties and cardView structure
-                    const aTime = a.cardView?.time || a.time || '0h ago';
-                    const bTime = b.cardView?.time || b.time || '0h ago';
-                    aVal = this.parseTimeAgo(aTime);
-                    bVal = this.parseTimeAgo(bTime);
+                    // Episodes from the API carry a real ISO timestamp; fall
+                    // back to the "3h ago" style string for anything without one.
+                    if (a.publishedAt || b.publishedAt) {
+                        aVal = Date.parse(a.publishedAt || 0) || 0;
+                        bVal = Date.parse(b.publishedAt || 0) || 0;
+                    } else {
+                        aVal = this.parseTimeAgo(a.cardView?.time || a.time || '0h ago');
+                        bVal = this.parseTimeAgo(b.cardView?.time || b.time || '0h ago');
+                    }
                     break;
                 case 'duration':
                     // Handle both direct properties and cardView structure

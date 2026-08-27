@@ -299,7 +299,10 @@ class DataValidator {
             const daysSinceUpdate = (now - lastUpdate) / (1000 * 60 * 60 * 24);
             
             if (daysSinceUpdate > 7) {
-                this.warnings.push('Data is more than 7 days old');
+                // Vision mode: the stamp is the date of the mock-up, by design.
+                if (!window.__syntheaValidatorNote) {
+                    this.warnings.push('Data is more than 7 days old');
+                }
             }
         }
     }
@@ -361,6 +364,12 @@ window.dataValidator = new DataValidator();
 // Auto-validate on load if unified data exists
 if (window.unifiedData) {
     console.log('Running data validation...');
+    // Phase B: this validator only makes sense against the Vision dataset. In
+    // Live mode there is no unifiedData to validate, and its "more than 7 days
+    // old" warning has been firing continuously since August 2025 against a
+    // mock-up whose date is deliberate. In Vision mode the July 2025 stamp is
+    // the vision date, not staleness.
+    if (window.__syntheaSuppressDataValidator || !window.unifiedData) return;
     const results = window.dataValidator.validate();
     
     if (!results.valid) {

@@ -7,6 +7,16 @@ class EpisodePanelV2 {
         this.activeListeners = [];
         this.portfolioExpanded = false;
         this.watchlistExpanded = false;
+
+        // --- Live episode catalogue (GET /api/episodes) ------------------
+        // Episodes opened from the Episode Library resolve against this map.
+        // Priority Briefings still passes its own mock ids, which keep using
+        // the unified-data.js lookup below so that component is unaffected.
+        this.apiBaseUrl = window.SYNTHEA_API_BASE || 'http://localhost:8000';
+        this.apiTimeoutMs = 30000;
+        this.liveEpisodes = new Map();
+        this.liveDataState = 'loading';   // 'loading' | 'ready' | 'error'
+        this.liveDataError = null;
     }
 
     // Initialize the panel
@@ -14,6 +24,73 @@ class EpisodePanelV2 {
         this.createBackdrop();
         this.createPanel();
         this.setupGlobalListeners();
+        this.loadEpisodes();
+    }
+
+    // Fetch the episode catalogue once and index it by episode_id.
+    async loadEpisodes() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
+
+        try {
+            const response = await (window.SyntheaData.claim('episode-panel', '.epb-panel, .episode-panel'), window.SyntheaData).fetchResponse('episode-panel', `${this.apiBaseUrl}/api/episodes`, { signal: controller.signal });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const items = Array.isArray(data.episodes) ? data.episodes : [];
+
+            this.liveEpisodes = new Map(items.map(item => [item.episode_id, item]));
+            this.liveDataState = 'ready';
+            console.log('[Episode Panel] Loaded', this.liveEpisodes.size, 'episodes from /api/episodes');
+        } catch (error) {
+            console.error('[Episode Panel] Failed to load episodes:', error);
+            this.liveDataState = 'error';
+            this.liveDataError = error && error.name === 'AbortError'
+                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
+                : `Could not reach ${this.apiBaseUrl}/api/episodes (${(error && error.message) || error}).`;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    /**
+     * Shape a live catalogue record like the panel's existing episode object.
+     * Only the fields the endpoint returns are filled in - the analysis
+     * sections stay empty rather than being padded with mock content.
+     */
+    buildLiveEpisode(item) {
+        const published = item.published_at ? new Date(item.published_at) : null;
+        const publishedLabel = published && !isNaN(published.getTime())
+            ? published.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            : 'Unknown date';
+
+        const facts = [];
+        if (item.word_count) facts.push(`${item.word_count.toLocaleString()} words`);
+        if (item.total_chunks) facts.push(`${item.total_chunks.toLocaleString()} transcript chunks`);
+
+        return {
+            id: item.episode_id,
+            isLive: true,
+            cardView: {
+                podcast: item.podcast_name,
+                title: item.episode_title,
+                time: publishedLabel,
+                duration: item.duration_seconds ? `${Math.round(item.duration_seconds / 60)} min` : '',
+                hashtags: []
+            },
+            expandedView: {
+                conversationSummary: `This episode comes from /api/episodes, which returns catalogue metadata only` +
+                    `${facts.length ? ' (' + facts.join(', ') + ')' : ''}. ` +
+                    `No synthesis, insights or quotes are available for it from that endpoint.`,
+                keyInsights: [],
+                portfolioMentions: [],
+                watchlistMentions: [],
+                notableNumbers: {},
+                relatedTopics: []
+            }
+        };
     }
 
     // Create backdrop element
@@ -225,9 +302,13 @@ class EpisodePanelV2 {
         document.body.style.overflow = 'hidden';
     }
 
-    // Find episode data from unified data or fallback
+    // Find episode data: the live catalogue first, then the mock sources
     findEpisodeData(episodeId) {
-        // Try unified data first
+        // Episodes opened from the Episode Library are real episode_ids
+        const liveItem = this.liveEpisodes.get(episodeId);
+        if (liveItem) return this.buildLiveEpisode(liveItem);
+
+        // Priority Briefings still passes its own mock ids ('briefing-1' etc.)
         if (window.unifiedData?.priorityBriefings?.items) {
             const episode = window.unifiedData.priorityBriefings.items.find(
                 item => item.id === episodeId
@@ -342,10 +423,15 @@ class EpisodePanelV2 {
         // Set podcast name only (without episode number)
         this.panel.querySelector('.epb-podcast-name').textContent = podcastName;
         
-        // Get episode number and add it to meta section
-        const episodeNumber = this.getEpisodeNumber(card.podcast, this.currentEpisodeId);
-        const episodeNumberClean = episodeNumber.replace(' • ', '');
-        this.panel.querySelector('.epb-episode-number').textContent = episodeNumberClean;
+        // Get episode number and add it to meta section. Live episodes have no
+        // episode number in the catalogue, and getEpisodeNumber() derives one
+        // from a hardcoded per-podcast range, so leave it blank for those.
+        if (episode.isLive) {
+            this.panel.querySelector('.epb-episode-number').textContent = '';
+        } else {
+            const episodeNumber = this.getEpisodeNumber(card.podcast, this.currentEpisodeId);
+            this.panel.querySelector('.epb-episode-number').textContent = episodeNumber.replace(' • ', '');
+        }
         
         this.panel.querySelector('.epb-time').textContent = card.time || 'Recent';
         this.panel.querySelector('.epb-duration').textContent = card.duration || '--';
@@ -354,10 +440,17 @@ class EpisodePanelV2 {
         // Title
         this.panel.querySelector('.epb-title').textContent = card.title || 'Episode Title';
         
-        // Host and Guest in header
-        const { host, guest } = this.extractParticipants(card);
-        this.panel.querySelector('.epb-host').textContent = host;
-        this.panel.querySelector('.epb-guest').textContent = guest;
+        // Host and Guest in header. The catalogue has no participant data, and
+        // extractParticipants() falls back to a hardcoded host per podcast, so
+        // live episodes show nothing rather than a guess.
+        if (episode.isLive) {
+            this.panel.querySelector('.epb-host').textContent = '—';
+            this.panel.querySelector('.epb-guest').textContent = '—';
+        } else {
+            const { host, guest } = this.extractParticipants(card);
+            this.panel.querySelector('.epb-host').textContent = host;
+            this.panel.querySelector('.epb-guest').textContent = guest;
+        }
 
         // Conversation
         this.panel.querySelector('.epb-conversation').textContent = 
@@ -367,23 +460,27 @@ class EpisodePanelV2 {
         this.populateInsights(expanded.keyInsights || []);
 
         // Key Quotes
-        this.populateKeyQuotes(expanded.essentialQuote);
+        this.populateKeyQuotes(expanded.essentialQuote, episode.isLive);
 
         // Portfolio and Watchlist
         this.populateBadges('portfolio', expanded.portfolioMentions || []);
         this.populateBadges('watchlist', expanded.watchlistMentions || []);
 
         // Quote - Use more specific selector to target sidebar quote
+        const sidebarQuote = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-text');
+        const sidebarAuthor = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-author');
+
         if (expanded.essentialQuote) {
-            const sidebarQuote = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-text');
-            const sidebarAuthor = this.panel.querySelector('.epb-sidebar .epb-quote .epb-quote-author');
-            
             if (sidebarQuote) {
                 sidebarQuote.textContent = `"${expanded.essentialQuote.text}"`;
             }
             if (sidebarAuthor) {
                 sidebarAuthor.textContent = `— ${expanded.essentialQuote.author}${expanded.essentialQuote.time ? ' at ' + expanded.essentialQuote.time : ''}`;
             }
+        } else if (episode.isLive) {
+            // Don't leave the previously opened episode's quote on screen
+            if (sidebarQuote) sidebarQuote.textContent = 'No quote available.';
+            if (sidebarAuthor) sidebarAuthor.textContent = '';
         }
 
         // Notable Numbers
@@ -411,11 +508,19 @@ class EpisodePanelV2 {
     }
 
     // Populate key quotes section
-    populateKeyQuotes(essentialQuote) {
+    populateKeyQuotes(essentialQuote, isLive) {
         const container = this.panel.querySelector('.epb-key-quotes');
         const countEl = this.panel.querySelector('.epb-quote-count');
         container.innerHTML = '';
-        
+
+        // Live episodes have no quotes in the catalogue. The demo quotes below
+        // are fixed sample content, so they must not be shown for a real one.
+        if (isLive && !essentialQuote) {
+            countEl.textContent = '0 QUOTES';
+            container.innerHTML = '<div class="epb-empty-note">No quotes available from /api/episodes.</div>';
+            return;
+        }
+
         // Create demo quotes array mixing real and demo data
         const demoQuotes = [
             {

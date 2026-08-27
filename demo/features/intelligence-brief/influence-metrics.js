@@ -56,7 +56,7 @@ const InfluenceMetrics = {
         const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/api/entities?limit=${this.limit}`, {
+            const response = await (window.SyntheaData.claim('influence-metrics', '#influence-metrics-section'), window.SyntheaData).fetchResponse('influence-metrics', `${this.apiBaseUrl}/api/entities?limit=${this.limit}`, {
                 signal: controller.signal
             });
             if (!response.ok) {

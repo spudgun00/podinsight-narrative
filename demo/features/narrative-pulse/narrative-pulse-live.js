@@ -44,6 +44,31 @@ const NarrativePulseLive = {
     LEFT: 62, RIGHT: 770, TOP: 40, BOTTOM: 240,
 
     async init() {
+        // Vision mode: stand aside so the July 2025 mock chart renders. Without
+        // this the live component fetches, is refused by the resolver, and
+        // paints "Topic mentions unavailable" over the vision content - an
+        // error message about a request Vision mode never wanted made.
+        if (window.SyntheaData && window.SyntheaData.isVision()) {
+            // The July 2025 mock chart stack was removed from demo.html when
+            // this live component replaced it, so Vision has nothing to fall
+            // back to here. Say that, rather than leaving a spinner or painting
+            // "Topic mentions unavailable" over a mode that never wanted a fetch.
+            var host = document.getElementById('narrative-pulse-container');
+            if (host) {
+                host.innerHTML =
+                    '<div class="synthea-unbuilt">' +
+                    '<div class="synthea-unbuilt-title">Not part of the vision mock-up</div>' +
+                    '<p class="synthea-unbuilt-why">Narrative Pulse is one of the components that ' +
+                    'has already been built against real data. Its July 2025 mock version was ' +
+                    'removed from the page when the live chart replaced it, so there is no ' +
+                    'illustrative version to show here.</p>' +
+                    '<p class="synthea-unbuilt-foot">Switch to <b>Live</b> to see it plotting ' +
+                    '1,236 episodes.</p></div>';
+            }
+            window.SyntheaData.claim('narrative-pulse', '.narrative-pulse');
+            window.SyntheaData.mark('narrative-pulse', 'unbuilt', 'no vision mock exists');
+            return;
+        }
         this.container = document.getElementById('narrative-pulse-container');
         if (!this.container) {
             console.error('[Narrative Pulse] container not found');
@@ -132,7 +157,7 @@ const NarrativePulseLive = {
         const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/api/topic-mentions?bucket=month`,
+            const response = await (window.SyntheaData.claim('narrative-pulse', '.narrative-pulse'), window.SyntheaData).fetchResponse('narrative-pulse', `${this.apiBaseUrl}/api/topic-mentions?bucket=month`,
                 { signal: controller.signal });
             if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
 

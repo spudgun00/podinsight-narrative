@@ -543,7 +543,8 @@ class PatternFlowSearch {
         const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/api/search`, {
+            window.SyntheaData.claim('search', '#searchPanel');
+            const response = await window.SyntheaData.fetchResponse('search', `${this.apiBaseUrl}/api/search`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query, limit: this.apiSearchLimit }),
@@ -851,7 +852,8 @@ class PatternFlowSearch {
         const timeoutId = setTimeout(() => controller.abort(), 90000);
 
         try {
-            const response = await fetch(
+            const response = await window.SyntheaData.fetchResponse(
+                'audio-clips',
                 `${this.apiBaseUrl}/api/v1/audio_clips/${encodeURIComponent(episodeId)}` +
                 `?start_time_ms=${encodeURIComponent(startMs)}&duration_ms=30000`,
                 { signal: controller.signal }

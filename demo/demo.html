@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="styles/variables.css?v=20250118">
     <link rel="stylesheet" href="styles/base.css?v=20250118">
     <link rel="stylesheet" href="styles/layout.css?v=20250118">
-    <link rel="stylesheet" href="styles/components.css?v=20250118">
+    <link rel="stylesheet" href="styles/components.css?v=20260826c">
     <link rel="stylesheet" href="styles/utilities.css?v=20250118">
     
     <!-- Episode Panel v2.0 Styles - Clean architecture without !important -->
@@ -131,12 +131,12 @@
                     <!-- Search Dropdown -->
                     <div class="search-dropdown" id="searchDropdown">
                         <!-- Time Filter in Dropdown -->
+                        <!-- The corpus is fixed (Jan-Jun 2025) and /api/search takes no
+                             date parameter, so this states the range instead of filtering. -->
                         <div class="dropdown-time-filter" onmousedown="event.preventDefault()">
                             <div class="inline-time-selector">
-                                <button class="time-option active" data-value="7days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('7days', this, event)">7 days</button>
-                                <button class="time-option" data-value="30days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('30days', this, event)">30 days</button>
-                                <button class="time-option" data-value="90days" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('90days', this, event)">90 days</button>
-                                <button class="time-option" data-value="all" onmousedown="event.preventDefault()" onclick="patternFlowSearch.setTimeFilter('all', this, event)">All time</button>
+                                <button class="time-option" disabled
+                                        title="The indexed corpus is fixed and /api/search takes no date parameter">Jan–Jun 2025</button>
                             </div>
                         </div>
                         
@@ -214,6 +214,7 @@
                 </div>
             </div>
         </div>
+        </div>
         <div class="header-metrics">
             <div class="header-metrics-inner">
                 <!-- Ticker content loaded from data -->
@@ -271,19 +272,25 @@
     <!-- <script src="data/narrative-pulse-data.js" defer></script> -->
     <!-- New unified data source -->
     <script src="data/unified-data.js" defer></script>
+    <!-- Debug overlay (Ctrl+Shift+D). Instrumentation only - must load after the
+         data source it wraps and before every consumer script. -->
+    <script src="debug-overlay.js" defer></script>
     <script src="data/data-adapter.js" defer></script>
     <script src="data/data-validator.js" defer></script>
     <!-- Backup data for clean guest information -->
     <script src="data/priorityBriefings_backup_20250805_213425.js" defer></script>
     
     <!-- Component Scripts -->
-    <script src="features/narrative-pulse/unified-data-adapter.js" defer></script>
+    <!-- Mock chart stack replaced by narrative-pulse-live.js (GET /api/topic-mentions):
+         unified-data-adapter.js, narrative-pulse.js, generate-dynamic-insights.js, init.js -->
+    <!-- <script src="features/narrative-pulse/unified-data-adapter.js" defer></script> -->
     <!-- <script src="features/narrative-pulse/data-transformer.js" defer></script> Removed to eliminate conflicts -->
-    <script src="features/narrative-pulse/narrative-pulse.js" defer></script>
-    <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script>
+    <!-- <script src="features/narrative-pulse/narrative-pulse.js" defer></script> -->
+    <!-- <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script> -->
+    <script src="features/narrative-pulse/narrative-pulse-live.js?v=20260827a" defer></script>
     <!-- <script src="features/narrative-pulse/apply-data-updates.js" defer></script> Removed - causing conflicts -->
     <!-- <script src="features/narrative-pulse/final-fixes.js" defer></script> Removed - causing conflicts -->
-    <script src="features/narrative-pulse/init.js" defer></script>
+    <!-- <script src="features/narrative-pulse/init.js" defer></script> -->
     
     <script src="features/narrative-feed/narrative-feed.js" defer></script>
     <script src="features/narrative-feed/init.js" defer></script>
@@ -292,7 +299,7 @@
     <script src="features/notable-signals/init.js" defer></script>
     
     <!-- Shared Briefing Card Renderer - Used by Priority Briefings and Episode Library -->
-    <script src="shared/briefing-card-renderer.js?v=20250108" defer></script>
+    <script src="shared/briefing-card-renderer.js?v=20260825" defer></script>
     
     <!-- Priority Briefings Compact Implementation -->
     <script src="features/priority-briefings/priority-briefings-compact.js" defer></script>
@@ -301,18 +308,22 @@
     <!-- <script src="features/priority-briefings/priority-briefings-expanded.js" defer></script> -->
     <!-- <script src="features/priority-briefings/init.js" defer></script> -->
     
-    <script src="features/intelligence-brief/intelligence-brief.js" defer></script>
+    <script src="features/intelligence-brief/intelligence-brief.js?v=20260827a" defer></script>
+    <script src="features/intelligence-brief/influence-metrics.js?v=20260827a" defer></script>
+    <script src="features/intelligence-brief/velocity-tracking.js?v=20260827a" defer></script>
+    <script src="features/intelligence-brief/topic-correlations.js?v=20260827a" defer></script>
     <script src="features/intelligence-brief/init.js" defer></script>
     <!-- Removed velocity-tracking.js - now using unified data source in intelligence-brief.js -->
     
     <!-- Episode Panel v2.0 - Enhanced with interactive badges -->
-    <script src="features/episode-panel/episode-panel-v2.js?v=20250107" defer></script>
+    <script src="features/episode-panel/episode-panel-v2.js?v=20260825" defer></script>
     
     <!-- Search -->
-    <script src="search.js" defer></script>
+    <script src="search.js?v=20260827a" defer></script>
+    <script src="header-stats.js?v=20260826c" defer></script>
     
     <!-- Episode Library -->
-    <script src="features/episode-library/episode-library.js?v=20250108" defer></script>
+    <script src="features/episode-library/episode-library.js?v=20260825" defer></script>
     <script src="features/episode-library/init.js" defer></script>
     
     <!-- Narrative Pulse Drill-Down Panel -->
@@ -322,7 +333,7 @@
     <script src="features/customization-panel/customization-panel.js" defer></script>
     
     <!-- Main Application Orchestrator -->
-    <script src="main.js" defer></script>
+    <script src="main.js?v=20260825" defer></script>
     
     <!-- Debug Script -->
     <!-- <script src="debug-narrative-pulse.js" defer></script> -->

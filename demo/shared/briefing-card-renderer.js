@@ -115,8 +115,9 @@
                             <span>${cardData.time}</span>
                             <span class="separator">•</span>
                             <span>${cardData.duration}</span>
+                            ${cardData.score != null ? `
                             <span class="separator">•</span>
-                            <span>Score: ${cardData.score}</span>
+                            <span>Score: ${cardData.score}</span>` : ''}
                         </div>
                         ${cardData.priorityTag ? `<span class="priority-tag ${priorityClass}">${cardData.priorityTag}</span>` : ''}
                     </div>

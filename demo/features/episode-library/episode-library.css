@@ -1342,3 +1342,53 @@
 /* All panel styles now use shared              */
 /* episode-panel.css for consistency            */
 /* ============================================= */
+
+/* ============================================
+   Live catalogue states (loading / error / empty)
+   ============================================ */
+
+.library-data-state {
+    padding: 64px 24px;
+    text-align: center;
+}
+
+.library-data-spinner {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 18px;
+    border: 2px solid var(--gray-200, #e5e7eb);
+    border-top-color: var(--sage, #4a7c59);
+    border-radius: 50%;
+    animation: library-data-spin 0.9s linear infinite;
+}
+
+@keyframes library-data-spin {
+    to { transform: rotate(360deg); }
+}
+
+.library-data-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--deep-ink, #1a1a2e);
+    margin-bottom: 6px;
+}
+
+.library-data-note {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--gray-600, #6b7280);
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+.library-data-state--error .library-data-title {
+    color: var(--dusty-rose, #c77d7d);
+}
+
+.library-retry-btn {
+    margin-top: 18px;
+}
+
+.library-influence-none {
+    color: var(--gray-400, #9ca3af);
+}

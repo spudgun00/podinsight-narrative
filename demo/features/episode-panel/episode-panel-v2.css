@@ -1036,3 +1036,10 @@
     font-size: 11px;
     line-height: 1.4;
 }
+/* Placeholder for sections the live catalogue does not populate */
+.epb-empty-note {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--epb-gray-600, #6b7280);
+    padding: 10px 0;
+}

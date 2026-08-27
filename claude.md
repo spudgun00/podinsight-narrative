@@ -1,3 +1,10 @@
+> **DEPRECATED — 2026-08-26.** This document describes a system that no longer exists.
+> See `~/projects/podinsight/SOURCE_OF_TRUTH.md` for verified current state.
+> Specific errors:
+> - states the project is in a **mock-data validation phase before connecting live feeds** — **8 of 14 components are now live** against the API (Narrative Pulse, Velocity Tracking, Influence Metrics, Topic Correlations, Episode Library, Episode Panel, Search, Header Stats)
+> - claims **1,547 mock episodes from 52 podcasts** — the real corpus is **50 episodes from 29 podcasts**, Jan–Jun 2025
+> - **Read `~/projects/podinsight/SOURCE_OF_TRUTH.md` before making changes in this repo.** §5 lists which components are live and which are mock; §7 documents two traps in `main.js` and `intelligence-brief.js` that silently break the page if you edit around them
+
 # Synthea.ai - VC Podcast Intelligence Platform
 
 ## Product Overview
@@ -626,3 +633,33 @@ The platform leverages a sophisticated search infrastructure:
 
   This CLAUDE.md provides comprehensive context for any future AI assistance, covering the philosophy, technical
   details, business context, and development guidelines needed to maintain consistency with the Synthea.ai vision.
+
+## UI acceptance rule
+
+Before reporting any UI work complete, satisfy `../UI_ACCEPTANCE.md`: a parity
+table against the Vision reference (every element PRESENT / DELIBERATELY ABSENT
+with a reason / REPLACED with the honest equivalent named), an interaction audit
+listing what each control actually did when clicked, screenshots of the loading,
+empty and error states as well as the happy path, Live-beside-Vision screenshots
+at the same viewport width plus the component in page context, and a
+component-scoped DOM copy check.
+
+A completion report without the parity table and screenshots is not a completion
+report. Diagnostic or developer text never renders in a user-facing surface.
+
+## Session rules
+
+**Every session ends with commit AND push.** A commit that only exists locally
+is not durable work: this project spans five independent repos, and an
+un-pushed commit in one of them is invisible to every other machine and to any
+review.
+
+**Milestone commits are pushed immediately, not at the end.** A milestone is
+anything another person would want to cite: a scorecard line, a report, a
+reconciliation, a cost figure. These are the artefacts the project is judged
+on, and they are worth nothing sitting on one laptop.
+
+Before pushing, confirm no file containing credentials is tracked or in the
+history being pushed. `.env` and `aws-backup-2026-08-26/` are gitignored; the
+backup holds a live API key in plaintext (SOURCE_OF_TRUTH 12.5) and must never
+reach a remote.

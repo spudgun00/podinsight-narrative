@@ -24,7 +24,62 @@ const CustomizationPanel = {
     },
 
     // Initialize the component
+    /** Remove the panel's invented content in Live, and disable its button. */
+    stripInLive() {
+        const panel = document.querySelector('.customization-panel');
+        if (panel) {
+            const content = panel.querySelector('.panel-content');
+            if (content) {
+                content.innerHTML = '';
+                const box = document.createElement('div');
+                box.className = 'synthea-unbuilt';
+                box.innerHTML =
+                    '<div class="synthea-unbuilt-title">Not built yet</div>' +
+                    '<p class="synthea-unbuilt-why">Filtering the dashboard by podcast or ' +
+                    'topic would have to be honoured by every live component, and none of ' +
+                    'them reads a filter today. The controls that were here offered eight ' +
+                    'focus areas the corpus does not track and a show count it does not ' +
+                    'have, so they have been removed rather than left to look functional.</p>' +
+                    '<p class="synthea-unbuilt-foot">The five tracked topics are ' +
+                    'Crypto/Web3, AI Agents, B2B SaaS, Capital Efficiency and DePIN, over ' +
+                    '31 podcasts. Switch to <b>Vision</b> to see the intended design.</p>';
+                content.appendChild(box);
+            }
+            const footer = panel.querySelector('.panel-footer');
+            if (footer) footer.remove();
+        }
+        const btn = document.querySelector('.customize-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.classList.add('control-disabled');
+            btn.style.opacity = '0.45';
+            btn.style.cursor = 'not-allowed';
+            btn.title = 'Dashboard filtering is not built. No live component reads a filter.';
+        }
+    },
+
     init() {
+
+        // Vision only. Instance nine, and the largest concentration of
+        // fabricated content still reaching Live.
+        //
+        // This panel offers eight "focus areas" - AI Infrastructure, Defense
+        // Tech, Enterprise Agents, Exit Strategies, Vertical AI, Traditional
+        // SaaS, Climate Tech - of which the corpus tracks none. It claims
+        // "60+ shows" against 31 podcasts, offers Tier 1 / Broad Coverage
+        // groupings that classify nothing real, and its Apply Changes button
+        // touches no live component: this file never references SyntheaData at
+        // all, so nothing it does could filter anything.
+        //
+        // Making it work is a feature - every live component would have to
+        // honour a filter - not a leak fix. So in Live the panel does not
+        // initialise, its fabricated markup is removed from the DOM rather
+        // than left off-screen where search and screen readers still reach it,
+        // and the header button says why it is disabled.
+        if (window.SyntheaData && window.SyntheaData.isLive()) {
+            this.stripInLive();
+            return false;
+        }
         console.log('[CustomizationPanel] Initializing...');
         const elementsFound = this.cacheElements();
         if (!elementsFound) {

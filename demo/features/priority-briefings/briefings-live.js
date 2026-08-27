@@ -175,29 +175,81 @@ const BriefingsLive = {
         btn.type = 'button';
         btn.className = 'view-brief-btn';
         btn.textContent = `View Full Brief (${b.claims.length}) →`;
-        btn.addEventListener('click', () => this.openFull(b));
+        btn.addEventListener('click', (e) => { e.stopPropagation(); this.openFull(b); });
         footer.appendChild(btn);
 
         el.appendChild(footer);
+        // One surface: the whole card is the route to the brief, not just the
+        // button. Nothing else opens from a card.
+        el.tabIndex = 0;
+        el.setAttribute('role', 'button');
+        el.addEventListener('click', () => this.openFull(b));
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.openFull(b); }
+        });
         return el;
     },
 
     buildFullBriefPanel() {
         if (this.panel) return;
+        // Rebuilt on the Vision brief's own layout and classes, so it reads as
+        // the same product. Slots with nothing honest behind them are absent
+        // rather than empty: no score, no relative time, and no
+        // Portfolio/Watchlist tiles while Company Tracking is unbuilt.
         this.panel = document.createElement('div');
-        this.panel.className = 'briefings-live-panel';
+        this.panel.className = 'epb-panel briefings-live-epb';
         this.panel.setAttribute('data-state', 'closed');
         this.panel.setAttribute('role', 'dialog');
         this.panel.setAttribute('aria-modal', 'true');
         this.panel.innerHTML = `
-            <div class="briefings-live-panel-head">
-                <div>
-                    <h2 class="briefings-live-panel-title"></h2>
-                    <p class="briefings-live-panel-sub"></p>
+            <div class="epb-header">
+                <div class="epb-header-top">
+                    <div class="epb-meta">
+                        <span class="epb-podcast"></span> •
+                        <span class="epb-date"></span> •
+                        <span class="epb-duration"></span>
+                    </div>
+                    <div class="epb-actions">
+                        <div class="epb-btn epb-close" title="Close" role="button" tabindex="0">✕</div>
+                    </div>
                 </div>
-                <button class="briefings-live-close" aria-label="Close">✕</button>
+                <div class="epb-header-middle">
+                    <h1 class="epb-title"></h1>
+                </div>
+                <div class="epb-header-bottom">
+                    <div class="epb-speakers"></div>
+                </div>
             </div>
-            <div class="briefings-live-panel-body"></div>`;
+            <div class="epb-content">
+                <div class="epb-main">
+                    <div class="epb-section">
+                        <div class="epb-section-title">THE CONVERSATION</div>
+                        <div class="epb-conversation"></div>
+                    </div>
+                    <div class="epb-section epb-quotes-section">
+                        <div class="epb-section-header">
+                            <div class="epb-section-title">KEY QUOTES</div>
+                            <span class="epb-quote-count"></span>
+                        </div>
+                        <div class="epb-key-quotes"></div>
+                    </div>
+                </div>
+                <div class="epb-sidebar">
+                    <div class="epb-quote epb-essential">
+                        <div class="epb-section-title">ESSENTIAL QUOTE</div>
+                        <div class="epb-quote-text"></div>
+                        <div class="epb-quote-author"></div>
+                    </div>
+                    <div class="epb-section epb-numbers-section">
+                        <div class="epb-section-title">NOTABLE NUMBERS</div>
+                        <div class="epb-numbers"></div>
+                    </div>
+                    <div class="epb-topics">
+                        <div class="epb-section-title">RELATED TOPICS</div>
+                        <div class="epb-tags"></div>
+                    </div>
+                </div>
+            </div>`;
         document.body.appendChild(this.panel);
 
         this.backdrop = document.createElement('div');
@@ -205,87 +257,226 @@ const BriefingsLive = {
         this.backdrop.addEventListener('click', () => this.closeFull());
         document.body.appendChild(this.backdrop);
 
-        this.panel.querySelector('.briefings-live-close')
-            .addEventListener('click', () => this.closeFull());
+        const close = () => this.closeFull();
+        this.panel.querySelector('.epb-close').addEventListener('click', close);
+        this.panel.querySelector('.epb-close').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); close(); }
+        });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.panel.getAttribute('data-state') === 'open') this.closeFull();
+            if (e.key === 'Escape' && this.panel.getAttribute('data-state') === 'open') close();
         });
     },
 
-    openFull(b) {
+    /** Open by episode id, for the episode panel and the drilldown. */
+    async openById(episodeId) {
+        this.buildFullBriefPanel();
+        let brief = (this.data && this.data.briefs || []).find(b => b.episode_id === episodeId);
+        if (!brief) {
+            try {
+                brief = await window.SyntheaData.fetchJSON(
+                    'briefings', `/api/briefings/${encodeURIComponent(episodeId)}`);
+            } catch (err) {
+                this.openMissing(episodeId);
+                return;
+            }
+        }
+        this.openFull(brief);
+    },
+
+    /** Briefs are still generating; say so plainly rather than show scaffolding. */
+    openMissing(episodeId) {
         this.panel.setAttribute('data-state', 'open');
         this.backdrop.setAttribute('data-state', 'open');
-        this.panel.querySelector('.briefings-live-panel-title').textContent = b.episode_title;
-        this.panel.querySelector('.briefings-live-panel-sub').textContent =
-            `${b.podcast_name} · ${this.dateLabel(b.published_at)}`
-            + (b.guests && b.guests.length ? ` · ${b.guests.join(', ')}` : '');
+        // Hide the meta line entirely rather than leaving its separators
+        // stranded as "• •".
+        this.panel.querySelector('.epb-meta').style.display = 'none';
+        this.panel.querySelector('.epb-title').textContent = 'No brief for this episode yet';
+        this.panel.querySelector('.epb-speakers').textContent = '';
+        this.panel.querySelector('.epb-conversation').textContent =
+            'This episode is in the corpus and searchable, but its brief has not been '
+            + 'generated yet. It will appear here once it has.';
+        this.panel.querySelector('.epb-key-quotes').innerHTML = '';
+        this.panel.querySelector('.epb-quote-count').textContent = '';
+        this.panel.querySelector('.epb-quotes-section').style.display = 'none';
+        this.panel.querySelector('.epb-essential').style.display = 'none';
+        this.panel.querySelector('.epb-numbers-section').style.display = 'none';
+        this.panel.querySelector('.epb-topics').style.display = 'none';
+    },
 
-        const body = this.panel.querySelector('.briefings-live-panel-body');
-        body.innerHTML = '';
+    /**
+     * Essential Quote, chosen post-hoc from the claims already generated - no
+     * second model call. Rule: the longest quote that carries a numeric figure,
+     * falling back to the longest quote. Length stands in for substance and a
+     * number makes a quote checkable, and both are properties of text already
+     * on the page.
+     */
+    essentialQuote(b) {
+        const withNum = b.claims.filter(c => /\d/.test(c.quote));
+        const pool = withNum.length ? withNum : b.claims;
+        return pool.slice().sort((a, c) => c.quote.length - a.quote.length)[0] || null;
+    },
 
-        const sum = document.createElement('p');
-        sum.className = 'briefings-live-panel-summary';
-        sum.textContent = b.summary;          // the long summary lives here, not on the card
-        body.appendChild(sum);
+    /**
+     * Notable Numbers, extracted post-hoc from claim text. Nothing is generated:
+     * these are figures the claims already state, each linking back to the claim
+     * it came from. Section is omitted when a brief has none.
+     */
+    notableNumbers(b) {
+        const out = [];
+        const seen = new Set();
+        b.claims.forEach((c, i) => {
+            const re = /(\$\s?\d[\d,.]*\s?(?:billion|million|trillion|bn|m|k)?|\d[\d,.]*\s?(?:%|percent)|\d[\d,.]*\s?(?:billion|million|trillion))/gi;
+            (c.claim.match(re) || []).forEach(m => {
+                const key = m.replace(/\s+/g, '').toLowerCase();
+                if (seen.has(key)) return;
+                seen.add(key);
+                out.push({ value: m.trim(), claimIndex: i });
+            });
+        });
+        return out.slice(0, 6);
+    },
 
-        if (b.no_playable_claims) {
-            const none = document.createElement('p');
-            none.className = 'briefings-live-noclaims';
-            none.textContent = 'No playable claims. Every quote this episode produced failed '
-                             + 'the verbatim or timestamp check, so none is shown rather than '
-                             + 'shipping a Play clip that lands on the wrong audio.';
-            body.appendChild(none);
+    speakerLine(b) {
+        // From the v3 speakers field, not from entity data: role and
+        // affiliation are only present where the transcript stated them.
+        const sp = b.speakers && b.speakers.length ? b.speakers : null;
+        if (!sp) return (b.guests || []).join(', ');
+        return sp.map(s => {
+            const detail = [s.role, s.affiliation].filter(Boolean).join(', ');
+            return detail ? `${s.name} (${detail})` : s.name;
+        }).join(' · ');
+    },
+
+    openFull(b) {
+        this.buildFullBriefPanel();
+        this.current = b;
+        this.panel.setAttribute('data-state', 'open');
+        this.backdrop.setAttribute('data-state', 'open');
+
+        this.panel.querySelector('.epb-meta').style.display = '';
+        this.panel.querySelector('.epb-quotes-section').style.display = '';
+        this.panel.querySelector('.epb-podcast').textContent = b.podcast_name;
+        this.panel.querySelector('.epb-date').textContent = this.dateLabel(b.published_at);
+        this.panel.querySelector('.epb-duration').textContent =
+            b.duration_minutes ? `${b.duration_minutes} min` : '';
+        this.panel.querySelector('.epb-title').textContent = b.episode_title;
+        this.panel.querySelector('.epb-speakers').textContent = this.speakerLine(b);
+        this.panel.querySelector('.epb-conversation').textContent = b.summary || '';
+
+        const quotes = this.panel.querySelector('.epb-key-quotes');
+        quotes.innerHTML = '';
+        this.panel.querySelector('.epb-quote-count').textContent =
+            b.claims.length ? `${b.claims.length}` : '';
+
+        if (!b.claims.length) {
+            const none = document.createElement('div');
+            none.className = 'epb-noquotes';
+            none.textContent = b.no_playable_claims
+                ? 'No playable quotes. Every quote generated for this episode failed the '
+                  + 'verbatim or timestamp check, so none is shown.'
+                : 'No quotes for this episode.';
+            quotes.appendChild(none);
         }
 
-        const h = document.createElement('h4');
-        h.className = 'briefings-live-claims-head';
-        h.textContent = 'What was said';
-        body.appendChild(h);
-
-        b.claims.forEach(c => {
+        b.claims.forEach((c, i) => {
             const row = document.createElement('div');
-            row.className = 'briefings-live-claim';
+            row.className = 'epb-quote-row';
+            row.id = `epb-claim-${i}`;
 
             const claim = document.createElement('div');
-            claim.className = 'briefings-live-claim-text';
+            claim.className = 'epb-quote-claim';
             claim.textContent = c.claim;
             row.appendChild(claim);
 
             const q = document.createElement('blockquote');
-            q.className = 'briefings-live-quote';
-            q.textContent = '“' + c.quote + '”';
+            q.className = 'epb-quote-body';
+            q.textContent = '\u201C' + c.quote + '\u201D';
             row.appendChild(q);
 
             const foot = document.createElement('div');
-            foot.className = 'briefings-live-claim-foot';
+            foot.className = 'epb-quote-foot';
+            const attribution = this.attributionFor(b, c);
+            if (attribution) {
+                const who = document.createElement('span');
+                who.className = 'epb-quote-who';
+                who.textContent = attribution;
+                foot.appendChild(who);
+            }
             const ts = document.createElement('span');
-            ts.className = 'briefings-live-ts';
-            ts.textContent = c.timestamp || '—';
+            ts.className = 'epb-quote-ts';
+            ts.textContent = c.timestamp || '';
             foot.appendChild(ts);
-
             if (c.located && c.start_seconds != null) {
                 const play = document.createElement('button');
                 play.type = 'button';
-                play.className = 'briefings-live-play';
-                play.textContent = '▶ Play clip';
+                play.className = 'epb-quote-play';
+                play.textContent = '\u25B6 Play';
                 play.addEventListener('click', () => this.playClip(b.episode_id, c.start_seconds, play));
                 foot.appendChild(play);
             }
             row.appendChild(foot);
-            body.appendChild(row);
+            quotes.appendChild(row);
         });
 
-        const openEp = document.createElement('button');
-        openEp.type = 'button';
-        openEp.className = 'briefings-live-open-episode';
-        openEp.textContent = 'Open episode →';
-        openEp.addEventListener('click', () => {
-            if (window.episodePanelV2 && window.episodePanelV2.open) {
-                this.closeFull();
-                window.episodePanelV2.open(b.episode_id);
-            }
-        });
-        body.appendChild(openEp);
+        // Essential Quote
+        const ess = this.essentialQuote(b);
+        const essBox = this.panel.querySelector('.epb-essential');
+        if (ess) {
+            essBox.style.display = '';
+            essBox.querySelector('.epb-quote-text').textContent = '\u201C' + ess.quote + '\u201D';
+            essBox.querySelector('.epb-quote-author').textContent =
+                [this.attributionFor(b, ess), ess.timestamp].filter(Boolean).join(' · ');
+        } else {
+            essBox.style.display = 'none';
+        }
+
+        // Notable Numbers
+        const nums = this.notableNumbers(b);
+        const numBox = this.panel.querySelector('.epb-numbers-section');
+        const numList = this.panel.querySelector('.epb-numbers');
+        numList.innerHTML = '';
+        if (nums.length) {
+            numBox.style.display = '';
+            nums.forEach(n => {
+                const a = document.createElement('button');
+                a.type = 'button';
+                a.className = 'epb-number';
+                a.textContent = n.value;
+                a.title = 'Jump to the claim this figure comes from';
+                a.addEventListener('click', () => {
+                    const el = this.panel.querySelector(`#epb-claim-${n.claimIndex}`);
+                    if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                              el.classList.add('is-flash');
+                              setTimeout(() => el.classList.remove('is-flash'), 1200); }
+                });
+                numList.appendChild(a);
+            });
+        } else {
+            numBox.style.display = 'none';        // omitted, not shown empty
+        }
+
+        // Related Topics
+        const topics = this.panel.querySelector('.epb-topics');
+        const tags = this.panel.querySelector('.epb-tags');
+        tags.innerHTML = '';
+        if (b.topic_tags && b.topic_tags.length) {
+            topics.style.display = '';
+            b.topic_tags.forEach(t => {
+                const sp = document.createElement('span');
+                sp.className = 'epb-tag';
+                sp.textContent = t;
+                tags.appendChild(sp);
+            });
+        } else {
+            topics.style.display = 'none';
+        }
+    },
+
+    /** Attribution only where the brief names exactly one plausible speaker. */
+    attributionFor(b, claim) {
+        const sp = (b.speakers || []).filter(s => s.name);
+        if (sp.length === 1) return sp[0].name;
+        return '';
     },
 
     async playClip(episodeId, startSeconds, btn) {
@@ -312,6 +503,7 @@ const BriefingsLive = {
     },
 
     closeFull() {
+        if (!this.panel) return;
         this.panel.setAttribute('data-state', 'closed');
         this.backdrop.setAttribute('data-state', 'closed');
         if (this.audio) this.audio.pause();

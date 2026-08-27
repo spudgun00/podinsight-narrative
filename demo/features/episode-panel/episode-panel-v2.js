@@ -286,6 +286,16 @@ class EpisodePanelV2 {
 
     // Open panel with episode data
     open(episodeId) {
+        // One surface. In Live the brief IS the episode panel: this shell was
+        // built for the Vision dataset and, fed by /api/episodes, renders empty
+        // scaffolding plus endpoint diagnostic text inside The Conversation
+        // box. Diagnostic prose never belongs in a user-facing panel. Third
+        // time a retired mock has kept rendering underneath - the drilldown and
+        // the briefings cards were the first two.
+        if (window.SyntheaData && window.SyntheaData.isLive() && window.BriefingsLive) {
+            window.BriefingsLive.openById(episodeId);
+            return;
+        }
         
         // Find episode data
         const episode = this.findEpisodeData(episodeId);

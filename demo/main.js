@@ -1,22 +1,9 @@
 // PatternFlow - Main Application Initializer
 
-// Initialize header ticker with data
+// Header ticker is rendered by header-stats.js from GET /api/episodes.
+// This stub stays so initializeApp()'s call site is unchanged.
 function initializeHeaderTicker() {
-    const headerMetricsInner = document.querySelector('.header-metrics-inner');
-    if (headerMetricsInner && window.tickerData && window.tickerData.items) {
-        const tickerHTML = [];
-        window.tickerData.items.forEach((item, index) => {
-            if (index > 0) {
-                tickerHTML.push('<span class="ticker-item">•</span>');
-            }
-            if (item.label === 'Patterns Detected') {
-                tickerHTML.push(`<span class="ticker-item"><span class="ticker-value">${item.value}</span> ${item.label}</span>`);
-            } else {
-                tickerHTML.push(`<span class="ticker-item">${item.label} <span class="ticker-value">${item.value}</span></span>`);
-            }
-        });
-        headerMetricsInner.innerHTML = tickerHTML.join('\n            ');
-    }
+    // no-op
 }
 
 // Portfolio Button State Management
@@ -1079,7 +1066,10 @@ const componentInitializers = [
     {
         name: 'Narrative Pulse',
         containerId: 'narrative-pulse-container',
-        loaded: () => !!window.NarrativePulse
+        // NarrativePulseLive replaced the mock NarrativePulse component. This
+        // check gates the postInit pass below, which is what initialises
+        // Priority Briefings, so it has to know about the live module.
+        loaded: () => !!window.NarrativePulseLive || !!window.NarrativePulse
     },
     {
         name: 'Narrative Feed',
@@ -1126,6 +1116,17 @@ function verifyComponents() {
 
 // Episode Panel Mediator - Bridges Priority Briefings buttons to Episode Panel
 function initializeEpisodePanelMediator() {
+    // Vision only. This installs a capture-phase interceptor that swallows every
+    // click on .view-brief-btn with stopImmediatePropagation() and routes it by
+    // data-briefing-id. In Live the button belongs to briefings-live.js and
+    // carries no such attribute, so the interceptor ate the click and the
+    // button did nothing at all - a dead control with no error.
+    //
+    // Fourth instance of a retired mock still running underneath, and the only
+    // one that rendered no DOM: it intercepted events instead. Found by
+    // clicking every control per UI_ACCEPTANCE.md, not by reading the diff.
+    if (window.SyntheaData && window.SyntheaData.isLive()) return;
+
     // Use event delegation with capture phase to intercept before the compact modal
     document.body.addEventListener('click', function(event) {
         // Check if clicked element is the "View Full Brief" button

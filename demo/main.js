@@ -7,8 +7,25 @@ function initializeHeaderTicker() {
 }
 
 // Portfolio Button State Management
+//
+// Vision only, since 28 Aug 2026. This whole class is the mock Company
+// Tracking: addCompany() runs every name through _generateMockCompanyData,
+// which invents a mention count, a seven-dot sentiment array, a status and a
+// "last insight" line, and renderList() paints them into the panel. Only the
+// new-mentions interval was guarded before, which stopped the badge cycling but
+// left the fabricated cards rendering on every add.
+//
+// In Live the panel belongs to features/company-tracking/company-tracking-live.js.
+// The guard is at the constructor rather than at each render call, because
+// every path into this class - the button, the input, the remove buttons,
+// restoring from localStorage on load - ends in the same invented card.
+// Instance six of a retired mock still rendering underneath.
 class PortfolioManager {
     constructor() {
+        if (window.SyntheaData && window.SyntheaData.isLive()) {
+            this.disabled = true;
+            return;
+        }
         this.button = document.querySelector('.portfolio-button');
         this.badge = document.querySelector('.notification-badge');
         this.pulseIndicator = document.querySelector('.pulse-indicator');
@@ -1181,10 +1198,12 @@ async function initializeApp() {
         console.error('✗ Failed to initialize header ticker:', error);
     }
     
-    // Initialize Portfolio Manager
+    // Initialize Portfolio Manager (Vision only; see the class comment)
     try {
         window.portfolioManager = new PortfolioManager();
-        console.log('✓ Portfolio Manager initialized');
+        console.log(window.portfolioManager.disabled
+            ? '· Portfolio Manager skipped (Live: CompanyTrackingLive owns the panel)'
+            : '✓ Portfolio Manager initialized');
     } catch (error) {
         console.error('✗ Failed to initialize Portfolio Manager:', error);
     }

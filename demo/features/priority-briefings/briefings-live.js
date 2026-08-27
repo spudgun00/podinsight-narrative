@@ -244,6 +244,11 @@ const BriefingsLive = {
                         <div class="epb-section-title">NOTABLE NUMBERS</div>
                         <div class="epb-numbers"></div>
                     </div>
+                    <div class="epb-section epb-watchlist-section">
+                        <div class="epb-section-title">WATCHLIST</div>
+                        <div class="epb-blocks epb-watchlist-blocks"></div>
+                        <div class="epb-watchlist-names"></div>
+                    </div>
                     <div class="epb-topics">
                         <div class="epb-section-title">RELATED TOPICS</div>
                         <div class="epb-tags"></div>
@@ -265,6 +270,85 @@ const BriefingsLive = {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.panel.getAttribute('data-state') === 'open') close();
         });
+    },
+
+    /**
+     * The Vision brief's Portfolio and Watchlist tiles, rendering in Live for
+     * the first time now that Company Tracking exists.
+     *
+     * One tile, not two. Vision had Portfolio and Watchlist side by side; v1
+     * keeps a single list, and a second tile reading 0 forever would be the
+     * kind of empty slot this project keeps removing. The section is absent
+     * entirely when no companies are configured - there is nothing to say.
+     */
+    async renderWatchlist(b) {
+        const section = this.panel.querySelector('.epb-watchlist-section');
+        const blocks = this.panel.querySelector('.epb-watchlist-blocks');
+        const names = this.panel.querySelector('.epb-watchlist-names');
+        if (!section) return;
+        const ct = window.CompanyTrackingLive;
+        const watch = ct ? ct.names() : [];
+        if (!watch.length) { section.style.display = 'none'; return; }
+        section.style.display = '';
+        blocks.innerHTML = '';
+        names.innerHTML = '';
+
+        let data;
+        try {
+            const qs = watch.map(n => 'name=' + encodeURIComponent(n)).join('&');
+            data = await window.SyntheaData.fetchJSON('company-tracking',
+                '/api/companies/mentions?episode_id=' + encodeURIComponent(b.episode_id) + '&' + qs);
+        } catch (err) {
+            section.style.display = 'none';
+            return;
+        }
+        // A late arrival must not paint over a brief the user has since
+        // switched away from.
+        if (!this.current || this.current.episode_id !== b.episode_id) return;
+
+        const tile = document.createElement('div');
+        tile.className = 'epb-block';
+        const label = document.createElement('span');
+        label.className = 'epb-block-label';
+        label.textContent = '\u{1F441} WATCHLIST';
+        tile.appendChild(label);
+        const count = document.createElement('span');
+        count.className = 'epb-block-count';
+        count.textContent = String(data.mentioned.length);
+        count.title = `${data.mentioned.length} of the ${data.checked} companies on your `
+                    + `watchlist are named in this episode.`;
+        tile.appendChild(count);
+        blocks.appendChild(tile);
+
+        if (!data.mentioned.length) {
+            const none = document.createElement('p');
+            none.className = 'epb-watchlist-none';
+            none.textContent = 'None of your watchlist companies is named in this episode.';
+            names.appendChild(none);
+            return;
+        }
+
+        // Names on expand, not by default: the tile is the summary and the
+        // sidebar is narrow.
+        const det = document.createElement('details');
+        det.className = 'epb-watchlist-detail';
+        const sum = document.createElement('summary');
+        sum.textContent = data.mentioned.length === 1 ? 'Show the company' : 'Show the companies';
+        det.appendChild(sum);
+        const ul = document.createElement('ul');
+        ul.className = 'epb-watchlist-list';
+        data.mentioned.forEach(m => {
+            const li = document.createElement('li');
+            li.textContent = `${m.name} — ${m.mention_count} `
+                           + `${m.mention_count === 1 ? 'mention' : 'mentions'}`;
+            ul.appendChild(li);
+        });
+        det.appendChild(ul);
+        const note = document.createElement('p');
+        note.className = 'epb-watchlist-note';
+        note.textContent = data.extraction_note || '';
+        det.appendChild(note);
+        names.appendChild(det);
     },
 
     /** Open by episode id, for the episode panel and the drilldown. */
@@ -362,6 +446,7 @@ const BriefingsLive = {
         this.panel.querySelector('.epb-title').textContent = b.episode_title;
         this.panel.querySelector('.epb-speakers').textContent = this.speakerLine(b);
         this.panel.querySelector('.epb-conversation').textContent = b.summary || '';
+        this.renderWatchlist(b);
 
         const quotes = this.panel.querySelector('.epb-key-quotes');
         quotes.innerHTML = '';

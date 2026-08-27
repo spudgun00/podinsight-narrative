@@ -49,17 +49,14 @@
             root: '#notable-signals-container',
             slot: null,
             klass: 'C',
-            why: 'A shift count needs a measurable definition of what a shift is, and a week-on-week series to compare against. Neither exists: the corpus is six fixed months ending 23 June 2025.',
-            effort: 'Not scheduled — needs a defined, measurable shift metric'
+            why: 'Awaiting the topic-discovery engine (parked). A shift count needs topics the corpus discovers for itself, not the five tracked by hand, and a week-on-week series to compare them across. The engine is what would produce both; until it exists there is nothing to count.',
+            effort: 'Parked — depends on the topic-discovery engine'
         },
-        'consensus-monitor': {
-            label: 'Consensus Monitor',
-            root: '#consensus-monitor-section',
-            slot: '.consensus-monitor-container',
-            klass: 'C',
-            why: 'Measuring agreement needs stance detection — whether two speakers agree about a proposition, not merely that both mentioned the topic.',
-            effort: 'Not scheduled — needs stance detection'
-        }
+        // consensus-monitor is not here because it is no longer a Live surface
+        // at all. Dropped 28 Aug 2026 by James: stance detection is not on any
+        // roadmap, so a permanent not-built card is worse than the honest
+        // absence of a section. intelligence-brief.js removes it from the
+        // sidebar in Live. Vision still renders it in full.
     };
 
     var state = {};        // key -> state string

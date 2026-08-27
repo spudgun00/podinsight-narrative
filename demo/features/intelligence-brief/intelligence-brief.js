@@ -11,6 +11,20 @@ const IntelligenceBrief = {
         // path renders the July 2025 dataset and is Vision-only.
         this.setupIntersectionObserver();
 
+        // Consensus Monitor was DROPPED from Live on 28 Aug 2026 by James.
+        // Measuring agreement needs stance detection, which is on no roadmap,
+        // so the section is removed rather than left showing a permanent
+        // not-built card. Removed AFTER setupIntersectionObserver, never
+        // before: that function assigns the four section ids by position, so
+        // taking this section out first would hand #consensus-monitor-section
+        // to Topic Correlations. Vision is untouched and still renders it.
+        if (window.SyntheaData && window.SyntheaData.isLive()) {
+            var cm = document.querySelector('#consensus-monitor-section')
+                  || (document.querySelector('.consensus-monitor-container') || {}).closest
+                     && document.querySelector('.consensus-monitor-container').closest('.synthesis-section');
+            if (cm && cm.parentNode) cm.parentNode.removeChild(cm);
+        }
+
         if (window.SyntheaData && window.SyntheaData.isLive()) return;
 
         this.bindEvents();

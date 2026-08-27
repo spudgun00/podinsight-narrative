@@ -675,12 +675,12 @@ class PatternFlowSearch {
         const sourcePreviewsContainer = document.getElementById('sourcePreviewsContainer');
         if (sourcePreviewsContainer) {
             sourcePreviewsContainer.innerHTML = citations.length
-                ? citations.map(citation => this.createCitationCard(citation)).join('')
+                ? citations.map((citation, i) => this.createCitationCard(citation, i + 1)).join('')
                 : '<div class="search-state-note">No supporting citations returned for this query.</div>';
         }
     }
 
-    createCitationCard(citation) {
+    createCitationCard(citation, rank) {
         const truncateLength = 100;
         const quoteText = citation.chunk_text || '';
         const needsTruncation = quoteText.length > truncateLength;
@@ -692,9 +692,15 @@ class PatternFlowSearch {
         const timestamp = this.escapeHtml(citation.timestamp || '');
         const episodeId = this.escapeHtml(citation.episode_id || '');
         const startMs = Math.max(0, Math.round((citation.start_seconds || 0) * 1000));
-        const score = typeof citation.similarity_score === 'number'
-            ? `${Math.round(citation.similarity_score * 100)}% match`
-            : '';
+        // Rank, not a percentage. similarity_score carries the reranker's raw
+        // relevance score, and Amazon Rerank 1.0 scores are tiny in absolute
+        // terms - a perfectly good second citation scores 0.06, which rendered
+        // as "6% match" and read as a bad result. The number is a ranking
+        // signal, not a confidence, and there is no honest rescaling of it:
+        // anything that made 0.06 look better would be inventing precision the
+        // model never expressed. So show the position instead, which is what
+        // the score actually means here.
+        const score = typeof rank === 'number' ? `Source ${rank}` : '';
 
         return `
             <div class="source-card">

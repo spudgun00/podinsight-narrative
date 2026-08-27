@@ -9,8 +9,11 @@
     border: 1px solid var(--gray-200, #e5e7eb); border-radius: 8px;
     padding: 0.375rem 1rem; cursor: pointer;
 }
-.ibl-head { margin-bottom: 0; }
-.ibl-meta { border-bottom: 1px dotted var(--gray-400, #9ca3af); display: inline-block; cursor: help; }
+.ibl-head { margin-bottom: 16px; }   /* parity: Vision .brief-header */
+/* Parity: .section-description is block in Vision. The dotted help underline
+   is drawn on an inner span so the description itself keeps its display. */
+.ibl-meta { cursor: help; }
+.ibl-meta { text-decoration: underline dotted var(--gray-400, #9ca3af); text-underline-offset: 3px; }
 
 .ibl-section { margin: 0; }
 .ibl-section + .ibl-section { border-top: 1px solid var(--gray-200, #e5e7eb); padding-top: 0.875rem; }
@@ -102,10 +105,12 @@
 /* (d) */
 .ibl-absence .ibl-note { color: var(--deep-ink, #1a1a2e); }
 
+/* Parity: .brief-expand-btn is the Vision control and already carries its own
+   grammar - 13px/400, #333 on #f8f8f7, 10px padding, 6px radius. The live
+   button had overridden every one of those. It keeps the class and adds only
+   full-width alignment, which the sidebar needs. */
 .ibl-expand {
-    align-self: flex-start; font-family: inherit; font-size: 0.75rem; font-weight: 600;
-    color: var(--sage, #4a7c59); background: white;
-    border: 1px solid var(--gray-200, #e5e7eb); border-radius: 8px;
-    padding: 0.4rem 1rem; cursor: pointer;
+    align-self: stretch;
+    font-family: inherit;
+    cursor: pointer;
 }
-.ibl-expand:hover { background: var(--warm-paper, #fafaf9); border-color: var(--sage, #4a7c59); }

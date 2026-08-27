@@ -4565,7 +4565,8 @@ body.portfolio-open {
         .narrative-feed-live .nfl-status:empty,
         .narrative-feed-live .nfl-rule:empty { display: none; }
         .narrative-feed-live .nfl-list {
-            margin-top: 0.5rem;
+            /* parity: Vision .feed-container is 1.5rem from the block above it */
+            margin-top: 1.5rem;
         }
 
         /* A row. Grid rather than flex so the date and quote-count columns
@@ -4575,14 +4576,17 @@ body.portfolio-open {
             grid-template-columns: 6.5rem minmax(0, 12rem) minmax(0, 1fr) auto;
             align-items: center;
             gap: 1rem;
-            padding: 0.875rem 0.75rem;
+            /* parity: Vision .feed-entry-header is 1rem vertical. The horizontal
+               inset is this component's own - it is what gives the hover
+               highlight somewhere to sit - so it is kept and offset. */
+            padding: 1rem 0.75rem;
             margin: 0 -0.75rem;
             cursor: default;
         }
         /* The Vision rule adds padding on hover, which shifts the row sideways.
            The padding is constant here and only the background changes. */
         .narrative-feed-live .feed-entry-header:hover {
-            padding: 0.875rem 0.75rem;
+            padding: 1rem 0.75rem;
             margin: 0 -0.75rem;
             background: transparent;
         }

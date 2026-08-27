@@ -476,6 +476,18 @@
 }
 .briefings-live-card .view-brief-btn:hover { background: #3f6b4c; }
 
+/* Parity against priority-briefings-reference.html, the surviving Vision
+   reference for this card: the button is 12px/500 in 8px 16px with an 8px
+   radius, and the tag row is an 8px gap. The live card had 11px/600 in
+   6px 12px at 5px, and a 12px gap - smaller and tighter throughout. */
+.briefings-live-card .view-brief-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+.briefings-live-card .card-tags { gap: 8px; }
+
 .briefings-live-card .tag { cursor: default; }
 
 .briefings-live-noclaims {

@@ -24,16 +24,18 @@ class PatternFlowSearch {
         
         // Bind event handlers to preserve context
         this.boundHandleGlobalKeydown = this.handleGlobalKeydown.bind(this);
-        
-        // Timeframe options - keep it simple with 3 most relevant options
-        this.timeframeOptions = [
-            { label: 'Last 7 days', value: '7days', discussions: 14, default: true },
-            { label: 'Last 30 days', value: '30days', discussions: 47 },
-            { label: 'Last 90 days', value: '90days', discussions: 156 }
-        ];
-        
-        // Current selected timeframe
-        this.selectedTimeframe = this.timeframeOptions.find(opt => opt.default) || this.timeframeOptions[1];
+
+        // --- Live search API (PodInsight) -------------------------------------
+        this.apiBaseUrl = window.SYNTHEA_API_BASE || 'http://localhost:8000';
+        this.apiSearchLimit = 10;
+        // Modal cold starts take 10-15s on the first request, so keep this well
+        // above 30s.
+        this.apiTimeoutMs = 45000;
+        this.searchRequestId = 0;
+        this.lastQuery = '';
+        // The indexed corpus is fixed and /api/search accepts no date filter,
+        // so the panel states the range instead of offering to change it.
+        this.corpusRangeLabel = 'Jan–Jun 2025';
     }
     
     init() {
@@ -56,71 +58,10 @@ class PatternFlowSearch {
             return;
         }
         
-        // Clean up any stuck dropdowns from previous sessions
-        const timeframeDropdown = document.getElementById('timeframeDropdown');
-        if (timeframeDropdown) {
-            timeframeDropdown.classList.remove('active');
-            timeframeDropdown.style.cssText = '';
-            delete timeframeDropdown.dataset.source;
-        }
-        
         // Bind events
         this.bindEvents();
         
         this.isInitialized = true;
-    }
-    
-    getQuickQuestions(query) {
-        const lowerQuery = query.toLowerCase();
-        
-        if (lowerQuery.includes('vertical ai')) {
-            return [
-                'How do vertical AI valuations compare to horizontal?',
-                'Which verticals are seeing highest retention?',
-                'What are LPs saying about vertical AI investments?',
-                'Compare vertical AI performance to 2023 AI investments'
-            ];
-        } else if (lowerQuery.includes('contrarian')) {
-            return [
-                'Who are the main contrarian voices in VC?',
-                'What successful contrarian bets paid off?',
-                'How do contrarian views on AI differ from consensus?',
-                'Which VCs have the best contrarian track records?'
-            ];
-        } else if (lowerQuery.includes('series a')) {
-            return [
-                'How have Series A valuations changed YoY?',
-                'What metrics matter most for Series A in 2024?',
-                'Which sectors have the highest Series A activity?',
-                'How long are companies taking to reach Series A?'
-            ];
-        } else if (lowerQuery.includes('brad gerstner')) {
-            return [
-                'What is Gerstner\'s latest investment thesis?',
-                'How does Gerstner view AI infrastructure plays?',
-                'What companies is Altimeter Capital backing?',
-                'Compare Gerstner\'s views to other growth investors'
-            ];
-        } else {
-            // Default questions for generic searches
-            return [
-                'What\'s the consensus view on this topic?',
-                'Who are the contrarian voices?',
-                'What are the investment implications?',
-                'How has this narrative evolved over time?'
-            ];
-        }
-    }
-    
-    generateTimeframeOptions() {
-        return this.timeframeOptions.map(option => `
-            <div class="timeframe-option ${option.value === this.selectedTimeframe.value ? 'selected' : ''}" 
-                 onmousedown="event.preventDefault()"
-                 onclick="patternFlowSearch.selectTimeframe('${option.value}', event)">
-                ${option.value === this.selectedTimeframe.value ? '<span class="checkmark">✓</span>' : '<span class="checkmark-placeholder"></span>'}
-                <span>${option.label}</span>
-            </div>
-        `).join('');
     }
     
     createQuoteCard(podcast, guest, timeAgo, duration, quoteText) {
@@ -223,22 +164,31 @@ class PatternFlowSearch {
                     </div>
                     
                     <div class="panel-content" id="searchResults">
+                        <div class="search-state search-state--loading" id="searchLoadingState">
+                            <div class="search-state-spinner" aria-hidden="true"></div>
+                            <div class="search-state-title">Searching the transcript archive…</div>
+                            <div class="search-state-note">Searching 54,284 passages across 1,236 episodes.</div>
+                        </div>
+
+                        <div class="search-state search-state--nomatch" id="searchNoMatchState">
+                            <div class="search-state-icon" aria-hidden="true">◦</div>
+                            <div class="search-state-title">No strong matches in the library</div>
+                            <div class="search-state-note" id="searchNoMatchMessage"></div>
+                            <div class="search-state-detail" id="searchNoMatchDetail"></div>
+                        </div>
+
+                        <div class="search-state search-state--error" id="searchErrorState">
+                            <div class="search-state-title">Search unavailable</div>
+                            <div class="search-state-note" id="searchErrorMessage"></div>
+                            <button class="panel-search-btn" onclick="patternFlowSearch.retrySearch()">Try again</button>
+                        </div>
+
                         <div class="synthesis-content">
                             <div class="confidence-metadata">
-                                <span class="confidence-value">${defaultData.confidence} confidence</span>
+                                <span class="discussion-count">Based on ${defaultData.discussions || 0} discussions</span>
                                 <span class="separator">•</span>
-                                <span class="discussion-count">Based on ${defaultData.discussions || this.selectedTimeframe.discussions} discussions</span>
-                                <span class="separator">•</span>
-                                <span class="timeframe-selector" 
-                                      onclick="patternFlowSearch.toggleTimeframeDropdown(event, 'results')"
-                                      aria-haspopup="true" 
-                                      aria-controls="timeframeDropdown" 
-                                      aria-expanded="false">
-                                    <span class="timeframe-text">${this.selectedTimeframe.label}</span>
-                                    <span class="dropdown-arrow">▾</span>
-                                    <div class="timeframe-dropdown" id="timeframeDropdown">
-                                        ${this.generateTimeframeOptions()}
-                                    </div>
+                                <span class="timeframe-static" title="The corpus is fixed and /api/search takes no date parameter">
+                                    ${this.corpusRangeLabel}
                                 </span>
                             </div>
                             
@@ -258,16 +208,6 @@ class PatternFlowSearch {
                                 <a href="pdf/weekly-brief.html" class="cta-link" target="_blank">Learn more</a>
                             </div>
                             
-                            <div class="quick-questions">
-                                <div class="questions-header">
-                                    <span class="questions-icon">🔍</span>
-                                    <span class="questions-title">Explore further:</span>
-                                </div>
-                                <div class="questions-list" id="quickQuestionsList">
-                                    <!-- Questions will be dynamically inserted here -->
-                                </div>
-                            </div>
-                            
                             <div class="source-previews" id="sourcePreviewsContainer">
                                 ${defaultData.sources.map(source => 
                                     this.createQuoteCard(source.podcast, source.guest, source.timeAgo, source.duration, source.quote)
@@ -276,7 +216,6 @@ class PatternFlowSearch {
                         </div>
                         
                         <div class="action-row">
-                            <button class="panel-search-btn" onclick="patternFlowSearch.viewDeepAnalysis()">View Full Brief</button>
                             <button class="panel-search-btn" onclick="patternFlowSearch.shareInsight()">Share Insight</button>
                         </div>
                     </div>
@@ -321,13 +260,18 @@ class PatternFlowSearch {
             closeBtn.addEventListener('click', () => this.closeResults());
         }
         
-        // Play button clicks
-        document.querySelectorAll('.play-clip-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+        // Play button clicks. Delegated from the panel: the source cards are
+        // replaced on every search, so binding to the buttons directly only
+        // ever reached the ones present at init.
+        const panel = document.getElementById('searchPanel');
+        if (panel) {
+            panel.addEventListener('click', (e) => {
+                const button = e.target.closest('.play-clip-btn');
+                if (!button) return;
                 e.stopPropagation();
-                this.handlePlayClip(btn);
+                this.handlePlayClip(button);
             });
-        });
+        }
     }
     
     handleFocus() {
@@ -405,11 +349,7 @@ class PatternFlowSearch {
         
         // ESC to close results or dropdown
         if (e.key === 'Escape') {
-            // First check if timeframe dropdown is open
-            const timeframeDropdown = document.getElementById('timeframeDropdown');
-            if (timeframeDropdown && timeframeDropdown.classList.contains('active')) {
-                this.closeTimeframeDropdown();
-            } else if (this.searchPanel?.classList.contains('active')) {
+            if (this.searchPanel?.classList.contains('active')) {
                 this.closeResults();
             }
         }
@@ -519,13 +459,8 @@ class PatternFlowSearch {
             panelInput.value = this.searchInput.value;
         }
         
-        // Populate quick questions
-        this.populateQuickQuestions(this.searchInput.value);
-        
-        // Update results based on query BEFORE showing panel
-        this.updateResultsForQuery(this.searchInput.value);
-        
-        // Show panel and backdrop AFTER content is updated
+        // Show panel and backdrop first so the loading state is visible while
+        // the live search request is in flight.
         if (this.backdrop) {
             this.backdrop.classList.add('active');
         }
@@ -533,6 +468,9 @@ class PatternFlowSearch {
         if (this.searchPanel) {
             this.searchPanel.classList.add('active');
         }
+        
+        // Kick off the live search (async - renders when the API responds)
+        this.updateResultsForQuery(this.searchInput.value);
         
         // Temporary console logs to verify correct pattern
         console.log('Search Panel Config:', {
@@ -549,115 +487,243 @@ class PatternFlowSearch {
         return `0:${seconds}`;
     }
     
-    updateResultsForQuery(query) {
-        const searchData = window.unifiedData?.searchResults;
-        if (!searchData) {
-            console.error('Search data not found in unifiedData');
+    /**
+     * Live search. Replaces the previous unified-data.js lookup with a call to
+     * POST /api/search on the PodInsight API.
+     */
+    async updateResultsForQuery(query) {
+        const trimmed = (query || '').trim();
+        if (!trimmed) return;
+
+        this.lastQuery = trimmed;
+        const requestId = ++this.searchRequestId;
+
+        this.setPanelState('loading');
+
+        let data;
+        try {
+            data = await this.fetchSearchResults(trimmed);
+        } catch (error) {
+            if (requestId !== this.searchRequestId) return; // superseded
+            console.error('Search request failed:', error);
+            this.setPanelState('error', this.describeSearchError(error));
             return;
         }
-        
-        // Find matching query pattern
-        let resultData = searchData.default;
-        const lowerQuery = query.toLowerCase();
-        
-        // Check for matching patterns
-        if (lowerQuery.includes('european') || lowerQuery.includes('europe')) {
-            // Get the current timeframe
-            const timeframeValue = this.selectedTimeframe.value;
-            
-            // Get the european data
-            const europeanData = searchData.queries.european;
-            
-            // Build resultData with timeframe-specific content
-            resultData = {
-                confidence: europeanData.confidence,
-                discussions: europeanData.discussions[timeframeValue],
-                synthesis: europeanData.synthesis[timeframeValue],
-                sources: europeanData.sources[timeframeValue] || searchData.default.sources
-            };
-        } else if (lowerQuery.includes('revolut')) {
-            resultData = searchData.queries.revolut;
-        } else if (lowerQuery.includes('fintech profitability')) {
-            resultData = searchData.queries.fintech_profitability;
-        } else if (lowerQuery.includes('contrarian')) {
-            resultData = searchData.queries.contrarian;
-        } else if (lowerQuery.includes('series a')) {
-            resultData = searchData.queries.series_a;
-        } else if (lowerQuery.includes('brad gerstner')) {
-            resultData = searchData.queries.brad_gerstner;
-        } else if (lowerQuery.includes('vertical ai')) {
-            // Get the current timeframe
-            const timeframeValue = this.selectedTimeframe.value; // '7days', '30days', or '90days'
-            
-            // Get the vertical_ai data
-            const verticalData = searchData.queries.vertical_ai;
-            
-            // Build resultData with timeframe-specific content
-            resultData = {
-                confidence: verticalData.confidence,
-                discussions: verticalData.discussions[timeframeValue],
-                synthesis: verticalData.synthesis[timeframeValue],
-                sources: verticalData.sources[timeframeValue] || searchData.default.sources
-            };
-        }
-        
-        // Update UI elements with data from unified source
-        // IMPORTANT: Only look for elements within the search panel to avoid updating wrong elements
-        const searchPanel = document.getElementById('searchPanel');
-        if (!searchPanel) {
-            console.error('Search panel not found');
+
+        if (requestId !== this.searchRequestId) return; // superseded
+
+        if (!data) {
+            this.setPanelState('error', 'The API returned an empty response.');
             return;
         }
-        
-        const confidenceValue = searchPanel.querySelector('.confidence-value');
-        const discussionCount = searchPanel.querySelector('.discussion-count');
-        const insightText = searchPanel.querySelector('.insight-text');
-        
-        if (confidenceValue) {
-            confidenceValue.textContent = `${resultData.confidence} confidence`;
+
+        // A deliberate refusal is a result, not a failure. The API sets
+        // no_matches when nothing cleared the reranker cutoff, or when the
+        // passages it did retrieve turned out not to answer the question.
+        if (data.no_matches) {
+            this.setPanelState('no_matches', {
+                reason: data.no_matches_reason,
+                topScore: data.top_score,
+                cutoff: data.cutoff
+            });
+            return;
         }
-        
-        if (discussionCount) {
-            discussionCount.textContent = `Based on ${resultData.discussions} discussions`;
+
+        if (!data.answer || !data.answer.text) {
+            this.setPanelState('error', 'The API responded but returned no synthesis for this query.');
+            return;
         }
-        
-        if (insightText) {
-            // Apply highlighting to certain terms
-            let htmlContent = resultData.synthesis.content
-                .replace(/\$5M ARR/g, '<span class="highlight">$5M ARR</span>')
-                .replace(/\$2-3M threshold/g, '<span class="highlight">$2-3M threshold</span>')
-                .replace(/Revolut's Q2 numbers/g, '<span class="highlight">Revolut\'s Q2 numbers</span>')
-                .replace(/20-30x ARR/g, '<span class="highlight">20-30x ARR</span>')
-                .replace(/AI infrastructure plays/g, '<span class="highlight">AI infrastructure plays</span>')
-                .replace(/timeline to profitability/g, '<span class="highlight">timeline to profitability</span>')
-                .replace(/proprietary data moats/g, '<span class="highlight">proprietary data moats</span>')
-                .replace(/AI for specific workflows/g, '<span class="highlight">AI for specific workflows</span>');
-            
-            insightText.innerHTML = `<strong>${resultData.synthesis.title}:</strong> ${htmlContent}`;
+
+        this.renderSearchResults(trimmed, data);
+        this.setPanelState('results');
+    }
+
+    async fetchSearchResults(query) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.apiTimeoutMs);
+
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/api/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, limit: this.apiSearchLimit }),
+                signal: controller.signal
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json();
+        } finally {
+            clearTimeout(timeoutId);
         }
-        
-        // Update source cards if they exist
-        const sourcePreviewsContainer = document.getElementById('sourcePreviewsContainer');
-        if (sourcePreviewsContainer) {
-            // Use specific sources if available, otherwise use default sources
-            const sources = resultData.sources && resultData.sources.length > 0 
-                ? resultData.sources 
-                : searchData.default.sources;
-            
-            if (sources && sources.length > 0) {
-                sourcePreviewsContainer.innerHTML = sources
-                    .map(source => this.createQuoteCard(
-                        source.podcast,
-                        source.guest,
-                        source.timeAgo,
-                        source.duration,
-                        source.quote
-                    ))
-                    .join('');
+    }
+
+    describeSearchError(error) {
+        if (error && error.name === 'AbortError') {
+            return `No response after ${Math.round(this.apiTimeoutMs / 1000)} seconds. The search service may still be starting up.`;
+        }
+        if (error && /HTTP \d/.test(error.message || '')) {
+            return `The search service returned an error (${error.message}).`;
+        }
+        return `Could not reach the search service at ${this.apiBaseUrl}. Check that it is running.`;
+    }
+
+    retrySearch() {
+        if (this.lastQuery) {
+            this.updateResultsForQuery(this.lastQuery);
+        }
+    }
+
+    /**
+     * Toggle between the loading skeleton, the error card and the results.
+     */
+    setPanelState(state, message) {
+        const panel = document.getElementById('searchPanel');
+        if (!panel) return;
+
+        const loading = panel.querySelector('#searchLoadingState');
+        const error = panel.querySelector('#searchErrorState');
+        const noMatch = panel.querySelector('#searchNoMatchState');
+        const results = panel.querySelector('.synthesis-content');
+        const actions = panel.querySelector('.action-row');
+
+        // .search-state blocks are display:none in CSS, so show them explicitly.
+        const showState = (el, visible) => { if (el) el.style.display = visible ? 'block' : 'none'; };
+        const show = (el, visible) => { if (el) el.style.display = visible ? '' : 'none'; };
+
+        showState(loading, state === 'loading');
+        showState(error, state === 'error');
+        showState(noMatch, state === 'no_matches');
+        show(results, state === 'results');
+        show(actions, state === 'results');
+
+        if (state === 'error') {
+            const messageEl = panel.querySelector('#searchErrorMessage');
+            if (messageEl) {
+                messageEl.textContent = message || 'Something went wrong.';
+            }
+        }
+
+        if (state === 'no_matches') {
+            const messageEl = panel.querySelector('#searchNoMatchMessage');
+            const detailEl = panel.querySelector('#searchNoMatchDetail');
+            const info = message || {};
+            if (messageEl) {
+                messageEl.textContent = info.reason
+                    || 'Nothing in the library scored above the relevance floor.';
+            }
+            if (detailEl) {
+                // Show the numbers. A refusal the user cannot inspect reads as
+                // a failure; one with a score against a threshold reads as a
+                // judgement.
+                detailEl.textContent = (typeof info.topScore === 'number')
+                    ? `Best match scored ${info.topScore.toPrecision(3)} against a floor of `
+                      + `${Number(info.cutoff).toPrecision(3)}. This is a deliberate answer, not an error.`
+                    : 'This is a deliberate answer, not an error.';
             }
         }
     }
-    
+
+    escapeHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Map the API response onto the existing panel markup.
+     *   answer.text      -> AI-Generated Synthesis block
+     *   answer.citations -> source quote cards
+     */
+    renderSearchResults(query, data) {
+        const panel = document.getElementById('searchPanel');
+        if (!panel) {
+            console.error('Search panel not found');
+            return;
+        }
+
+        const answer = data.answer || {};
+        const citations = Array.isArray(answer.citations) ? answer.citations : [];
+
+        const discussionCount = panel.querySelector('.discussion-count');
+        if (discussionCount) {
+            const total = typeof data.total_results === 'number' ? data.total_results : citations.length;
+            discussionCount.textContent = `Based on ${total} matching segment${total === 1 ? '' : 's'}`;
+        }
+
+        const insightText = panel.querySelector('.insight-text');
+        if (insightText) {
+            // The API appends a constant "(95% confidence)" to every answer.
+            // It is the same number on every query, so it is not shown.
+            const body = String(answer.text)
+                .replace(/\s*\(\d+% confidence\)\s*$/, '')
+                .split('\n')
+                .map(line => line.trim())
+                .filter(Boolean)
+                .map(line => this.escapeHtml(line))
+                .join('<br>');
+
+            insightText.innerHTML = `<strong>${this.escapeHtml(query)}</strong>` +
+                `<div class="synthesis-body">${body}</div>`;
+        }
+
+        const sourcePreviewsContainer = document.getElementById('sourcePreviewsContainer');
+        if (sourcePreviewsContainer) {
+            sourcePreviewsContainer.innerHTML = citations.length
+                ? citations.map(citation => this.createCitationCard(citation)).join('')
+                : '<div class="search-state-note">No supporting citations returned for this query.</div>';
+        }
+    }
+
+    createCitationCard(citation) {
+        const truncateLength = 100;
+        const quoteText = citation.chunk_text || '';
+        const needsTruncation = quoteText.length > truncateLength;
+        const truncatedText = needsTruncation ? quoteText.substring(0, truncateLength) + '...' : quoteText;
+        const cardId = 'quote-' + Date.now() + Math.random();
+
+        const podcast = this.escapeHtml(citation.podcast_name || 'Unknown podcast');
+        const episode = this.escapeHtml(citation.episode_title || 'Unknown episode');
+        const timestamp = this.escapeHtml(citation.timestamp || '');
+        const episodeId = this.escapeHtml(citation.episode_id || '');
+        const startMs = Math.max(0, Math.round((citation.start_seconds || 0) * 1000));
+        const score = typeof citation.similarity_score === 'number'
+            ? `${Math.round(citation.similarity_score * 100)}% match`
+            : '';
+
+        return `
+            <div class="source-card">
+                <div class="source-header">
+                    <div class="source-info">
+                        <span>🎙️</span>
+                        <span>${podcast}</span>
+                        ${timestamp ? `<span>• ${timestamp}</span>` : ''}
+                    </div>
+                    ${score ? `<span class="source-score">${score}</span>` : ''}
+                </div>
+                <div class="source-episode">${episode}</div>
+                <div class="quote-text ${needsTruncation ? 'truncated' : ''}" id="${cardId}">
+                    <span class="quote-content">${this.escapeHtml(truncatedText)}</span>
+                    ${needsTruncation ? `<a href="#" class="show-more-link" onclick="patternFlowSearch.toggleQuote(event, '${cardId}')">Show more</a>` : ''}
+                </div>
+                <button class="play-clip-btn" data-duration="${timestamp}"
+                        data-episode-id="${episodeId}" data-start-ms="${startMs}">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="7" cy="7" r="6"/>
+                        <path d="M5.5 4.5v5l4-2.5z" fill="currentColor" stroke="none"/>
+                    </svg>
+                    Play clip
+                </button>
+                ${needsTruncation ? `<div class="quote-full-text" style="display:none">${this.escapeHtml(quoteText)}</div>` : ''}
+            </div>
+        `;
+    }
+
     closeResults() {
         // Restore body scroll
         document.body.style.overflow = '';
@@ -675,17 +741,6 @@ class PatternFlowSearch {
     }
     
     // Action handlers
-    viewDeepAnalysis() {
-        // Close the search panel
-        this.closeResults();
-        
-        // Scroll to Priority Briefings section
-        const briefingsSection = document.querySelector('.priority-briefings');
-        if (briefingsSection) {
-            briefingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-    
     shareInsight() {
         alert('In production: Share to Slack, Email, or copy formatted insight');
     }
@@ -731,62 +786,164 @@ class PatternFlowSearch {
         // Update results based on new query
         this.updateResultsForQuery(newQuery);
         
-        // Update quick questions
-        this.populateQuickQuestions(newQuery);
     }
     
-    // Handle play clip animation
-    handlePlayClip(button) {
-        // Check if already playing
+    /**
+     * Play a 30s clip for a citation.
+     *
+     * GET /api/v1/audio_clips/{episode_id}?start_time_ms=&duration_ms=30000
+     * returns a presigned S3 URL. Generation is not instant (12-16s typical,
+     * longer for long episodes), hence the explicit loading state.
+     */
+    async handlePlayClip(button) {
+        if (button.classList.contains('loading')) return;
+
         if (button.classList.contains('playing')) {
             this.stopClip(button);
             return;
         }
-        
-        // Stop any other playing clips
-        document.querySelectorAll('.play-clip-btn.playing').forEach(btn => {
-            this.stopClip(btn);
-        });
-        
-        // Start playing this clip
-        button.classList.add('playing');
-        
-        // Update button content
-        const originalContent = button.innerHTML;
-        button.innerHTML = `
-            <div class="audio-wave">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            Playing...
-        `;
-        
-        // Store original content for restoration
-        button.dataset.originalContent = originalContent;
-        
-        // Simulate clip duration (5 seconds)
-        button.playTimeout = setTimeout(() => {
-            this.stopClip(button);
-        }, 5000);
+
+        const episodeId = button.dataset.episodeId;
+        const startMs = button.dataset.startMs;
+
+        // The legacy mock cards carry no episode id - keep their old simulated
+        // behaviour rather than firing a request that cannot succeed.
+        if (!episodeId) {
+            this.simulatePlayClip(button);
+            return;
+        }
+
+        // Only one clip at a time
+        document.querySelectorAll('.play-clip-btn.playing').forEach(other => this.stopClip(other));
+
+        this.setButtonState(button, 'loading', 'Generating clip…');
+
+        let clipUrl;
+        try {
+            clipUrl = await this.fetchClipUrl(episodeId, startMs);
+        } catch (error) {
+            console.error('Clip generation failed:', error);
+            this.setButtonState(button, 'error', 'Clip unavailable');
+            button.title = this.describeClipError(error);
+            setTimeout(() => this.setButtonState(button, 'idle', 'Play clip'), 6000);
+            return;
+        }
+
+        try {
+            await this.startAudio(button, clipUrl);
+        } catch (error) {
+            console.error('Clip playback failed:', error);
+            this.setButtonState(button, 'error', 'Playback failed');
+            button.title = (error && error.message) || 'The browser could not play this clip.';
+            setTimeout(() => this.setButtonState(button, 'idle', 'Play clip'), 6000);
+        }
     }
-    
+
+    async fetchClipUrl(episodeId, startMs) {
+        const controller = new AbortController();
+        // Well above the API's own Lambda timeout
+        const timeoutId = setTimeout(() => controller.abort(), 90000);
+
+        try {
+            const response = await fetch(
+                `${this.apiBaseUrl}/api/v1/audio_clips/${encodeURIComponent(episodeId)}` +
+                `?start_time_ms=${encodeURIComponent(startMs)}&duration_ms=30000`,
+                { signal: controller.signal }
+            );
+
+            if (!response.ok) {
+                let detail = '';
+                try {
+                    const body = await response.json();
+                    detail = body.detail || '';
+                } catch (e) { /* non-JSON error body */ }
+                const error = new Error(`HTTP ${response.status}`);
+                error.status = response.status;
+                error.detail = detail;
+                throw error;
+            }
+
+            const data = await response.json();
+            if (!data.clip_url) throw new Error('No clip_url in response');
+            console.log('Clip ready:', data.clip_url.split('?')[0], `(${data.generation_time_ms}ms, cache_hit=${data.cache_hit})`);
+            return data.clip_url;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    describeClipError(error) {
+        if (error && error.name === 'AbortError') {
+            return 'The clip took more than 90 seconds to generate.';
+        }
+        if (error && error.status) {
+            return `The audio service returned ${error.status}${error.detail ? ': ' + error.detail : ''}`;
+        }
+        return `Could not reach the audio service at ${this.apiBaseUrl}.`;
+    }
+
+    startAudio(button, clipUrl) {
+        return new Promise((resolve, reject) => {
+            if (this.audio) {
+                this.audio.pause();
+                this.audio.src = '';
+            }
+
+            const audio = new Audio(clipUrl);
+            this.audio = audio;
+            this.audioButton = button;
+
+            audio.addEventListener('ended', () => this.stopClip(button));
+            audio.addEventListener('error', () => reject(new Error('The clip could not be decoded.')));
+
+            audio.play().then(() => {
+                this.setButtonState(button, 'playing', 'Playing…');
+                resolve();
+            }).catch(reject);
+        });
+    }
+
+    /** Swap the button between idle / loading / playing / error. */
+    setButtonState(button, state, label) {
+        button.classList.remove('loading', 'playing', 'error');
+        if (state !== 'idle') button.classList.add(state);
+        if (state === 'idle') button.title = '';
+
+        const icons = {
+            idle: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                     <circle cx="7" cy="7" r="6"/><path d="M5.5 4.5v5l4-2.5z" fill="currentColor" stroke="none"/></svg>`,
+            loading: `<span class="clip-spinner" aria-hidden="true"></span>`,
+            playing: `<div class="audio-wave"><span></span><span></span><span></span></div>`,
+            error: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <circle cx="7" cy="7" r="6"/><path d="M7 4v3.5M7 9.5v.5"/></svg>`
+        };
+
+        button.innerHTML = `${icons[state] || icons.idle} ${label}`;
+    }
+
+    /** Legacy behaviour for the mock cards that have no episode id. */
+    simulatePlayClip(button) {
+        if (button.classList.contains('playing')) {
+            this.stopClip(button);
+            return;
+        }
+        document.querySelectorAll('.play-clip-btn.playing').forEach(other => this.stopClip(other));
+        this.setButtonState(button, 'playing', 'Playing…');
+        button.playTimeout = setTimeout(() => this.stopClip(button), 5000);
+    }
+
     stopClip(button) {
-        button.classList.remove('playing');
-        
-        // Clear timeout if exists
         if (button.playTimeout) {
             clearTimeout(button.playTimeout);
             delete button.playTimeout;
         }
-        
-        // Restore original content
-        if (button.dataset.originalContent) {
-            button.innerHTML = button.dataset.originalContent;
-            delete button.dataset.originalContent;
+        if (this.audio && this.audioButton === button) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
         }
+        this.setButtonState(button, 'idle', 'Play clip');
     }
-    
+
     // Toggle quote expansion
     toggleQuote(event, cardId) {
         event.preventDefault();
@@ -814,27 +971,6 @@ class PatternFlowSearch {
     }
     
     // Populate quick questions based on query
-    populateQuickQuestions(query) {
-        const questionsList = document.getElementById('quickQuestionsList');
-        if (!questionsList) return;
-        
-        const questions = this.getQuickQuestions(query);
-        
-        // Clear existing questions
-        questionsList.innerHTML = '';
-        
-        // Add new questions
-        questions.forEach(question => {
-            const link = document.createElement('a');
-            link.href = '#';
-            link.className = 'question-link';
-            link.textContent = question;
-            link.onclick = (e) => this.handleQuestionClick(e, question);
-            questionsList.appendChild(link);
-        });
-    }
-    
-    // Handle quick question click
     handleQuestionClick(event, question) {
         event.preventDefault();
         console.log(`Quick question clicked: ${question}`);
@@ -858,118 +994,19 @@ class PatternFlowSearch {
         this.updateResultsForQuery(question);
     }
     
-    // Simple toggle for timeframe dropdown
-    toggleTimeframeDropdown(event, source = 'results') {
-        event.stopPropagation();
+    // Handle quote action clicks
+    handleQuoteAction(event, action) {
+        event.preventDefault();
+        console.log(`Quote action clicked: ${action}`);
         
-        const dropdown = document.getElementById('timeframeDropdown');
-        if (!dropdown) return;
-        
-        const trigger = event.currentTarget;
-        const isOpen = dropdown.classList.contains('active');
-        
-        if (!isOpen) {
-            // Open dropdown
-            dropdown.classList.add('active');
-            trigger.setAttribute('aria-expanded', 'true');
-            
-            // Add click outside listener after a brief delay
-            setTimeout(() => {
-                document.addEventListener('click', this.handleClickOutside);
-            }, 10);
-        } else {
-            this.closeTimeframeDropdown();
-        }
-    }
-    
-    // Handle click outside dropdown
-    handleClickOutside = (event) => {
-        const dropdown = document.getElementById('timeframeDropdown');
-        const selector = event.target.closest('.timeframe-selector');
-        
-        // If clicking outside the selector, close dropdown
-        if (!selector) {
-            this.closeTimeframeDropdown();
-        }
-    }
-    
-    // Close timeframe dropdown
-    closeTimeframeDropdown = () => {
-        const dropdown = document.getElementById('timeframeDropdown');
-        if (dropdown) {
-            dropdown.classList.remove('active');
-        }
-        
-        // Reset aria-expanded on trigger
-        document.querySelectorAll('.timeframe-selector')
-            .forEach(el => el.setAttribute('aria-expanded', 'false'));
-        
-        // Remove the event listener
-        document.removeEventListener('click', this.handleClickOutside);
-    }
-    
-    // Select timeframe option
-    selectTimeframe(value, event) {
-        event.stopPropagation();
-        
-        // Find the selected option
-        const option = this.timeframeOptions.find(opt => opt.value === value);
-        if (!option) return;
-        
-        // Update selected timeframe
-        this.selectedTimeframe = option;
-        
-        // Update BOTH filter displays
-        // 1. Update results panel filter
-        const timeframeText = document.querySelector('.timeframe-text');
-        const discussionCount = document.querySelector('.discussion-count');
-        
-        if (timeframeText) {
-            timeframeText.textContent = option.label;
-        }
-        
-        if (discussionCount) {
-            discussionCount.textContent = `Based on ${option.discussions} discussions`;
-        }
-        
-        // Update dropdown options to reflect new selection
-        const dropdown = document.getElementById('timeframeDropdown');
-        if (dropdown) {
-            dropdown.innerHTML = this.generateTimeframeOptions();
-        }
-        
-        // Close dropdown
-        this.closeTimeframeDropdown();
-        
-        // After closing dropdown, refresh results if a search is active
-        if (this.searchPanel && this.searchPanel.classList.contains('active')) {
-            const currentQuery = this.searchInput.value || 'vertical ai';
-            this.updateResultsForQuery(currentQuery);
-        }
-        
-        // Log for demo
-        console.log(`Timeframe selected: ${option.label} (${option.discussions} discussions)`);
-        
-        // In production, this would trigger a new search with the selected timeframe
-        // For demo, we just update the display
-        this.updateResultsForTimeframe(option);
-    }
-    
-    // Update results based on timeframe (demo only)
-    updateResultsForTimeframe(timeframe) {
-        // Update confidence based on timeframe
-        const confidenceValue = document.querySelector('.confidence-value');
-        if (confidenceValue) {
-            // Simulate different confidence levels based on data volume
-            let confidence = 89;
-            if (timeframe.discussions < 10) {
-                confidence = Math.floor(70 + Math.random() * 10);
-            } else if (timeframe.discussions > 200) {
-                confidence = Math.floor(90 + Math.random() * 8);
-            } else {
-                confidence = Math.floor(80 + Math.random() * 15);
-            }
-            confidenceValue.textContent = `${confidence}% confidence`;
+        // In production, these would have real implementations
+        switch(action) {
+            case 'context':
+                console.log('Would show full episode context and surrounding discussion');
+                break;
+            case 'save':
+                console.log('Would save quote to user\'s notebook/collection');
+                break;
         }
     }
     
@@ -989,57 +1026,6 @@ class PatternFlowSearch {
         }
     }
     
-    // Set time filter from dropdown
-    setTimeFilter(value, element, event) {
-        // Stop event propagation to prevent dropdown from closing
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
-        
-        // Remove active class from all options
-        const allOptions = document.querySelectorAll('.inline-time-selector .time-option');
-        allOptions.forEach(opt => opt.classList.remove('active'));
-        
-        // Add active class to selected option
-        if (element) {
-            element.classList.add('active');
-        }
-        
-        // Update the selected timeframe (for demo purposes)
-        const timeframeMap = {
-            '7days': 'Last 7 days',
-            '30days': 'Last 30 days',
-            '90days': 'Last 90 days',
-            'all': 'All time'
-        };
-        
-        this.selectedTimeframe = {
-            label: timeframeMap[value] || 'Last 7 days',
-            value: value
-        };
-        
-        // Update the results panel timeframe if it's open
-        const resultsTimeframe = document.querySelector('.timeframe-text');
-        if (resultsTimeframe) {
-            resultsTimeframe.textContent = this.selectedTimeframe.label;
-        }
-        
-        // Update discussions count in metadata if visible
-        const discussionCount = document.querySelector('.discussion-count');
-        if (discussionCount) {
-            const discussionCounts = {
-                '7days': 14,
-                '30days': 47,
-                '90days': 156
-            };
-            discussionCount.textContent = `Based on ${discussionCounts[value] || 14} discussions`;
-        }
-        
-        console.log('Time filter set to:', this.selectedTimeframe.label);
-    }
-    
-    // Clean up method
     destroy() {
         // Remove event listeners
         if (this.boundHandleGlobalKeydown) {

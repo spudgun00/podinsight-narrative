@@ -1116,3 +1116,137 @@
         min-width: 60px;
     }
 }
+
+/* ============================================
+   Live Search States (loading / error)
+   ============================================ */
+
+.search-state {
+    display: none;
+    padding: 32px 8px;
+    text-align: center;
+}
+
+.search-state-spinner {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 16px;
+    border: 2px solid var(--gray-200, #e5e7eb);
+    border-top-color: var(--sage, #4a7c59);
+    border-radius: 50%;
+    animation: search-state-spin 0.9s linear infinite;
+}
+
+@keyframes search-state-spin {
+    to { transform: rotate(360deg); }
+}
+
+.search-state-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--deep-ink, #1a1a2e);
+    margin-bottom: 6px;
+}
+
+.search-state-note {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: #999;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.search-state--error .search-state-title {
+    color: var(--dusty-rose, #c77d7d);
+}
+
+.search-state--error .panel-search-btn {
+    margin: 16px auto 0;
+}
+
+/* Synthesis body (live answer text, one line per bullet) */
+.insight-text .synthesis-body {
+    margin-top: 6px;
+}
+
+/* Citation card extras */
+.source-episode {
+    font-size: 0.75rem;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.source-score {
+    font-size: 0.6875rem;
+    color: var(--sage, #4a7c59);
+    white-space: nowrap;
+}
+
+/* ============================================
+   Play clip - loading / error states
+   ============================================ */
+
+.play-clip-btn.loading {
+    opacity: 0.8;
+    cursor: progress;
+}
+
+.play-clip-btn.error {
+    color: var(--dusty-rose, #c77d7d);
+    border-color: var(--dusty-rose, #c77d7d);
+}
+
+.clip-spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--gray-200, #e5e7eb);
+    border-top-color: var(--sage, #4a7c59);
+    border-radius: 50%;
+    animation: clip-spin 0.8s linear infinite;
+    vertical-align: -1px;
+}
+
+@keyframes clip-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* No strong matches — a first-class result, not an error.
+   Deliberately styled as a neutral finding rather than a red failure: the
+   system declining is the behaviour we want users to trust. */
+.search-state--nomatch {
+    text-align: center;
+    padding: 40px 32px;
+}
+
+.search-state--nomatch .search-state-icon {
+    font-size: 32px;
+    line-height: 1;
+    color: var(--sage, #4a7c59);
+    opacity: 0.55;
+    margin-bottom: 14px;
+}
+
+.search-state--nomatch .search-state-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary, #1a1a1a);
+    margin-bottom: 8px;
+}
+
+.search-state--nomatch .search-state-note {
+    font-size: 14px;
+    color: var(--text-secondary, #666);
+    max-width: 460px;
+    margin: 0 auto 12px;
+    line-height: 1.5;
+}
+
+.search-state--nomatch .search-state-detail {
+    font-size: 12px;
+    color: var(--text-tertiary, #999);
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+}

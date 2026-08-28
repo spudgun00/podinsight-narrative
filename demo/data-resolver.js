@@ -117,11 +117,14 @@
             return fetch(url, o);
         }
         if (!inflight[url]) {
+            requestStarted();
             inflight[url] = fetch(url).then(function (r) {
                 delete inflight[url];
+                requestSettled();
                 return r;
             }, function (e) {
                 delete inflight[url];
+                requestSettled();
                 throw e;
             });
         }
@@ -295,6 +298,46 @@
             wrap.appendChild(b);
         });
         host.appendChild(wrap);
+    }
+
+    // ------------------------------------------------------- warming-up state
+    //
+    // The search engine scales to zero when idle, and waking it measured 38s on
+    // a cold page. Every component sits in its own loading state for that whole
+    // time, which reads as a broken page rather than a waiting one.
+    //
+    // So say what is happening, once, at page level. It appears only when a
+    // request has actually been slow - the threshold is well above a warm
+    // load's slowest request - so a normal visit never sees it.
+    var WARMING_AFTER_MS = 4000;
+    var inflightCount = 0, warmTimer = null, warmingBar = null;
+
+    function requestStarted() {
+        inflightCount++;
+        if (warmTimer === null && !warmingBar) {
+            warmTimer = setTimeout(showWarming, WARMING_AFTER_MS);
+        }
+    }
+
+    function requestSettled() {
+        inflightCount = Math.max(0, inflightCount - 1);
+        if (inflightCount > 0) return;
+        if (warmTimer !== null) { clearTimeout(warmTimer); warmTimer = null; }
+        if (warmingBar) { warmingBar.remove(); warmingBar = null; }
+    }
+
+    function showWarming() {
+        warmTimer = null;
+        if (warmingBar || !inflightCount || !document.body) return;
+        warmingBar = document.createElement('div');
+        warmingBar.className = 'synthea-warming-banner';
+        warmingBar.setAttribute('role', 'status');
+        warmingBar.innerHTML =
+            '<span class="synthea-warming-dot" aria-hidden="true"></span>' +
+            '<span><strong>Warming up.</strong> The search engine sleeps when it has ' +
+            'not been used, and the first visit afterwards can take up to a minute. ' +
+            'Nothing is wrong - each section fills in as its data arrives.</span>';
+        document.body.insertBefore(warmingBar, document.body.firstChild);
     }
 
     function buildVisionBanner() {

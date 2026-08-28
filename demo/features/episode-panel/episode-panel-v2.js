@@ -13,7 +13,8 @@ class EpisodePanelV2 {
         // Priority Briefings still passes its own mock ids, which keep using
         // the unified-data.js lookup below so that component is unaffected.
         this.apiBaseUrl = window.SYNTHEA_API_BASE || 'http://localhost:8000';
-        this.apiTimeoutMs = 30000;
+        this.apiTimeoutMs = 60000;   // 60s, not 30s. A search engine waking from idle measured 38s on a cold
+        // page, and a genuine wake must not render as failure.
         this.liveEpisodes = new Map();
         this.liveDataState = 'loading';   // 'loading' | 'ready' | 'error'
         this.liveDataError = null;

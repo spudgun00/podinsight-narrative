@@ -25,7 +25,8 @@
  */
 const VelocityTracking = {
     apiBaseUrl: window.SYNTHEA_API_BASE || 'http://localhost:8000',
-    apiTimeoutMs: 30000,
+    apiTimeoutMs: 60000,   // 60s, not 30s. A search engine waking from idle measured 38s on a cold
+    // page, and a genuine wake must not render as failure.
     bucket: 'month',
 
     topics: [],

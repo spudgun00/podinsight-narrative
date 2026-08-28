@@ -609,3 +609,38 @@
     background: var(--light-sage, #e8f0ea); color: var(--sage, #4a7c59);
     border-radius: 4px; padding: 5px 8px;
 }
+
+/* --------------------------------------------------------- warming-up state */
+/* Shown only when a request has already been slow, so a warm visit never sees
+   it. Says what is happening in the reader's language: no endpoint, no status
+   code, no exception - UI_ACCEPTANCE.md section 3. */
+
+.synthea-warming-banner {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: #2e4a5c;
+    color: #fff;
+    font: 400 13px/1.5 'Inter', system-ui, sans-serif;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.synthea-warming-banner strong { font-weight: 700; }
+.synthea-warming-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #f0c674;
+    flex: 0 0 auto;
+    animation: synthea-warming-pulse 1.4s ease-in-out infinite;
+}
+@keyframes synthea-warming-pulse {
+    0%, 100% { opacity: 0.35; }
+    50%      { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .synthea-warming-dot { animation: none; opacity: 1; }
+}

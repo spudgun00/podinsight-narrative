@@ -108,6 +108,7 @@
     // signal rejects that caller's promise alone, which is the behaviour each
     // component already handles.
     var inflight = {};
+    var corpusPromise = null;
 
     function sharedGet(url, opts) {
         var o = opts || {};
@@ -258,6 +259,44 @@
             return what + ' could not be loaded. Try again in a moment.';
         },
 
+        /**
+         * The corpus's own headline figures, fetched once per page load.
+         *
+         * Five surfaces used to hardcode these - "54,284 passages across 1,236
+         * episodes", "over 31 podcasts" - and the editorial purge of 28 Aug 2026
+         * made every one of them wrong at a stroke. Hardcoding v2 would only
+         * move the problem to the next corpus event, so the numbers come from
+         * the corpus.
+         *
+         * Callers must handle null: a surface that cannot get the figure says
+         * less rather than saying something untrue.
+         */
+        corpus: function () {
+            if (!corpusPromise) {
+                corpusPromise = SyntheaData.fetchJSON('corpus-facts', '/api/signals?limit=1')
+                    .then(function (d) {
+                        return {
+                            episodes: d.episodes, podcasts: d.podcasts,
+                            hours: d.hours, claims: d.verified_claims,
+                            period: d.period
+                        };
+                    })
+                    .catch(function () { return null; });
+            }
+            return corpusPromise;
+        },
+
+        /** Fill [data-corpus="episodes"] nodes once the figures arrive. */
+        fillCorpus: function (root) {
+            SyntheaData.corpus().then(function (f) {
+                if (!f) return;
+                (root || document).querySelectorAll('[data-corpus]').forEach(function (el) {
+                    var v = f[el.getAttribute('data-corpus')];
+                    if (v !== undefined && v !== null) el.textContent = Number(v).toLocaleString();
+                });
+            });
+        },
+
         /** Stamp a state the resolver did not derive from a fetch. */
         mark: function (key, next, detail) {
             if (['pending','live','vision','unbuilt','empty','error'].indexOf(next) === -1) return;
@@ -349,7 +388,7 @@
             '<strong>Vision mock-up — not real data.</strong> ' +
             'Everything on this page is illustrative content dated <b>25 July 2025</b>, ' +
             'showing what the product is intended to do. It is not derived from the ' +
-            '1,236-episode corpus. Switch to <b>Live</b> to see what the system actually returns.' +
+            'transcript corpus. Switch to <b>Live</b> to see what the system actually returns.' +
             '<button type="button" class="synthea-vision-switch">Switch to Live</button>';
         bar.querySelector('.synthea-vision-switch').addEventListener('click', function () { setMode(LIVE); });
         document.body.insertBefore(bar, document.body.firstChild);

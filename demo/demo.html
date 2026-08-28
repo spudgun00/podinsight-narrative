@@ -37,40 +37,40 @@
     <link rel="stylesheet" href="styles/variables.css?v=20250118">
     <link rel="stylesheet" href="styles/base.css?v=20250118">
     <link rel="stylesheet" href="styles/layout.css?v=20250118">
-    <link rel="stylesheet" href="styles/components.css?v=20260828l">
+    <link rel="stylesheet" href="styles/components.css?v=20260828m">
     <link rel="stylesheet" href="styles/utilities.css?v=20250118">
     
     <!-- Episode Panel v2.0 Styles - Clean architecture without !important -->
-    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css?v=20260828l">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2.css?v=20260828m">
     <!-- Episode Panel v2.0 Override - Ensures header displays correctly -->
-    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2-override.css?v=20260828l">
+    <link rel="stylesheet" href="features/episode-panel/episode-panel-v2-override.css?v=20260828m">
     
     <!-- Portfolio Panel Styles -->
-    <link rel="stylesheet" href="styles/portfolio.css?v=20260828l">
+    <link rel="stylesheet" href="styles/portfolio.css?v=20260828m">
     
     <!-- Briefing Card Clickable -->
-    <link rel="stylesheet" href="briefing-card-clickable.css?v=20260828l">
+    <link rel="stylesheet" href="briefing-card-clickable.css?v=20260828m">
     
     <!-- Search Styles -->
-    <link rel="stylesheet" href="styles/search.css?v=20260828l">
-    <link rel="stylesheet" href="data-resolver.css?v=20260828l">
+    <link rel="stylesheet" href="styles/search.css?v=20260828m">
+    <link rel="stylesheet" href="data-resolver.css?v=20260828m">
     
     <!-- Episode Library Styles -->
-    <link rel="stylesheet" href="features/episode-library/episode-library.css?v=20260828l">
+    <link rel="stylesheet" href="features/episode-library/episode-library.css?v=20260828m">
     
     <!-- Priority Briefings Compact Styles -->
-    <link rel="stylesheet" href="styles/priority-briefings-compact.css?v=20260828l">
+    <link rel="stylesheet" href="styles/priority-briefings-compact.css?v=20260828m">
     
     <!-- Narrative Pulse Drill-Down Panel Styles -->
-    <link rel="stylesheet" href="styles/narrative-pulse-drilldown.css?v=20260828l">
+    <link rel="stylesheet" href="styles/narrative-pulse-drilldown.css?v=20260828m">
     
     <!-- Customization Panel Styles -->
-    <link rel="stylesheet" href="styles/customization-panel.css?v=20260828l">
+    <link rel="stylesheet" href="styles/customization-panel.css?v=20260828m">
 
     <!-- Company Tracking v1 (live watchlist over the entity index) -->
-    <link rel="stylesheet" href="features/company-tracking/company-tracking.css?v=20260828l">
-    <link rel="stylesheet" href="features/intelligence-brief/intelligence-brief-live.css?v=20260828l">
-    <link rel="stylesheet" href="features/notable-signals/notable-signals-live.css?v=20260828l">
+    <link rel="stylesheet" href="features/company-tracking/company-tracking.css?v=20260828m">
+    <link rel="stylesheet" href="features/intelligence-brief/intelligence-brief-live.css?v=20260828m">
+    <link rel="stylesheet" href="features/notable-signals/notable-signals-live.css?v=20260828m">
 </head>
 <body>
     <!-- Header -->
@@ -279,15 +279,15 @@
     <!-- New unified data source -->
     <!-- Resolver first: it seals the vision dataset in Live mode and stamps
          every component from what it actually returned. -->
-    <script src="data-resolver.js?v=20260828l"></script>
-    <script src="trend.js?v=20260828l"></script>
-    <script src="data-furniture.js?v=20260828l" defer></script>
-    <script src="data/unified-data.js?v=20260828l" defer></script>
+    <script src="data-resolver.js?v=20260828m"></script>
+    <script src="trend.js?v=20260828m"></script>
+    <script src="data-furniture.js?v=20260828m" defer></script>
+    <script src="data/unified-data.js?v=20260828m" defer></script>
     <!-- Debug overlay (Ctrl+Shift+D). Instrumentation only - must load after the
          data source it wraps and before every consumer script. -->
-    <script src="debug-overlay.js?v=20260828l" defer></script>
+    <script src="debug-overlay.js?v=20260828m" defer></script>
     <!-- data/data-adapter.js removed 2026-08-27: 18 globals, read by nothing. -->
-    <script src="data/data-validator.js?v=20260828l" defer></script>
+    <script src="data/data-validator.js?v=20260828m" defer></script>
     <!-- Backup data for clean guest information -->
     <!-- data/priorityBriefings_backup_20250805_213425.js removed 2026-08-27: a July 2025 data blob read by nothing. -->
     
@@ -298,7 +298,7 @@
     <!-- <script src="features/narrative-pulse/data-transformer.js" defer></script> Removed to eliminate conflicts -->
     <!-- <script src="features/narrative-pulse/narrative-pulse.js" defer></script> -->
     <!-- <script src="features/narrative-pulse/generate-dynamic-insights.js" defer></script> -->
-    <script src="features/narrative-pulse/narrative-pulse-live.js?v=20260828l" defer></script>
+    <script src="features/narrative-pulse/narrative-pulse-live.js?v=20260828m" defer></script>
     <!-- <script src="features/narrative-pulse/apply-data-updates.js" defer></script> Removed - causing conflicts -->
     <!-- <script src="features/narrative-pulse/final-fixes.js" defer></script> Removed - causing conflicts -->
     <!-- <script src="features/narrative-pulse/init.js" defer></script> -->
@@ -306,59 +306,59 @@
     <!-- Narrative Feed: live from the brief store (GET /api/feed). The two
          scripts below are the retired mock, kept for Vision mode and guarded at
          both entry points; they render nothing in Live. -->
-    <script src="features/narrative-feed/narrative-feed-live.js?v=20260828l" defer></script>
-    <script src="features/narrative-feed/narrative-feed.js?v=20260828l" defer></script>
-    <script src="features/narrative-feed/init.js?v=20260828l" defer></script>
+    <script src="features/narrative-feed/narrative-feed-live.js?v=20260828m" defer></script>
+    <script src="features/narrative-feed/narrative-feed.js?v=20260828m" defer></script>
+    <script src="features/narrative-feed/init.js?v=20260828m" defer></script>
     
-    <script src="features/notable-signals/notable-signals.js?v=20260828l" defer></script>
-    <script src="features/notable-signals/init.js?v=20260828l" defer></script>
-    <script src="features/notable-signals/notable-signals-live.js?v=20260828l" defer></script>
+    <script src="features/notable-signals/notable-signals.js?v=20260828m" defer></script>
+    <script src="features/notable-signals/init.js?v=20260828m" defer></script>
+    <script src="features/notable-signals/notable-signals-live.js?v=20260828m" defer></script>
     
     <!-- Shared Briefing Card Renderer - Used by Priority Briefings and Episode Library -->
     <!-- shared/briefing-card-renderer.js removed 2026-08-27: read by nothing since the live cards replaced it. -->
     
     <!-- Priority Briefings Compact Implementation -->
-    <script src="features/priority-briefings/priority-briefings-compact.js?v=20260828l" defer></script>
+    <script src="features/priority-briefings/priority-briefings-compact.js?v=20260828m" defer></script>
     <!-- Commenting out old Priority Briefings scripts -->
     <!-- <script src="features/priority-briefings/priority-briefings-dynamic.js" defer></script> -->
     <!-- <script src="features/priority-briefings/priority-briefings-expanded.js" defer></script> -->
     <!-- <script src="features/priority-briefings/init.js" defer></script> -->
-    <script src="features/priority-briefings/briefings-live.js?v=20260828l" defer></script>
+    <script src="features/priority-briefings/briefings-live.js?v=20260828m" defer></script>
     
-    <script src="features/intelligence-brief/intelligence-brief.js?v=20260828l" defer></script>
-    <script src="features/intelligence-brief/influence-metrics.js?v=20260828l" defer></script>
-    <script src="features/intelligence-brief/velocity-tracking.js?v=20260828l" defer></script>
-    <script src="features/intelligence-brief/topic-correlations.js?v=20260828l" defer></script>
-    <script src="features/intelligence-brief/init.js?v=20260828l" defer></script>
+    <script src="features/intelligence-brief/intelligence-brief.js?v=20260828m" defer></script>
+    <script src="features/intelligence-brief/influence-metrics.js?v=20260828m" defer></script>
+    <script src="features/intelligence-brief/velocity-tracking.js?v=20260828m" defer></script>
+    <script src="features/intelligence-brief/topic-correlations.js?v=20260828m" defer></script>
+    <script src="features/intelligence-brief/init.js?v=20260828m" defer></script>
     <!-- The live brief takes over .brief-content after init.js injects the
          template; the template still carries the live sidebar components. -->
-    <script src="features/intelligence-brief/intelligence-brief-live.js?v=20260828l" defer></script>
+    <script src="features/intelligence-brief/intelligence-brief-live.js?v=20260828m" defer></script>
     <!-- Removed velocity-tracking.js - now using unified data source in intelligence-brief.js -->
     
     <!-- Episode Panel v2.0 - Enhanced with interactive badges -->
-    <script src="features/episode-panel/episode-panel-v2.js?v=20260828l" defer></script>
+    <script src="features/episode-panel/episode-panel-v2.js?v=20260828m" defer></script>
     
     <!-- Search -->
-    <script src="search.js?v=20260828l" defer></script>
-    <script src="header-stats.js?v=20260828l" defer></script>
+    <script src="search.js?v=20260828m" defer></script>
+    <script src="header-stats.js?v=20260828m" defer></script>
     
     <!-- Episode Library -->
-    <script src="features/episode-library/episode-library.js?v=20260828l" defer></script>
-    <script src="features/episode-library/init.js?v=20260828l" defer></script>
+    <script src="features/episode-library/episode-library.js?v=20260828m" defer></script>
+    <script src="features/episode-library/init.js?v=20260828m" defer></script>
     
     <!-- Narrative Pulse Drill-Down Panel -->
-    <script src="features/narrative-pulse-drilldown/narrative-pulse-drilldown.js?v=20260828l" defer></script>
-    <script src="features/narrative-pulse-drilldown/drilldown-live.js?v=20260828l" defer></script>
+    <script src="features/narrative-pulse-drilldown/narrative-pulse-drilldown.js?v=20260828m" defer></script>
+    <script src="features/narrative-pulse-drilldown/drilldown-live.js?v=20260828m" defer></script>
     
     <!-- Customization Panel -->
-    <script src="features/customization-panel/customization-panel.js?v=20260828l" defer></script>
+    <script src="features/customization-panel/customization-panel.js?v=20260828m" defer></script>
     
     <!-- Company Tracking: live watchlist. The mock lives in main.js's
          PortfolioManager, which is Vision-only and guarded at its constructor. -->
-    <script src="features/company-tracking/company-tracking-live.js?v=20260828l" defer></script>
+    <script src="features/company-tracking/company-tracking-live.js?v=20260828m" defer></script>
 
     <!-- Main Application Orchestrator -->
-    <script src="main.js?v=20260828l" defer></script>
+    <script src="main.js?v=20260828m" defer></script>
     
     <!-- Debug Script -->
     <!-- <script src="debug-narrative-pulse.js" defer></script> -->

@@ -81,7 +81,7 @@ const NarrativePulseLive = {
                     'removed from the page when the live chart replaced it, so there is no ' +
                     'illustrative version to show here.</p>' +
                     '<p class="synthea-unbuilt-foot">Switch to <b>Live</b> to see it plotting ' +
-                    '1,236 episodes.</p></div>';
+                    'the whole corpus.</p></div>';
             }
             window.SyntheaData.claim('narrative-pulse', '.narrative-pulse');
             window.SyntheaData.mark('narrative-pulse', 'unbuilt', 'no vision mock exists');

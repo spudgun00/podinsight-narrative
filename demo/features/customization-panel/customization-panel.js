@@ -42,8 +42,10 @@ const CustomizationPanel = {
                     'have, so they have been removed rather than left to look functional.</p>' +
                     '<p class="synthea-unbuilt-foot">The five tracked topics are ' +
                     'Crypto/Web3, AI Agents, B2B SaaS, Capital Efficiency and DePIN, over ' +
-                    '31 podcasts. Switch to <b>Vision</b> to see the intended design.</p>';
+                    '<span data-corpus="podcasts">every</span> podcasts in the corpus. ' +
+                    'Switch to <b>Vision</b> to see the intended design.</p>';
                 content.appendChild(box);
+                if (window.SyntheaData.fillCorpus) window.SyntheaData.fillCorpus(box);
             }
             const footer = panel.querySelector('.panel-footer');
             if (footer) footer.remove();

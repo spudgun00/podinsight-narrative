@@ -167,7 +167,7 @@ class PatternFlowSearch {
                         <div class="search-state search-state--loading" id="searchLoadingState">
                             <div class="search-state-spinner" aria-hidden="true"></div>
                             <div class="search-state-title">Searching the transcript archive…</div>
-                            <div class="search-state-note">Searching 54,284 passages across 1,236 episodes.</div>
+                            <div class="search-state-note">Searching every passage in the corpus<span class="search-corpus-note"></span>.</div>
                         </div>
 
                         <div class="search-state search-state--nomatch" id="searchNoMatchState">
@@ -561,6 +561,15 @@ class PatternFlowSearch {
         }
     }
 
+    fillCorpusNote() {
+        const el = document.querySelector('.search-corpus-note');
+        if (!el || !window.SyntheaData.corpus) return;
+        window.SyntheaData.corpus().then(f => {
+            // No figure is better than last week's figure.
+            if (f && f.episodes) el.textContent = ` — ${f.episodes.toLocaleString()} episodes`;
+        });
+    }
+
     describeSearchError(error) {
         if (error && error.name === 'AbortError') {
             return `No response after ${Math.round(this.apiTimeoutMs / 1000)} seconds. Search may still be starting up.`;
@@ -582,6 +591,7 @@ class PatternFlowSearch {
         if (!panel) return;
 
         const loading = panel.querySelector('#searchLoadingState');
+        this.fillCorpusNote();
         const error = panel.querySelector('#searchErrorState');
         const noMatch = panel.querySelector('#searchNoMatchState');
         const results = panel.querySelector('.synthesis-content');

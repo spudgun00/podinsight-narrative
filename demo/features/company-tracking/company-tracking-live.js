@@ -378,8 +378,15 @@ const CompanyTrackingLive = {
                             + `${c.episode_count === 1 ? 'episode' : 'episodes'} · `
                             + `${(c.total_mentions || 0).toLocaleString()} `
                             + `${c.total_mentions === 1 ? 'mention' : 'mentions'}`;
-            met.title = `Named in ${c.episode_count} of 1,236 episodes, across `
+            // The corpus total is fetched, not baked in: it changed on 28 Aug 2026.
+            met.title = `Named in ${c.episode_count} episodes, across `
                       + `${c.podcast_count || 0} podcasts, ${c.total_mentions} times in total.`;
+            window.SyntheaData.corpus().then(f => {
+                if (!f || !f.episodes) return;
+                met.title = `Named in ${c.episode_count} of `
+                          + `${f.episodes.toLocaleString()} episodes, across `
+                          + `${c.podcast_count || 0} podcasts, ${c.total_mentions} times in total.`;
+            });
             open.appendChild(met);
             open.addEventListener('click', () => this.openCompany(c.name));
             row.appendChild(open);

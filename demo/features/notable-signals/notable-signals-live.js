@@ -23,9 +23,22 @@
  * The subtitle is "Jan-Jun 2025". Nothing here is weekly and nothing is new.
  */
 const NotableSignalsLive = {
+
+    /** The corpus's real period, from the index. Null until it arrives, and a
+     *  surface shows no range rather than a stale one. */
+    rangeLabel: null,
+
+    loadRangeLabel() {
+        return window.SyntheaData.corpus().then(f => {
+            if (!f || !f.rangeLabel) return;
+            this.rangeLabel = f.rangeLabel;
+            try { this.render(); } catch (e) { /* not rendered yet; it will pick it up */ }
+        });
+    },
     data: null,
 
     async init() {
+        this.loadRangeLabel();
         if (window.SyntheaData && window.SyntheaData.isVision()) return;
         const container = document.getElementById('notable-signals-container');
         if (!container) return;
@@ -36,7 +49,7 @@ const NotableSignalsLive = {
             <section class="notable-signals nsl">
                 <div class="section-header nsl-head">
                     <h2 class="section-title">NOTABLE SIGNALS</h2>
-                    <span class="section-subtitle nsl-sub">Jan–Jun 2025</span>
+                    <span class="section-subtitle nsl-sub" data-corpus-range></span>
                 </div>
                 <div class="signals-grid nsl-grid"></div>
                 <div class="ai-search-callout nsl-callout"></div>
@@ -234,7 +247,7 @@ const NotableSignalsLive = {
         const sub = this.npanel.querySelector('.drilldown-live-sub');
         this.npanel.querySelector('.drilldown-live-title').textContent = 'Market Narratives';
         sub.textContent = `${d.count} narratives from ${d.count + d.excluded_count} clusters, `
-                        + `k=${d.k}. Jan–Jun 2025.`;
+                        + `k=${d.k}.` + (this.rangeLabel ? ` ${this.rangeLabel}.` : '');
         body.innerHTML = '';
 
         const method = document.createElement('div');

@@ -1311,3 +1311,10 @@ window.PatternFlow = {
     componentInitializers,
     reinitialize: initializeApp
 };
+
+// Period labels come from the corpus, not from copy: fill every
+// [data-corpus-range] node once the figures arrive. Added with the backfill,
+// which makes "Jan-Jun 2025" wrong the moment the first newer episode lands.
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.SyntheaData && window.SyntheaData.fillRange) window.SyntheaData.fillRange();
+});

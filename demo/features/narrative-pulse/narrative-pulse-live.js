@@ -33,6 +33,21 @@
  * data no longer exists.
  */
 const NarrativePulseLive = {
+
+    /** The corpus's real period, from the index. Null until it arrives, and a
+     *  surface shows no range rather than a stale one. */
+    rangeLabel: null,
+
+    loadRangeLabel() {
+        return window.SyntheaData.corpus().then(f => {
+            if (!f || !f.rangeLabel) return;
+            this.rangeLabel = f.rangeLabel;
+            // The range toggle is painted once at init, before this resolves.
+            const t = document.querySelector('[data-action="toggleTimeRange"]');
+            if (t) t.textContent = f.rangeLabel;
+            try { this.renderChart(); } catch (e) { /* not rendered yet; it will pick it up */ }
+        });
+    },
     apiBaseUrl: window.SYNTHEA_API_BASE || 'http://localhost:8000',
     apiTimeoutMs: 60000,   // 60s, not 30s. A search engine waking from idle measured 38s on a cold
     // page, and a genuine wake must not render as failure.
@@ -62,6 +77,7 @@ const NarrativePulseLive = {
     LEFT: 62, RIGHT: 770, TOP: 40, BOTTOM: 240,
 
     async init() {
+        this.loadRangeLabel();
         // Vision mode: stand aside so the July 2025 mock chart renders. Without
         // this the live component fetches, is refused by the resolver, and
         // paints "Topic mentions unavailable" over the vision content - an
@@ -135,7 +151,7 @@ const NarrativePulseLive = {
         };
 
         // The series is fixed at six monthly buckets, so there is no range to pick
-        disable('[data-action="toggleTimeRange"]', 'Jan–Jun 2025',
+        disable('[data-action="toggleTimeRange"]', this.rangeLabel || 'the corpus range',
             'The series is six monthly buckets covering the whole corpus. There is no other range to show.');
         // Share/download encoded the old mock chart state
         disable('[data-action="shareChart"]', null,

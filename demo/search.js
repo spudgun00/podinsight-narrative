@@ -35,7 +35,13 @@ class PatternFlowSearch {
         this.lastQuery = '';
         // The indexed corpus is fixed and /api/search accepts no date filter,
         // so the panel states the range instead of offering to change it.
-        this.corpusRangeLabel = 'Jan–Jun 2025';
+        // Placeholder only: replaced by the corpus's real range on first fetch.
+        this.corpusRangeLabel = '';
+        if (window.SyntheaData && window.SyntheaData.corpus) {
+            window.SyntheaData.corpus().then(f => {
+                if (f && f.rangeLabel) this.corpusRangeLabel = f.rangeLabel;
+            });
+        }
     }
     
     init() {
@@ -187,7 +193,7 @@ class PatternFlowSearch {
                             <div class="confidence-metadata">
                                 <span class="discussion-count">Based on ${defaultData.discussions || 0} discussions</span>
                                 <span class="separator">•</span>
-                                <span class="timeframe-static" title="The corpus is fixed, so there is no date range to change">
+                                <span class="timeframe-static" data-corpus-range title="The corpus range is set by the episodes in it, not chosen here">
                                     ${this.corpusRangeLabel}
                                 </span>
                             </div>
@@ -592,6 +598,7 @@ class PatternFlowSearch {
 
         const loading = panel.querySelector('#searchLoadingState');
         this.fillCorpusNote();
+        if (window.SyntheaData.fillRange) window.SyntheaData.fillRange(panel);
         const error = panel.querySelector('#searchErrorState');
         const noMatch = panel.querySelector('#searchNoMatchState');
         const results = panel.querySelector('.synthesis-content');

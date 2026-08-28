@@ -156,6 +156,24 @@
         return e;
     }
 
+    // The period label the page shows, built from the corpus's real first and
+    // last episode rather than written down. "Jan-Jun 2025" was hardcoded in
+    // five places; the backfill makes the corpus current, and a label that says
+    // Jun 2025 over episodes from this month is simply a lie.
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function rangeLabel(period) {
+        // period is "YYYY-MM-DD to YYYY-MM-DD", straight from the index.
+        var m = /^(\d{4})-(\d{2})-\d{2}\s+to\s+(\d{4})-(\d{2})-\d{2}$/.exec(period || '');
+        if (!m) return null;
+        var y1 = m[1], m1 = MONTHS[+m[2] - 1], y2 = m[3], m2 = MONTHS[+m[4] - 1];
+        if (y1 === y2) {
+            return m1 === m2 ? m1 + ' ' + y1 : m1 + '\u2013' + m2 + ' ' + y1;
+        }
+        return m1 + ' ' + y1 + '\u2013' + m2 + ' ' + y2;
+    }
+
     var SyntheaData = {
         LIVE: LIVE,
         VISION: VISION,
@@ -278,12 +296,23 @@
                         return {
                             episodes: d.episodes, podcasts: d.podcasts,
                             hours: d.hours, claims: d.verified_claims,
-                            period: d.period
+                            period: d.period,
+                            rangeLabel: rangeLabel(d.period)
                         };
                     })
                     .catch(function () { return null; });
             }
             return corpusPromise;
+        },
+
+        /** Replace [data-corpus-range] text with the real period label. */
+        fillRange: function (root) {
+            SyntheaData.corpus().then(function (f) {
+                if (!f || !f.rangeLabel) return;   // no label beats a wrong one
+                (root || document).querySelectorAll('[data-corpus-range]').forEach(function (el) {
+                    el.textContent = f.rangeLabel;
+                });
+            });
         },
 
         /** Fill [data-corpus="episodes"] nodes once the figures arrive. */

@@ -22,12 +22,25 @@
  * spellings the corpus never uses, each reporting zero forever.
  */
 const CompanyTrackingLive = {
+
+    /** The corpus's real period, from the index. Null until it arrives, and a
+     *  surface shows no range rather than a stale one. */
+    rangeLabel: null,
+
+    loadRangeLabel() {
+        return window.SyntheaData.corpus().then(f => {
+            if (!f || !f.rangeLabel) return;
+            this.rangeLabel = f.rangeLabel;
+            try { this.render(); } catch (e) { /* not rendered yet; it will pick it up */ }
+        });
+    },
     KEY: 'synthea.watchlist.v1',
     companies: [],          // [{name, episode_count, total_mentions, podcast_count}]
     view: 'list',           // list | company
     current: null,
 
     async init() {
+        this.loadRangeLabel();
         if (window.SyntheaData && window.SyntheaData.isVision()) return;
         const panel = document.querySelector('.portfolio-panel');
         if (!panel) return;
@@ -317,7 +330,8 @@ const CompanyTrackingLive = {
         line.textContent = n
             ? `Tracking ${n} ${n === 1 ? 'company' : 'companies'} · `
               + `${mentions.toLocaleString()} ${mentions === 1 ? 'mention' : 'mentions'} across `
-              + `${eps.toLocaleString()} ${eps === 1 ? 'episode' : 'episodes'}, Jan–Jun 2025`
+              + `${eps.toLocaleString()} ${eps === 1 ? 'episode' : 'episodes'}`
+              + (this.rangeLabel ? `, ${this.rangeLabel}` : '')
             : 'No companies configured';
         this.metricsEl.appendChild(line);
         // Persistence is stated, not assumed - v1 keeps the list in this

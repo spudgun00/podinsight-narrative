@@ -51,9 +51,7 @@ const TopicCorrelations = {
         } catch (error) {
             console.error('[Topic Correlations] Failed to load:', error);
             this.dataState = 'error';
-            this.dataError = error && error.name === 'AbortError'
-                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
-                : `Could not reach ${this.apiBaseUrl}/api/topic-correlations.`;
+            this.dataError = window.SyntheaData.describeError(error, 'Topic correlations');
         } finally {
             clearTimeout(timeoutId);
         }

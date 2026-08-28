@@ -227,6 +227,34 @@
             return data;
         },
 
+        /**
+         * Reader-facing copy for a failed load.
+         *
+         * UI_ACCEPTANCE.md section 3: no endpoint URLs, no exception messages
+         * and no internal paths in a user-facing surface. Seven components each
+         * built their own message by interpolating apiBaseUrl and the caught
+         * error, which put "Could not reach http://localhost:8000/api/themes."
+         * in front of a reader.
+         *
+         * No diagnostic detail is lost: every caller console.errors the real
+         * error immediately before calling this. What comes back is only what a
+         * reader should see, and it lives here so that the same failure cannot
+         * read seven different ways on seven surfaces - the rule trend.js
+         * already applies to volume wording.
+         *
+         * @param error   the caught error
+         * @param subject capitalised noun phrase for what failed, e.g.
+         *                'The theme series'. Defaults to something neutral.
+         */
+        describeError: function (error, subject) {
+            var what = subject || 'This section';
+            if (error && error.name === 'AbortError') {
+                return what + ' is taking longer than usual to load. '
+                     + 'The service may still be starting up.';
+            }
+            return what + ' could not be loaded. Try again in a moment.';
+        },
+
         /** Stamp a state the resolver did not derive from a fetch. */
         mark: function (key, next, detail) {
             if (['pending','live','vision','unbuilt','empty','error'].indexOf(next) === -1) return;

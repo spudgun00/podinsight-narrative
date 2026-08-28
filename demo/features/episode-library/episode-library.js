@@ -124,9 +124,7 @@ const EpisodeLibrary = {
         } catch (error) {
             console.error('[Episode Library] Failed to load episodes:', error);
             this.dataState = 'error';
-            this.dataError = error && error.name === 'AbortError'
-                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
-                : `Could not load episodes from ${this.apiBaseUrl}/api/episodes (${(error && error.message) || error}).`;
+            this.dataError = window.SyntheaData.describeError(error, 'The episode catalogue');
         } finally {
             clearTimeout(timeoutId);
         }
@@ -381,7 +379,7 @@ const EpisodeLibrary = {
                 <div class="library-data-state">
                     <div class="library-data-spinner"></div>
                     <div class="library-data-title">Loading episodes…</div>
-                    <div class="library-data-note">Reading the catalogue from ${this.apiBaseUrl}/api/episodes</div>
+                    <div class="library-data-note">Reading the episode catalogue</div>
                 </div>
             `;
         }

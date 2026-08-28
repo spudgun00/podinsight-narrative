@@ -47,9 +47,7 @@ class EpisodePanelV2 {
         } catch (error) {
             console.error('[Episode Panel] Failed to load episodes:', error);
             this.liveDataState = 'error';
-            this.liveDataError = error && error.name === 'AbortError'
-                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
-                : `Could not reach ${this.apiBaseUrl}/api/episodes (${(error && error.message) || error}).`;
+            this.liveDataError = window.SyntheaData.describeError(error, 'The episode catalogue');
         } finally {
             clearTimeout(timeoutId);
         }
@@ -81,9 +79,9 @@ class EpisodePanelV2 {
                 hashtags: []
             },
             expandedView: {
-                conversationSummary: `This episode comes from /api/episodes, which returns catalogue metadata only` +
+                conversationSummary: `This episode is in the library catalogue` +
                     `${facts.length ? ' (' + facts.join(', ') + ')' : ''}. ` +
-                    `No synthesis, insights or quotes are available for it from that endpoint.`,
+                    `No summary, insights or quotes have been generated for it.`,
                 keyInsights: [],
                 portfolioMentions: [],
                 watchlistMentions: [],
@@ -527,7 +525,7 @@ class EpisodePanelV2 {
         // are fixed sample content, so they must not be shown for a real one.
         if (isLive && !essentialQuote) {
             countEl.textContent = '0 QUOTES';
-            container.innerHTML = '<div class="epb-empty-note">No quotes available from /api/episodes.</div>';
+            container.innerHTML = '<div class="epb-empty-note">No quotes available for this episode.</div>';
             return;
         }
 

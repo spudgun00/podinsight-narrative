@@ -74,9 +74,7 @@ const InfluenceMetrics = {
         } catch (error) {
             console.error('[Influence Metrics] Failed to load entities:', error);
             this.dataState = 'error';
-            this.dataError = error && error.name === 'AbortError'
-                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
-                : `Could not reach ${this.apiBaseUrl}/api/entities.`;
+            this.dataError = window.SyntheaData.describeError(error, 'Influence metrics');
         } finally {
             clearTimeout(timeoutId);
         }

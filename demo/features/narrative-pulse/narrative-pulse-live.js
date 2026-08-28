@@ -242,9 +242,7 @@ const NarrativePulseLive = {
         } catch (error) {
             console.error('[Narrative Pulse] Failed to load topic mentions:', error);
             this.dataState = 'error';
-            this.dataError = error && error.name === 'AbortError'
-                ? `No response from ${this.apiBaseUrl} after ${Math.round(this.apiTimeoutMs / 1000)} seconds.`
-                : `Could not reach ${this.apiBaseUrl}/api/themes.`;
+            this.dataError = window.SyntheaData.describeError(error, 'The theme series');
         } finally {
             clearTimeout(timeoutId);
         }

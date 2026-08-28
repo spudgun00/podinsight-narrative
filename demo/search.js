@@ -187,7 +187,7 @@ class PatternFlowSearch {
                             <div class="confidence-metadata">
                                 <span class="discussion-count">Based on ${defaultData.discussions || 0} discussions</span>
                                 <span class="separator">•</span>
-                                <span class="timeframe-static" title="The corpus is fixed and /api/search takes no date parameter">
+                                <span class="timeframe-static" title="The corpus is fixed, so there is no date range to change">
                                     ${this.corpusRangeLabel}
                                 </span>
                             </div>
@@ -563,12 +563,9 @@ class PatternFlowSearch {
 
     describeSearchError(error) {
         if (error && error.name === 'AbortError') {
-            return `No response after ${Math.round(this.apiTimeoutMs / 1000)} seconds. The search service may still be starting up.`;
+            return `No response after ${Math.round(this.apiTimeoutMs / 1000)} seconds. Search may still be starting up.`;
         }
-        if (error && /HTTP \d/.test(error.message || '')) {
-            return `The search service returned an error (${error.message}).`;
-        }
-        return `Could not reach the search service at ${this.apiBaseUrl}. Check that it is running.`;
+        return 'Search could not be completed. Try again in a moment.';
     }
 
     retrySearch() {
@@ -841,7 +838,8 @@ class PatternFlowSearch {
         } catch (error) {
             console.error('Clip playback failed:', error);
             this.setButtonState(button, 'error', 'Playback failed');
-            button.title = (error && error.message) || 'The browser could not play this clip.';
+            // The tooltip used to carry error.message straight from the browser.
+            button.title = 'The browser could not play this clip.';
             setTimeout(() => this.setButtonState(button, 'idle', 'Play clip'), 6000);
         }
     }
@@ -865,6 +863,8 @@ class PatternFlowSearch {
                     const body = await response.json();
                     detail = body.detail || '';
                 } catch (e) { /* non-JSON error body */ }
+                // status and detail are for the console, not the reader:
+                // describeClipError deliberately does not put them on screen.
                 const error = new Error(`HTTP ${response.status}`);
                 error.status = response.status;
                 error.detail = detail;
@@ -884,10 +884,7 @@ class PatternFlowSearch {
         if (error && error.name === 'AbortError') {
             return 'The clip took more than 90 seconds to generate.';
         }
-        if (error && error.status) {
-            return `The audio service returned ${error.status}${error.detail ? ': ' + error.detail : ''}`;
-        }
-        return `Could not reach the audio service at ${this.apiBaseUrl}.`;
+        return 'This clip could not be prepared. Try again in a moment.';
     }
 
     startAudio(button, clipUrl) {

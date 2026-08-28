@@ -45,8 +45,19 @@ const NotableSignalsLive = {
         this.grid.innerHTML = '<p class="nsl-status">Loading signals…</p>';
         this.buildCallout();
 
+        // All three reads are independent, so they go out together. Chained,
+        // they made this component the last thing on the page to settle.
+        const signalsReq = window.SyntheaData
+            .fetchJSON('notable-signals', '/api/signals?limit=200');
+        const movementReq = window.SyntheaData
+            .fetchJSON('notable-signals', '/api/topic-mentions?bucket=month')
+            .catch(() => null);
+        const narrativesReq = window.SyntheaData
+            .fetchJSON('notable-signals', '/api/narratives?limit=12')
+            .catch(() => null);
+
         try {
-            this.data = await window.SyntheaData.fetchJSON('notable-signals', '/api/signals?limit=200');
+            this.data = await signalsReq;
         } catch (err) {
             this.grid.innerHTML = '';
             const p = document.createElement('p');
@@ -59,17 +70,11 @@ const NotableSignalsLive = {
             this.grid.appendChild(retry);
             return;
         }
-        try {
-            this.movement = await window.SyntheaData.fetchJSON(
-                'notable-signals', '/api/topic-mentions?bucket=month');
-        } catch (err) { this.movement = null; }
+        this.movement = await movementReq;
         // Market Narratives. The slot stayed absent until the discovery engine
         // existed; it exists now, so the card renders - and if the endpoint is
         // not there, the slot goes back to being absent rather than empty.
-        try {
-            this.narratives = await window.SyntheaData.fetchJSON(
-                'notable-signals', '/api/narratives?limit=12');
-        } catch (err) { this.narratives = null; }
+        this.narratives = await narrativesReq;
 
         this.render();
         // The watchlist card is live against Company Tracking, so it repaints

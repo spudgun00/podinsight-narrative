@@ -90,6 +90,68 @@
 
     var API = window.SYNTHEA_API_BASE || 'http://localhost:8000';
 
+    // ------------------------------------------------- one request per URL
+    //
+    // Three components each read GET /api/episodes, and three more each read
+    // GET /api/topic-mentions?bucket=month. They fire within a few ms of each
+    // other on load, so the page was asking for the same bytes three times -
+    // measured at 1.1 MB of the cold load, and three times the work for an API
+    // that answers them one at a time.
+    //
+    // Identical in-flight GETs now share one request. Only in-flight: nothing
+    // is retained after it settles, so this is de-duplication, not a cache,
+    // and it cannot serve anything stale.
+    //
+    // The caller's AbortController is deliberately NOT passed to the shared
+    // fetch. Each component sets its own timeout, and one component timing out
+    // must not cancel the response the other two are waiting for. Instead the
+    // signal rejects that caller's promise alone, which is the behaviour each
+    // component already handles.
+    var inflight = {};
+
+    function sharedGet(url, opts) {
+        var o = opts || {};
+        // Anything with a body, a non-GET method or custom headers is somebody
+        // else's request; it goes straight out.
+        if (o.body || (o.method && o.method.toUpperCase() !== 'GET') || o.headers) {
+            return fetch(url, o);
+        }
+        if (!inflight[url]) {
+            inflight[url] = fetch(url).then(function (r) {
+                delete inflight[url];
+                return r;
+            }, function (e) {
+                delete inflight[url];
+                throw e;
+            });
+        }
+        // Every caller gets its own Response. The shared one is never read, so
+        // it is always safe to clone.
+        return withSignal(inflight[url], o.signal).then(function (r) { return r.clone(); });
+    }
+
+    function withSignal(promise, signal) {
+        if (!signal) return promise;
+        if (signal.aborted) return Promise.reject(abortError());
+        return new Promise(function (resolve, reject) {
+            function onAbort() { reject(abortError()); }
+            signal.addEventListener('abort', onAbort, { once: true });
+            promise.then(function (v) {
+                signal.removeEventListener('abort', onAbort); resolve(v);
+            }, function (e) {
+                signal.removeEventListener('abort', onAbort); reject(e);
+            });
+        });
+    }
+
+    function abortError() {
+        // Components branch on error.name === 'AbortError' to tell a timeout
+        // from a failure, so the shape has to match what fetch itself throws.
+        var e = new Error('The operation was aborted.');
+        e.name = 'AbortError';
+        return e;
+    }
+
     var SyntheaData = {
         LIVE: LIVE,
         VISION: VISION,
@@ -118,7 +180,7 @@
                 return Promise.reject(new Error('vision-mode'));
             }
             var url = /^https?:/.test(path) ? path : API + path;
-            return fetch(url, opts || {}).then(function (r) {
+            return sharedGet(url, opts).then(function (r) {
                 if (!r.ok) throw new Error('HTTP ' + r.status);
                 return r.json();
             }).then(function (data) {
@@ -140,7 +202,7 @@
                 stamp(key, 'vision', 'page is in Vision mode');
                 return Promise.reject(new Error('vision-mode'));
             }
-            return fetch(url, opts || {}).then(function (r) {
+            return sharedGet(url, opts).then(function (r) {
                 stamp(key, r.ok ? 'live' : 'error', r.ok ? String(url) : 'HTTP ' + r.status);
                 return r;
             }).catch(function (err) {

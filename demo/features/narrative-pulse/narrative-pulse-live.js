@@ -185,6 +185,18 @@ const NarrativePulseLive = {
 
         try {
             window.SyntheaData.claim('narrative-pulse', '.narrative-pulse');
+
+            // The two overlay catalogues below do not depend on the theme
+            // series, so they go out alongside it rather than after it. Waiting
+            // for themes first made this component three round trips deep, and
+            // it was the longest chain on the page.
+            const narrativesReq = window.SyntheaData
+                .fetchJSON('narrative-pulse', '/api/narratives?limit=30')
+                .catch(() => null);
+            const legacyReq = window.SyntheaData
+                .fetchJSON('narrative-pulse', '/api/topic-mentions?bucket=month')
+                .catch(() => null);
+
             const response = await window.SyntheaData.fetchResponse(
                 'narrative-pulse', `${this.apiBaseUrl}/api/themes?limit=${this.MAX_SERIES}`,
                 { signal: controller.signal });
@@ -207,20 +219,18 @@ const NarrativePulseLive = {
             };
             this.themes = (data.themes || []).map(t => Object.assign({}, t, { kind: 'theme' }));
 
-            // Overlay catalogues. A failure here costs the watchlist, never the
-            // chart, so they are fetched separately and swallowed.
-            this.narrativeOptions = [];
-            this.legacyTopics = [];
-            try {
-                const n = await window.SyntheaData.fetchJSON('narrative-pulse', '/api/narratives?limit=30');
-                this.narrativeOptions = (n.narratives || []).map(x => Object.assign({}, x, {
-                    kind: 'narrative', id: String(x.cluster_id) }));
-            } catch (e) { /* watchlist offers fewer options; the chart is unaffected */ }
-            try {
-                const l = await window.SyntheaData.fetchJSON('narrative-pulse', '/api/topic-mentions?bucket=month');
-                this.legacyTopics = (l.topics || []).map(x => Object.assign({}, x, {
-                    kind: 'legacy', id: x.topic }));
-            } catch (e) { /* same */ }
+            // Overlay catalogues, issued above. A failure here costs the
+            // watchlist, never the chart, so each resolves to null rather than
+            // rejecting and is read as absent.
+            const [n, l] = await Promise.all([narrativesReq, legacyReq]);
+            this.narrativeOptions = n
+                ? (n.narratives || []).map(x => Object.assign({}, x, {
+                    kind: 'narrative', id: String(x.cluster_id) }))
+                : [];   /* watchlist offers fewer options; the chart is unaffected */
+            this.legacyTopics = l
+                ? (l.topics || []).map(x => Object.assign({}, x, {
+                    kind: 'legacy', id: x.topic }))
+                : [];   /* same */
 
             this.watchlist = this.loadWatchlist();
             this.composeSeries();

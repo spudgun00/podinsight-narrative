@@ -174,6 +174,20 @@
         return m1 + ' ' + y1 + '\u2013' + m2 + ' ' + y2;
     }
 
+    // Entity coverage lags the corpus: extraction reads precomputed artefacts
+    // that exist only for the pre-backfill episodes. Surfaces built on entities
+    // are correct AND incomplete, so they say through when. Derived from the
+    // API, never written down, so the label removes itself the moment
+    // extraction catches up - `complete` flips and this returns null.
+    var coveragePromise = null;
+
+    function coverageLabel(cov) {
+        if (!cov || cov.complete || !cov.entity_coverage_through) return null;
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(cov.entity_coverage_through);
+        if (!m) return null;
+        return 'mentions through ' + (+m[3]) + ' ' + MONTHS[+m[2] - 1] + ' ' + m[1];
+    }
+
     var SyntheaData = {
         LIVE: LIVE,
         VISION: VISION,
@@ -303,6 +317,31 @@
                     .catch(function () { return null; });
             }
             return corpusPromise;
+        },
+
+        /**
+         * Entity coverage, and the label that says how far it reaches.
+         * Resolves to null when coverage has caught up with the corpus.
+         */
+        entityCoverage: function () {
+            if (!coveragePromise) {
+                coveragePromise = SyntheaData.fetchJSON('entity-coverage', '/api/entities?limit=1')
+                    .then(function (d) { return d.entity_coverage || null; })
+                    .catch(function () { return null; });
+            }
+            return coveragePromise;
+        },
+
+        /** Put the coverage label into [data-entity-coverage] nodes, or leave them empty. */
+        fillEntityCoverage: function (root) {
+            SyntheaData.entityCoverage().then(function (cov) {
+                var label = coverageLabel(cov);
+                (root || document).querySelectorAll('[data-entity-coverage]').forEach(function (el) {
+                    if (!label) { el.textContent = ''; el.hidden = true; return; }
+                    el.textContent = label;
+                    el.hidden = false;
+                });
+            });
         },
 
         /** Replace [data-corpus-range] text with the real period label. */

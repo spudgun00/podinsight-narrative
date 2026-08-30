@@ -51,6 +51,9 @@ const CompanyTrackingLive = {
 
         this.companies = this.load();
         this.renderShell();
+        if (window.SyntheaData.fillEntityCoverage) {
+            window.SyntheaData.fillEntityCoverage(this.content);
+        }
         this.bindPanel();
         await this.refreshAll();
         window.SyntheaData.mark('company-tracking',
@@ -78,6 +81,7 @@ const CompanyTrackingLive = {
     renderShell() {
         this.content.innerHTML = `
             <div class="ctl">
+                <span class="synthea-coverage-note" data-entity-coverage hidden></span>
                 <div class="ctl-metrics" id="ctl-metrics"></div>
                 <div class="ctl-add">
                     <label class="ctl-add-label" for="ctl-input">Add a company</label>

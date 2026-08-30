@@ -45,7 +45,11 @@ const HeaderStats = {
                 podcasts: typeof data.podcast_count === 'number'
                     ? data.podcast_count
                     : new Set(episodes.map(e => e.podcast_name)).size,
-                hours: Math.round(seconds / 3600)
+                // Prefer the API's whole-catalogue total; summing the page
+                // under-reported once the corpus outgrew the default limit.
+                hours: typeof data.total_hours === 'number'
+                    ? data.total_hours
+                    : Math.round(seconds / 3600)
             };
             this.dataState = 'ready';
             console.log('[Header Stats]', this.stats);

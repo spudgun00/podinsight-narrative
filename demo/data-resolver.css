@@ -644,3 +644,21 @@
 @media (prefers-reduced-motion: reduce) {
     .synthea-warming-dot { animation: none; opacity: 1; }
 }
+
+/* ------------------------------------------------- entity coverage note */
+/* Entity extraction lags the corpus after the 28 Aug 2026 backfill. The note
+   is rendered from the API's own coverage figures and hides itself when
+   extraction catches up, so nothing has to be remembered to remove it. */
+.synthea-coverage-note {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    border: 1px solid var(--border-strong, #d8d5cc);
+    border-radius: 10px;
+    background: var(--bg-secondary, #f6f5f2);
+    color: var(--text-secondary, #6b6a65);
+    font: 400 11px/1.6 'Inter', system-ui, sans-serif;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.synthea-coverage-note[hidden] { display: none; }

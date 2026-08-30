@@ -98,6 +98,19 @@ const InfluenceMetrics = {
         description.textContent = this.dataState === 'ready'
             ? `Named entities by episodes mentioning them (of ${this.episodesCovered})`
             : 'Named entities by episodes mentioning them';
+        // Entity extraction lags the corpus. Say so, from the data, and let the
+        // label remove itself when it catches up.
+        let cov = description.querySelector('[data-entity-coverage]');
+        if (!cov) {
+            cov = document.createElement('span');
+            cov.className = 'synthea-coverage-note';
+            cov.setAttribute('data-entity-coverage', '');
+            cov.hidden = true;
+            description.appendChild(cov);
+        }
+        if (window.SyntheaData.fillEntityCoverage) {
+            window.SyntheaData.fillEntityCoverage(description);
+        }
     },
 
     render() {

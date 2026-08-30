@@ -344,6 +344,14 @@
             });
         },
 
+        /**
+         * "YYYY-MM-DD to YYYY-MM-DD" -> "Jan-Jun 2025". Exposed so a surface
+         * summarising a NARROWER range than the corpus - Company Tracking's
+         * metrics line, over the episodes its entity data actually covers -
+         * formats it the same way rather than writing its own wording.
+         */
+        rangeLabel: rangeLabel,
+
         /** Replace [data-corpus-range] text with the real period label. */
         fillRange: function (root) {
             SyntheaData.corpus().then(function (f) {

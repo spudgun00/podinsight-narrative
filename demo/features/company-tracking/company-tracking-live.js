@@ -23,16 +23,30 @@
  */
 const CompanyTrackingLive = {
 
-    /** The corpus's real period, from the index. Null until it arrives, and a
-     *  surface shows no range rather than a stale one. */
+    /** The range of the ENTITY data this line summarises - earliest and latest
+     *  episode dates among the matched episodes - not the library's range.
+     *  The library runs to Aug 2026; entity coverage stops at 23 Jun 2025, so
+     *  printing the library's range above a "mentions through 23 Jun 2025"
+     *  label stated two different periods for one set of numbers. Null until
+     *  a company has been looked up, and no range beats a wrong one. */
     rangeLabel: null,
 
-    loadRangeLabel() {
-        return window.SyntheaData.corpus().then(f => {
-            if (!f || !f.rangeLabel) return;
-            this.rangeLabel = f.rangeLabel;
-            try { this.render(); } catch (e) { /* not rendered yet; it will pick it up */ }
-        });
+    /** Recompute from what the watchlist companies actually cover: earliest
+     *  first date, latest last date, across every company that has a period.
+     *  Each company's `period` comes from /api/companies/{name}, which reads
+     *  min and max published_at over that company's own matched episodes. */
+    recomputeRange() {
+        const firsts = [], lasts = [];
+        for (const c of this.companies) {
+            const m = /^(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})$/.exec(c.period || '');
+            if (!m) continue;
+            firsts.push(m[1]);
+            lasts.push(m[2]);
+        }
+        if (!firsts.length) { this.rangeLabel = null; return; }
+        firsts.sort(); lasts.sort();
+        this.rangeLabel = window.SyntheaData.rangeLabel(
+            firsts[0] + ' to ' + lasts[lasts.length - 1]);
     },
     KEY: 'synthea.watchlist.v1',
     companies: [],          // [{name, episode_count, total_mentions, podcast_count}]
@@ -40,7 +54,6 @@ const CompanyTrackingLive = {
     current: null,
 
     async init() {
-        this.loadRangeLabel();
         if (window.SyntheaData && window.SyntheaData.isVision()) return;
         const panel = document.querySelector('.portfolio-panel');
         if (!panel) return;
@@ -50,6 +63,7 @@ const CompanyTrackingLive = {
         window.SyntheaData.claim('company-tracking', panel);
 
         this.companies = this.load();
+        this.recomputeRange();     // from stored periods, until refreshAll re-reads them
         this.renderShell();
         if (window.SyntheaData.fillEntityCoverage) {
             window.SyntheaData.fillEntityCoverage(this.content);
@@ -284,6 +298,7 @@ const CompanyTrackingLive = {
     remove(name) {
         this.companies = this.companies.filter(c => c.name !== name);
         this.save();
+        this.recomputeRange();
         if (this.current && this.current.name === name) { this.view = 'list'; this.current = null; }
         this.help(`${name} removed.`, 'ok');
         this.render();
@@ -302,7 +317,12 @@ const CompanyTrackingLive = {
                 c.episode_count = d.episode_count;
                 c.total_mentions = d.total_mentions;
                 c.podcast_count = d.podcast_count;
+                // The entity data's own period for this company, min and max
+                // published_at over its matched episodes. The metrics line's
+                // range is built from these, never from the corpus figures.
+                c.period = d.period || null;
                 this.save();
+                this.recomputeRange();
             }
             this.versions = this.versions || d;
         } catch (err) { /* leave the stored numbers; the row says nothing new */ }

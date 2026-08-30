@@ -22,6 +22,15 @@
           "value": "1; mode=block"
         }
       ]
+    },
+    {
+      "source": "/(demo.html)?",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
     }
   ]
 }

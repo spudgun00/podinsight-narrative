@@ -352,12 +352,35 @@
          */
         rangeLabel: rangeLabel,
 
-        /** Replace [data-corpus-range] text with the real period label. */
+        /**
+         * Replace [data-corpus-range] text with the real period label.
+         *
+         * When the figures cannot be fetched this used to return early, which
+         * left whatever the markup shipped standing - and the markup shipped
+         * "Jan-Jun 2025", a date that stopped being true the moment the
+         * backfill landed. Returning early is only safe if the fallback is
+         * honest, and it was not. The failure path now writes an explicit
+         * unavailable state, so the page never shows a period it could not read.
+         *
+         * A node that ships visible text is a standalone label and gets the
+         * unavailable string; a node that ships empty is a suffix on someone
+         * else's sentence and stays empty, because "Range unavailable" tacked
+         * onto a subtitle reads worse than nothing.
+         */
+        UNAVAILABLE: 'Range unavailable',
+
         fillRange: function (root) {
+            var nodes = (root || document).querySelectorAll('[data-corpus-range]');
+            nodes.forEach(function (el) {
+                if (el.dataset.corpusRangeHadText === undefined) {
+                    el.dataset.corpusRangeHadText = el.textContent.trim() ? '1' : '';
+                }
+            });
             SyntheaData.corpus().then(function (f) {
-                if (!f || !f.rangeLabel) return;   // no label beats a wrong one
-                (root || document).querySelectorAll('[data-corpus-range]').forEach(function (el) {
-                    el.textContent = f.rangeLabel;
+                nodes.forEach(function (el) {
+                    if (f && f.rangeLabel) { el.textContent = f.rangeLabel; return; }
+                    el.textContent = el.dataset.corpusRangeHadText
+                        ? SyntheaData.UNAVAILABLE : '';
                 });
             });
         },

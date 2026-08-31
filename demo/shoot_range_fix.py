@@ -37,6 +37,11 @@ STATES = {
     # that used to render the hardcoded "Jan-Jun 2025".
     "range-live":    {"watchlist": [], "api": None, "open": "search"},
     "range-apidown": {"watchlist": [], "api": "http://localhost:9", "open": "search"},
+    # 31 Aug, after the full entity run: the coverage labels must be GONE from
+    # both entity surfaces because the data completed, not because anyone
+    # touched a label. Company Tracking's range must now span the whole library.
+    "postrun-company":   {"watchlist": WATCHLIST, "api": None},
+    "postrun-influence": {"watchlist": [], "api": None, "open": "influence"},
 }
 
 
@@ -109,7 +114,11 @@ async def run(label, outdir):
             await asyncio.sleep(6)
 
             # Open the surface this shot is about.
-            if st.get("open") == "search":
+            if st.get("open") == "influence":
+                # Influence Metrics lives in the right sidebar; nothing to open,
+                # just scroll it into view once its fetch has landed.
+                await c.js("var e=document.getElementById('influence-metrics-section'); if(e) e.scrollIntoView({block:'center'}); 1")
+            elif st.get("open") == "search":
                 # The dropdown opens on focus, but a headless focus() does not
                 # always fire the app's handler; add the class the app itself
                 # adds (search.js:285) so the shot is of the real element in
@@ -137,7 +146,9 @@ async def run(label, outdir):
             print(f"corpus range   : {corpus}")
 
             os.makedirs(outdir, exist_ok=True)
-            sel = "#searchDropdown" if st.get("open") == "search" else ".portfolio-panel"
+            sel = {"search": "#searchDropdown",
+                   "influence": "#influence-metrics-section"
+                   }.get(st.get("open"), ".portfolio-panel")
             box = await c.js("JSON.stringify(document.querySelector('" + sel + "')"
                              ".getBoundingClientRect().toJSON())")
             b = json.loads(box)

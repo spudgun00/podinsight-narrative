@@ -133,15 +133,67 @@ const NotableSignalsLive = {
         this.grid.appendChild(this.libraryCard());
     },
 
-    card(title, {big, label, note, onClick, ariaLabel}) {
-        const el = document.createElement(onClick ? 'button' : 'div');
-        if (onClick) { el.type = 'button'; el.addEventListener('click', onClick); }
+    /**
+     * A card. Finding 3, 2 Sep 2026: the FACE carries a title, one number and
+     * one line of context, and nothing else - the vision mock's grammar.
+     *
+     * Everything that used to sit on the face - methodology sentences, floor
+     * explanations, the little row lists - moves behind a per-card info
+     * affordance, **word for word**. Nothing is summarised away and nothing is
+     * dropped; it is one click down instead of in the way.
+     *
+     * Permanently banned from a face, whatever a future card wants to say:
+     * confidence percentages, sentiment, and any figure with no machinery
+     * behind it. The mock had all three. The layout was right and the numbers
+     * were fiction, and only the layout is being adopted.
+     */
+    card(title, {big, label, note, detail, onClick, ariaLabel}) {
+        const el = document.createElement('div');
         el.className = 'signal-card nsl-card' + (onClick ? ' is-openable' : '');
-        if (ariaLabel) el.setAttribute('aria-label', ariaLabel);
+
+        const head = document.createElement('div');
+        head.className = 'nsl-card-head';
         const t = document.createElement('div');
         t.className = 'nsl-card-title';
         t.textContent = title;
-        el.appendChild(t);
+        head.appendChild(t);
+
+        // The disclosure. Only rendered when there is something to disclose -
+        // an icon that looks clickable and does nothing is a dead control.
+        const disclosures = [].concat(note || [], detail || []).filter(Boolean);
+        if (disclosures.length) {
+            const info = document.createElement('button');
+            info.type = 'button';
+            info.className = 'nsl-info';
+            info.textContent = 'i';
+            info.setAttribute('aria-label', `How ${title} is calculated`);
+            info.setAttribute('aria-expanded', 'false');
+            const pop = document.createElement('div');
+            pop.className = 'nsl-pop';
+            pop.hidden = true;
+            disclosures.forEach(d => {
+                if (typeof d === 'string') {
+                    const q = document.createElement('p');
+                    q.className = 'nsl-pop-note';
+                    q.textContent = d;               // word for word
+                    pop.appendChild(q);
+                } else {
+                    pop.appendChild(d);
+                }
+            });
+            info.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const open = pop.hidden;
+                document.querySelectorAll('.nsl-pop').forEach(x => { x.hidden = true; });
+                document.querySelectorAll('.nsl-info').forEach(x => x.setAttribute('aria-expanded', 'false'));
+                pop.hidden = !open;
+                info.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            head.appendChild(info);
+            el._pop = pop;
+        }
+        el.appendChild(head);
+
         if (big != null) {
             const b = document.createElement('div');
             b.className = 'signal-count nsl-card-value';
@@ -154,13 +206,50 @@ const NotableSignalsLive = {
             l.textContent = label;
             el.appendChild(l);
         }
-        if (note) {
-            const n = document.createElement('div');
-            n.className = 'nsl-card-note';
-            n.textContent = note;
-            el.appendChild(n);
+        if (el._pop) el.appendChild(el._pop);
+
+        // The whole card opens, and it carries no extra label to say so - a
+        // button captioned "Show the claims citing a figure of $1bn or more"
+        // is a fourth thing on a face the ruling limits to three. The card is a
+        // div with a button role rather than a <button>, because the info
+        // affordance is itself a button and a button inside a button is invalid
+        // markup that makes the inner one unclickable.
+        if (onClick) {
+            el.setAttribute('role', 'button');
+            el.tabIndex = 0;
+            el.setAttribute('aria-label', ariaLabel || `Open ${title}`);
+            const go = (e) => {
+                if (e.target.closest('.nsl-info, .nsl-pop')) return;   // disclosure, not open
+                onClick(e);
+            };
+            el.addEventListener('click', go);
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(e); }
+            });
         }
         return el;
+    },
+
+    /** A detail list for the popover, built from the rows a face used to show. */
+    detailList(rows) {
+        const list = document.createElement('div');
+        list.className = 'nsl-move';
+        rows.forEach(r => {
+            const row = document.createElement('div');
+            row.className = 'nsl-move-row';
+            const n = document.createElement('span');
+            n.className = 'nsl-move-name';
+            n.textContent = r.name;
+            row.appendChild(n);
+            const v = document.createElement('span');
+            v.className = 'nsl-move-value';
+            v.textContent = r.value;
+            if (r.colour) v.style.color = r.colour;
+            if (r.title) v.title = r.title;
+            row.appendChild(v);
+            list.appendChild(row);
+        });
+        return list;
     },
 
     // ------------------------------------------------------------ the cards
@@ -169,9 +258,11 @@ const NotableSignalsLive = {
         const ct = window.CompanyTrackingLive;
         const names = ct ? ct.names() : [];
         if (!names.length) {
+            // The empty card keeps its one-line add prompt ON the face: it is
+            // the only instruction that makes the card actionable, and hiding
+            // it behind an affordance would leave a card that says nothing.
             const c = this.card('Watchlist Mentions', {
-                label: 'No companies configured',
-                note: 'Add companies in Company Tracking to see how often the library names them.'
+                label: 'Add companies in Company Tracking to see how often the library names them.'
             });
             c.classList.add('nsl-card--empty');
             return c;
@@ -182,13 +273,13 @@ const NotableSignalsLive = {
             big: mentions.toLocaleString(),
             label: `${mentions === 1 ? 'mention' : 'mentions'} across `
                  + `${eps.toLocaleString()} ${eps === 1 ? 'episode' : 'episodes'}`,
-            note: `${names.length} ${names.length === 1 ? 'company' : 'companies'}: `
-                 + names.slice(0, 4).join(', ') + (names.length > 4 ? '…' : ''),
+            note: [`${names.length} ${names.length === 1 ? 'company' : 'companies'}: `
+                   + names.slice(0, 4).join(', ') + (names.length > 4 ? '…' : ''),
+                   'Summed per company, so an episode naming two watchlist '
+                   + 'companies counts in both.'],
             ariaLabel: 'Open Company Tracking',
             onClick: () => { if (ct.open) ct.open(); }
         });
-        c.title = 'Summed per company, so an episode naming two watchlist '
-                + 'companies counts in both.';
         return c;
     },
 
@@ -203,35 +294,20 @@ const NotableSignalsLive = {
     narrativesCard() {
         const d = this.narratives;
         if (!d || !d.narratives || !d.narratives.length) return null;
-        const c = this.card('Market Narratives', {
+        const rows = d.narratives.slice(0, 3).map(n => ({
+            name: n.topic,
+            value: `${n.podcasts} pods`,
+            title: `${n.podcasts} distinct podcasts, ${n.episodes.toLocaleString()} episodes, `
+                 + `${n.chunks.toLocaleString()} passages`
+        }));
+        return this.card('Market Narratives', {
             big: d.count.toLocaleString(),
             label: `discovered topics, ${d.excluded_count} clusters excluded`,
+            detail: [this.detailList(rows)],
+            note: d.ranking,
             ariaLabel: 'Show the discovered market narratives',
             onClick: () => this.openNarratives()
         });
-        const list = document.createElement('div');
-        list.className = 'nsl-move';
-        d.narratives.slice(0, 3).forEach(n => {
-            const row = document.createElement('div');
-            row.className = 'nsl-move-row';
-            const nm = document.createElement('span');
-            nm.className = 'nsl-move-name';
-            nm.textContent = n.topic;
-            row.appendChild(nm);
-            const v = document.createElement('span');
-            v.className = 'nsl-move-value';
-            v.textContent = `${n.podcasts} pods`;
-            v.title = `${n.podcasts} distinct podcasts, ${n.episodes.toLocaleString()} episodes, `
-                    + `${n.chunks.toLocaleString()} passages`;
-            row.appendChild(v);
-            list.appendChild(row);
-        });
-        c.appendChild(list);
-        const note = document.createElement('div');
-        note.className = 'nsl-card-note';
-        note.textContent = d.ranking;
-        c.appendChild(note);
-        return c;
     },
 
     openNarratives() {
@@ -439,7 +515,7 @@ const NotableSignalsLive = {
         return this.card('Notable Figures', {
             big: d.figures_count.toLocaleString(),
             label: 'claims citing $1bn or more',
-            note: d.figures_rule,
+            note: d.figures_rule,          // word for word, one click down
             ariaLabel: 'Show the claims citing a figure of $1bn or more',
             onClick: () => this.openFigures()
         });
@@ -457,69 +533,47 @@ const NotableSignalsLive = {
                                         total: t.total_mentions || 0 }));
         const printable = rows.filter(r => !r.fmt.suppressed && r.fmt.dir !== 'none');
         const suppressed = rows.length - printable.length;
-        const c = this.card('Topic Movement', {
-            label: printable.length
-                ? `${printable.length} of ${rows.length} tracked topics move enough to report`
-                : 'No tracked topic clears the floor'
-        });
-        const list = document.createElement('div');
-        list.className = 'nsl-move';
-        rows.forEach(r => {
-            const row = document.createElement('div');
-            row.className = 'nsl-move-row';
-            const n = document.createElement('span');
-            n.className = 'nsl-move-name';
-            n.textContent = r.name;
-            row.appendChild(n);
-            const v = document.createElement('span');
-            v.className = 'nsl-move-value';
-            // fmt.text is the shared formatter's own wording - "low volume",
-            // "N mentions", or the percentage. Re-deriving it here is how the
-            // same topic ends up reading "low volume" on one surface and
-            // "no data" on another, which is the drift trend.js exists to stop.
-            // The one addition is Velocity Tracking's zero case, which it also
-            // handles before calling the formatter.
-            v.textContent = (r.total === 0) ? 'no mentions' : r.fmt.text;
-            v.style.color = r.fmt.colour;
-            v.title = r.fmt.title || '';
-            row.appendChild(v);
-            list.appendChild(row);
-        });
-        c.appendChild(list);
+
+        // fmt.text is the shared formatter's own wording - "low volume",
+        // "N mentions", or the percentage. Re-deriving it here is how the same
+        // topic ends up reading "low volume" on one surface and "no data" on
+        // another, which is the drift trend.js exists to stop. The one addition
+        // is Velocity Tracking's zero case, which it also handles before
+        // calling the formatter.
+        const detail = rows.map(r => ({
+            name: r.name,
+            value: (r.total === 0) ? 'no mentions' : r.fmt.text,
+            colour: r.fmt.colour,
+            title: r.fmt.title || ''
+        }));
+
+        const notes = [];
         if (suppressed) {
-            const n = document.createElement('div');
-            n.className = 'nsl-card-note';
-            n.textContent = `${suppressed} of ${rows.length} are below the `
-                + `${window.SyntheaTrend.MIN_BASELINE_MENTIONS}-mention floor, so their `
-                + `volume is shown instead of a percentage.`;
-            c.appendChild(n);
+            notes.push(`${suppressed} of ${rows.length} are below the `
+                     + `${T.MIN_BASELINE_MENTIONS}-mention floor, so they report volume rather than a `
+                     + `percentage. The floor is not loosened inside a window.`);
         }
-        return c;
+        return this.card('Topic Movement', {
+            big: String(printable.length),
+            label: printable.length
+                ? `of ${rows.length} tracked topics move enough to report`
+                : `of ${rows.length} tracked topics clear the floor`,
+            detail: [this.detailList(detail)],
+            note: notes
+        });
     },
 
     libraryCard() {
         const d = this.data;
-        const c = this.card('Library', {
+        return this.card('Library', {
             big: d.episodes.toLocaleString(),
-            label: 'episodes'
+            label: 'episodes in this window',
+            detail: [this.detailList([
+                { name: 'hours', value: d.hours.toLocaleString() },
+                { name: 'verified claims', value: d.verified_claims.toLocaleString() },
+                { name: 'podcasts', value: d.podcasts.toLocaleString() }
+            ])]
         });
-        const list = document.createElement('div');
-        list.className = 'nsl-move';
-        [[d.hours.toLocaleString(), 'hours'],
-         [d.verified_claims.toLocaleString(), 'verified claims'],
-         [d.podcasts.toLocaleString(), 'podcasts']].forEach(([v, l]) => {
-            const row = document.createElement('div');
-            row.className = 'nsl-move-row';
-            const n = document.createElement('span');
-            n.className = 'nsl-move-name'; n.textContent = l;
-            row.appendChild(n);
-            const s = document.createElement('span');
-            s.className = 'nsl-move-value'; s.textContent = v;
-            row.appendChild(s);
-            list.appendChild(row);
-        });
-        c.appendChild(list);
-        return c;
     },
 
     // --------------------------------------------------------- figures list

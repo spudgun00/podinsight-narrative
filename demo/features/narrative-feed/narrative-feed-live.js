@@ -18,7 +18,7 @@
  * Notable Episodes and the episode panel open. One brief surface, not two.
  */
 const NarrativeFeedLive = {
-    PAGE: 30,
+    PAGE: 10,          // finding 4: the front page shows the newest ten
 
     topic: null,        // null = All
     offset: 0,
@@ -41,7 +41,7 @@ const NarrativeFeedLive = {
             <section class="narrative-feed narrative-feed-live">
                 <div class="section-header">
                     <div class="feed-title-group">
-                        <h2 class="section-title">NARRATIVE FEED</h2>
+                        <h2 class="section-title">LATEST EPISODES</h2>
                         <span class="section-subtitle nfl-period"></span>
                     </div>
                 </div>
@@ -255,28 +255,33 @@ const NarrativeFeedLive = {
         (reset ? this.list : this.footEl).appendChild(box);
     },
 
+    /**
+     * Finding 4, 2 Sep 2026. The front page shows the newest ten and stops.
+     *
+     * This module was called Narrative Feed and rendered every episode in the
+     * window - 613 rows in the default view, 4,471 at all time - behind
+     * infinite scroll. That is the archive wearing the feed's name. It is
+     * "Latest episodes" now, capped at ten, and the line below points at the
+     * surface that owns the full list.
+     *
+     * The name Narrative Feed is retired from the page until the real one
+     * exists: dated pattern statements badged consensus, divergence, trend and
+     * pattern, each citing playable sources. That is adopted as the radar's
+     * target output format and is NOT built here - see TOUR_FINDINGS.md
+     * finding 4.
+     */
     renderFoot(hasMore) {
         this.footEl.innerHTML = '';
-        if (!hasMore) {
-            const end = document.createElement('p');
-            end.className = 'nfl-end';
-            // With a filter on, this is the end of the filtered list, not of
-            // the corpus. Saying "End of the corpus" under two DePIN episodes
-            // would read as a claim about the whole store.
-            end.textContent = this.topic
-                ? `That is every episode mentioning ${this.topic}.`
-                : 'End of the corpus.';
-            this.footEl.appendChild(end);
-            return;
-        }
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'nfl-more';
-        b.textContent = 'Load more';
-        b.addEventListener('click', () => this.load({ reset: false }));
-        this.footEl.appendChild(b);
-        this.moreBtn = b;
-        this.watchMore(b);
+        const total = this.total || 0;
+        const p = document.createElement('p');
+        p.className = 'nfl-end nfl-library-pointer';
+        p.textContent = this.topic
+            ? `${total.toLocaleString()} ${total === 1 ? 'episode' : 'episodes'} `
+              + `mentioning ${this.topic} in this window, open the Episode Library`
+            : `${total.toLocaleString()} ${total === 1 ? 'episode' : 'episodes'} `
+              + `in this window, open the Episode Library`;
+        this.footEl.appendChild(p);
+        void hasMore;
     },
 
     /**

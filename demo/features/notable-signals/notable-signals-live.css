@@ -87,3 +87,63 @@
                 color: var(--sage, #4a7c59); background: transparent; border: 0;
                 padding: 0 0 .75rem; cursor: pointer; }
 .nsl-nar-back:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------------------
+   Finding 3, 2 Sep 2026: the vision mock's card grammar.
+   A face carries a title, one number and one line. Methodology, floor
+   explanations and the old row lists sit behind a per-card info affordance,
+   word for word.
+   --------------------------------------------------------------------------- */
+.nsl-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.nsl-info {
+    appearance: none;
+    flex: 0 0 auto;
+    width: 1.15rem;
+    height: 1.15rem;
+    line-height: 1.05rem;
+    border-radius: 50%;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    background: #fff;
+    color: var(--gray-600, #6b7280);
+    font-size: 0.7rem;
+    font-style: italic;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    padding: 0;
+}
+.nsl-info:hover,
+.nsl-info[aria-expanded="true"] {
+    background: var(--sage, #4a7c59);
+    border-color: var(--sage, #4a7c59);
+    color: #fff;
+}
+
+.nsl-pop {
+    margin-top: 0.6rem;
+    padding: 0.6rem 0.7rem;
+    background: var(--warm-paper, #fafaf9);
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 5px;
+    font-size: 0.75rem;
+    color: var(--gray-600, #6b7280);
+    line-height: 1.45;
+}
+.nsl-pop-note { margin: 0 0 0.45rem; }
+.nsl-pop-note:last-child { margin-bottom: 0; }
+.nsl-pop .nsl-move { margin: 0 0 0.5rem; }
+.nsl-pop .nsl-move:last-child { margin-bottom: 0; }
+
+/* The open action is its own control now, so the whole card is not a button
+   wrapping other buttons - which is invalid markup and made the info
+   affordance unclickable. */
+.nsl-card.is-openable { cursor: pointer; }
+.nsl-card.is-openable:focus-visible {
+    outline: 2px solid var(--sage, #4a7c59);
+    outline-offset: 2px;
+}

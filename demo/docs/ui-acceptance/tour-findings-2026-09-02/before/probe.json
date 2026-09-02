@@ -1,0 +1,318 @@
+{
+ "90d": {
+  "header_text": "synthea.ai\nsynthesized intelligence\nWORKING TITLE\n\u2318K\n\ud83d\udd0d\nEpisode Library\nCustomization\nCompany Tracking\nEpisodes\n613\n\u2022\nPodcasts\n25\n\u2022\nHours analysed\n542\nLast 30 days\nLast 90 days\nLast 12 months\nAll time\n31 May 2026 to 28 Aug 2026\nLIVE\nVISION",
+  "header_height": 162,
+  "dw_span": "31 May 2026 to 28 Aug 2026",
+  "dw_active": [
+   "Last 90 days"
+  ],
+  "signals_cards": [
+   {
+    "title": "Market Narratives",
+    "value": "25",
+    "label": "discovered topics, 5 clusters excluded",
+    "notes": [],
+    "rows": [
+     "Startup valuations and early investments29 pods",
+     "Manufacturing automation and cost reduction29 pods",
+     "Fintech products and consumer banking29 pods"
+    ],
+    "info": true,
+    "face_text": "MARKET NARRATIVES\ni\n25\ndiscovered topics, 5 clusters excluded"
+   },
+   {
+    "title": "Watchlist Mentions",
+    "value": null,
+    "label": "Add companies in Company Tracking to see how often the library names them.",
+    "notes": [],
+    "rows": [],
+    "info": false,
+    "face_text": "WATCHLIST MENTIONS\nAdd companies in Company Tracking to see how often the library names them."
+   },
+   {
+    "title": "Notable Figures",
+    "value": "298",
+    "label": "claims citing $1bn or more",
+    "notes": [],
+    "rows": [],
+    "info": true,
+    "face_text": "NOTABLE FIGURES\ni\n298\nclaims citing $1bn or more"
+   },
+   {
+    "title": "Topic Movement",
+    "value": "2",
+    "label": "of 5 tracked topics move enough to report",
+    "notes": [],
+    "rows": [
+     "AI Agents-32%",
+     "Capital Efficiencylow volume",
+     "DePIN3 mentions",
+     "B2B SaaSlow volume",
+     "Crypto/Web3+10%"
+    ],
+    "info": true,
+    "face_text": "TOPIC MOVEMENT\ni\n2\nof 5 tracked topics move enough to report"
+   },
+   {
+    "title": "Library",
+    "value": "613",
+    "label": "episodes in this window",
+    "notes": [],
+    "rows": [
+     "hours542",
+     "verified claims2,951",
+     "podcasts25"
+    ],
+    "info": true,
+    "face_text": "LIBRARY\ni\n613\nepisodes in this window"
+   }
+  ],
+  "feed_title": "LATEST EPISODES",
+  "feed_period": "31 MAY 2026 \u2013 28 AUGUST 2026",
+  "feed_rows": 10,
+  "feed_foot": "613 episodes in this window, open the Episode Library",
+  "feed_more": null,
+  "banned": {
+   "confidence": false,
+   "sentiment": false,
+   "lp": false
+  }
+ },
+ "30d": {
+  "header_text": "synthea.ai\nsynthesized intelligence\nWORKING TITLE\n\u2318K\n\ud83d\udd0d\nEpisode Library\nCustomization\nCompany Tracking\nEpisodes\n208\n\u2022\nPodcasts\n25\n\u2022\nHours analysed\n190\nLast 30 days\nLast 90 days\nLast 12 months\nAll time\n30 Jul 2026 to 28 Aug 2026\nLIVE\nVISION",
+  "header_height": 162,
+  "dw_span": "30 Jul 2026 to 28 Aug 2026",
+  "dw_active": [
+   "Last 30 days"
+  ],
+  "signals_cards": [
+   {
+    "title": "Market Narratives",
+    "value": "25",
+    "label": "discovered topics, 5 clusters excluded",
+    "notes": [],
+    "rows": [
+     "Startup valuations and early investments29 pods",
+     "Manufacturing automation and cost reduction29 pods",
+     "Fintech products and consumer banking29 pods"
+    ],
+    "info": true,
+    "face_text": "MARKET NARRATIVES\ni\n25\ndiscovered topics, 5 clusters excluded"
+   },
+   {
+    "title": "Watchlist Mentions",
+    "value": null,
+    "label": "Add companies in Company Tracking to see how often the library names them.",
+    "notes": [],
+    "rows": [],
+    "info": false,
+    "face_text": "WATCHLIST MENTIONS\nAdd companies in Company Tracking to see how often the library names them."
+   },
+   {
+    "title": "Notable Figures",
+    "value": "113",
+    "label": "claims citing $1bn or more",
+    "notes": [],
+    "rows": [],
+    "info": true,
+    "face_text": "NOTABLE FIGURES\ni\n113\nclaims citing $1bn or more"
+   },
+   {
+    "title": "Topic Movement",
+    "value": "2",
+    "label": "of 5 tracked topics move enough to report",
+    "notes": [],
+    "rows": [
+     "AI Agents-32%",
+     "Capital Efficiencylow volume",
+     "DePIN3 mentions",
+     "B2B SaaSlow volume",
+     "Crypto/Web3+10%"
+    ],
+    "info": true,
+    "face_text": "TOPIC MOVEMENT\ni\n2\nof 5 tracked topics move enough to report"
+   },
+   {
+    "title": "Library",
+    "value": "208",
+    "label": "episodes in this window",
+    "notes": [],
+    "rows": [
+     "hours190",
+     "verified claims998",
+     "podcasts25"
+    ],
+    "info": true,
+    "face_text": "LIBRARY\ni\n208\nepisodes in this window"
+   }
+  ],
+  "feed_title": "LATEST EPISODES",
+  "feed_period": "30 JULY 2026 \u2013 28 AUGUST 2026",
+  "feed_rows": 10,
+  "feed_foot": "208 episodes in this window, open the Episode Library",
+  "feed_more": null,
+  "banned": {
+   "confidence": false,
+   "sentiment": false,
+   "lp": false
+  }
+ },
+ "12m": {
+  "header_text": "synthea.ai\nsynthesized intelligence\nWORKING TITLE\n\u2318K\n\ud83d\udd0d\nEpisode Library\nCustomization\nCompany Tracking\nEpisodes\n2,806\n\u2022\nPodcasts\n29\n\u2022\nHours analysed\n2,547\nLast 30 days\nLast 90 days\nLast 12 months\nAll time\n28 Aug 2025 to 28 Aug 2026\nLIVE\nVISION",
+  "header_height": 162,
+  "dw_span": "28 Aug 2025 to 28 Aug 2026",
+  "dw_active": [
+   "Last 12 months"
+  ],
+  "signals_cards": [
+   {
+    "title": "Market Narratives",
+    "value": "25",
+    "label": "discovered topics, 5 clusters excluded",
+    "notes": [],
+    "rows": [
+     "Startup valuations and early investments29 pods",
+     "Manufacturing automation and cost reduction29 pods",
+     "Fintech products and consumer banking29 pods"
+    ],
+    "info": true,
+    "face_text": "MARKET NARRATIVES\ni\n25\ndiscovered topics, 5 clusters excluded"
+   },
+   {
+    "title": "Watchlist Mentions",
+    "value": null,
+    "label": "Add companies in Company Tracking to see how often the library names them.",
+    "notes": [],
+    "rows": [],
+    "info": false,
+    "face_text": "WATCHLIST MENTIONS\nAdd companies in Company Tracking to see how often the library names them."
+   },
+   {
+    "title": "Notable Figures",
+    "value": "1,410",
+    "label": "claims citing $1bn or more",
+    "notes": [],
+    "rows": [],
+    "info": true,
+    "face_text": "NOTABLE FIGURES\ni\n1,410\nclaims citing $1bn or more"
+   },
+   {
+    "title": "Topic Movement",
+    "value": "2",
+    "label": "of 5 tracked topics move enough to report",
+    "notes": [],
+    "rows": [
+     "AI Agents-32%",
+     "Capital Efficiencylow volume",
+     "DePIN3 mentions",
+     "B2B SaaSlow volume",
+     "Crypto/Web3+10%"
+    ],
+    "info": true,
+    "face_text": "TOPIC MOVEMENT\ni\n2\nof 5 tracked topics move enough to report"
+   },
+   {
+    "title": "Library",
+    "value": "2,806",
+    "label": "episodes in this window",
+    "notes": [],
+    "rows": [
+     "hours2,547",
+     "verified claims13,422",
+     "podcasts29"
+    ],
+    "info": true,
+    "face_text": "LIBRARY\ni\n2,806\nepisodes in this window"
+   }
+  ],
+  "feed_title": "LATEST EPISODES",
+  "feed_period": "28 AUGUST 2025 \u2013 28 AUGUST 2026",
+  "feed_rows": 10,
+  "feed_foot": "2,806 episodes in this window, open the Episode Library",
+  "feed_more": null,
+  "banned": {
+   "confidence": false,
+   "sentiment": false,
+   "lp": false
+  }
+ },
+ "all": {
+  "header_text": "synthea.ai\nsynthesized intelligence\nWORKING TITLE\n\u2318K\n\ud83d\udd0d\nEpisode Library\nCustomization\nCompany Tracking\nEpisodes\n4,471\n\u2022\nPodcasts\n29\n\u2022\nHours analysed\n4,080\nLast 30 days\nLast 90 days\nLast 12 months\nAll time\n1 Jan 2025 to 28 Aug 2026\nLIVE\nVISION",
+  "header_height": 162,
+  "dw_span": "1 Jan 2025 to 28 Aug 2026",
+  "dw_active": [
+   "All time"
+  ],
+  "signals_cards": [
+   {
+    "title": "Market Narratives",
+    "value": "25",
+    "label": "discovered topics, 5 clusters excluded",
+    "notes": [],
+    "rows": [
+     "Startup valuations and early investments29 pods",
+     "Manufacturing automation and cost reduction29 pods",
+     "Fintech products and consumer banking29 pods"
+    ],
+    "info": true,
+    "face_text": "MARKET NARRATIVES\ni\n25\ndiscovered topics, 5 clusters excluded"
+   },
+   {
+    "title": "Watchlist Mentions",
+    "value": null,
+    "label": "Add companies in Company Tracking to see how often the library names them.",
+    "notes": [],
+    "rows": [],
+    "info": false,
+    "face_text": "WATCHLIST MENTIONS\nAdd companies in Company Tracking to see how often the library names them."
+   },
+   {
+    "title": "Notable Figures",
+    "value": "2,231",
+    "label": "claims citing $1bn or more",
+    "notes": [],
+    "rows": [],
+    "info": true,
+    "face_text": "NOTABLE FIGURES\ni\n2,231\nclaims citing $1bn or more"
+   },
+   {
+    "title": "Topic Movement",
+    "value": "2",
+    "label": "of 5 tracked topics move enough to report",
+    "notes": [],
+    "rows": [
+     "AI Agents-32%",
+     "Capital Efficiencylow volume",
+     "DePIN3 mentions",
+     "B2B SaaSlow volume",
+     "Crypto/Web3+10%"
+    ],
+    "info": true,
+    "face_text": "TOPIC MOVEMENT\ni\n2\nof 5 tracked topics move enough to report"
+   },
+   {
+    "title": "Library",
+    "value": "4,471",
+    "label": "episodes in this window",
+    "notes": [],
+    "rows": [
+     "hours4,081",
+     "verified claims21,289",
+     "podcasts29"
+    ],
+    "info": true,
+    "face_text": "LIBRARY\ni\n4,471\nepisodes in this window"
+   }
+  ],
+  "feed_title": "LATEST EPISODES",
+  "feed_period": "1 JANUARY 2025 \u2013 28 AUGUST 2026",
+  "feed_rows": 10,
+  "feed_foot": "4,471 episodes in this window, open the Episode Library",
+  "feed_more": null,
+  "banned": {
+   "confidence": false,
+   "sentiment": false,
+   "lp": false
+  }
+ }
+}

@@ -8,7 +8,7 @@
    "control_visible_without_scroll": true,
    "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 613 EPISODES \u00b7 MAY 2026\u2013AUG 2026 \u00b7 MONTHLY",
    "pulse_points": 28,
-   "feed_period": "31 MAY 2026 \u2013 28 AUG 2026",
+   "feed_period": "31 MAY 2026 \u2013 28 AUGUST 2026",
    "feed_rows": 30,
    "feed_status": "Showing 30 of 613 episodes.",
    "feed_chips": [
@@ -22,8 +22,8 @@
    "body_has_2025_06_dash": false,
    "empty_states": 1
   },
-  "api_calls": 15,
-  "api_calls_with_window": 15,
+  "api_calls": 14,
+  "api_calls_with_window": 14,
   "api_calls_missing_window": []
  },
  "30d": {
@@ -35,7 +35,7 @@
    "control_visible_without_scroll": true,
    "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 208 EPISODES \u00b7 JUL 2026\u2013AUG 2026 \u00b7 MONTHLY",
    "pulse_points": 4,
-   "feed_period": "30 JUL 2026 \u2013 28 AUG 2026",
+   "feed_period": "30 JULY 2026 \u2013 28 AUGUST 2026",
    "feed_rows": 30,
    "feed_status": "Showing 30 of 208 episodes.",
    "feed_chips": [
@@ -49,8 +49,8 @@
    "body_has_2025_06_dash": false,
    "empty_states": 1
   },
-  "api_calls": 15,
-  "api_calls_with_window": 15,
+  "api_calls": 16,
+  "api_calls_with_window": 16,
   "api_calls_missing_window": []
  },
  "12m": {
@@ -62,7 +62,7 @@
    "control_visible_without_scroll": true,
    "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 2,806 EPISODES \u00b7 AUG 2025\u2013AUG 2026 \u00b7 MONTHLY",
    "pulse_points": 82,
-   "feed_period": "28 AUG 2025 \u2013 28 AUG 2026",
+   "feed_period": "28 AUGUST 2025 \u2013 28 AUGUST 2026",
    "feed_rows": 30,
    "feed_status": "Showing 30 of 2,806 episodes.",
    "feed_chips": [
@@ -89,7 +89,7 @@
    "control_visible_without_scroll": true,
    "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 4,471 EPISODES \u00b7 JAN 2025\u2013AUG 2026 \u00b7 MONTHLY",
    "pulse_points": 124,
-   "feed_period": "1 JAN 2025 \u2013 28 AUG 2026",
+   "feed_period": "1 JANUARY 2025 \u2013 28 AUGUST 2026",
    "feed_rows": 30,
    "feed_status": "Showing 30 of 4,471 episodes.",
    "feed_chips": [
@@ -108,8 +108,8 @@
    "body_has_2025_06_dash": false,
    "empty_states": 1
   },
-  "api_calls": 15,
-  "api_calls_with_window": 15,
+  "api_calls": 16,
+  "api_calls_with_window": 16,
   "api_calls_missing_window": []
  }
 }

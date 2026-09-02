@@ -182,6 +182,15 @@ const NarrativeFeedLive = {
      * vanished. Derived from the API's topic_coverage, so it removes itself if
      * tagging ever catches up.
      */
+    /** 2025-06-21 -> 21 June 2025. Never used to invent a date, only to format one. */
+    dateLabel(iso) {
+        const M = ['January','February','March','April','May','June',
+                   'July','August','September','October','November','December'];
+        const d = new Date(iso + 'T00:00:00Z');
+        if (isNaN(d)) return iso;
+        return d.getUTCDate() + ' ' + M[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+    },
+
     renderTopicNote() {
         const old = this.chipsEl.parentNode.querySelector('.dw-note[data-panel="feed-topics"]');
         if (old) old.remove();
@@ -190,11 +199,22 @@ const NarrativeFeedLive = {
         const n = document.createElement('p');
         n.className = 'dw-note';
         n.setAttribute('data-panel', 'feed-topics');
-        n.textContent = 'Topic chips are not shown for this period. The five tracked '
-            + 'topics were only ever tagged on episodes up to '
-            + (c.tagged_through || 'June 2025')
-            + '; nothing published since has been tagged, so a chip here would read zero '
-            + 'for every topic. Every episode in the period is still listed below.';
+        // NO fallback date. The first version of this note read
+        // `c.tagged_through || 'June 2025'`, and because the reach was being
+        // measured inside the window - where there are no tagged briefs to take
+        // a max over - it came back null and the page printed a date I had
+        // typed. A note about a data gap must not itself state an unverified
+        // date. If the reach is unknown, the note says less.
+        const through = c.tagged_through ? this.dateLabel(c.tagged_through) : null;
+        n.textContent = through
+            ? 'No topic chips for this period. The five tracked topics were only '
+              + 'ever tagged on episodes up to ' + through + ', so every chip here '
+              + 'would read zero. '
+              + (this.total ? 'All ' + this.total.toLocaleString() + ' episodes in '
+                              + 'the period are listed below, untagged.'
+                            : 'Every episode in the period is still listed below.')
+            : 'No topic chips for this period: none of these episodes carries a '
+              + 'tracked-topic tag. Every episode in the period is still listed below.';
         this.chipsEl.parentNode.insertBefore(n, this.chipsEl.nextSibling);
     },
 

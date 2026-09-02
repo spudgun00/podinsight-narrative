@@ -1,0 +1,115 @@
+{
+ "90d": {
+  "probe": {
+   "control_active": [
+    "Last 90 days"
+   ],
+   "control_span": "31 May 2026 to 28 Aug 2026",
+   "control_visible_without_scroll": true,
+   "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 613 EPISODES \u00b7 MAY 2026\u2013AUG 2026 \u00b7 MONTHLY",
+   "pulse_points": 28,
+   "feed_period": "31 MAY 2026 \u2013 28 AUG 2026",
+   "feed_rows": 30,
+   "feed_status": "Showing 30 of 613 episodes.",
+   "feed_chips": [
+    "All613"
+   ],
+   "feed_foot": "Load more",
+   "feed_empty": null,
+   "signals_text": "NOTABLE SIGNALS\nMAY\u2013AUG 2026\nMARKET NARRATIVES\n25\ndiscovered topics, 5 clusters excluded\nStartup valuations and early investments\n29 pods\nManufacturing automation and cost reduction\n29 pods\nFintech products and consumer banking\n29 pods\nRanked by breadth: disti",
+   "brief_note": "This brief covers 1 Jan 2025 to 28 Aug 2026, the whole library. It is a written document with every sentence citing a verified claim, so it is not narrowed to last 90 days - the prose would cite evidence the page no longer shows.",
+   "header_stats": "",
+   "body_has_2025_06_dash": false,
+   "empty_states": 1
+  },
+  "api_calls": 15,
+  "api_calls_with_window": 15,
+  "api_calls_missing_window": []
+ },
+ "30d": {
+  "probe": {
+   "control_active": [
+    "Last 30 days"
+   ],
+   "control_span": "30 Jul 2026 to 28 Aug 2026",
+   "control_visible_without_scroll": true,
+   "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 208 EPISODES \u00b7 JUL 2026\u2013AUG 2026 \u00b7 MONTHLY",
+   "pulse_points": 4,
+   "feed_period": "30 JUL 2026 \u2013 28 AUG 2026",
+   "feed_rows": 30,
+   "feed_status": "Showing 30 of 208 episodes.",
+   "feed_chips": [
+    "All208"
+   ],
+   "feed_foot": "Load more",
+   "feed_empty": null,
+   "signals_text": "NOTABLE SIGNALS\nJUL\u2013AUG 2026\nMARKET NARRATIVES\n25\ndiscovered topics, 5 clusters excluded\nStartup valuations and early investments\n29 pods\nManufacturing automation and cost reduction\n29 pods\nFintech products and consumer banking\n29 pods\nRanked by breadth: disti",
+   "brief_note": "This brief covers 1 Jan 2025 to 28 Aug 2026, the whole library. It is a written document with every sentence citing a verified claim, so it is not narrowed to last 30 days - the prose would cite evidence the page no longer shows.",
+   "header_stats": "",
+   "body_has_2025_06_dash": false,
+   "empty_states": 1
+  },
+  "api_calls": 15,
+  "api_calls_with_window": 15,
+  "api_calls_missing_window": []
+ },
+ "12m": {
+  "probe": {
+   "control_active": [
+    "Last 12 months"
+   ],
+   "control_span": "28 Aug 2025 to 28 Aug 2026",
+   "control_visible_without_scroll": true,
+   "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 2,806 EPISODES \u00b7 AUG 2025\u2013AUG 2026 \u00b7 MONTHLY",
+   "pulse_points": 82,
+   "feed_period": "28 AUG 2025 \u2013 28 AUG 2026",
+   "feed_rows": 30,
+   "feed_status": "Showing 30 of 2,806 episodes.",
+   "feed_chips": [
+    "All2,806"
+   ],
+   "feed_foot": "Load more",
+   "feed_empty": null,
+   "signals_text": "NOTABLE SIGNALS\nAUG 2025\u2013AUG 2026\nMARKET NARRATIVES\n25\ndiscovered topics, 5 clusters excluded\nStartup valuations and early investments\n29 pods\nManufacturing automation and cost reduction\n29 pods\nFintech products and consumer banking\n29 pods\nRanked by breadth: ",
+   "brief_note": "This brief covers 1 Jan 2025 to 28 Aug 2026, the whole library. It is a written document with every sentence citing a verified claim, so it is not narrowed to last 12 months - the prose would cite evidence the page no longer shows.",
+   "header_stats": "",
+   "body_has_2025_06_dash": false,
+   "empty_states": 1
+  },
+  "api_calls": 15,
+  "api_calls_with_window": 15,
+  "api_calls_missing_window": []
+ },
+ "all": {
+  "probe": {
+   "control_active": [
+    "All time"
+   ],
+   "control_span": "1 Jan 2025 to 28 Aug 2026",
+   "control_visible_without_scroll": true,
+   "pulse_subtitle": "6 THEMES \u00b7 PASSAGES ACROSS 4,471 EPISODES \u00b7 JAN 2025\u2013AUG 2026 \u00b7 MONTHLY",
+   "pulse_points": 124,
+   "feed_period": "1 JAN 2025 \u2013 28 AUG 2026",
+   "feed_rows": 30,
+   "feed_status": "Showing 30 of 4,471 episodes.",
+   "feed_chips": [
+    "All4,471",
+    "AI Agents411",
+    "B2B SaaS61",
+    "Capital Efficiency46",
+    "Crypto/Web3486",
+    "DePIN2"
+   ],
+   "feed_foot": "Load more",
+   "feed_empty": null,
+   "signals_text": "NOTABLE SIGNALS\nJAN 2025\u2013AUG 2026\nMARKET NARRATIVES\n25\ndiscovered topics, 5 clusters excluded\nStartup valuations and early investments\n29 pods\nManufacturing automation and cost reduction\n29 pods\nFintech products and consumer banking\n29 pods\nRanked by breadth: ",
+   "brief_note": null,
+   "header_stats": "",
+   "body_has_2025_06_dash": false,
+   "empty_states": 1
+  },
+  "api_calls": 15,
+  "api_calls_with_window": 15,
+  "api_calls_missing_window": []
+ }
+}

@@ -160,6 +160,16 @@
     // last episode rather than written down. "Jan-Jun 2025" was hardcoded in
     // five places; the backfill makes the corpus current, and a label that says
     // Jun 2025 over episodes from this month is simply a lie.
+    /* Add the active window to any of our own API calls. Absolute URLs to
+     * other hosts, and the audio-clip Lambda, are left alone: the window is a
+     * property of this API's period questions, not of every request. */
+    function withWindow(url) {
+        if (!/\/api\//.test(url)) return url;
+        if (/[?&]window=/.test(url)) return url;            // caller was explicit
+        var w = SyntheaData.getWindow();
+        return url + (url.indexOf('?') === -1 ? '?' : '&') + 'window=' + encodeURIComponent(w);
+    }
+
     var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -205,6 +215,37 @@
             return root;
         },
 
+        /* ---------------------------------------------------------------
+         * The global date window. One control, four choices, and it is
+         * stamped onto every API call from ONE place - here - so no panel can
+         * forget it and none can be filtered client-side by hiding rows.
+         * ------------------------------------------------------------- */
+        WINDOWS: [
+            { key: '30d', label: 'Last 30 days' },
+            { key: '90d', label: 'Last 90 days' },
+            { key: '12m', label: 'Last 12 months' },
+            { key: 'all', label: 'All time' }
+        ],
+        WINDOW_DEFAULT: '90d',
+        WINDOW_KEY: 'synthea.window.v1',
+
+        getWindow: function () {
+            var v;
+            try { v = localStorage.getItem(SyntheaData.WINDOW_KEY); } catch (e) { v = null; }
+            var ok = SyntheaData.WINDOWS.some(function (w) { return w.key === v; });
+            return ok ? v : SyntheaData.WINDOW_DEFAULT;
+        },
+
+        setWindow: function (key) {
+            if (key === SyntheaData.getWindow()) return;
+            try { localStorage.setItem(SyntheaData.WINDOW_KEY, key); } catch (e) { /* private mode */ }
+            // A full reload, deliberately. The window changes the period every
+            // panel is about, and several panels cache internally; re-rendering
+            // them piecemeal is how one panel ends up showing 90 days under a
+            // control that says 30. A reload cannot leave a stale panel behind.
+            location.reload();
+        },
+
         /**
          * The one call every live component makes. Stamps pending, then live or
          * error, from the actual outcome.
@@ -215,7 +256,7 @@
                 stamp(key, 'vision', 'page is in Vision mode');
                 return Promise.reject(new Error('vision-mode'));
             }
-            var url = /^https?:/.test(path) ? path : API + path;
+            var url = withWindow(/^https?:/.test(path) ? path : API + path);
             return sharedGet(url, opts).then(function (r) {
                 if (!r.ok) throw new Error('HTTP ' + r.status);
                 return r.json();
@@ -238,6 +279,7 @@
                 stamp(key, 'vision', 'page is in Vision mode');
                 return Promise.reject(new Error('vision-mode'));
             }
+            url = withWindow(url);
             return sharedGet(url, opts).then(function (r) {
                 stamp(key, r.ok ? 'live' : 'error', r.ok ? String(url) : 'HTTP ' + r.status);
                 return r;

@@ -112,6 +112,7 @@ const NarrativeFeedLive = {
     // ------------------------------------------------------------- chrome
 
     renderRule(data) {
+        this.topicCoverage = data.topic_coverage || null;
         this.container.querySelector('.nfl-period').textContent = this.periodLabel(data.period);
         // The panel's own rule, from the endpoint, so the sentence and the sort
         // cannot drift apart.
@@ -170,6 +171,31 @@ const NarrativeFeedLive = {
             });
             this.chipsEl.appendChild(b);
         });
+        this.renderTopicNote();
+    },
+
+    /**
+     * Tracked-topic tagging reaches only to 23 Jun 2025: the backfill wrote
+     * briefs for 3,301 episodes and never tagged them. Inside any window newer
+     * than that the chips are all zero, so the panel says why instead of
+     * rendering a lone "All" chip and letting the reader assume the topics
+     * vanished. Derived from the API's topic_coverage, so it removes itself if
+     * tagging ever catches up.
+     */
+    renderTopicNote() {
+        const old = this.chipsEl.parentNode.querySelector('.dw-note[data-panel="feed-topics"]');
+        if (old) old.remove();
+        const c = this.topicCoverage;
+        if (!c || c.complete || c.tagged_in_window > 0) return;
+        const n = document.createElement('p');
+        n.className = 'dw-note';
+        n.setAttribute('data-panel', 'feed-topics');
+        n.textContent = 'Topic chips are not shown for this period. The five tracked '
+            + 'topics were only ever tagged on episodes up to '
+            + (c.tagged_through || 'June 2025')
+            + '; nothing published since has been tagged, so a chip here would read zero '
+            + 'for every topic. Every episode in the period is still listed below.';
+        this.chipsEl.parentNode.insertBefore(n, this.chipsEl.nextSibling);
     },
 
     status(text) { this.statusEl.textContent = text; },

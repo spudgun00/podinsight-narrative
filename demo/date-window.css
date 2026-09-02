@@ -1,0 +1,55 @@
+/* The global date window. Sits in the header, visible without scrolling. */
+.date-window {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.5rem 2rem 0.625rem;
+    border-top: 1px solid var(--gray-200, #e5e7eb);
+    background: var(--warm-paper, #fafaf9);
+}
+
+.dw-options {
+    display: inline-flex;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.dw-option {
+    appearance: none;
+    border: 0;
+    border-right: 1px solid var(--gray-200, #e5e7eb);
+    background: transparent;
+    padding: 0.3rem 0.7rem;
+    font: inherit;
+    font-size: 0.75rem;
+    color: var(--gray-600, #6b7280);
+    cursor: pointer;
+    white-space: nowrap;
+}
+.dw-option:last-child { border-right: 0; }
+.dw-option:hover { background: var(--light-sage, #e8f0ea); color: var(--deep-ink, #1a1a2e); }
+
+.dw-option.is-active {
+    background: var(--sage, #4a7c59);
+    color: #fff;
+    font-weight: 600;
+}
+
+.dw-span {
+    font-size: 0.75rem;
+    color: var(--gray-600, #6b7280);
+    font-variant-numeric: tabular-nums;
+}
+
+/* The honest note a panel shows when it cannot follow the control. */
+.dw-note {
+    font-size: 0.75rem;
+    color: var(--gray-600, #6b7280);
+    background: var(--light-rose, #f5e6e6);
+    border-radius: 4px;
+    padding: 0.35rem 0.6rem;
+    margin: 0.5rem 0;
+}

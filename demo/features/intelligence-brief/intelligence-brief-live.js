@@ -98,6 +98,18 @@ const IntelligenceBriefLive = {
         head.appendChild(meta);
         root.appendChild(head);
 
+        // The brief is a generated document with every sentence citing a claim
+        // id. It cannot be narrowed to a window without leaving prose that
+        // cites evidence the reader can no longer see, so it says so here
+        // rather than silently ignoring the control.
+        if (d.window_note) {
+            const wn = document.createElement('p');
+            wn.className = 'dw-note';
+            wn.setAttribute('data-panel', 'brief');
+            wn.textContent = d.window_note;
+            root.appendChild(wn);
+        }
+
         root.appendChild(this.numbersSection(d));
         root.appendChild(this.dominatedSection(d));
         root.appendChild(this.notableSection(d));

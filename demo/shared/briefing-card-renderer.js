@@ -44,34 +44,11 @@
         return mentions.join('');
     }
 
-    // Helper function to generate episode number
-    function getEpisodeNumber(podcast, episodeId) {
-        // Map podcasts to their typical episode ranges for demo purposes
-        const podcastEpisodeRanges = {
-            'All-In': 180,
-            '20VC': 1200,
-            'The Twenty Minute VC': 1200,
-            'The Information\'s 411': 89,
-            'Acquired': 145,
-            'Invest Like the Best': 450,
-            'The Logan Bartlett Show': 67,
-            'Stratechery': 234,
-            'Khosla Ventures Podcast': 342,
-            'Khosla Ventures': 342,
-            'Indie Hackers': 289
-        };
-        
-        // Get base episode number for the podcast, or use a default
-        const baseNumber = podcastEpisodeRanges[podcast] || 100;
-        
-        // Create variation based on episode ID to make each one unique
-        const idMatch = episodeId?.match(/\d+/);
-        const variation = idMatch ? parseInt(idMatch[0]) : 0;
-        
-        // Generate episode number (going backwards from most recent)
-        const episodeNum = baseNumber - variation;
-        return `#${episodeNum}`;
-    }
+    // getEpisodeNumber() was removed 3 Sep 2026. It invented an episode number
+    // by subtracting a regex match on the id from a hardcoded per-podcast base
+    // ("All-In": 180, "20VC": 1200), and its only call site had already been
+    // commented out. A number with no machinery behind it does not ship, and it
+    // does not sit in a live file waiting to be uncommented either.
 
     // Main renderer function
     window.renderBriefingCards = function(episodes, options = {}) {

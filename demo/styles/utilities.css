@@ -100,19 +100,30 @@
             box-shadow: none !important;
         }
         
-        /* Remove any possible vignette or edge effects */
+        /* Remove any possible vignette or edge effects.
+         *
+         * Scoped 3 Sep 2026. This was written to kill a full-bleed page overlay
+         * and reached it by naming every container in sight, `div` and `aside`
+         * included. A vignette attaches to the page, not to arbitrary boxes, and
+         * `div::before` is most of the page: every module root on demo.html is a
+         * div, and the resolver's MOCK / PENDING / ERROR badge is a ::before. So
+         * this rule was silently suppressing the badges that say whether a panel
+         * is showing real data - the outline still drew, because that sits on the
+         * element, so the page looked badged and was not.
+         *
+         * Measured before scoping, by deleting this rule at run time and diffing
+         * every generated pseudo-element on the page: dropping `div` and `aside`
+         * brings back exactly two things in Live, the PENDING badge on the search
+         * panel and the ○ bullet on an unbuilt-panel title, and nothing at all
+         * that looks like a vignette. The page containers below keep the guard. */
         body::after,
         body::before,
         html::after,
         html::before,
-        div::after,
-        div::before,
         main::after,
         main::before,
         .container::after,
-        .container::before,
-        aside::after,
-        aside::before {
+        .container::before {
             display: none !important;
             content: none !important;
             box-shadow: none !important;

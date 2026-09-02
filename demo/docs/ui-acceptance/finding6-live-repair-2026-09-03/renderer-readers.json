@@ -1,0 +1,46 @@
+{
+ "live": {
+  "mode": "live",
+  "library": {
+   "cards": 613,
+   "apology": false,
+   "stats": "613 episodes \u2022 25 podcasts \u2022 542 hours analysed",
+   "firstCard": "Hard Fork 28 Aug 2026 \u2022 65 min Meta Shifts the Blame + Do Data Center Bans Work? + The Final HatGPT View Full "
+  },
+  "renderer": {
+   "defined": "function",
+   "callCount": 1,
+   "callers": {
+    "episode-library.js:514": 1
+   },
+   "samples": [
+    {
+     "episodes": 613,
+     "caller": "at Object.renderCardView (http://localhost:5173/features/episode-library/episode-library.js?v=20260903b:514:34) <- at Object.renderContentHTML (http://localhost:5173/features/episode-library/episode-library.js?v=20260903b:436:20)"
+    }
+   ]
+  }
+ },
+ "vision": {
+  "mode": "vision",
+  "library": {
+   "cards": 0,
+   "apology": false,
+   "stats": "Live-mode surface",
+   "firstCard": ""
+  },
+  "renderer": {
+   "defined": "function",
+   "callCount": 1,
+   "callers": {
+    "priority-briefings-compact.js:71": 1
+   },
+   "samples": [
+    {
+     "episodes": 9,
+     "caller": "at Object.renderCards (http://localhost:5173/features/priority-briefings/priority-briefings-compact.js?v=20260903b:71:23) <- at Object.render (http://localhost:5173/features/priority-briefings/priority-briefings-compact.js?v=20260903b:60:24)"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,464 @@
+{
+ "live": {
+  "mode": "live",
+  "counts": {
+   "live": 13,
+   "empty": 1,
+   "pending": 1
+  },
+  "painted": 1,
+  "rows": [
+   {
+    "el": "header",
+    "tag": "header",
+    "state": "live",
+    "detail": "http://localhost:8000/api/episodes?window=90d",
+    "badge": null,
+    "wasSuppressed": false,
+    "visible": true,
+    "says": "synthea.ai synthesized intelligence WORKING TITLE \u2318K \ud83d\udd0d Episode Library Customization Comp"
+   },
+   {
+    "el": "searchDropdown",
+    "tag": "div",
+    "state": "live",
+    "detail": "5 queries verified against /api/search",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": ""
+   },
+   {
+    "el": "dropdown-section",
+    "tag": "div",
+    "state": "live",
+    "detail": null,
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": ""
+   },
+   {
+    "el": "narrative-pulse",
+    "tag": "section",
+    "state": "live",
+    "detail": "/api/topic-mentions?bucket=month",
+    "badge": null,
+    "wasSuppressed": false,
+    "visible": true,
+    "says": "NARRATIVE PULSE 6 THEMES \u00b7 PASSAGES ACROSS 613 EPISODES \u00b7 MAY 2026\u2013AUG 2026 \u00b7 MONTHLY May\u2013"
+   },
+   {
+    "el": "narrative-feed-container",
+    "tag": "div",
+    "state": "live",
+    "detail": "/api/feed?limit=10&offset=0",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "LATEST EPISODES 31 MAY 2026 \u2013 28 AUGUST 2026 Every episode's brief, newest first. All 613 "
+   },
+   {
+    "el": "notable-signals-container",
+    "tag": "div",
+    "state": "live",
+    "detail": "/api/narratives?limit=12",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NOTABLE SIGNALS MAY\u2013AUG 2026 MARKET NARRATIVES i 25 discovered topics, 5 clusters excluded"
+   },
+   {
+    "el": "priority-briefings-container",
+    "tag": "div",
+    "state": "live",
+    "detail": "/api/briefings?limit=12",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NOTABLE EPISODES MAY 2026 \u2013 AUG 2026 Ranked by how densely each episode discusses the five"
+   },
+   {
+    "el": "brief-content",
+    "tag": "div",
+    "state": "live",
+    "detail": "/api/intelligence-brief",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "INTELLIGENCE BRIEF \u00b7 JAN 2025\u2013AUG 2026 4,471 episodes \u00b7 29 podcasts \u00b7 4,081 hours This bri"
+   },
+   {
+    "el": "velocity-tracking-section",
+    "tag": "div",
+    "state": "live",
+    "detail": "http://localhost:8000/api/topic-mentions?bucket=month&window=90d",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "VELOCITY TRACKING Mentions per episode, monthly \u00b7 May 2026\u2013Aug 2026 \u00b7 613 episodes Crypto/"
+   },
+   {
+    "el": "influence-metrics-section",
+    "tag": "div",
+    "state": "live",
+    "detail": "http://localhost:8000/api/entities?limit=7&window=90d",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "MOST-MENTIONED ENTITIES Named entities by episodes mentioning them (of 613) A Anthropic 31"
+   },
+   {
+    "el": "topic-correlations-section",
+    "tag": "div",
+    "state": "live",
+    "detail": "http://localhost:8000/api/topic-correlations?window=90d",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "TOPIC CORRELATIONS Episodes mentioning both tracked topics TOPIC PAIR OBSERVED EXPECTED VE"
+   },
+   {
+    "el": "portfolio-panel",
+    "tag": "div",
+    "state": "empty",
+    "detail": "no companies configured",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Company Tracking No companies configured Saved in this browser ADD A COMPANY Add No compan"
+   },
+   {
+    "el": "episodePanel",
+    "tag": "div",
+    "state": "live",
+    "detail": "http://localhost:8000/api/episodes?window=90d",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "\u2022 \u2022 \u2022 Score: -- \u25b6 \ud83d\udcc4 \u2b07 \u2934 \u2715 HOST GUEST THE CONVERSATION KEY INSIGHTS KEY QUOTES ESSENTIAL Q"
+   },
+   {
+    "el": "searchPanel",
+    "tag": "div",
+    "state": "pending",
+    "detail": "no search run yet",
+    "badge": "PENDING",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Search Share Insight"
+   },
+   {
+    "el": "episode-library-overlay",
+    "tag": "div",
+    "state": "live",
+    "detail": "http://localhost:8000/api/episodes?window=90d",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": false,
+    "says": "Podcast Intelligence Repository 613 episodes \u2022 25 podcasts \u2022 542 hours analysed \u2193 Export R"
+   }
+  ]
+ },
+ "error": {
+  "mode": "live",
+  "counts": {
+   "error": 11,
+   "live": 1,
+   "empty": 1,
+   "pending": 1
+  },
+  "painted": 12,
+  "rows": [
+   {
+    "el": "header",
+    "tag": "header",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": false,
+    "visible": true,
+    "says": "synthea.ai synthesized intelligence WORKING TITLE \u2318K \ud83d\udd0d Episode Library Customization Comp"
+   },
+   {
+    "el": "searchDropdown",
+    "tag": "div",
+    "state": "live",
+    "detail": "5 queries verified against /api/search",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": ""
+   },
+   {
+    "el": "narrative-pulse",
+    "tag": "section",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": false,
+    "visible": true,
+    "says": "NARRATIVE PULSE THEMES ACROSS THE TRANSCRIPT CORPUS the corpus range Share Topics No theme"
+   },
+   {
+    "el": "narrative-feed-container",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "LATEST EPISODES Could not load the feed. Try again"
+   },
+   {
+    "el": "notable-signals-container",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NOTABLE SIGNALS Could not load signals. Try again Have a specific question about these epi"
+   },
+   {
+    "el": "priority-briefings-container",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NOTABLE EPISODES Could not load briefs."
+   },
+   {
+    "el": "brief-content",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Could not load the brief. Try again"
+   },
+   {
+    "el": "velocity-tracking-section",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "VELOCITY TRACKING Tracked topic mentions Topic velocity could not be loaded. Try again in "
+   },
+   {
+    "el": "influence-metrics-section",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "MOST-MENTIONED ENTITIES Named entities by episodes mentioning them Influence metrics could"
+   },
+   {
+    "el": "topic-correlations-section",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "TOPIC CORRELATIONS Episodes mentioning both tracked topics Topic correlations could not be"
+   },
+   {
+    "el": "portfolio-panel",
+    "tag": "div",
+    "state": "empty",
+    "detail": "no companies configured",
+    "badge": null,
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Company Tracking No companies configured Saved in this browser ADD A COMPANY Add No compan"
+   },
+   {
+    "el": "episodePanel",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "\u2022 \u2022 \u2022 Score: -- \u25b6 \ud83d\udcc4 \u2b07 \u2934 \u2715 HOST GUEST THE CONVERSATION KEY INSIGHTS KEY QUOTES ESSENTIAL Q"
+   },
+   {
+    "el": "searchPanel",
+    "tag": "div",
+    "state": "pending",
+    "detail": "no search run yet",
+    "badge": "PENDING",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Search Share Insight"
+   },
+   {
+    "el": "episode-library-overlay",
+    "tag": "div",
+    "state": "error",
+    "detail": "Failed to fetch",
+    "badge": "ERROR",
+    "wasSuppressed": true,
+    "visible": false,
+    "says": "Podcast Intelligence Repository Catalogue unavailable \u2193 Export Results Table Cards \u00d7 \ud83d\udd0d Al"
+   }
+  ]
+ },
+ "vision": {
+  "mode": "vision",
+  "counts": {
+   "vision": 14
+  },
+  "painted": 14,
+  "rows": [
+   {
+    "el": "header",
+    "tag": "header",
+    "state": "vision",
+    "detail": "page is in Vision mode",
+    "badge": "MOCK",
+    "wasSuppressed": false,
+    "visible": true,
+    "says": "synthea.ai synthesized intelligence WORKING TITLE \u2318K \ud83d\udd0d Episode Library Customization Comp"
+   },
+   {
+    "el": "searchDropdown",
+    "tag": "div",
+    "state": "vision",
+    "detail": null,
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": ""
+   },
+   {
+    "el": "narrative-pulse-container",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NARRATIVE PULSE TOPIC MOMENTUM ACROSS 1,498 EPISODES 7 days Share Topics AI Infrastructure"
+   },
+   {
+    "el": "narrative-feed-container",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "LATEST EPISODES PATTERN EMERGENCE \u2022 LAST 48 HOURS 2h ago Infrastructure commanding 4x appl"
+   },
+   {
+    "el": "notable-signals-container",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "NOTABLE SIGNALS KEY PATTERNS FROM THIS WEEK'S EPISODES MARKET NARRATIVES 67 narrative shif"
+   },
+   {
+    "el": "priority-briefings-container",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "PRIORITY BRIEFINGS WHAT REQUIRES YOUR ATTENTION TODAY ALL BRIEFINGS \u2192 All-In 3h ago \u2022 94 m"
+   },
+   {
+    "el": "intelligence-brief-sidebar",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "WEEKLY INTELLIGENCE BRIEF Share | Email CONSENSUS FORMING AI infrastructure dominates with"
+   },
+   {
+    "el": "velocity-tracking-section",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "VELOCITY TRACKING Topic acceleration over past 7 days Enterprise Agents +25% w/w Defense T"
+   },
+   {
+    "el": "influence-metrics-section",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "INFLUENCE METRICS Who's shaping the conversation All-In Podcast High (97) 20VC High (93) B"
+   },
+   {
+    "el": "consensus-monitor-section",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "CONSENSUS MONITOR Market agreement levels by topic AI Infrastructure Strong consensus Ente"
+   },
+   {
+    "el": "topic-correlations-section",
+    "tag": "div",
+    "state": "vision",
+    "detail": "July 2025 vision mock-up",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "TOPIC CORRELATIONS How narratives cluster in conversation 82% AI + Infrastructure 73% Ente"
+   },
+   {
+    "el": "portfolio-metrics",
+    "tag": "div",
+    "state": "vision",
+    "detail": null,
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "Tracking 3 companies \u2022 26 mentions this week \u2022 46% positive sentiment"
+   },
+   {
+    "el": "episodePanel",
+    "tag": "div",
+    "state": "vision",
+    "detail": "page is in Vision mode",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": true,
+    "says": "\u2022 \u2022 \u2022 Score: -- \u25b6 \ud83d\udcc4 \u2b07 \u2934 \u2715 HOST GUEST THE CONVERSATION KEY INSIGHTS KEY QUOTES ESSENTIAL Q"
+   },
+   {
+    "el": "episode-library-overlay",
+    "tag": "div",
+    "state": "vision",
+    "detail": "live-mode surface, no mock",
+    "badge": "MOCK",
+    "wasSuppressed": true,
+    "visible": false,
+    "says": "Podcast Intelligence Repository Live-mode surface \u2193 Export Results Table Cards \u00d7 \ud83d\udd0d All Po"
+   }
+  ]
+ }
+}

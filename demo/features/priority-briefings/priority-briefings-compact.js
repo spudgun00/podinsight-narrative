@@ -11,12 +11,16 @@ const PriorityBriefingsCompact = {
         this.visibleCount = 4; // Start with 4 cards visible
         this.currentFilter = 'all';
 
-        // Finding 6, 2 Sep 2026. This container was rendering nothing at all in
-        // Vision - a 300px blank box in the middle of the page - because
-        // render() throws on window.renderBriefingCards, and the tag that
-        // defines it was removed from demo.html on 27 Aug as "read by nothing
-        // since the live cards replaced it". The mock cards read it. It is
-        // loaded here instead of restored to demo.html, so it stays out of Live.
+        // Finding 6, 2 Sep 2026. This container rendered nothing at all in Vision
+        // - a 300px blank box in the middle of the page - because render()
+        // throws on window.renderBriefingCards, and the tag that defines it was
+        // removed from demo.html on 27 Aug as "read by nothing since the live
+        // cards replaced it". Two things read it: these cards, and the Episode
+        // Library's card view in Live.
+        //
+        // The tag is back in demo.html for both modes (3 Sep 2026), so this
+        // usually resolves on the first branch. The loader stays as the fallback
+        // that made the failure visible, and because it costs nothing.
         var self = this;
         var ready = (typeof window.renderBriefingCards === 'function')
             ? Promise.resolve(true)

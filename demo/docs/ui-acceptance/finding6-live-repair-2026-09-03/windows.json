@@ -1,0 +1,23 @@
+{
+ "all": {
+  "window": "",
+  "span": "1 Jan 2025 to 28 Aug 2026",
+  "topicMovement": "TOPIC MOVEMENT i 2 of 5 tracked topics move enough to report",
+  "velocity": "Crypto/Web3 \u2191 10% AI Agents \u2193 32% Capital Efficiency low volume B2B SaaS low volume DePIN no mentions",
+  "correlations": "TOPIC PAIR OBSERVED EXPECTED VERDICT AI Agents + Crypto/Web3 683 777 Indistinguishable from chance Capital Efficiency + Crypto/Web3 100 78 Above chance AI Agents + Capital Efficiency 71 84 Indistinguishable from chance B2B SaaS + Capital Efficiency 10 5 Above "
+ },
+ "90d": {
+  "window": "",
+  "span": "31 May 2026 to 28 Aug 2026",
+  "topicMovement": "TOPIC MOVEMENT i 2 of 5 tracked topics move enough to report",
+  "velocity": "Crypto/Web3 \u2191 10% AI Agents \u2193 32% Capital Efficiency low volume B2B SaaS low volume DePIN no mentions",
+  "correlations": "TOPIC PAIR OBSERVED EXPECTED VERDICT AI Agents + Crypto/Web3 118 134 Indistinguishable from chance B2B SaaS + Capital Efficiency 2 0 Indistinguishable from chance Capital Efficiency + Crypto/Web3 15 11 Indistinguishable from chance AI Agents + Capital Efficien"
+ },
+ "30d": {
+  "window": "",
+  "span": "30 Jul 2026 to 28 Aug 2026",
+  "topicMovement": "TOPIC MOVEMENT i 0 of 5 tracked topics clear the floor",
+  "velocity": "Crypto/Web3 2 of 2 months 1514 mentions AI Agents 2 of 2 months 441 mentions Capital Efficiency 1 of 2 months 18 mentions B2B SaaS no mentions DePIN no mentions",
+  "correlations": "TOPIC PAIR OBSERVED EXPECTED VERDICT AI Agents + Crypto/Web3 34 42 Indistinguishable from chance AI Agents + Capital Efficiency 3 4 Indistinguishable from chance Capital Efficiency + Crypto/Web3 2 3 Indistinguishable from chance Expected is what the overlap wo"
+ }
+}

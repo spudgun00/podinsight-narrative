@@ -63,24 +63,19 @@
 
 /* ------------------------------------------------------------- MOCK badge */
 
-/* Finding 6, 2 Sep 2026. styles/utilities.css carries a "nuclear option" block
-   that sets `div::before { display: none !important; content: none !important }`
-   to kill a vignette effect. Every module root on this page is a div, so it was
-   killing the MOCK badge too: a walk of the Vision page found the badge painting
-   on exactly one element, <header>, because that is the only module root that is
-   not a div. The dashed outline survived, because it sits on the element rather
-   than on a pseudo-element, which is why the page looked badged and was not.
+/* The badge was invisible for most of this project's life. styles/utilities.css
+   carried a "nuclear option" block that killed `div::before` with !important to
+   remove a vignette, and every module root on this page is a div, so the badge
+   painted on exactly one element - <header>, the only root that is not a div.
+   The dashed outline still drew, because that sits on the element rather than on
+   a pseudo-element, which is why the page looked badged and was not.
 
-   Beating !important needs !important. It is scoped to body.synthea-vision-mode
-   deliberately: Live carries its own PENDING and ERROR badges through the same
-   pseudo-element and they are suppressed by the same nuclear rule, but fixing
-   those would change what Live renders, and finding 6 is Vision only. That
-   remains open and is recorded in TOUR_FINDINGS.md. */
-body.synthea-vision-mode [data-synthea-source="vision"]::before {
-    display: block !important;
-    content: 'MOCK' !important;
-    background: #7a5c2e !important;
-}
+   Fixed 3 Sep 2026 in utilities.css itself, by scoping that rule to the page
+   containers a vignette can actually attach to. A Vision-only !important
+   override stood here for a day and has been removed: one rule now serves MOCK,
+   PENDING and ERROR in both modes, which is the point of stamping state from
+   what the resolver returned. */
+
 
 
 [data-synthea-source="vision"] {

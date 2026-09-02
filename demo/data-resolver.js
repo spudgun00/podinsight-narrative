@@ -246,6 +246,41 @@
             location.reload();
         },
 
+        /* ---------------------------------------------------------------
+         * Finding 5: wake the engine in the background on load.
+         *
+         * The panels render from prebuilt snapshots and never touch OpenSearch,
+         * which is why the page is fast. But a QUESTION must reach the whole
+         * library, and the collection scales to zero when idle - so one wake
+         * call goes out as the page loads and the engine warms while the reader
+         * is still reading. By the time a question is typed it is usually ready.
+         *
+         * Nothing renders from this. The warming bar is NOT removed: it still
+         * appears for anyone who outruns the wake, which is the honest state for
+         * that person.
+         * ------------------------------------------------------------- */
+        wakeState: 'idle',
+
+        wake: function () {
+            if (SyntheaData.wakeState !== 'idle') return;
+            SyntheaData.wakeState = 'waking';
+            var t0 = Date.now();
+            return fetch(API + '/api/wake', { method: 'GET' })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (d) {
+                    SyntheaData.wakeState = 'ready';
+                    SyntheaData.wakeMs = Date.now() - t0;
+                    document.dispatchEvent(new CustomEvent('synthea:engine-ready',
+                        { detail: d || {} }));
+                })
+                .catch(function () {
+                    // A failed wake is not a failed page: the panels are already
+                    // rendered from snapshots. The next real question will find
+                    // out for itself.
+                    SyntheaData.wakeState = 'idle';
+                });
+        },
+
         /**
          * The one call every live component makes. Stamps pending, then live or
          * error, from the actual outcome.
@@ -456,6 +491,13 @@
     };
 
     window.SyntheaData = SyntheaData;
+
+    // One wake per page load, after paint so it never competes with rendering.
+    if (typeof window !== 'undefined') {
+        var fire = function () { try { SyntheaData.wake(); } catch (e) { /* never blocks the page */ } };
+        if (document.readyState === 'complete') { setTimeout(fire, 0); }
+        else { window.addEventListener('load', function () { setTimeout(fire, 0); }); }
+    }
 
     // ---------------------------------------------------------------- mode UI
 

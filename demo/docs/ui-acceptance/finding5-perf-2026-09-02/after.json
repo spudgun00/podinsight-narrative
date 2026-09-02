@@ -1,0 +1,66 @@
+{
+ "30d": {
+  "cold_s": 1.35,
+  "cold_state": {
+   "header": true,
+   "chart": true,
+   "cards": true,
+   "list": true,
+   "span": true
+  },
+  "warm_s": [
+   0.31,
+   0.3,
+   0.3
+  ],
+  "warm_median_s": 0.3
+ },
+ "90d": {
+  "cold_s": 2.62,
+  "cold_state": {
+   "header": true,
+   "chart": true,
+   "cards": true,
+   "list": true,
+   "span": true
+  },
+  "warm_s": [
+   0.31,
+   0.33,
+   0.32
+  ],
+  "warm_median_s": 0.32
+ },
+ "12m": {
+  "cold_s": 1.83,
+  "cold_state": {
+   "header": true,
+   "chart": true,
+   "cards": true,
+   "list": true,
+   "span": true
+  },
+  "warm_s": [
+   0.41,
+   0.8,
+   0.46
+  ],
+  "warm_median_s": 0.46
+ },
+ "all": {
+  "cold_s": 1.42,
+  "cold_state": {
+   "header": true,
+   "chart": true,
+   "cards": true,
+   "list": true,
+   "span": true
+  },
+  "warm_s": [
+   0.74,
+   0.42,
+   0.72
+  ],
+  "warm_median_s": 0.72
+ }
+}

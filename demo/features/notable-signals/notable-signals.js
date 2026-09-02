@@ -97,13 +97,20 @@ const NotableSignals = {
                     break;
             }
             
-            // Calculate and render confidence bar
-            const confidence = this.calculateConfidence(signal.type, index, signalTypes.length);
-            this.renderConfidenceBar(card, confidence);
+            // Finding 6, 2 Sep 2026. The confidence bar and the strength dots
+            // are removed, and this is the ONE thing the finding-6 ruling keeps
+            // permanently banned rather than returning to the backlog:
+            // confidence-percentage theatre never ships, even when machinery
+            // exists, because the evidence itself is what should be shown. It
+            // goes from the mock-up too - a badged mock is still something a
+            // reader looks at and believes the product will one day do.
+            const strength = card.querySelector('.signal-strength');
+            if (strength) strength.remove();
         });
     },
     
-    // Render confidence bar for a card
+    // Retained but no longer called; see the note in the render loop above.
+    // Kept, not deleted, so the ban is visible at the site it applies to.
     renderConfidenceBar: function(card, confidence) {
         const strengthContainer = card.querySelector('.signal-strength');
         if (!strengthContainer) return;

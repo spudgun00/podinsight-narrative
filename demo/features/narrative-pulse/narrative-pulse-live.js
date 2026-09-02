@@ -83,24 +83,7 @@ const NarrativePulseLive = {
         // paints "Topic mentions unavailable" over the vision content - an
         // error message about a request Vision mode never wanted made.
         if (window.SyntheaData && window.SyntheaData.isVision()) {
-            // The July 2025 mock chart stack was removed from demo.html when
-            // this live component replaced it, so Vision has nothing to fall
-            // back to here. Say that, rather than leaving a spinner or painting
-            // "Topic mentions unavailable" over a mode that never wanted a fetch.
-            var host = document.getElementById('narrative-pulse-container');
-            if (host) {
-                host.innerHTML =
-                    '<div class="synthea-unbuilt">' +
-                    '<div class="synthea-unbuilt-title">Not part of the vision mock-up</div>' +
-                    '<p class="synthea-unbuilt-why">Narrative Pulse is one of the components that ' +
-                    'has already been built against real data. Its July 2025 mock version was ' +
-                    'removed from the page when the live chart replaced it, so there is no ' +
-                    'illustrative version to show here.</p>' +
-                    '<p class="synthea-unbuilt-foot">Switch to <b>Live</b> to see it plotting ' +
-                    'the whole corpus.</p></div>';
-            }
-            window.SyntheaData.claim('narrative-pulse', '.narrative-pulse');
-            window.SyntheaData.mark('narrative-pulse', 'unbuilt', 'no vision mock exists');
+            await this.renderVisionMock();
             return;
         }
         this.container = document.getElementById('narrative-pulse-container');
@@ -125,6 +108,58 @@ const NarrativePulseLive = {
         this.stripFabricatedChrome();
         this.bindEvents();
         this.load();
+    },
+
+    /**
+     * Vision mode: render the July 2025 mock chart, not an apology for it.
+     *
+     * Finding 6, 2 Sep 2026. This branch used to paint "Not part of the vision
+     * mock-up", on the belief that the mock chart had been deleted when the
+     * live component replaced it. It had not. Every file is still on disk -
+     * narrative-pulse.js, its adapter and its insight generator - and what was
+     * removed was four <script> tags in demo.html. So the claim in that
+     * placeholder was simply untrue, and Vision was showing a hole where its
+     * centrepiece belongs.
+     *
+     * The tags stay removed, because a mock script must not load in Live. The
+     * stack is injected here instead, through SyntheaData.loadMock(), which
+     * does nothing at all when the page is not in Vision.
+     *
+     * Order matters: unified-data-adapter.js builds window.narrativePulseData
+     * out of window.unifiedData, and narrative-pulse.js reads it at init.
+     */
+    async renderVisionMock() {
+        const host = document.getElementById('narrative-pulse-container');
+        if (!host) return;
+        try {
+            await window.SyntheaData.loadMock([
+                'features/narrative-pulse/unified-data-adapter.js',
+                'features/narrative-pulse/narrative-pulse.js',
+                'features/narrative-pulse/generate-dynamic-insights.js'
+            ]);
+            const r = await fetch('features/narrative-pulse/narrative-pulse.html');
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            host.classList.remove('loading');
+            host.innerHTML = await r.text();
+            if (!window.NarrativePulse) throw new Error('mock NarrativePulse did not load');
+            window.NarrativePulse.init(host);
+            if (window.NarrativePulse.updateInsightCards) {
+                setTimeout(() => window.NarrativePulse.updateInsightCards(), 100);
+            }
+            window.SyntheaData.claim('narrative-pulse', host);
+            window.SyntheaData.mark('narrative-pulse', 'vision', 'July 2025 mock chart');
+        } catch (error) {
+            // A mock-up cannot fail to load itself in front of a reader: say
+            // what is missing, in the page's own voice, and log the detail.
+            console.error('[Narrative Pulse] vision mock failed to load:', error);
+            host.innerHTML =
+                '<div class="synthea-unbuilt">' +
+                '<div class="synthea-unbuilt-title">Narrative Pulse mock-up unavailable</div>' +
+                '<p class="synthea-unbuilt-why">The July 2025 chart files did not load on this ' +
+                'page. This is a fault in the demo, not a statement about the product.</p></div>';
+            window.SyntheaData.claim('narrative-pulse', host);
+            window.SyntheaData.mark('narrative-pulse', 'error', 'vision mock failed to load');
+        }
     },
 
     /**

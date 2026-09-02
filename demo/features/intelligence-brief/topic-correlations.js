@@ -20,7 +20,61 @@ const TopicCorrelations = {
     data: null,
 
     init() {
-        this.waitForContainer(() => this.load());
+        this.waitForContainer(() => {
+            // Finding 6, 2 Sep 2026. See velocity-tracking.js. In Vision this
+            // printed "Topic correlations could not be loaded. Try again."
+            // beside a MOCK badge, which is two contradictory claims about the
+            // same panel.
+            if (window.SyntheaData && window.SyntheaData.isVision()) {
+                this.renderVisionMock();
+                return;
+            }
+            this.load();
+        });
+    },
+
+    /** The July 2025 mock donuts, from the mock dataset. Never fetches. */
+    renderVisionMock() {
+        const E = window.SyntheaData.esc;
+        const host = document.getElementById('topicCorrelationsContainer');
+        if (!host) return;
+        const rows = ((((window.unifiedData || {}).intelligenceBrief || {}).metrics || {})
+                      .topicCorrelations) || [];
+        const section = document.getElementById('topic-correlations-section');
+        if (section) {
+            const desc = section.querySelector('.section-description');
+            if (desc) desc.textContent = 'How narratives cluster in conversation';
+        }
+        // The mock's four-colour rotation, kept so the exhibit looks like the
+        // exhibit rather than like a recolouring of it.
+        //
+        // `visible animated` are not decoration: components.css ships
+        // .mini-pie-chart at opacity 0 and its percentage text at opacity 0,
+        // waiting for an animator that intelligence-brief.js gutted to a no-op
+        // when the live panel replaced this one. Without them the six donuts
+        // render at the right size, in the right grid, and paint nothing - which
+        // is how the first pass of this restoration shipped a badged, titled,
+        // completely blank panel.
+        const COLOURS = ['#4a7c59', '#f4a261', '#5a6c8c', '#c77d7d'];
+        const CIRC = 2 * Math.PI * 40;   // r=40 in the 100x100 viewBox
+        host.innerHTML = rows.map((r, i) => {
+            const pct = Math.max(0, Math.min(100, Number(r.percentage) || 0));
+            const dash = (CIRC * pct / 100).toFixed(1) + ' ' + CIRC.toFixed(1);
+            return '<div class="mini-pie-chart visible animated">' +
+                   '<svg viewBox="0 0 100 100" style="width: 80px; height: 80px;" aria-hidden="true">' +
+                   '<circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="20"/>' +
+                   '<circle cx="50" cy="50" r="40" fill="none" stroke="' + COLOURS[i % COLOURS.length] +
+                   '" stroke-width="20" stroke-dasharray="' + dash + '" transform="rotate(-90 50 50)"/>' +
+                   '<text x="50" y="55" text-anchor="middle" fill="#1a1a2e" font-size="16" ' +
+                   'font-weight="600">' + pct + '%</text></svg>' +
+                   '<span class="pie-label">' + E(r.topics) + '</span></div>';
+        }).join('');
+        if (!rows.length) {
+            host.innerHTML = '<div class="influence-empty">' +
+                'The mock dataset carries no correlation pairs.</div>';
+        }
+        window.SyntheaData.claim('topic-correlations', '#topic-correlations-section');
+        window.SyntheaData.mark('topic-correlations', 'vision', 'July 2025 mock donuts');
     },
 
     waitForContainer(callback, attempt = 0) {

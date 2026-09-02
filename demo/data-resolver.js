@@ -56,6 +56,7 @@
 
     var state = {};        // key -> state string
     var roots = {};        // key -> element
+    var mockLoaded = {};   // src -> Promise, so a mock script loads at most once
 
     function readMode() {
         var q = new URLSearchParams(location.search).get('data');
@@ -381,6 +382,27 @@
          * less rather than saying something untrue.
          */
         corpus: function () {
+            // Finding 6, 2 Sep 2026. In Vision the fetch is refused, the catch
+            // returned null, and every [data-corpus-range] node was written
+            // "Range unavailable" - a Live failure state rendered on a page
+            // whose banner says nothing here is real. The mock-up carries its
+            // own corpus figures; in Vision they are what the page shows.
+            if (mode === VISION) {
+                if (!corpusPromise) {
+                    corpusPromise = Promise.resolve((function () {
+                        var m = ((window.unifiedData || {}).meta) || {};
+                        var a = m.analysis || {};
+                        var wk = m.dataWeek || {};
+                        if (!a.episodesAnalyzed) return null;
+                        return {
+                            episodes: a.episodesAnalyzed, podcasts: a.podcastsTracked,
+                            hours: a.hoursAnalyzed, claims: null, period: null,
+                            rangeLabel: wk.range || null
+                        };
+                    })());
+                }
+                return corpusPromise;
+            }
             if (!corpusPromise) {
                 corpusPromise = SyntheaData.fetchJSON('corpus-facts', '/api/signals?limit=1')
                     .then(function (d) {
@@ -473,13 +495,64 @@
             });
         },
 
+        /**
+         * Load mock scripts, in order, in VISION only.
+         *
+         * Finding 6, 2 Sep 2026. The July 2025 mock components are still on
+         * disk; what was removed when the live versions replaced them was their
+         * <script> tags in demo.html. Restoring those tags would load mock code
+         * in LIVE too, which the honesty programme forbids - so the mock stack
+         * is injected here, at run time, and only when the page is in Vision.
+         *
+         * In LIVE this resolves to false having created nothing: no <script>
+         * element, no network request, no global. That is the wall, and the
+         * Live audit checks it by listing document.scripts.
+         *
+         * Each src is loaded once and in sequence, because the mock stack has
+         * order dependencies (the adapter builds window.narrativePulseData
+         * before narrative-pulse.js reads it).
+         */
+        loadMock: function (srcs) {
+            if (mode !== VISION) return Promise.resolve(false);
+            var chain = Promise.resolve(true);
+            (srcs || []).forEach(function (src) {
+                chain = chain.then(function () {
+                    if (mockLoaded[src]) return mockLoaded[src];
+                    mockLoaded[src] = new Promise(function (res, rej) {
+                        var el = document.createElement('script');
+                        el.src = src;
+                        el.setAttribute('data-synthea-mock', '1');
+                        el.onload = function () { res(true); };
+                        el.onerror = function () { rej(new Error('mock script failed: ' + src)); };
+                        document.head.appendChild(el);
+                    });
+                    return mockLoaded[src];
+                });
+            });
+            return chain.then(function () { return true; });
+        },
+
         /** Stamp a state the resolver did not derive from a fetch. */
         mark: function (key, next, detail) {
             if (['pending','live','vision','unbuilt','empty','error'].indexOf(next) === -1) return;
             stamp(key, next, detail);
         },
 
+        /**
+         * Escape a value before it reaches innerHTML. The vision renderers
+         * build markup from the mock dataset, and mock data is still data: it
+         * goes in as text, never as markup.
+         */
+        esc: function (v) {
+            return String(v === null || v === undefined ? '' : v)
+                .replace(/[&<>"']/g, function (c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;',
+                             '"': '&quot;', "'": '&#39;' }[c];
+                });
+        },
+
         state: function (key) { return state[key] || 'pending'; },
+        visionGaps: function () { return visionGaps(); },
         allStates: function () { return JSON.parse(JSON.stringify(state)); },
 
         /** Everything the overlay needs, without it having to infer anything. */
@@ -619,6 +692,54 @@
         });
     }
 
+    // --------------------------------------------------- vision badge sweep
+    //
+    // Finding 6, 2 Sep 2026. Vision is the target-state exhibit, and every
+    // module on it is mock by definition - the banner says so at the top of the
+    // page. But the MOCK badge was only reaching the components that happened
+    // to call claim(), which left the Narrative Feed, Notable Signals, Priority
+    // Briefings, the Weekly Brief and the Consensus Monitor rendering July 2025
+    // content with nothing on them to say so. A walk of the page found nine
+    // modules and zero badges.
+    //
+    // So the badge is swept over the known module roots, in VISION only. This
+    // is not a claim about a fetch - it is the page-level fact that in Vision
+    // there is no live data anywhere, which is exactly what the banner asserts.
+    // In LIVE this function returns immediately and stamps nothing.
+    //
+    // A root that is missing or empty is left alone and reported by
+    // visionGaps(), so "no badge" and "nothing rendered" stay distinguishable.
+    var VISION_MODULES = {
+        'narrative-pulse':    '#narrative-pulse-container',
+        'narrative-feed':     '#narrative-feed-container',
+        'notable-signals':    '#notable-signals-container',
+        'priority-briefings': '#priority-briefings-container',
+        'intelligence-brief': '#intelligence-brief-container .intelligence-brief-sidebar',
+        'velocity-tracking':  '#velocity-tracking-section',
+        'influence-metrics':  '#influence-metrics-section',
+        'consensus-monitor':  '#consensus-monitor-section',
+        'topic-correlations': '#topic-correlations-section'
+    };
+
+    function badgeVisionModules() {
+        if (mode !== VISION) return;
+        Object.keys(VISION_MODULES).forEach(function (key) {
+            var el = document.querySelector(VISION_MODULES[key]);
+            if (!el) return;
+            if (!(el.textContent || '').trim()) return;   // empty: not yet rendered
+            roots[key] = el;
+            stamp(key, 'vision', 'July 2025 vision mock-up');
+        });
+    }
+
+    /** Vision modules that are missing or still empty. For the acceptance walk. */
+    function visionGaps() {
+        return Object.keys(VISION_MODULES).filter(function (key) {
+            var el = document.querySelector(VISION_MODULES[key]);
+            return !el || !(el.textContent || '').trim();
+        });
+    }
+
     // In LIVE the vision dataset must not be reachable at all, so a component
     // that ignores the resolver still cannot render mock content.
     function sealVisionData() {
@@ -639,6 +760,11 @@
         setTimeout(renderUnbuilt, 0);
         setTimeout(renderUnbuilt, 900);
         setTimeout(renderUnbuilt, 2500);
+        // Same schedule, opposite mode: the mock components render
+        // asynchronously, so the badge sweep runs again as they arrive.
+        [0, 900, 2500, 5000].forEach(function (ms) {
+            setTimeout(badgeVisionModules, ms);
+        });
     });
 
     sealVisionData();

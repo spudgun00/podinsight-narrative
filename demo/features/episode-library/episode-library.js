@@ -93,6 +93,19 @@ const EpisodeLibrary = {
 
     // Fetch the live episode catalogue and re-render.
     async loadEpisodes() {
+        // Finding 6, 2 Sep 2026. The Episode Library browses the real corpus
+        // and has no July 2025 mock-up - it was built after the mock. In Vision
+        // it says that in one line instead of asking, being refused, and
+        // showing "Episodes unavailable ... Try again", which is a Live-mode
+        // failure state on a page whose banner says nothing here is real.
+        if (window.SyntheaData && window.SyntheaData.isVision()) {
+            this.episodes = [];
+            this.dataState = 'vision';
+            this.refreshOverlay();
+            window.SyntheaData.claim('episode-library', '.episode-library-overlay, .episode-library');
+            window.SyntheaData.mark('episode-library', 'vision', 'live-mode surface, no mock');
+            return;
+        }
         this.dataState = 'loading';
         this.dataError = null;
         this.updateContent();
@@ -357,6 +370,7 @@ const EpisodeLibrary = {
 
     renderStatsLine(totalEpisodes, podcastCount, totalHours) {
         if (this.dataState === 'loading') return 'Loading catalogue…';
+        if (this.dataState === 'vision') return 'Live-mode surface';
         if (this.dataState === 'error') return 'Catalogue unavailable';
         return `${totalEpisodes.toLocaleString()} episodes • ${podcastCount} podcasts • ` +
                `${totalHours.toLocaleString()} hours analysed`;
@@ -381,6 +395,17 @@ const EpisodeLibrary = {
                     <div class="library-data-spinner"></div>
                     <div class="library-data-title">Loading episodes…</div>
                     <div class="library-data-note">Reading the episode catalogue</div>
+                </div>
+            `;
+        }
+
+        if (this.dataState === 'vision') {
+            return `
+                <div class="library-data-state">
+                    <div class="library-data-title">No mock-up for the Episode Library</div>
+                    <div class="library-data-note">This catalogue browses the real corpus and was
+                        built after the July 2025 mock-up, so there is no illustrative version of
+                        it. Switch to <b>Live</b> to browse the library.</div>
                 </div>
             `;
         }

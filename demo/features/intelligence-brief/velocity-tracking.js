@@ -35,7 +35,52 @@ const VelocityTracking = {
     dataError: null,
 
     init() {
-        this.waitForList(() => this.load());
+        this.waitForList(() => {
+            // Finding 6, 2 Sep 2026. Vision is a mock-up; a mock-up cannot fail
+            // to load itself. This panel used to call the resolver, be refused
+            // with 'vision-mode', and paint "Topic velocity could not be
+            // loaded. Try again." over a page whose banner says nothing here is
+            // real - an error about a request Vision never wanted made, with a
+            // retry button that could only produce the same refusal.
+            if (window.SyntheaData && window.SyntheaData.isVision()) {
+                this.renderVisionMock();
+                return;
+            }
+            this.load();
+        });
+    },
+
+    /** The July 2025 mock rows, from the mock dataset. Never fetches. */
+    renderVisionMock() {
+        const E = window.SyntheaData.esc;
+        const container = document.getElementById('velocityTrackingList');
+        if (!container) return;
+        const rows = ((((window.unifiedData || {}).intelligenceBrief || {}).metrics || {})
+                      .velocityTracking) || [];
+        const section = document.getElementById('velocity-tracking-section');
+        if (section) {
+            // Restore the mock's own wording. "Tracked topic mentions" is the
+            // live panel's honest label for what the corpus can actually count;
+            // the mock-up is showing the intended product, so it says what the
+            // intended product would say.
+            const title = section.querySelector('.synthesis-section-title');
+            if (title) title.textContent = 'Velocity Tracking';
+            const desc = section.querySelector('.section-description');
+            if (desc) desc.textContent = 'Topic acceleration over past 7 days';
+        }
+        container.innerHTML = rows.map(r => {
+            const dir = r.direction === 'negative' ? 'negative' : 'positive';
+            return '<div class="momentum-item">' +
+                   '<span class="momentum-theme">' + E(r.theme) + '</span>' +
+                   '<span class="momentum-change ' + dir + '">' + E(r.change) + ' w/w</span>' +
+                   '</div>';
+        }).join('');
+        if (!rows.length) {
+            container.innerHTML = '<div class="influence-empty">' +
+                'The mock dataset carries no velocity rows.</div>';
+        }
+        window.SyntheaData.claim('velocity-tracking', '#velocity-tracking-section');
+        window.SyntheaData.mark('velocity-tracking', 'vision', 'July 2025 mock rows');
     },
 
     waitForList(callback, attempt = 0) {

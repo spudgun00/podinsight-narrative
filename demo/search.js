@@ -502,6 +502,17 @@ class PatternFlowSearch {
         if (!trimmed) return;
 
         this.lastQuery = trimmed;
+
+        // Finding 6, 2 Sep 2026. Search reaches the whole library and has no
+        // July 2025 mock-up: the mock's dropdown was suggestions and chrome,
+        // never an answer. In Vision it therefore says so in one line, rather
+        // than firing a request the resolver will refuse and painting "Search
+        // unavailable. Try again." A mock-up cannot fail to load itself.
+        if (window.SyntheaData && window.SyntheaData.isVision()) {
+            this.setPanelState('vision');
+            return;
+        }
+
         const requestId = ++this.searchRequestId;
 
         this.setPanelState('loading');
@@ -609,16 +620,28 @@ class PatternFlowSearch {
         const show = (el, visible) => { if (el) el.style.display = visible ? '' : 'none'; };
 
         showState(loading, state === 'loading');
-        showState(error, state === 'error');
+        showState(error, state === 'error' || state === 'vision');
         showState(noMatch, state === 'no_matches');
         show(results, state === 'results');
         show(actions, state === 'results');
 
-        if (state === 'error') {
+        if (state === 'error' || state === 'vision') {
+            const titleEl = panel.querySelector('#searchErrorState .search-state-title');
             const messageEl = panel.querySelector('#searchErrorMessage');
-            if (messageEl) {
-                messageEl.textContent = message || 'Something went wrong.';
+            const retryEl = panel.querySelector('#searchErrorState .panel-search-btn');
+            const vision = state === 'vision';
+            if (titleEl) {
+                titleEl.textContent = vision ? 'Search is a Live-mode surface'
+                                             : 'Search unavailable';
             }
+            if (messageEl) {
+                messageEl.textContent = vision
+                    ? 'The vision mock-up has no answers to give: search reads the real '
+                      + 'library. Switch to Live to ask it something.'
+                    : (message || 'Something went wrong.');
+            }
+            // Nothing for a retry to reach in Vision, so no button offering one.
+            if (retryEl) retryEl.style.display = vision ? 'none' : '';
         }
 
         if (state === 'no_matches') {

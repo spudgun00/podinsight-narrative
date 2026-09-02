@@ -1,0 +1,194 @@
+{
+ "vision": {
+  "mode": "vision",
+  "banner": "Vision mock-up \u2014 not real data. Everything on this page is illustrative content dated 25 July 2025 , showing what the product is intended to do. It is not derived from the transcript corpus. Switch to Live to see what the system actually returns. SWITCH TO LIVE",
+  "modules": [
+   {
+    "tag": "div",
+    "id": "narrative-pulse-container",
+    "cls": "loading",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 235,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": true,
+    "firstLine": "Not part of the vision mock-up Narrative Pulse is one of the components that has already been built against re"
+   },
+   {
+    "tag": "div",
+    "id": "narrative-feed-container",
+    "cls": "",
+    "heading": "LATEST EPISODES",
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 548,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "LATEST EPISODES PATTERN EMERGENCE \u2022 LAST 48 HOURS 2h ago Infrastructure commanding 4x application layer multip"
+   },
+   {
+    "tag": "div",
+    "id": "notable-signals-container",
+    "cls": "",
+    "heading": "NOTABLE SIGNALS",
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 475,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "NOTABLE SIGNALS KEY PATTERNS FROM THIS WEEK'S EPISODES MARKET NARRATIVES 67 narrative shifts detected \u2191 24 fro"
+   },
+   {
+    "tag": "div",
+    "id": "priority-briefings-container",
+    "cls": "priority-briefings-container",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": true,
+    "height": 300,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": ""
+   },
+   {
+    "tag": "div",
+    "id": "intelligence-brief-container",
+    "cls": "",
+    "heading": "WEEKLY INTELLIGENCE BRIEF",
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 1437,
+    "hasError": true,
+    "hasRetry": true,
+    "unbuilt": false,
+    "firstLine": "WEEKLY INTELLIGENCE BRIEF Share | Email CONSENSUS FORMING AI infrastructure dominates with 70% of funding [8 s"
+   },
+   {
+    "tag": "div",
+    "id": "velocity-tracking-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 175,
+    "hasError": true,
+    "hasRetry": true,
+    "unbuilt": false,
+    "firstLine": "VELOCITY TRACKING Tracked topic mentions Topic velocity could not be loaded"
+   },
+   {
+    "tag": "div",
+    "id": "influence-metrics-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 175,
+    "hasError": true,
+    "hasRetry": true,
+    "unbuilt": false,
+    "firstLine": "MOST-MENTIONED ENTITIES Named entities by episodes mentioning them Influence metrics could not be loaded"
+   },
+   {
+    "tag": "div",
+    "id": "consensus-monitor-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 218,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "CONSENSUS MONITOR Market agreement levels by topic AI Infrastructure Strong consensus Enterprise Agents Strong"
+   },
+   {
+    "tag": "div",
+    "id": "topic-correlations-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": false,
+    "height": 146,
+    "hasError": true,
+    "hasRetry": true,
+    "unbuilt": false,
+    "firstLine": "TOPIC CORRELATIONS Episodes mentioning both tracked topics Topic correlations could not be loaded"
+   },
+   {
+    "tag": "div",
+    "id": "supporting-analytics-container",
+    "cls": "",
+    "heading": null,
+    "badge": false,
+    "badgeText": "",
+    "state": null,
+    "empty": true,
+    "height": 0,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": ""
+   }
+  ],
+  "badges": [],
+  "errorsAnywhere": [
+   "Topic velocity could not be loaded. Try again in a moment.",
+   "Influence metrics could not be loaded. Try again in a moment.",
+   "Topic correlations could not be loaded. Try again in a moment.",
+   "The episode catalogue could not be loaded. Try again in a moment."
+  ]
+ },
+ "live": {
+  "mode": "live",
+  "mockScriptsLoaded": [
+   "http://localhost:5173/data-furniture.js?v=20260902d",
+   "http://localhost:5173/data/unified-data.js?v=20260902d"
+  ],
+  "mockGlobals": [],
+  "visionBanner": false,
+  "identity": {
+   "headerStats": "Episodes\n613\n\u2022\nPodcasts\n25\n\u2022\nHours analysed\n542",
+   "dwSpan": "31 May 2026 to 28 Aug 2026",
+   "cardValues": [
+    "25",
+    "298",
+    "2",
+    "613"
+   ],
+   "cardTitles": [
+    "Market Narratives",
+    "Watchlist Mentions",
+    "Notable Figures",
+    "Topic Movement",
+    "Library"
+   ],
+   "feedTitle": "31 May 2026 \u2013 28 August 2026",
+   "feedRows": 10,
+   "pulseSubtitle": "6 themes \u00b7 passages across 613 episodes \u00b7 May 2026\u2013Aug 2026 \u00b7 monthly"
+  }
+ }
+}

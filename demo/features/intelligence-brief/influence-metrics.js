@@ -33,7 +33,53 @@ const InfluenceMetrics = {
     init() {
         // The list lives in a template intelligence-brief/init.js fetches, so
         // wait for it before rendering into it.
-        this.waitForList(() => this.load());
+        this.waitForList(() => {
+            // Finding 6, 2 Sep 2026. See velocity-tracking.js: in Vision this
+            // panel asked the resolver, was refused, and printed "Influence
+            // metrics could not be loaded. Try again." A mock-up cannot fail to
+            // load itself, and there is nothing for a retry to reach.
+            if (window.SyntheaData && window.SyntheaData.isVision()) {
+                this.renderVisionMock();
+                return;
+            }
+            this.load();
+        });
+    },
+
+    /** The July 2025 mock rows, from the mock dataset. Never fetches. */
+    renderVisionMock() {
+        const E = window.SyntheaData.esc;
+        const list = document.getElementById('influence-metrics-list');
+        if (!list) return;
+        const rows = ((((window.unifiedData || {}).intelligenceBrief || {}).metrics || {})
+                      .influenceMetrics) || [];
+        const section = document.getElementById('influence-metrics-section');
+        if (section) {
+            // "Most-Mentioned Entities" is the live panel's honest name: counting
+            // mentions is what the corpus can do. The mock-up shows the intended
+            // product, which claimed to weigh influence, so it says so here.
+            const title = section.querySelector('.synthesis-section-title');
+            if (title) title.textContent = 'Influence Metrics';
+            const desc = section.querySelector('.section-description');
+            if (desc) desc.textContent = "Who's shaping the conversation";
+        }
+        list.innerHTML = rows.map(r => {
+            const m = /(\d+)/.exec(r.score || '');
+            const width = m ? Math.max(0, Math.min(100, parseInt(m[1], 10))) : 0;
+            return '<div class="influence-item">' +
+                   '<span class="influence-name">' + E(r.name) + '</span>' +
+                   '<div class="influence-bar-container">' +
+                   '<div class="influence-bar" style="width: ' + width + '%;"></div>' +
+                   '</div>' +
+                   '<span class="influence-score">' + E(r.score) + '</span>' +
+                   '</div>';
+        }).join('');
+        if (!rows.length) {
+            list.innerHTML = '<div class="influence-empty">' +
+                'The mock dataset carries no influence rows.</div>';
+        }
+        window.SyntheaData.claim('influence-metrics', '#influence-metrics-section');
+        window.SyntheaData.mark('influence-metrics', 'vision', 'July 2025 mock rows');
     },
 
     waitForList(callback, attempt = 0) {

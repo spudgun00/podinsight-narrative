@@ -1,0 +1,266 @@
+{
+ "vision": {
+  "mode": "vision",
+  "banner": "Vision mock-up \u2014 not real data. Everything on this page is illustrative content dated 25 July 2025 , showing what the product is intended to do. It is not derived from the transcript corpus. Switch to Live to see what the system actually returns. SWITCH TO LIVE",
+  "modules": [
+   {
+    "tag": "div",
+    "id": "narrative-pulse-container",
+    "cls": "",
+    "heading": "NARRATIVE PULSE",
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 632,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "NARRATIVE PULSE TOPIC MOMENTUM ACROSS 1,498 EPISODES 7 days Share Topics AI Infrastructure +64% Enterprise Age"
+   },
+   {
+    "tag": "div",
+    "id": "narrative-feed-container",
+    "cls": "",
+    "heading": "LATEST EPISODES",
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 548,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "LATEST EPISODES PATTERN EMERGENCE \u2022 LAST 48 HOURS 2h ago Infrastructure commanding 4x application layer multip"
+   },
+   {
+    "tag": "div",
+    "id": "notable-signals-container",
+    "cls": "",
+    "heading": "NOTABLE SIGNALS",
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 447,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "NOTABLE SIGNALS KEY PATTERNS FROM THIS WEEK'S EPISODES MARKET NARRATIVES 67 narrative shifts detected \u2191 24 fro"
+   },
+   {
+    "tag": "div",
+    "id": "priority-briefings-container",
+    "cls": "priority-briefings-container",
+    "heading": "PRIORITY BRIEFINGS",
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 864,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "PRIORITY BRIEFINGS WHAT REQUIRES YOUR ATTENTION TODAY ALL BRIEFINGS \u2192 All-In 3h ago \u2022 94 min \u2022 Score: 97 CONSE"
+   },
+   {
+    "tag": "div",
+    "id": "intelligence-brief-container",
+    "cls": "",
+    "heading": "WEEKLY INTELLIGENCE BRIEF",
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 2162,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "WEEKLY INTELLIGENCE BRIEF Share | Email CONSENSUS FORMING AI infrastructure dominates with 70% of funding [8 s"
+   },
+   {
+    "tag": "div",
+    "id": "velocity-tracking-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 419,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "VELOCITY TRACKING Topic acceleration over past 7 days Enterprise Agents +25% w/w Defense Tech +33% w/w AI Infr"
+   },
+   {
+    "tag": "div",
+    "id": "influence-metrics-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 373,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "INFLUENCE METRICS Who's shaping the conversation All-In Podcast High (97) 20VC High (93) BG2Pod High (91) Inve"
+   },
+   {
+    "tag": "div",
+    "id": "consensus-monitor-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 218,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "CONSENSUS MONITOR Market agreement levels by topic AI Infrastructure Strong consensus Enterprise Agents Strong"
+   },
+   {
+    "tag": "div",
+    "id": "topic-correlations-section",
+    "cls": "synthesis-section",
+    "heading": null,
+    "badge": true,
+    "state": "vision",
+    "empty": false,
+    "height": 429,
+    "hasError": false,
+    "hasRetry": false,
+    "unbuilt": false,
+    "firstLine": "TOPIC CORRELATIONS How narratives cluster in conversation 82% AI + Infrastructure 73% Enterprise + Production "
+   }
+  ],
+  "badged": [
+   "header",
+   "searchDropdown",
+   "narrative-pulse-container",
+   "narrative-feed-container",
+   "notable-signals-container",
+   "priority-briefings-container",
+   "intelligence-brief-sidebar",
+   "velocity-tracking-section",
+   "influence-metrics-section",
+   "consensus-monitor-section",
+   "topic-correlations-section",
+   "portfolio-metrics",
+   "episodePanel",
+   "episode-library-overlay"
+  ],
+  "gaps": [],
+  "mockScripts": [
+   "unified-data-adapter.js",
+   "narrative-pulse.js",
+   "generate-dynamic-insights.js",
+   "briefing-card-renderer.js"
+  ],
+  "confidenceTheatre": 0,
+  "errorsVisible": []
+ },
+ "clicks": [
+  {
+   "control": "Pulse: time range (7d)",
+   "label": "30 days",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Pulse: customise topics",
+   "label": "Topics",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Pulse: share",
+   "label": "Share",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Pulse: a topic in the legend",
+   "label": "AI Infrastructure +74%",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Signals: first card",
+   "label": "Market Narratives 67 narrative shi",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Briefings: a card",
+   "label": "All-In 3h ago \u2022 94 min \u2022 Score: 97",
+   "opened": [
+    "episodePanel"
+   ],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Briefings: show more",
+   "label": "Show More \u25bc",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Briefings: all briefings",
+   "label": "ALL BRIEFINGS \u2192",
+   "opened": [
+    "episode-library-overlay"
+   ],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Weekly Brief: expand",
+   "label": "Collapse Analysis",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Weekly Brief: download PDF",
+   "label": "Download Brief (PDF)",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Feed: a row",
+   "label": "2h ago Infrastructure commanding 4",
+   "opened": [],
+   "liveErrorCopy": []
+  },
+  {
+   "control": "Header: search",
+   "label": "",
+   "opened": [],
+   "liveErrorCopy": []
+  }
+ ],
+ "live": {
+  "mode": "live",
+  "mockScriptsLoaded": [
+   "http://localhost:5173/data-furniture.js?v=20260902g",
+   "http://localhost:5173/data/unified-data.js?v=20260902g"
+  ],
+  "mockGlobals": [],
+  "visionBanner": false,
+  "identity": {
+   "headerStats": "Episodes\n613\n\u2022\nPodcasts\n25\n\u2022\nHours analysed\n542",
+   "dwSpan": "31 May 2026 to 28 Aug 2026",
+   "cardValues": [
+    "25",
+    "298",
+    "2",
+    "613"
+   ],
+   "cardTitles": [
+    "Market Narratives",
+    "Watchlist Mentions",
+    "Notable Figures",
+    "Topic Movement",
+    "Library"
+   ],
+   "feedTitle": "31 May 2026 \u2013 28 August 2026",
+   "feedRows": 10,
+   "pulseSubtitle": "6 themes \u00b7 passages across 613 episodes \u00b7 May 2026\u2013Aug 2026 \u00b7 monthly"
+  }
+ }
+}

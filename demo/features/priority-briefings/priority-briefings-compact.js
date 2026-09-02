@@ -10,14 +10,32 @@ const PriorityBriefingsCompact = {
         this.briefings = window.unifiedData?.priorityBriefings?.items || [];
         this.visibleCount = 4; // Start with 4 cards visible
         this.currentFilter = 'all';
-        
-        // Render initial view
-        this.render();
-        
-        // Set up event listeners
-        this.setupEventListeners();
-        
-        // Modal removed - using Episode Panel instead
+
+        // Finding 6, 2 Sep 2026. This container was rendering nothing at all in
+        // Vision - a 300px blank box in the middle of the page - because
+        // render() throws on window.renderBriefingCards, and the tag that
+        // defines it was removed from demo.html on 27 Aug as "read by nothing
+        // since the live cards replaced it". The mock cards read it. It is
+        // loaded here instead of restored to demo.html, so it stays out of Live.
+        var self = this;
+        var ready = (typeof window.renderBriefingCards === 'function')
+            ? Promise.resolve(true)
+            : window.SyntheaData.loadMock(['shared/briefing-card-renderer.js']);
+        ready.then(function () {
+            self.render();
+            self.setupEventListeners();
+            window.SyntheaData.claim('priority-briefings', self.container);
+            window.SyntheaData.mark('priority-briefings', 'vision', 'July 2025 mock briefings');
+        }).catch(function (e) {
+            console.error('[Priority Briefings] vision mock failed to load:', e);
+            self.container.innerHTML =
+                '<div class="synthea-unbuilt">' +
+                '<div class="synthea-unbuilt-title">Priority Briefings mock-up unavailable</div>' +
+                '<p class="synthea-unbuilt-why">The July 2025 card renderer did not load on this ' +
+                'page. This is a fault in the demo, not a statement about the product.</p></div>';
+            window.SyntheaData.claim('priority-briefings', self.container);
+            window.SyntheaData.mark('priority-briefings', 'error', 'vision mock failed to load');
+        });
     },
     
     render: function() {

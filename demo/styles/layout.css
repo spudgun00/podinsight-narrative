@@ -656,3 +656,13 @@
             font-size: 0.875rem;
             color: var(--gray-600);
         }
+
+/* Alias table version in the footer. Read live from /api/entities on every load,
+   never baked at build time. Every other footer rule in this file sits inside
+   @media (max-width: 768px), so this one is deliberately at file scope. */
+.footer-alias {
+    font-size: 0.75rem;
+    color: var(--gray-600, #6b7280);
+    opacity: 0.75;
+    margin-top: 0.35rem;
+}
